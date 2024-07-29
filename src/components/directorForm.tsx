@@ -19,8 +19,8 @@ interface DirectorFormProps {
 const DirectorForm = ({ formData, handleInputChange, index , handleSubmit}: DirectorFormProps) => {
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <h1 className="text-2xl font-bold mb-4">Registro del Director</h1>
+             <br />
+            <form onSubmit={handleSubmit} className="margin-top-4">
                 
                 <div className="mb-4">
                     <label className="block text-gray-700 mb-2" htmlFor={`directorName${index}`}>Nombre del Director Representado</label>
@@ -86,7 +86,7 @@ const DirectorForm = ({ formData, handleInputChange, index , handleSubmit}: Dire
                     />
                 </div>
                 
-                <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Guardar</button>
+                
             </form>
         </div>
     );

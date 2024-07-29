@@ -2,7 +2,7 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import "./globals.css";
 import RegistroProductora2 from '../components/registroProductora2';
 import DirectorForm from '../components/directorForm';
-
+import { FaCheck } from 'react-icons/fa';
 
 interface FormData {
     companyName: string;
@@ -57,9 +57,11 @@ const Register = () => {
             { name: '', nationality: 'Mexicana', residesInMexico: '', birthYear: '' }
         ]);
     };
-
+    const removeLastDirector = () => {
+        setDirectors(directors.slice(0, -1));
+    };
     const [activeTab, setActiveTab] = useState<string>('agencia');
-    const [activeTabRegisterProductora, setActiveTabRegisterProductora] = useState<string>('registerProductora1');
+    const [activeTabRegisterProductora, setActiveTabRegisterProductora] = useState<string>('1');
 
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -138,16 +140,31 @@ const Register = () => {
 
                     {activeTab === 'productora' && (
                         <div>
-                            <div className="tabs">
-                                <button onClick={() => setActiveTabRegisterProductora('registerProductora1')} className={activeTabRegisterProductora === 'tab1' ? 'active' : ''}>Tab 1</button>
-                                <button onClick={() => setActiveTabRegisterProductora('registerProductora2')} className={activeTabRegisterProductora === 'tab2' ? 'active' : ''}>Tab 2</button>
-                                <button onClick={() => setActiveTabRegisterProductora('registerProductora3')} className={activeTabRegisterProductora === 'tab3' ? 'active' : ''}>Tab 3</button>
+                            <div className="tabs flex justify-center space-x-4">
+                                <button
+                                    onClick={() => setActiveTabRegisterProductora('1')}
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTabRegisterProductora) >= 1 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
+                                >
+                                    {Number(activeTabRegisterProductora) >= 1 ? <FaCheck /> : '1'}
+                                </button>
+                                <button
+                                    onClick={() => setActiveTabRegisterProductora('2')}
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTabRegisterProductora) >= 2 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
+                                >
+                                    {Number(activeTabRegisterProductora) >= 2 ? <FaCheck /> : '2'}
+                                </button>
 
+                                <button
+                                    onClick={() => setActiveTabRegisterProductora('3')}
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTabRegisterProductora) >= 3 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
+                                >
+                                    {Number(activeTabRegisterProductora) >= 3 ? <FaCheck /> : '3'}
+                                </button>
                             </div>
 
-                            {activeTabRegisterProductora === 'registerProductora1' && (
+                            {activeTabRegisterProductora === '1' && (
                                 <form onSubmit={handleSubmit}>
-                                    <h1 className="text-2xl font-bold mb-4">Registro Casa Productora</h1>
+                                    <br />
                                     {/* Resto de los campos de formulario para Casa Productora */}
                                     <div className="mb-4">
                                         <label className="block text-gray-700 mb-2" htmlFor="companyName">Nombre comercial de la empresa</label>
@@ -199,38 +216,51 @@ const Register = () => {
                                         <label className="block text-gray-700 mb-2" htmlFor="rfc">RFC</label>
                                         <input className="w-full px-3 py-2 border rounded" type="text" id="rfc" name="rfc" value={formData.rfc} onChange={handleChange} />
                                     </div>
-                                    <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Registrarme</button>
+
+                                    <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Siguiente</button>
+
                                 </form>
                             )}
 
-                            {activeTabRegisterProductora === 'registerProductora2' && (
+                            {activeTabRegisterProductora === '2' && (
                                 <RegistroProductora2 formData={formData} handleInputChange={handleChange} handleSubmit={handleSubmit} />
                             )}
-                            
-                            {activeTabRegisterProductora === 'registerProductora3' && (
-                                  <div>
-                                  <form onSubmit={handleSubmit}>
-                                      {directors.map((director, index) => (
-                                          <DirectorForm
-                                              key={index}
-                                              index={index}
-                                              formData={director}
-                                              handleInputChange={handleInputChange}
-                                              handleSubmit={handleSubmit}
-                                          />
-                                      ))}
-                                      <button type="button" onClick={addDirector}>
-                                          + Agregar otro director
-                                      </button>
-                                      <div>
-                                          <label>
-                                              <input type="checkbox" name="terms" required /> He leído y acepto los términos y condiciones.
-                                          </label>
-                                      </div>
-                                      <button type="button">Atrás</button>
-                                      <button type="submit">Registrar</button>
-                                  </form>
-                              </div>
+
+                            {activeTabRegisterProductora === '3' && (
+                                <div>
+                                    <form onSubmit={handleSubmit}>
+                                        {directors.map((director, index) => (
+                                            <DirectorForm
+                                                key={index}
+                                                index={index}
+                                                formData={director}
+                                                handleInputChange={handleInputChange}
+                                                handleSubmit={handleSubmit}
+                                            />
+                                        ))}
+                                        <br />
+                                        <div className="flex justify-between">
+                                            <button type="button" onClick={removeLastDirector}>
+                                                - Quitar director
+                                            </button>
+                                            <button type="button" onClick={addDirector}>
+                                                + Agregar otro director
+                                            </button>
+                                        </div>
+                                        <br />
+                                        <div>
+                                            <label>
+                                                <input type="checkbox" name="terms" required /> He leído y acepto los términos y condiciones.
+                                            </label>
+                                        </div>
+                                        <br />
+                                        <div className="flex space-x-4">
+                                            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Atras</button>
+                                            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Registrar</button>
+                                        </div>
+
+                                    </form>
+                                </div>
                             )}
                         </div>
                     )}
