@@ -1,5 +1,8 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import "./globals.css";
+import RegistroProductora2 from '../components/registroProductora2';
+import DirectorForm from '../components/directorForm';
+
 
 interface FormData {
     companyName: string;
@@ -14,6 +17,9 @@ interface FormData {
     idCertificacion: string;
     rfc: string;
     nroSocio: string;
+    linkInstagram: string;
+    linkLinkedin: string;
+    linkPaginaWeb: string;
 }
 
 const Register = () => {
@@ -30,13 +36,35 @@ const Register = () => {
         isMenberANFI: true,
         anio: 2024,
         nroSocio: '',
+        linkInstagram: '',
+        linkLinkedin: '',
+        linkPaginaWeb: '',
     });
 
+    const [directors, setDirectors] = useState([
+        { name: '', nationality: 'Mexicana', residesInMexico: '', birthYear: '' }
+    ]);
+    const handleInputChange = (e, index) => {
+        const { name, value } = e.target;
+        const updatedDirectors = [...directors];
+        updatedDirectors[index][name.split('.')[1]] = value;
+        setDirectors(updatedDirectors);
+    };
+
+    const addDirector = () => {
+        setDirectors([
+            ...directors,
+            { name: '', nationality: 'Mexicana', residesInMexico: '', birthYear: '' }
+        ]);
+    };
+
     const [activeTab, setActiveTab] = useState<string>('agencia');
+    const [activeTabRegisterProductora, setActiveTabRegisterProductora] = useState<string>('registerProductora1');
+
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
-       // console.log('formData', formData)
+        // console.log('formData', formData)
         setFormData({
             ...formData,
             [name]: type === 'checkbox' ? checked : value,
@@ -109,62 +137,102 @@ const Register = () => {
                     )}
 
                     {activeTab === 'productora' && (
-                        <form onSubmit={handleSubmit}>
-                            <h1 className="text-2xl font-bold mb-4">Registro Casa Productora</h1>
-                            {/* Resto de los campos de formulario para Casa Productora */}
-                            <div className="mb-4">
-                                <label className="block text-gray-700 mb-2" htmlFor="companyName">Nombre comercial de la empresa</label>
-                                <input className="w-full px-3 py-2 border rounded" type="text" id="companyName" name="companyName" value={formData.companyName} onChange={handleChange} />
+                        <div>
+                            <div className="tabs">
+                                <button onClick={() => setActiveTabRegisterProductora('registerProductora1')} className={activeTabRegisterProductora === 'tab1' ? 'active' : ''}>Tab 1</button>
+                                <button onClick={() => setActiveTabRegisterProductora('registerProductora2')} className={activeTabRegisterProductora === 'tab2' ? 'active' : ''}>Tab 2</button>
+                                <button onClick={() => setActiveTabRegisterProductora('registerProductora3')} className={activeTabRegisterProductora === 'tab3' ? 'active' : ''}>Tab 3</button>
+
                             </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 mb-2" htmlFor="legalName">Razón Social</label>
-                                <input className="w-full px-3 py-2 border rounded" type="text" id="legalName" name="legalName" value={formData.legalName} onChange={handleChange} />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 mb-2" htmlFor="anio">Año de construcción de la empresa</label>
-                                <input className="w-full px-3 py-2 border rounded" type="number" id="anio" name="anio" value={formData.anio} onChange={handleChange} />
-                            </div>
-                            <div className="mb-4 flex items-center">
-                              <label className="mr-2" htmlFor="isMenberANFI">Soy socio</label>
-                              <div className="relative">
-                                <input
-                                  type="checkbox"
-                                  id="isMenberANFI"
-                                  name="isMenberANFI"
-                                  checked={formData.isMenberANFI || false}
-                                  onChange={handleChange}
-                                  className="sr-only"
-                                />
-                                <div
-                                  className="block bg-gray-300 w-14 h-8 rounded-full cursor-pointer"
-                                  onClick={() => handleChange({ target: { name: 'isMenberANFI', type: 'checkbox', checked: !formData.isMenberANFI } })}
-                                ></div>
-                                <div
-                                  className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${
-                                    formData.isMenberANFI ? 'transform translate-x-full bg-green-500' : ''
-                                  }`}
-                                ></div>
+
+                            {activeTabRegisterProductora === 'registerProductora1' && (
+                                <form onSubmit={handleSubmit}>
+                                    <h1 className="text-2xl font-bold mb-4">Registro Casa Productora</h1>
+                                    {/* Resto de los campos de formulario para Casa Productora */}
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700 mb-2" htmlFor="companyName">Nombre comercial de la empresa</label>
+                                        <input className="w-full px-3 py-2 border rounded" type="text" id="companyName" name="companyName" value={formData.companyName} onChange={handleChange} />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700 mb-2" htmlFor="legalName">Razón Social</label>
+                                        <input className="w-full px-3 py-2 border rounded" type="text" id="legalName" name="legalName" value={formData.legalName} onChange={handleChange} />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700 mb-2" htmlFor="anio">Año de construcción de la empresa</label>
+                                        <input className="w-full px-3 py-2 border rounded" type="number" id="anio" name="anio" value={formData.anio} onChange={handleChange} />
+                                    </div>
+                                    <div className="mb-4 flex items-center">
+                                        <label className="mr-2" htmlFor="isMenberANFI">Soy socio</label>
+                                        <div className="relative">
+                                            <input
+                                                type="checkbox"
+                                                id="isMenberANFI"
+                                                name="isMenberANFI"
+                                                checked={formData.isMenberANFI || false}
+                                                onChange={handleChange}
+                                                className="sr-only"
+                                            />
+                                            <div
+                                                className="block bg-gray-300 w-14 h-8 rounded-full cursor-pointer"
+                                                onClick={() => handleChange({ target: { name: 'isMenberANFI', type: 'checkbox', checked: !formData.isMenberANFI } })}
+                                            ></div>
+                                            <div
+                                                className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${formData.isMenberANFI ? 'transform translate-x-full bg-green-500' : ''
+                                                    }`}
+                                            ></div>
+                                        </div>
+                                        <input
+                                            className="w-full px-3 py-2 border rounded"
+                                            type="text"
+                                            id="nroSocio"
+                                            name="nroSocio"
+                                            value={formData.nroSocio || ''}
+                                            onChange={handleChange}
+                                            placeholder="Nro Socio"
+                                        />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700 mb-2" htmlFor="idCertificacion">ID Certificación</label>
+                                        <input className="w-full px-3 py-2 border rounded" type="text" id="idCertificacion" name="idCertificacion" value={formData.idCertificacion} onChange={handleChange} />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700 mb-2" htmlFor="rfc">RFC</label>
+                                        <input className="w-full px-3 py-2 border rounded" type="text" id="rfc" name="rfc" value={formData.rfc} onChange={handleChange} />
+                                    </div>
+                                    <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Registrarme</button>
+                                </form>
+                            )}
+
+                            {activeTabRegisterProductora === 'registerProductora2' && (
+                                <RegistroProductora2 formData={formData} handleInputChange={handleChange} handleSubmit={handleSubmit} />
+                            )}
+                            
+                            {activeTabRegisterProductora === 'registerProductora3' && (
+                                  <div>
+                                  <form onSubmit={handleSubmit}>
+                                      {directors.map((director, index) => (
+                                          <DirectorForm
+                                              key={index}
+                                              index={index}
+                                              formData={director}
+                                              handleInputChange={handleInputChange}
+                                              handleSubmit={handleSubmit}
+                                          />
+                                      ))}
+                                      <button type="button" onClick={addDirector}>
+                                          + Agregar otro director
+                                      </button>
+                                      <div>
+                                          <label>
+                                              <input type="checkbox" name="terms" required /> He leído y acepto los términos y condiciones.
+                                          </label>
+                                      </div>
+                                      <button type="button">Atrás</button>
+                                      <button type="submit">Registrar</button>
+                                  </form>
                               </div>
-                              <input
-                                className="w-full px-3 py-2 border rounded"
-                                type="text"
-                                id="nroSocio"
-                                name="nroSocio"
-                                value={formData.nroSocio || ''}
-                                onChange={handleChange}
-                                placeholder="Nro Socio"
-                              />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 mb-2" htmlFor="idCertificacion">ID Certificación</label>
-                                <input className="w-full px-3 py-2 border rounded" type="text" id="idCertificacion" name="idCertificacion" value={formData.idCertificacion} onChange={handleChange} />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 mb-2" htmlFor="rfc">RFC</label>
-                                <input className="w-full px-3 py-2 border rounded" type="text" id="rfc" name="rfc" value={formData.rfc} onChange={handleChange} />
-                            </div>
-                            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Registrarme</button>
-                        </form>
+                            )}
+                        </div>
                     )}
                 </div>
             </div>

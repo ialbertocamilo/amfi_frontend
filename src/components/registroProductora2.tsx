@@ -1,0 +1,46 @@
+import React from 'react';
+import "../pages/globals.css";
+
+const RegistroProductora2 = ({ formData, handleInputChange, handleSubmit }) => {
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <h1 className="text-2xl font-bold mb-4">Registro Agencia o Anunciante</h1>
+                <div className="mb-4">
+                    <label className="block text-gray-700 mb-2" htmlFor="email">Correo electrónico corporativo</label>
+                    <input className="w-full px-3 py-2 border rounded" type="email" id="email" name="email" value={formData.email} onChange={handleInputChange} />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700 mb-2" htmlFor="jobTitle">Cargo o Puesto</label>
+                    <input className="w-full px-3 py-2 border rounded" type="text" id="jobTitle" name="jobTitle" value={formData.jobTitle} onChange={handleInputChange} />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700 mb-2" htmlFor="linkInstagram">Link de Instagram</label>
+                    <input className="w-full px-3 py-2 border rounded" type="text" id="linkInstagram" name="linkInstagram" value={formData.linkInstagram} onChange={handleInputChange} />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700 mb-2" htmlFor="linkLinkedin">Link de Linkedin</label>
+                    <input className="w-full px-3 py-2 border rounded" type="text" id="linkLinkedin" name="clinkLinkedin" value={formData.linkLinkedin} onChange={handleInputChange} />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700 mb-2" htmlFor="linkPaginaWeb">Link de pagina Web</label>
+                    <input className="w-full px-3 py-2 border rounded" type="text" id="linkPaginaWeb" name="linkPaginaWeb" value={formData.linkPaginaWeb} onChange={handleInputChange} />
+                </div>
+
+                <div className="mb-4">
+                    <label className="block text-gray-700 mb-2" htmlFor="password">Contraseña</label>
+                    <input className="w-full px-3 py-2 border rounded" type="password" id="password" name="password" value={formData.password} onChange={handleInputChange} />
+                    <p className="text-xs text-gray-500 mt-1">Debe tener entre 6 y 10 caracteres. Debe contener al menos un número. Debe contener al menos un carácter especial.</p>
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700 mb-2" htmlFor="confirmPassword">Repetir Contraseña</label>
+                    <input className="w-full px-3 py-2 border rounded" type="password" id="confirmPassword" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} />
+                    <p className="text-xs text-gray-500 mt-1">Las contraseñas deben coincidir.</p>
+                </div>
+                <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Registrarme</button>
+            </form>
+        </div>
+    );
+};
+
+export default RegistroProductora2;
