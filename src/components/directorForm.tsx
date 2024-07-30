@@ -12,15 +12,15 @@ interface DirectorFormProps {
         residesInMexico: string;
         birthYear: string;
     };
-    handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, index: number) => void;
+    handleInputChange: any;
     index: number;
 }
 
-const DirectorForm = ({ formData, handleInputChange, index , handleSubmit}: DirectorFormProps) => {
+const DirectorForm = ({ formData, handleInputChange, index }: DirectorFormProps) => {
     return (
         <div>
              <br />
-            <form onSubmit={handleSubmit} className="margin-top-4">
+            <form className="margin-top-4">
                 
                 <div className="mb-4">
                     <label className="block text-gray-700 mb-2" htmlFor={`directorName${index}`}>Nombre del Director Representado</label>

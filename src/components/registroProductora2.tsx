@@ -1,7 +1,14 @@
 import React from 'react';
 import "../pages/globals.css";
 
-const RegistroProductora2 = ({ formData, handleInputChange, handleSubmit }) => {
+interface registroEntity {
+    formData: any,
+    handleInputChange: any;
+    handleSubmit: any
+}
+
+
+const RegistroProductora2 = ({ formData , handleInputChange, handleSubmit}: registroEntity) => {
     return (
         <div >
             <br />

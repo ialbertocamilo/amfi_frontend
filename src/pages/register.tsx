@@ -3,6 +3,7 @@ import "./globals.css";
 import RegistroProductora2 from '../components/registroProductora2';
 import DirectorForm from '../components/directorForm';
 import { FaCheck } from 'react-icons/fa';
+import { AnyNode } from 'postcss';
 
 interface FormData {
     companyName: string;
@@ -41,13 +42,21 @@ const Register = () => {
         linkPaginaWeb: '',
     });
 
-    const [directors, setDirectors] = useState([
+    interface Director {
+        name: string;
+        nationality: string;
+        residesInMexico: string;
+        birthYear: string;
+    }
+
+    const [directors, setDirectors] = useState<Director[]>([
         { name: '', nationality: 'Mexicana', residesInMexico: '', birthYear: '' }
     ]);
-    const handleInputChange = (e, index) => {
+
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
         const { name, value } = e.target;
         const updatedDirectors = [...directors];
-        updatedDirectors[index][name.split('.')[1]] = value;
+        updatedDirectors[index][name.split('.')[1] as keyof Director] = value;
         setDirectors(updatedDirectors);
     };
 
@@ -64,7 +73,7 @@ const Register = () => {
     const [activeTabRegisterProductora, setActiveTabRegisterProductora] = useState<string>('1');
 
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: any) => {
         const { name, value, type, checked } = e.target;
         // console.log('formData', formData)
         setFormData({
@@ -191,7 +200,15 @@ const Register = () => {
                                             />
                                             <div
                                                 className="block bg-gray-300 w-14 h-8 rounded-full cursor-pointer"
-                                                onClick={() => handleChange({ target: { name: 'isMenberANFI', type: 'checkbox', checked: !formData.isMenberANFI } })}
+                                                onClick={() =>
+                                                    handleChange({
+                                                        target: {
+                                                            name: 'isMenberANFI',
+                                                            type: 'checkbox',
+                                                            checked: !formData.isMenberANFI
+                                                        }
+                                                    })
+                                                }
                                             ></div>
                                             <div
                                                 className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${formData.isMenberANFI ? 'transform translate-x-full bg-green-500' : ''
@@ -235,7 +252,6 @@ const Register = () => {
                                                 index={index}
                                                 formData={director}
                                                 handleInputChange={handleInputChange}
-                                                handleSubmit={handleSubmit}
                                             />
                                         ))}
                                         <br />
