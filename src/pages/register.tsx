@@ -88,7 +88,7 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen flex">
+        <div className="flex flex-col md:flex-row">
             <div className="flex-1 flex items-center justify-center bg-gray-800">
                 <img src="/camera-setup.png" alt="Camera setup" className="w-full max-h-screen object-cover" />
             </div>
