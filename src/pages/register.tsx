@@ -85,7 +85,14 @@ const Register = () => {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         console.log(formData);
+        console.log('activeTabRegisterProductora', activeTabRegisterProductora)
     };
+
+    const changeTab = (tab: string) => {
+        setActiveTabRegisterProductora(tab);
+    }
+    
+
 
     return (
         <div className="flex flex-col md:flex-row">
@@ -234,13 +241,13 @@ const Register = () => {
                                         <input className="w-full px-3 py-2 border rounded" type="text" id="rfc" name="rfc" value={formData.rfc} onChange={handleChange} />
                                     </div>
 
-                                    <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Siguiente</button>
+                                    <button type="submit" className="w-full bg-red-500 text-white py-2 rounded" onClick={() => setActiveTabRegisterProductora('2')}>Siguiente</button>
 
                                 </form>
                             )}
 
                             {activeTabRegisterProductora === '2' && (
-                                <RegistroProductora2 formData={formData} handleInputChange={handleChange} handleSubmit={handleSubmit} />
+                                <RegistroProductora2 formData={formData} handleInputChange={handleChange} handleSubmit={handleSubmit} prev={changeTab} next={changeTab} />
                             )}
 
                             {activeTabRegisterProductora === '3' && (
@@ -271,7 +278,7 @@ const Register = () => {
                                         </div>
                                         <br />
                                         <div className="flex space-x-4">
-                                            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Atras</button>
+                                            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded" onClick={() => setActiveTabRegisterProductora('2')}>Atras</button>
                                             <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Registrar</button>
                                         </div>
 

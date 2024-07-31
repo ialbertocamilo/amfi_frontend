@@ -5,10 +5,12 @@ interface registroEntity {
     formData: any,
     handleInputChange: any;
     handleSubmit: any
+    prev: any|undefined;
+    next: any|undefined;
 }
 
 
-const RegistroProductora2 = ({ formData , handleInputChange, handleSubmit}: registroEntity) => {
+const RegistroProductora2 = ({ formData , handleInputChange, handleSubmit, prev, next}: registroEntity) => {
     return (
         <div >
             <br />
@@ -45,8 +47,8 @@ const RegistroProductora2 = ({ formData , handleInputChange, handleSubmit}: regi
                     <p className="text-xs text-gray-500 mt-1">Las contraseñas deben coincidir.</p>
                 </div>
                 <div className="flex space-x-4">
-                    <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Atras</button>
-                    <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Siguiente</button>
+                    <button type="submit" className="w-full bg-red-500 text-white py-2 rounded" onClick={() => prev('1')}>Atras</button>
+                    <button type="submit" className="w-full bg-red-500 text-white py-2 rounded" onClick={() => next('3')}>Siguiente</button>
                 </div>
             </form>
         </div>
