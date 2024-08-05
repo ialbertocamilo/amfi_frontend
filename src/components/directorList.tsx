@@ -1,21 +1,34 @@
 import { Director } from '@/entities/Director';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AddDirectorModal from './AddDirectorModal ';
 
+
 interface inputEntity {
-    directors: Director[];
+    directorsIni: Director[];
 }
 
-
-const DirectorsList: React.FC<inputEntity> = ({ directors }) => {
-
+const DirectorsList: React.FC<inputEntity> = ({ directorsIni }) => {
+    const [directors, setDirectors] = useState<Director[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const handleEdit = (data: Director | null) => {
-        setIsModalOpen(true)
+    const [currentDirector, setCurrentDirector] = useState<Director | null>(null);
+
+    useEffect(() => {
+        console.log('directorsIni', directorsIni)
+        setDirectors(directorsIni);
+        console.log('directors', directors)
+    }, [directorsIni]);
+    const handleEdit = (director: Director) => {
+        setCurrentDirector(director);
+        setIsModalOpen(true);
     };
 
     const handleDelete = (id: number | null) => {
-        console.log(`Delete director with id: ${id}`);
+        setDirectors(directors.filter(director => director.id !== id));
+    };
+
+    const handleUpdateDirector = (updatedDirector: Director) => {
+        setDirectors(directors.map(director => director.id === updatedDirector.id ? updatedDirector : director));
+        setIsModalOpen(false);
     };
 
     return (
@@ -28,12 +41,6 @@ const DirectorsList: React.FC<inputEntity> = ({ directors }) => {
                             <button onClick={() => handleEdit(director)} style={{ marginRight: '10px' }}>
                                 ✏️
                             </button>
-                            <AddDirectorModal
-                                director={null}
-                                isOpen={isModalOpen}
-                                onClose={() => setIsModalOpen(false)}
-                                onAdd={null}
-                            />
                             <button onClick={() => handleDelete(director.id)}>
                                 🗑️
                             </button>
@@ -41,6 +48,15 @@ const DirectorsList: React.FC<inputEntity> = ({ directors }) => {
                     </li>
                 ))}
             </ul>
+            {currentDirector && (
+                <AddDirectorModal
+                    onAdd={null}
+                    director={currentDirector}
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onUpdate={handleUpdateDirector}
+                />
+            )}
         </div>
     );
 };

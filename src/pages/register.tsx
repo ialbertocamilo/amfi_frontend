@@ -301,7 +301,7 @@ const Register = () => {
                                         <br />
                                         <div className="flex justify-between">
                                             <h1>Directores</h1>
-                                            <DirectorsList directors={directors} />
+                                            <DirectorsList directorsIni={directors} />
                                         </div>
                                         <br />
                                         <div>
@@ -311,6 +311,7 @@ const Register = () => {
                                                 isOpen={isModalOpen}
                                                 onClose={() => setIsModalOpen(false)}
                                                 onAdd={handleAddDirector}
+                                                onUpdate={null}
                                             />
                                         </div>
                                         <br />

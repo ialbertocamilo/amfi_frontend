@@ -6,10 +6,11 @@ type AddDirectorModalProps = {
     isOpen: boolean;
     onClose: () => void;
     onAdd: ((data: any) => void) | null;
+    onUpdate: ((director: Director) => void) | null;
     director: Director | null;
 };
 
-const AddDirectorModal = ({ isOpen, onClose, onAdd, director }: AddDirectorModalProps) => {
+const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDirectorModalProps) => {
     const [name, setName] = useState('');
     const [nationality, setNationality] = useState('');
     const [residesInMexico, setResidesInMexico] = useState(false);
@@ -17,7 +18,7 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director }: AddDirectorModal
 
     useEffect(() => {
         console.log('useEffect triggered');
-        if(director){
+        if (director) {
             console.log('director data', director);
             setName(director?.name || '');
             setNationality(director?.nationality || '');
@@ -116,7 +117,24 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director }: AddDirectorModal
                             Aceptar y agregar otro
                         </button>
                     )}
-                    <button className={styles.primaryButton} onClick={() => handleAdd(true)}>Aceptar</button>
+                    <button
+                        className={styles.primaryButton}
+                        onClick={() => {
+                            if (onUpdate) {
+                                onUpdate({
+                                    name: name,
+                                    nationality: nationality,
+                                    residesInMexico: residesInMexico,
+                                    birthYear: birthYear,
+                                    id: director?.id || null
+                                });
+                            } else {
+                                handleAdd(true);
+                            }
+                        }}
+                    >
+                        Aceptar
+                    </button>
                 </div>
             </div>
         </div>
