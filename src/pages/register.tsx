@@ -4,6 +4,9 @@ import RegistroProductora2 from '../components/registroProductora2';
 import DirectorForm from '../components/directorForm';
 import { FaCheck } from 'react-icons/fa';
 import { AnyNode } from 'postcss';
+import AddDirectorModal from '@/components/AddDirectorModal ';
+import DirectorsList from '@/components/directorList';
+import { Director } from '@/entities/Director';
 
 interface FormData {
     companyName: string;
@@ -23,7 +26,9 @@ interface FormData {
     linkPaginaWeb: string;
 }
 
+
 const Register = () => {
+    
     const [formData, setFormData] = useState<FormData>({
         companyName: '',
         legalName: '',
@@ -42,30 +47,61 @@ const Register = () => {
         linkPaginaWeb: '',
     });
 
-    interface Director {
-        name: string;
-        nationality: string;
-        residesInMexico: string;
-        birthYear: string;
-    }
 
-    const [directors, setDirectors] = useState<Director[]>([
-        { name: '', nationality: 'Mexicana', residesInMexico: '', birthYear: '' }
-    ]);
 
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
-        const { name, value } = e.target;
-        const updatedDirectors = [...directors];
-        updatedDirectors[index][name.split('.')[1] as keyof Director] = value;
-        setDirectors(updatedDirectors);
-    };
 
-    const addDirector = () => {
-        setDirectors([
-            ...directors,
-            { name: '', nationality: 'Mexicana', residesInMexico: '', birthYear: '' }
-        ]);
-    };
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [directors, setDirectors] = useState<Director[]>([]);
+    
+    let directorsTmp:Director[] = [
+        {
+            id: 1, name: 'Alfonso Portillo',
+            nationality: 'Mexicana',
+            residesInMexico: true,
+            birthYear: '2025'
+        },
+        {
+            id: 2, name: 'Camilo Vizcarra',
+            nationality: 'Mexicana',
+            residesInMexico: true,
+            birthYear: '2024'
+        },
+        {
+            id: 3, name: 'Sebastian Rodas',
+            nationality: 'Mexicana',
+            residesInMexico: false,
+            birthYear: ''
+        }
+    ];
+    // setDirectors(directorsTmp)
+
+    const handleAddDirector = (director: Director) => {
+        console.log('director register', director);
+        
+          const updatedDirectors = [...directors, director];
+          console.log('second register', updatedDirectors);
+          
+          setDirectors(updatedDirectors)
+
+      };
+      console.log('directors register', directors);
+    // const [directors, setDirectors] = useState<Director[]>([
+    //     { name: '', nationality: 'Mexicana', residesInMexico: '', birthYear: '' }
+    // ]);
+
+    // const handleInputChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    //     const { name, value } = e.target;
+    //     const updatedDirectors = [...directors];
+    //     updatedDirectors[index][name.split('.')[1] as keyof Director] = value;
+    //     setDirectors(updatedDirectors);
+    // };
+
+    // const addDirector = () => {
+    //     setDirectors([
+    //         ...directors,
+    //         { name: '', nationality: 'Mexicana', residesInMexico: '', birthYear: '' }
+    //     ]);
+    // };
     const removeLastDirector = () => {
         setDirectors(directors.slice(0, -1));
     };
@@ -86,12 +122,13 @@ const Register = () => {
         e.preventDefault();
         console.log(formData);
         console.log('activeTabRegisterProductora', activeTabRegisterProductora)
+        console.log('first', directors)
     };
 
     const changeTab = (tab: string) => {
         setActiveTabRegisterProductora(tab);
     }
-    
+
 
 
     return (
@@ -253,22 +290,28 @@ const Register = () => {
                             {activeTabRegisterProductora === '3' && (
                                 <div>
                                     <form onSubmit={handleSubmit}>
-                                        {directors.map((director, index) => (
+                                        {/* {directors.map((director, index) => (
                                             <DirectorForm
                                                 key={index}
                                                 index={index}
                                                 formData={director}
                                                 handleInputChange={handleInputChange}
                                             />
-                                        ))}
+                                        ))} */}
                                         <br />
                                         <div className="flex justify-between">
-                                            <button type="button" onClick={removeLastDirector}>
-                                                - Quitar director
-                                            </button>
-                                            <button type="button" onClick={addDirector}>
-                                                + Agregar otro director
-                                            </button>
+                                            <h1>Directores</h1>
+                                            <DirectorsList directors={directors} />
+                                        </div>
+                                        <br />
+                                        <div>
+                                            <button onClick={() => setIsModalOpen(true)}>Agregar Director</button>
+                                            <AddDirectorModal
+                                                director={null}
+                                                isOpen={isModalOpen}
+                                                onClose={() => setIsModalOpen(false)}
+                                                onAdd={handleAddDirector}
+                                            />
                                         </div>
                                         <br />
                                         <div>
