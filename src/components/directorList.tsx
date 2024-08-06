@@ -8,6 +8,7 @@ interface inputEntity {
 }
 
 const DirectorsList: React.FC<inputEntity> = ({ directorsIni }) => {
+    const [indexId, setIndexId] = useState('');
     const [directors, setDirectors] = useState<Director[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentDirector, setCurrentDirector] = useState<Director | null>(null);
@@ -17,8 +18,10 @@ const DirectorsList: React.FC<inputEntity> = ({ directorsIni }) => {
         setDirectors(directorsIni);
         console.log('directors', directors)
     }, [directorsIni]);
-    const handleEdit = (director: Director) => {
+    const handleEdit = (director: Director, index:number) => {
+        director.id = index;
         setCurrentDirector(director);
+        setIndexId(index?.toString());
         setIsModalOpen(true);
     };
 
@@ -27,21 +30,22 @@ const DirectorsList: React.FC<inputEntity> = ({ directorsIni }) => {
     };
 
     const handleUpdateDirector = (updatedDirector: Director) => {
-        setDirectors(directors.map(director => director.id === updatedDirector.id ? updatedDirector : director));
+
+        setDirectors(directors.map((director,index) => index.toString() == indexId ? updatedDirector : director));
         setIsModalOpen(false);
     };
 
     return (
         <div style={{ width: '300px', margin: 'auto', border: '1px solid #ccc', padding: '10px' }}>
             <ul style={{ listStyleType: 'none', padding: 0 }}>
-                {directors.map((director) => (
-                    <li key={director.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                {directors.map((director, index) => (
+                    <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                         <span>{director.name}</span>
                         <div>
-                            <button onClick={() => handleEdit(director)} style={{ marginRight: '10px' }}>
+                            <button onClick={() => handleEdit(director, index)} style={{ marginRight: '10px' }}>
                                 ✏️
                             </button>
-                            <button onClick={() => handleDelete(director.id)}>
+                            <button onClick={() => handleDelete(index)}>
                                 🗑️
                             </button>
                         </div>

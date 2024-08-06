@@ -76,35 +76,12 @@ const Register = () => {
     // setDirectors(directorsTmp)
 
     const handleAddDirector = (director: Director) => {
-        console.log('director register', director);
-        
-          const updatedDirectors = [...directors, director];
-          console.log('second register', updatedDirectors);
-          
+          const updatedDirectors = [...directors, director];          
           setDirectors(updatedDirectors)
 
       };
-      console.log('directors register', directors);
-    // const [directors, setDirectors] = useState<Director[]>([
-    //     { name: '', nationality: 'Mexicana', residesInMexico: '', birthYear: '' }
-    // ]);
 
-    // const handleInputChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
-    //     const { name, value } = e.target;
-    //     const updatedDirectors = [...directors];
-    //     updatedDirectors[index][name.split('.')[1] as keyof Director] = value;
-    //     setDirectors(updatedDirectors);
-    // };
 
-    // const addDirector = () => {
-    //     setDirectors([
-    //         ...directors,
-    //         { name: '', nationality: 'Mexicana', residesInMexico: '', birthYear: '' }
-    //     ]);
-    // };
-    const removeLastDirector = () => {
-        setDirectors(directors.slice(0, -1));
-    };
     const [activeTab, setActiveTab] = useState<string>('agencia');
     const [activeTabRegisterProductora, setActiveTabRegisterProductora] = useState<string>('1');
 
@@ -120,9 +97,6 @@ const Register = () => {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        console.log(formData);
-        console.log('activeTabRegisterProductora', activeTabRegisterProductora)
-        console.log('first', directors)
     };
 
     const changeTab = (tab: string) => {

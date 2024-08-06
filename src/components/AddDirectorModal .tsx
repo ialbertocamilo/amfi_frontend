@@ -11,15 +11,16 @@ type AddDirectorModalProps = {
 };
 
 const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDirectorModalProps) => {
+
     const [name, setName] = useState('');
     const [nationality, setNationality] = useState('');
     const [residesInMexico, setResidesInMexico] = useState(false);
     const [birthYear, setBirthYear] = useState('');
 
     useEffect(() => {
-        console.log('useEffect triggered');
+        console.log('director', director)
         if (director) {
-            console.log('director data', director);
+
             setName(director?.name || '');
             setNationality(director?.nationality || '');
             setResidesInMexico(director?.residesInMexico || false);
@@ -104,7 +105,7 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDir
                     <div className={styles.formGroup}>
                         <label>Año de nacimiento del Director</label>
                         <input
-                            type="text"
+                            type="date"
                             value={birthYear}
                             onChange={(e) => setBirthYear(e.target.value)}
                             placeholder="Elige el año"
