@@ -24,6 +24,8 @@ interface FormData {
     linkInstagram: string;
     linkLinkedin: string;
     linkPaginaWeb: string;
+    name: string;
+    lastName: string;
 }
 
 
@@ -45,6 +47,8 @@ const Register = () => {
         linkInstagram: '',
         linkLinkedin: '',
         linkPaginaWeb: '',
+        name: '',
+        lastName: ''
     });
 
 
@@ -138,6 +142,14 @@ const Register = () => {
                             <div className="mb-4">
                                 <label className="block text-gray-700 mb-2" htmlFor="legalName">Razón Social</label>
                                 <input className="w-full px-3 py-2 border rounded" type="text" id="legalName" name="legalName" value={formData.legalName} onChange={handleChange} />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 mb-2" htmlFor="legalName">Nombres</label>
+                                <input className="w-full px-3 py-2 border rounded" type="text" id="name" name="name" value={formData.name} onChange={handleChange} />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 mb-2" htmlFor="legalName">Apellidos</label>
+                                <input className="w-full px-3 py-2 border rounded" type="text" id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} />
                             </div>
                             <div className="mb-4">
                                 <label className="block text-gray-700 mb-2" htmlFor="email">Correo electrónico corporativo</label>
