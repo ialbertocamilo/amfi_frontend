@@ -25,8 +25,8 @@ const DirectorsList: React.FC<inputEntity> = ({ directorsIni }) => {
         setIsModalOpen(true);
     };
 
-    const handleDelete = (id: number | null) => {
-        setDirectors(directors.filter(director => director.id !== id));
+    const handleDelete = (index: number) => {
+        setDirectors(directors.filter((_, i) => i !== index));
     };
 
     const handleUpdateDirector = (updatedDirector: Director) => {
