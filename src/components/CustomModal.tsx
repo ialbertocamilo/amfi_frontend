@@ -45,6 +45,21 @@ const CustomModal: React.FC<CustomModalProps> = ({
         },
       }}
     >
+      <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
+        <button
+          onClick={onCancel}
+          style={{
+            padding: '10px 20px',
+            backgroundColor: '#fff',
+            color: '#f00',
+            border: '1px solid #f00',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          {cancelText}
+        </button>
+      </div>
       <h2>{title}</h2>
       <p>{message}</p>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
