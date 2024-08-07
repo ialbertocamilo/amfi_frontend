@@ -1,0 +1,45 @@
+// pages/index.tsx
+import React, { useState } from 'react';
+import CustomModal from '../components/CustomModal';
+
+const Home: React.FC = () => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalIsOpen(false);
+  };
+
+  const handleConfirmAction = () => {
+    // Acción a ejecutar cuando se confirma
+    alert('Confirmado');
+    handleCloseModal();
+  };
+
+  const handleCancelAction = () => {
+    // Acción a ejecutar cuando se cancela
+    alert('Cancelado');
+    handleCloseModal();
+  };
+
+  return (
+    <div>
+      <h1>Mi página de inicio</h1>
+      <button onClick={handleOpenModal}>Abrir Modal</button>
+      <CustomModal
+        isOpen={modalIsOpen}
+        title="Usuarios"
+        message="Has llegado al máximo de usuarios disponibles, si deseas puedes comprar más."
+        confirmText="Comprar"
+        cancelText="Salir"
+        onConfirm={handleConfirmAction}
+        onCancel={handleCancelAction}
+      />
+    </div>
+  );
+};
+
+export default Home;

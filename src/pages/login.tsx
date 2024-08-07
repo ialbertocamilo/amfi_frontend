@@ -1,106 +1,79 @@
-import { useState, FormEvent } from 'react';
-import { useRouter } from 'next/router';
+import { useState, ChangeEvent, FormEvent } from 'react';
+import "./globals.css";
+
+import {  Link } from '@mui/material';
+
+interface FormData {
+    
+    email: string;
+    password: string;
+    
+}
+
 
 const Login = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const router = useRouter();
-
-  const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
-
-    const response = await fetch('/api/auth', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
+    
+    const [formData, setFormData] = useState<FormData>({
+        email: '',
+        password: ''
+        
     });
 
-    const data = await response.json();
+    const handleChange = (e: any) => {
+        const { name, value, type, checked } = e.target;
+        // console.log('formData', formData)
+        setFormData({
+            ...formData,
+            [name]: type === 'checkbox' ? checked : value,
+        });
+    };
 
-    if (response.ok) {
-      router.push('/');
-    } else {
-      alert(data.message);
-    }
-  };
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+    };
 
-  return (
-    <div className="login-container">
-      <form onSubmit={handleSubmit} className="login-form">
-        <h2>Login</h2>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+
+
+
+    return (
+        <div className="flex flex-col md:flex-row bg-white">
+            <div className="flex-1 flex items-center justify-center  h-screen">
+                <img src="/camera-setup.png" alt="Camera setup" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex-1 flex flex-col items-center justify-center p-8">
+                <div className="w-full max-w-md bg-white p-8  rounded">
+
+                        <form onSubmit={handleSubmit}>
+                            <h1 className="text-2xl font-bold mb-4 text-center">Inicio de sesión</h1>
+                           
+                            <div className="mb-4">
+                                <label className="block text-gray-700 mb-2" htmlFor="email">Usuario</label>
+                                <input className="w-full px-3 py-2 border rounded" type="email" id="email" name="email" value={formData.email} onChange={handleChange} />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 mb-2" htmlFor="password">Contraseña</label>
+                                <input className="w-full px-3 py-2 border rounded" type="password" id="password" name="password" value={formData.password} onChange={handleChange} />
+                            </div>
+
+                            <div className="mb-4 flex items-center justify-end">
+                                <Link href="/register" variant="body2" sx={{ color: 'red',  textDecoration: 'none'}}>
+                                    {'Restablecer contraseña'}
+                                </Link>
+                            </div>
+                            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Registrarme</button>
+                            <div className="mt-4 mb-4 flex items-center justify-center">
+                              <Link href="/register" variant="body2" sx={{ color: 'red',  textDecoration: 'none' }}>
+                                  {'Regístrate'}
+                              </Link>
+                            </div>
+                        </form>
+                    
+
+
+                </div>
+            </div>
         </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-
-      <style jsx>{`
-        .login-container {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 100vh;
-          background-color: #f0f2f5;
-        }
-
-        .login-form {
-          background: #fff;
-          padding: 2rem;
-          border-radius: 8px;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group {
-          margin-bottom: 1rem;
-        }
-
-        .form-group label {
-          display: block;
-          margin-bottom: 0.5rem;
-        }
-
-        .form-group input {
-          width: 100%;
-          padding: 0.5rem;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
-
-        button {
-          width: 100%;
-          padding: 0.75rem;
-          border: none;
-          background-color: #0070f3;
-          color: #fff;
-          border-radius: 4px;
-          cursor: pointer;
-        }
-
-        button:hover {
-          background-color: #005bb5;
-        }
-      `}</style>
-    </div>
-  );
-};
+    );
+}
 
 export default Login;
