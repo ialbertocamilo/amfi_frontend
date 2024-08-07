@@ -56,7 +56,7 @@ const Login = () => {
                             </div>
 
                             <div className="mb-4 flex items-center justify-end">
-                                <Link href="/register" variant="body2" sx={{ color: 'red',  textDecoration: 'none'}}>
+                                <Link href="/reset-password" variant="body2" sx={{ color: 'red',  textDecoration: 'none'}}>
                                     {'Restablecer contraseña'}
                                 </Link>
                             </div>
