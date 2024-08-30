@@ -2,7 +2,7 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import "./globals.css";
 import RegistroProductora2 from '../components/registroProductora2';
 import DirectorForm from '../components/directorForm';
-import { FaCheck } from 'react-icons/fa';
+import { FaBell, FaCheck, FaExclamationCircle } from 'react-icons/fa';
 import { AnyNode } from 'postcss';
 import AddDirectorModal from '@/components/AddDirectorModal ';
 import DirectorsList from '@/components/directorList';
@@ -253,12 +253,19 @@ const Register = () => {
                                         ))} */}
                                         <br />
                                         <div className="flex justify-between">
-                                            <h1>Directores</h1>
-                                            <DirectorsList directorsIni={directors} />
+
+                                            {directors.length > 0 ? (
+                                                <DirectorsList directorsIni={directors} />
+                                            ) : (
+                                                <div className="bg-[#DFF9FF] rounded p-4 flex items-center">
+                                                    <FaExclamationCircle className="mr-2" style={{ color: '#4B9AA5' }} />
+                                                    Puedes agregar más directores posteriormente.
+                                                </div>
+                                            )}
                                         </div>
                                         <br />
-                                        <div>
-                                            <button onClick={() => setIsModalOpen(true)}>Agregar Director</button>
+                                        <div className="flex justify-end">
+                                            <button onClick={() => setIsModalOpen(true)}>+ Agregar Director</button>
                                             <AddDirectorModal
                                                 director={null}
                                                 isOpen={isModalOpen}
