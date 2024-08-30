@@ -13,9 +13,13 @@ type AddDirectorModalProps = {
 const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDirectorModalProps) => {
 
     const [name, setName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [nationality, setNationality] = useState('');
+    const [typeRepresentative, setTypeRepresentative] = useState(1);
     const [residesInMexico, setResidesInMexico] = useState(false);
     const [birthYear, setBirthYear] = useState('');
+    const [directionYear, setDirectionYear] = useState('');
+
 
     useEffect(() => {
         console.log('director', director)
@@ -25,6 +29,9 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDir
             setNationality(director?.nationality || '');
             setResidesInMexico(director?.residesInMexico || false);
             setBirthYear(director?.birthYear || '');
+            setDirectionYear(director?.directionYear || '');
+            setLastName(director?.lastName || '');
+            setTypeRepresentative(director?.typeRepresentative || 1);
         }
     }, [director]);
 
@@ -49,6 +56,9 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDir
         setNationality('');
         setResidesInMexico(false);
         setBirthYear('');
+        setDirectionYear('');
+        setLastName('');
+        setTypeRepresentative(1);
     };
 
     if (!isOpen) return null;
@@ -57,16 +67,25 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDir
         <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
                 <div className={styles.modalHeader}>
-                    <h2>Agregar(1)</h2>
+                    <h2 className="text-2xl text-black font-bold">Agregar Director</h2>
                     <button className={styles.closeButton} onClick={onClose}>×</button>
                 </div>
+                <span className="text-sm text-gray-400">Ingresa información oficial, no uses apodos o nicknames.</span>
                 <div className={styles.modalBody}>
                     <p>Ingresa los datos del director</p>
                     <div className={styles.formGroup}>
-                        <label>Nombre y apellidos oficiales del Director representado</label>
+                        <label>Nombres</label>
                         <input
                             type="text"
                             value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label>Apellidos</label>
+                        <input
+                            type="text"
+                            value={lastName}
                             onChange={(e) => setName(e.target.value)}
                         />
                     </div>
@@ -103,10 +122,29 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDir
                         </div>
                     </div>
                     <div className={styles.formGroup}>
+                        <label>Tipo de representación</label>
+                        <select
+                            value={typeRepresentative}
+                            onChange={(e) => setTypeRepresentative(Number(e.target.value))}
+                        >
+                            <option value={1}>Representación 1</option>
+                            <option value={2}>Representación 2</option>
+                        </select>
+                    </div>
+                    <div className={styles.formGroup}>
                         <label>Año de nacimiento del Director</label>
                         <input
                             type="date"
                             value={birthYear}
+                            onChange={(e) => setBirthYear(e.target.value)}
+                            placeholder="Elige el año"
+                        />
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label>¿En qué año empezó a dirigir?</label>
+                        <input
+                            type="date"
+                            value={directionYear}
                             onChange={(e) => setBirthYear(e.target.value)}
                             placeholder="Elige el año"
                         />
@@ -127,7 +165,10 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDir
                                     nationality: nationality,
                                     residesInMexico: residesInMexico,
                                     birthYear: birthYear,
-                                    id: director?.id || null
+                                    id: director?.id || null,
+                                    lastName: lastName,
+                                    directionYear: directionYear,
+                                    typeRepresentative: Number(typeRepresentative)
                                 });
                             } else {
                                 handleAdd(true);

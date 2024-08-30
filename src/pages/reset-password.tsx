@@ -49,11 +49,13 @@ const Login = () => {
                 <div className="w-full max-w-md bg-white p-8  rounded">
 
                     <form onSubmit={handleSubmit}>
-                        <h1 className="text-2xl font-bold mb-4 text-center">Reestablecer contraseña</h1>
-
-
+                        <h1 className="text-4xl font-bold text-black mb-4 text-center">
+                            Reestablecer <br /> contraseña
+                        </h1>
+                        <p className="text-black">Ingresa tu correo electrónico y enviaremos una liga para que cambies la contraseña</p>
+                        <br />
                         <div className="mb-4">
-                            <label className="block text-gray-700 mb-2" htmlFor="password">Contraseña</label>
+                            <label className="block text-black mb-2" htmlFor="password">Contraseña</label>
                             <input className="w-full px-3 py-2 border rounded" type="password" id="password" name="password" value={formData.password} onChange={handleChange} />
                         </div>
 
