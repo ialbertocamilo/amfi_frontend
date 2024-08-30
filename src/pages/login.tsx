@@ -44,7 +44,7 @@ const Login = () => {
                 <div className="w-full max-w-md bg-white p-8  rounded">
 
                         <form onSubmit={handleSubmit}>
-                            <h1 className="text-2xl font-bold mb-4 text-center">Inicio de sesión</h1>
+                            <h1 className="text-2xl font-bold mb-4 text-center text-black">Inicio de sesión</h1>
                            
                             <div className="mb-4">
                                 <label className="block text-gray-700 mb-2" htmlFor="email">Usuario</label>
@@ -60,7 +60,7 @@ const Login = () => {
                                     {'Restablecer contraseña'}
                                 </Link>
                             </div>
-                            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Registrarme</button>
+                            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Ingresar</button>
                             <div className="mt-4 mb-4 flex items-center justify-center">
                               <Link href="/register" variant="body2" sx={{ color: 'red',  textDecoration: 'none' }}>
                                   {'Regístrate'}
