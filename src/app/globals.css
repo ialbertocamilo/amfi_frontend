@@ -3,27 +3,27 @@
 @import 'tailwindcss/utilities';
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --foreground-color: #000000;
+  --background-start-color: #d6dbdc;
+  --background-end-color: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --foreground-color: #ffffff;
+    --background-start-color: #000000;
+    --background-end-color: #000000;
   }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  color: var(--foreground-color);
   background: linear-gradient(
       to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
+      var(--background-end-color)
     )
-    rgb(var(--background-start-rgb));
+    var(--background-start-color);
 }
 
 @layer utilities {
@@ -31,37 +31,6 @@ body {
     text-wrap: balance;
   }
 }
-
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-/* 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-} */
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
-
 
 body {
   margin: 0;
