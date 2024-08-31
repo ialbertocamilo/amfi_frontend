@@ -86,7 +86,7 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDir
                         <input
                             type="text"
                             value={lastName}
-                            onChange={(e) => setName(e.target.value)}
+                            onChange={(e) => setLastName(e.target.value)}
                         />
                     </div>
                     <div className={styles.formGroup}>
@@ -145,7 +145,7 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDir
                         <input
                             type="date"
                             value={directionYear}
-                            onChange={(e) => setBirthYear(e.target.value)}
+                            onChange={(e) => setDirectionYear(e.target.value)}
                             placeholder="Elige el año"
                         />
                     </div>
