@@ -22,7 +22,6 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDir
 
 
     useEffect(() => {
-        console.log('director', director)
         if (director) {
 
             setName(director?.name || '');

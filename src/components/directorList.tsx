@@ -14,9 +14,7 @@ const DirectorsList: React.FC<inputEntity> = ({ directorsIni }) => {
     const [currentDirector, setCurrentDirector] = useState<Director | null>(null);
 
     useEffect(() => {
-        console.log('directorsIni', directorsIni)
         setDirectors(directorsIni);
-        console.log('directors', directors)
     }, [directorsIni]);
     const handleEdit = (director: Director, index:number) => {
         director.id = index;
