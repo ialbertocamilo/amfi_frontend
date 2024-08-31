@@ -3,10 +3,18 @@ import SummaryWidget from '../components/SummaryWidget';
 import Chart from '../components/Chart';
 import PendingTable from '../components/PendingTable';
 import "./globals.css";
+import Navbar from '@/components/NavBar';
+import Sidebar from '@/components/Sidebar';
 
 export default function Home() {
   return (
-    <div className="container mx-auto p-4" style={{ backgroundColor: '#F5F5F5' }}>
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar />
+      <div className="flex-1 flex flex-col">
+        <Navbar />
+        <main className="flex-1 p-6">
+          {/* Aquí va el contenido del dashboard */}
+          <div className="container mx-auto p-4" style={{ backgroundColor: '#F5F5F5' }}>
       <h1 className="text-4xl font-bold mb-4">Panel</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <SummaryWidget title="Total Usuarios" count={32} link="#" icon="Icon.png" />
@@ -21,5 +29,10 @@ export default function Home() {
         <PendingTable />
       </div>
     </div>
+        </main>
+      </div>
+    </div>
+
+    
   );
 }
