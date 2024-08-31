@@ -39,6 +39,9 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDir
         if (onAdd) {
             onAdd({
                 name: name,
+                lastName: lastName,
+                typeRepresentative: typeRepresentative,
+                directionYear: directionYear,
                 nationality: nationality,
                 residesInMexico: residesInMexico,
                 birthYear: birthYear,

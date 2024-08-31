@@ -107,6 +107,11 @@ const Register = () => {
         setActiveTabRegisterProductora(tab);
     }
 
+    const registrar = () => {
+        console.log('formData', formData)
+        console.log('directors', directors)
+    }
+
 
 
     return (
@@ -174,7 +179,7 @@ const Register = () => {
                                 <input type="checkbox" id="termsAccepted" name="termsAccepted" checked={formData.termsAccepted} onChange={handleChange} className="mr-2" />
                                 <label htmlFor="termsAccepted" className="text-gray-700">He leído y acepto los términos y condiciones.</label>
                             </div>
-                            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Registrarme</button>
+                            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded" onClick={() => registrar()}>Registrarme</button>
                         </form>
                     )}
 
@@ -283,7 +288,7 @@ const Register = () => {
                                         <br />
                                         <div className="flex space-x-4">
                                             <button type="submit" className="w-full bg-red-500 text-white py-2 rounded" onClick={() => setActiveTabRegisterProductora('2')}>Atras</button>
-                                            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Registrar</button>
+                                            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded" onClick={() => registrar()}>Registrar</button>
                                         </div>
 
                                     </form>

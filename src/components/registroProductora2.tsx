@@ -43,7 +43,7 @@ const RegistroProductora2 = ({ formData, handleInputChange, handleSubmit, prev, 
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700 mb-2" htmlFor="linkLinkedin">Link de Linkedin</label>
-                    <input className="w-full px-3 py-2 border rounded" type="text" id="linkLinkedin" name="clinkLinkedin" value={formData.linkLinkedin} onChange={handleInputChange} />
+                    <input className="w-full px-3 py-2 border rounded" type="text" id="linkLinkedin" name="linkLinkedin" value={formData.linkLinkedin} onChange={handleInputChange} />
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700 mb-2" htmlFor="linkPaginaWeb">Link de Página web</label>
