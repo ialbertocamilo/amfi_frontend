@@ -5,8 +5,7 @@ import { Fragment } from 'react';
 
 const Navbar: React.FC = () => {
     return (
-        <div className="flex items-center justify-between px-6 py-4 bg-white shadow">
-            <h1 className="text-xl font-bold">Panel</h1>
+        <div className="flex items-center justify-between px-6 py-4  ">
             <Menu as="div" className="relative inline-block text-left">
                 <div className="flex items-center">
                     <img src="persona.png" alt="Description" className="w-10 h-10 object-contain mr-2 rounded-full" />
