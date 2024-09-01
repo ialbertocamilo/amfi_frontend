@@ -1,5 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import "./globals.css";
+import { useRouter } from 'next/router';
 
 import { Link } from '@mui/material';
 
@@ -18,6 +19,7 @@ const Login = () => {
         password: ''
 
     });
+    const router = useRouter();
 
     const handleChange = (e: any) => {
         const { name, value, type, checked } = e.target;
@@ -29,6 +31,8 @@ const Login = () => {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
+        router.push('/reset-password-token');
+
     };
 
 

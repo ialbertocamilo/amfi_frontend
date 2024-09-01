@@ -38,7 +38,7 @@ const Navbar: React.FC = () => {
                             <Menu.Item>
                                 {({ active }) => (
                                     <a
-                                        href="#"
+                                        href="/reset-password"
                                         className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                                             } block px-4 py-2 text-sm`}
                                     >
@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
                             <Menu.Item>
                                 {({ active }) => (
                                     <a
-                                        href="#"
+                                        href="/login"
                                         className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                                             } block px-4 py-2 text-sm`}
                                     >
