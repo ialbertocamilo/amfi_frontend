@@ -7,6 +7,7 @@ import { AnyNode } from 'postcss';
 import AddDirectorModal from '@/components/AddDirectorModal ';
 import DirectorsList from '@/components/directorList';
 import { Director } from '@/entities/Director';
+import { useRouter } from 'next/router';
 
 interface FormData {
     companyName: string;
@@ -107,10 +108,12 @@ const Register = () => {
     }
 
     const registrar = () => {
-        console.log('formData', formData)
-        console.log('directors', directors)
+        console.log('formData', formData);
+        console.log('directors', directors);
+    
+        const router = useRouter();
+        router.push('/dashboard');
     }
-
 
 
     return (

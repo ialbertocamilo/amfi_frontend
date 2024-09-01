@@ -61,7 +61,7 @@ const Login = () => {
                             </div>
                             <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Ingresar</button>
                             <div className="mt-4 mb-4 flex items-center justify-center">
-                              <Link href="/register" variant="body2" sx={{ color: 'red',  textDecoration: 'none' }}>
+                              <Link href="/dashboard" variant="body2" sx={{ color: 'red',  textDecoration: 'none' }}>
                                   {'Regístrate'}
                               </Link>
                             </div>
