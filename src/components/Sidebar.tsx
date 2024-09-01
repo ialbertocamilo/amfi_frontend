@@ -12,7 +12,7 @@ const Sidebar: React.FC = () => {
         <img src="IconHome.png" alt="Description" className="object-contain mr-2 " />
           <span>Inicio</span>
         </a>
-        <a href="#" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+        <a href="/usuarios" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
         <img src="IconUsuarios.png" alt="Description" className="object-contain mr-2 " />
           <span>Usuarios</span>
         </a>
@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => {
         <img src="IconProyectos.png" alt="Description" className="object-contain mr-2 " />
           <span>Proyectos</span>
         </a>
-        <a href="/nuevo-proyecto" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+        <a href="/productoras" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
         <img src="IconProductoras.png" alt="Description" className="object-contain mr-2 " />
           <span>Productoras</span>
         </a>
