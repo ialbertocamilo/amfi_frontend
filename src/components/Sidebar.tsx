@@ -1,7 +1,13 @@
-import React from 'react';
-import { FaHome, FaCube, FaClock, FaUsers } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { FaHome, FaCube, FaClock, FaUsers, FaChevronUp, FaChevronDown } from 'react-icons/fa';
 
 const Sidebar: React.FC = () => {
+  const [isProjectsMenuOpen, setIsProjectsMenuOpen] = useState(false);
+
+  const toggleProjectsMenu = () => {
+    setIsProjectsMenuOpen(!isProjectsMenuOpen);
+  };
+  
   return (
     <div className="flex flex-col w-64 h-full bg-white shadow-md">
       <div className="flex items-center justify-center h-16 text-white">
@@ -16,10 +22,26 @@ const Sidebar: React.FC = () => {
         <img src="IconUsuarios.png" alt="Description" className="object-contain mr-2 " />
           <span>Usuarios</span>
         </a>
-        <a href="/nuevo-proyecto" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-        <img src="IconProyectos.png" alt="Description" className="object-contain mr-2 " />
-          <span>Proyectos</span>
-        </a>
+        <div>
+          <button
+            onClick={toggleProjectsMenu}
+            className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md focus:outline-none"
+          >
+            <img src="IconProyectos.png" alt="Proyectos" className="object-contain mr-2" />
+            <span>Proyectos</span>
+            {isProjectsMenuOpen ? <FaChevronUp className="ml-auto" /> : <FaChevronDown className="ml-auto" />}
+          </button>
+          {isProjectsMenuOpen && (
+            <div className="ml-8 mt-2 space-y-2">
+              <a href="/nuevo-proyecto" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+                <span>Crear proyectos</span>
+              </a>
+              <a href="/lista-de-proyectos" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+                <span>Listar proyectos</span>
+              </a>
+            </div>
+          )}
+        </div>
         <a href="/productoras" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
         <img src="IconProductoras.png" alt="Description" className="object-contain mr-2 " />
           <span>Productoras</span>
