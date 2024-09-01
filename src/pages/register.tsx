@@ -106,12 +106,12 @@ const Register = () => {
     const changeTab = (tab: string) => {
         setActiveTabRegisterProductora(tab);
     }
+    const router = useRouter();
 
     const registrar = () => {
         console.log('formData', formData);
         console.log('directors', directors);
     
-        const router = useRouter();
         router.push('/dashboard');
     }
 

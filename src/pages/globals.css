@@ -18,12 +18,7 @@
 
 body {
   color: black;
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      var(--background-end-color)
-    )
-    var(--background-start-color);
+  background: white;
 }
 
 @layer utilities {
