@@ -1,8 +1,10 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import {FormEvent, useState} from 'react';
 import "./globals.css";
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 
-import { Link } from '@mui/material';
+import {Link} from '@mui/material';
+import {api} from "@/lib/api";
+import toast from "react-hot-toast";
 
 interface FormData {
 
@@ -22,30 +24,37 @@ const Login = () => {
     const router = useRouter();
 
     const handleChange = (e: any) => {
-        const { name, value, type, checked } = e.target;
+        const {name, value, type, checked} = e.target;
         setFormData({
             ...formData,
             [name]: type === 'checkbox' ? checked : value,
         });
     };
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        router.push('/reset-password-token');
+
+        try {
+            await api.post('/auth/recover-password', {email: formData.email})
+            toast.success('Se ha enviado un enlace para recuperar tu contraseña a tu correo electrónico')
+        } catch (e: any) {
+            if (e.status === 409)
+                toast.error(e?.response?.data?.clientMessage)
+            else
+                toast.error('Ocurrió un error al tratar de restablecer la contraseña')
+        }
 
     };
-
-
 
 
     return (
         <div className="flex flex-col md:flex-row bg-white">
             <div className="flex-1 flex items-center justify-center  h-screen">
-                <img src="/camera-setup.png" alt="Camera setup" className="w-full h-full object-cover" />
+                <img src="/camera-setup.png" alt="Camera setup" className="w-full h-full object-cover"/>
             </div>
             <div className="flex-1 flex flex-col items-center justify-center p-8">
                 <div className="absolute top-0 right-0 m-4">
-                    <Link href="/login" variant="body2" sx={{ color: 'red', textDecoration: 'none' }}>
+                    <Link href="/login" variant="body2" sx={{color: 'red', textDecoration: 'none'}}>
                         {'Iniciar sesión'}
                     </Link>
                 </div>
@@ -53,20 +62,21 @@ const Login = () => {
 
                     <form onSubmit={handleSubmit}>
                         <h1 className="text-4xl font-bold text-black mb-4 text-center">
-                            Reestablecer <br /> contraseña
+                            Reestablecer <br/> contraseña
                         </h1>
-                        <p className="text-black">Ingresa tu correo electrónico y enviaremos una liga para que cambies la contraseña</p>
-                        <br />
+                        <p className="text-black">Ingresa tu correo electrónico y enviaremos un enlace para que cambies
+                            la contraseña</p>
+                        <br/>
                         <div className="mb-4">
-                            <label className="block text-black mb-2" htmlFor="password">Contraseña</label>
-                            <input className="w-full px-3 py-2 border rounded" type="password" id="password" name="password" value={formData.password} onChange={handleChange} />
+                            <label className="block text-black mb-2" htmlFor="email">Correo electrónico</label>
+                            <input className="w-full px-3 py-2 border rounded" type="email" id="email"
+                                   name="email" value={formData.email} onChange={handleChange}/>
                         </div>
 
 
                         <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Enviar</button>
 
                     </form>
-
 
 
                 </div>

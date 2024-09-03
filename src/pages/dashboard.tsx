@@ -1,12 +1,13 @@
 // pages/index.tsx
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import SummaryWidget from '../components/SummaryWidget';
 import Chart from '../components/Chart';
 import PendingTable from '../components/PendingTable';
-import "./globals.css";
+import "../app/globals.css";
 import Navbar from '@/components/NavBar';
 import Sidebar from '@/components/Sidebar';
 import { FaBars } from 'react-icons/fa';
+import toast from "react-hot-toast";
 
 export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
