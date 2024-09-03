@@ -161,9 +161,12 @@ const Register = () => {
                     toast.error(error.response?.data?.clientMessage)
             }
         } else {
-            console.log(formData)
+        if (!formData.termsAccepted) {
+            toast.error('Debe aceptar los términos y condiciones');
+            return false;
+        }
             try {
-                await api.post(`/company/production-studio`, {
+                const companyResult = await api.post(`/company/production-studio`, {
                     "comercialName": formData.companyName,
                     "legalName": formData.legalName,
                     "name": formData.name,
@@ -171,15 +174,30 @@ const Register = () => {
                     "jobPosition": formData.jobTitle,
                     "email": formData.email,
                     "password": formData.password,
-                    "nationalIdentifierOrRFC":formData.rfc,
-                    "fundingYear":formData.anio?Number(formData.anio):null,
-                    "certificationId":formData.idCertificacion,
-                    "instagramUrl":formData.linkInstagram,
-                    "facebookUrl":formData.linkFacebook,
+                    "nationalIdentifierOrRFC": formData.rfc,
+                    "fundingYear": formData.anio ? Number(formData.anio) : null,
+                    "certificationId": formData.idCertificacion,
+                    "instagramUrl": formData.linkInstagram,
+                    "facebookUrl": formData.linkFacebook,
                     "linkedinUrl": formData.linkLinkedin,
-                    "webUrl":formData.linkPaginaWeb
+                    "webUrl": formData.linkPaginaWeb
                 })
 
+                const productionStudioId = companyResult?.data?.content?.company?.id
+
+                if (directors.length > 0 && productionStudioId)
+                    for (const value of directors) {
+                        const representation=value.typeRepresentative==1?'freelance':value.typeRepresentative==2?'represented':'co-represented'
+                        await api.post(`/director/${productionStudioId}`, {
+                            "name": value.name,
+                            "lastname": value.lastName,
+                            "nationality": value.nationality,
+                            "birthDate": value.birthYear,
+                            "isMexicanResident": value.residesInMexico,
+                            "representation": representation,
+                            // "startedExperienceYear": value.directionYear,
+                        })
+                    }
 
                 toast.success('Registro exitoso, debe confirmar su cuenta, revise su bandeja de entrada.');
                 router.push('/login');

@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './AddDirectorModal.module.css';
-import { Director } from '@/entities/Director';
+import {Director} from '@/entities/Director';
+import {api} from "@/lib/api";
+import {FaExclamationCircle} from "react-icons/fa";
 
 type AddDirectorModalProps = {
     isOpen: boolean;
@@ -10,8 +12,9 @@ type AddDirectorModalProps = {
     director: Director | null;
 };
 
-const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDirectorModalProps) => {
+const AddDirectorModal = ({isOpen, onClose, onAdd, director, onUpdate}: AddDirectorModalProps) => {
 
+    const [timer, setTimer] = useState<any>(null);
     const [name, setName] = useState('');
     const [lastName, setLastName] = useState('');
     const [nationality, setNationality] = useState('');
@@ -20,10 +23,39 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDir
     const [birthYear, setBirthYear] = useState('');
     const [directionYear, setDirectionYear] = useState('');
 
+    const [representationAlert, setRepresentationAlert] = useState(false)
+
+    const [representationString, setRepresentationString] = useState('')
+    useEffect(() => {
+        if (name && lastName && birthYear && nationality){
+
+        if (timer) {
+            clearTimeout(timer);
+        }
+        setTimer(
+            setTimeout(() => {
+                api.post('/director', {
+                    "name": name,
+                    "lastname": lastName,
+                    "birthDate": birthYear,
+                    "nationality": nationality
+                }).then(data=>{
+                    console.log(data.data?.content)
+                    switch (data.data?.content)
+                    {
+                        case 'freelance': setRepresentationString('Freelance');break
+                        case 'represented': setRepresentationString('Representado');break
+                        case 'co-represented': setRepresentationString('Co-representado');break
+                    }
+                    setRepresentationAlert(true)
+                })
+            }, 1000)
+        );
+        }
+    }, [name, lastName, birthYear, nationality]);
 
     useEffect(() => {
         if (director) {
-
             setName(director?.name || '');
             setNationality(director?.nationality || '');
             setResidesInMexico(director?.residesInMexico || false);
@@ -63,6 +95,15 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDir
         setTypeRepresentative(1);
     };
 
+    const RepresentationComponent=()=>{
+        if (representationAlert) {
+            return <div className="bg-[#DFF9FF] rounded p-4 flex items-center">
+                <FaExclamationCircle className="mr-2" style={{color: '#4B9AA5'}}/>
+                Este director ya es un {representationString}.
+            </div>
+        }
+        return <></>
+    }
     if (!isOpen) return null;
 
     return (
@@ -91,6 +132,14 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDir
                             onChange={(e) => setLastName(e.target.value)}
                         />
                     </div>
+                    {representationAlert &&
+                    <div className={styles.formGroup}>
+                        <div className="bg-[#FFEDD5] rounded p-4 mb-2 flex items-center">
+                            <FaExclamationCircle className="mr-2" style={{color: '#D8A25E'}}/>
+                            Este director ya es un {representationString}.
+                        </div>
+                    </div>
+                    }
                     <div className={styles.formGroup}>
                         <label>Nacionalidad</label>
                         <select
@@ -129,8 +178,9 @@ const AddDirectorModal = ({ isOpen, onClose, onAdd, director, onUpdate }: AddDir
                             value={typeRepresentative}
                             onChange={(e) => setTypeRepresentative(Number(e.target.value))}
                         >
-                            <option value={1}>Representación 1</option>
-                            <option value={2}>Representación 2</option>
+                            <option value={1}>Freelance</option>
+                            <option value={2}>Representado</option>
+                            <option value={3}>Co-representado</option>
                         </select>
                     </div>
                     <div className={styles.formGroup}>
