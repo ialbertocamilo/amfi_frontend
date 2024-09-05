@@ -2,7 +2,7 @@ FROM node:20-alpine AS build
 
 
 WORKDIR /web
-ENV NEXT_PUBLIC_SOCKET_URL="http://0.0.0.0:3000"
+ENV NEXT_PUBLIC_SOCKET_URL="http://ec2-3-93-158-212.compute-1.amazonaws.com:3000"
 COPY package*.json ./
 RUN yarn
 COPY . .
