@@ -4,6 +4,10 @@ import ProyectoSteep1 from "@/components/Proyecto/ProyectoSteep1";
 import Navbar from "@/components/NavBar";
 import Sidebar from "@/components/Sidebar";
 import { FaBars } from "react-icons/fa";
+import ProyectoSteep2 from "@/components/Proyecto/ProyectoSteep2";
+import ProyectoSteep4 from "@/components/Proyecto/ProyectoSteep4";
+import ProyectoSteep3 from "@/components/Proyecto/ProyectoSteep3";
+import ProyectoSteep5 from "@/components/Proyecto/ProyectoSteep5";
 
 const NuevoProyecto = () => {
   const [formData, setFormData] = useState({
@@ -61,7 +65,21 @@ const NuevoProyecto = () => {
           </button>
           <Navbar />
         </div>
-        <ProyectoSteep1 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} activeTab={activeTab} setactiveTab={setActiveTab}/>
+                {activeTab === '1' && (
+          <ProyectoSteep1 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} activeTab={activeTab} setactiveTab={setActiveTab} />
+        )}
+        {activeTab === '2' && (
+          <ProyectoSteep2 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} activeTab={activeTab} setactiveTab={setActiveTab} />
+        )}
+        {activeTab === '3' && (
+          <ProyectoSteep3 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} activeTab={activeTab} setactiveTab={setActiveTab} />
+        )}
+        {activeTab === '4' && (
+          <ProyectoSteep4 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} activeTab={activeTab} setactiveTab={setActiveTab} />
+        )}
+        {activeTab === '5' && (
+          <ProyectoSteep5 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} activeTab={activeTab} setactiveTab={setActiveTab} />
+        )}
       </div>
     </div>
     
