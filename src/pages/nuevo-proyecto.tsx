@@ -43,6 +43,9 @@ const NuevoProyecto = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const [activeTab, setActiveTab] = useState<string>('1');
+
+
   return (
     <div className="flex h-screen bg-gray-100">
       <div className={`fixed inset-0 z-30 transition-transform transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:${isSidebarOpen ? 'block' : 'hidden'}`}>
@@ -58,7 +61,7 @@ const NuevoProyecto = () => {
           </button>
           <Navbar />
         </div>
-        <ProyectoSteep1 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} />
+        <ProyectoSteep1 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} activeTab={activeTab} setactiveTab={setActiveTab}/>
       </div>
     </div>
     
