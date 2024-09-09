@@ -48,6 +48,7 @@ const NuevoProyecto = () => {
   };
 
   const [activeTab, setActiveTab] = useState<string>('1');
+  const [entregables, setEntregables] = useState<any[]>([]);
 
 
   return (
@@ -75,7 +76,7 @@ const NuevoProyecto = () => {
           <ProyectoSteep3 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} activeTab={activeTab} setactiveTab={setActiveTab} />
         )}
         {activeTab === '4' && (
-          <ProyectoSteep4 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} activeTab={activeTab} setactiveTab={setActiveTab} />
+          <ProyectoSteep4 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} activeTab={activeTab} setactiveTab={setActiveTab} entregables={entregables} setEntregables={setEntregables} />
         )}
         {activeTab === '5' && (
           <ProyectoSteep5 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} activeTab={activeTab} setactiveTab={setActiveTab} />

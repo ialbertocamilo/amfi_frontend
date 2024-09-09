@@ -1,17 +1,40 @@
 import { useState } from "react";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaExclamationCircle } from "react-icons/fa";
+import EntregableList from "./EntregableList";
+import AddEntregableModal from "./AddEntregableModal ";
+
 interface registroEntity {
-  formData: any,
+  formData: any;
   handleChange: any;
   handleSubmit: any;
   activeTab: string;
   setactiveTab: any;
+  setEntregables: any;
+  entregables: any[];
 }
 
-const ProyectoSteep4 = ({ formData, handleChange, handleSubmit, activeTab, setactiveTab }: registroEntity) => {
 
 
 
+
+
+
+const ProyectoSteep4 = ({
+  formData,
+  handleChange,
+  handleSubmit,
+  activeTab,
+  setactiveTab,
+
+}: registroEntity) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [entregables, setEntregables] = useState<any[]>([]);
+
+  const handleAddEntregable = (director: any) => {
+    const updatedDirectors = [...entregables, director];
+    setEntregables(updatedDirectors)
+
+  };
   return (
     <div className="space-y-8 p-4">
       <h1 className="text-2xl font-bold mb-6 space-y-4">Nuevo proyecto</h1>
@@ -19,245 +42,270 @@ const ProyectoSteep4 = ({ formData, handleChange, handleSubmit, activeTab, setac
         <span>Proyectos</span> {">"} <span>Nuevo proyecto</span>
       </div>
 
-
-
-
       <form onSubmit={handleSubmit}>
         <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
-          <div className="tabs flex justify-center space-x-10">
-            <button
-              onClick={() => setactiveTab('1')}
-              className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= 1 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
-            >
-              {Number(activeTab) >= 1 ? <FaCheck /> : '1'}
-            </button>
-            <button
-              onClick={() => setactiveTab('2')}
-              className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= 2 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
-            >
-              {Number(activeTab) >= 2 ? <FaCheck /> : '2'}
-            </button>
-
-            <button
-              onClick={() => setactiveTab('3')}
-              className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= 3 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
-            >
-              {Number(activeTab) >= 3 ? <FaCheck /> : '3'}
-            </button>
-
-            <button
-              onClick={() => setactiveTab('4')}
-              className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= 4 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
-            >
-              {Number(activeTab) >= 4 ? <FaCheck /> : '4'}
-            </button>
-
-            <button
-              onClick={() => setactiveTab('3')}
-              className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= 5 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
-            >
-              {Number(activeTab) >= 5 ? <FaCheck /> : '5'}
-            </button>
+          {/* Navegación de pestañas */}
+          <div className="tabs flex justify-center space-x-10 mb-8">
+            {[1, 2, 3, 4, 5].map((step) => (
+              <button
+                key={step}
+                onClick={() => setactiveTab(step.toString())}
+                className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= step
+                  ? "bg-red-500 text-white"
+                  : "bg-gray-200 text-black"
+                  }`}
+              >
+                {Number(activeTab) >= step ? <FaCheck /> : step}
+              </button>
+            ))}
           </div>
 
-          <h2 className="text-xl font-bold mb-4">Datos del proyecto</h2>
-          <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
+          {/* Sección: Desglose Creativo */}
+          <h2 className="text-xl font-bold mb-4">Desglose creativo</h2>
+          <div className="grid grid-cols-2 gap-8 mb-8">
+            {[
+              "Cinematografía",
+              "Arte/ Props",
+              "Talento",
+              "Vestuario",
+              "Locación",
+              "Casting",
+              "Compesanción",
+              "Maquillaje y peinado",
+            ].map((field, index) => (
+              <div key={index}>
+                <label
+                  htmlFor={field.toLowerCase()}
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  {field}
+                </label>
+                <input
+                  type="text"
+                  id={field.toLowerCase()}
+                  name={field.toLowerCase()}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  placeholder="Descripción aquí"
+                  value={formData[field.toLowerCase()]}
+                  onChange={handleChange}
+                />
+              </div>
+            ))}
+          </div>
 
+          {/* Sección: Post Producción */}
+          <h2 className="text-xl font-bold mb-4">Post producción</h2>
+          <div className="grid grid-cols-2 gap-8 mb-8">
+            {["Online", "Música", "Locución", "Animación", "Audio", "Entrega"].map(
+              (field, index) => (
+                <div key={index}>
+                  <label
+                    htmlFor={field.toLowerCase()}
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    {field}
+                  </label>
+                  <input
+                    type="text"
+                    id={field.toLowerCase()}
+                    name={field.toLowerCase()}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                    placeholder="Descripción aquí"
+                    value={formData[field.toLowerCase()]}
+                    onChange={handleChange}
+                  />
+                </div>
+              )
+            )}
+          </div>
+
+          {/* Sección: Asistentes filmación */}
+          <h2 className="text-xl font-bold mb-4">Asistentes filmación</h2>
+          <div className="grid grid-cols-2 gap-8 mb-8">
             <div>
-              <label htmlFor="anunciante" className="block text-sm font-medium text-gray-700">Anunciante</label>
-              <input
-                type="text"
-                id="anunciante"
-                name="anunciante"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.anunciante}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="marca" className="block text-sm font-medium text-gray-700">Marca</label>
-              <input
-                type="text"
-                id="marca"
-                name="marca"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.marca}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="producto" className="block text-sm font-medium text-gray-700">Producto</label>
-              <input
-                type="text"
-                id="producto"
-                name="producto"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.producto}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="categoria" className="block text-sm font-medium text-gray-700">Categoría</label>
-              <input
-                type="text"
-                id="categoria"
-                name="categoria"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.categoria}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="nombreProyecto" className="block text-sm font-medium text-gray-700">Nombre de Campaña / Proyecto</label>
-              <input
-                type="text"
-                id="nombreProyecto"
-                name="nombreProyecto"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.nombreProyecto}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="versiones" className="block text-sm font-medium text-gray-700">Versiones</label>
-              <input
-                type="text"
-                id="versiones"
-                name="versiones"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.versiones}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="cantidad" className="block text-sm font-medium text-gray-700">Cantidad</label>
+              <label
+                htmlFor="cantidadAsistentes"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Cantidad
+              </label>
               <input
                 type="number"
-                id="cantidad"
-                name="cantidad"
+                id="cantidadAsistentes"
+                name="cantidadAsistentes"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.cantidad}
+                value={formData.cantidadAsistentes}
                 onChange={handleChange}
               />
             </div>
             <div>
-              <label htmlFor="cantidadSeleccionar" className="block text-sm font-medium text-gray-700">Cantidad Seleccionar</label>
+              <label
+                htmlFor="puestoAsistentes"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Puesto
+              </label>
               <select
-                id="cantidadSeleccionar"
-                name="cantidadSeleccionar"
+                id="puestoAsistentes"
+                name="puestoAsistentes"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.cantidadSeleccionar}
+                value={formData.puestoAsistentes}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+                <option value="Cámara">Cámara</option>
+                <option value="Sonido">Sonido</option>
+                <option value="Producción">Producción</option>
               </select>
             </div>
+          </div>
+
+          {/* Sección: Entregables */}
+          <h2 className="text-xl font-bold mb-4">Entregables</h2>
+          <div className="grid grid-cols-3 gap-8 mb-8">
+            <div className="text-left mt-4">
+              <div className="text-left">
+                {entregables.length > 0 ? (
+                  <EntregableList entregablesIni={entregables} />
+                ) : (
+                  <div className="bg-[#DFF9FF] rounded p-4 flex items-center">
+                    <FaExclamationCircle className="mr-2" style={{ color: '#4B9AA5' }} />
+                    Aqui puedes agregar tus entregable.
+                  </div>
+                )}
+              </div>
+
+              <button
+                type="button"
+                className="bg-red-500 text-white px-4 py-2 mt-4 rounded"
+                onClick={() => setIsModalOpen(true)}
+              >
+                Agregar Entregable
+              </button>
+              <AddEntregableModal
+                director={null}
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onAdd={handleAddEntregable}
+                onUpdate={null}
+              />
+            </div>
+
+
+            <div className="">
+
+              <label htmlFor="comentarioEntregables" className="block text-sm font-medium text-gray-700">Comentarios</label>
+
+              <textarea
+                id="comentarioEntregables"
+                name="comentarioEntregables"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                value={formData.comentarioEntregables}
+                onChange={handleChange}
+                maxLength={300}
+              />
+
+
+
+
+            </div>
+            <div>
+              {["Video", "Foto", "Locutor", "Total"].map(
+                (field, index) => (
+                  <div key={index} className="flex items-center mb-4">
+                    <label
+                      htmlFor={field.toLowerCase()}
+                      className="block text-sm font-medium text-gray-700 w-1/4"
+                    >
+                      {field}
+                    </label>
+                    <input
+                      type="number"
+                      id={field.toLowerCase()}
+                      name={field.toLowerCase()}
+                      className="mt-1 block w-3/4 p-2 border border-gray-300 rounded-md"
+                      placeholder="Descripción aquí"
+                      value={formData[field.toLowerCase()]}
+                      onChange={handleChange}
+                    />
+                  </div>
+                )
+              )}
+            </div>
 
           </div>
 
-          <div>
-            <h2 className="text-xl font-bold mb-4">Datos de la agencia</h2>
-            <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
-              <div>
-                <label htmlFor="agencia" className="block text-sm font-medium text-gray-700">Nombre de la agencia</label>
-                <input
-                  type="text"
-                  id="agencia"
-                  name="agencia"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.agencia}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label htmlFor="correoResponsable" className="block text-sm font-medium text-gray-700">Correo del responsable</label>
-                <input
-                  type="email"
-                  id="correoResponsable"
-                  name="correoResponsable"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.correoResponsable}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label htmlFor="directorCreativo" className="block text-sm font-medium text-gray-700">Nombre del Director Creativo</label>
-                <input
-                  type="text"
-                  id="directorCreativo"
-                  name="directorCreativo"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.directorCreativo}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label htmlFor="contactoFinanzas" className="block text-sm font-medium text-gray-700">Contacto Finanzas</label>
-                <input
-                  type="text"
-                  id="contactoFinanzas"
-                  name="contactoFinanzas"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.contactoFinanzas}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label htmlFor="directorCuentas" className="block text-sm font-medium text-gray-700">Nombre del Director de Cuentas</label>
-                <input
-                  type="text"
-                  id="directorCuentas"
-                  name="directorCuentas"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.directorCuentas}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label htmlFor="productorAgencia" className="block text-sm font-medium text-gray-700">Productor de la agencia</label>
-                <input
-                  type="text"
-                  id="productorAgencia"
-                  name="productorAgencia"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.productorAgencia}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label htmlFor="numeroODT" className="block text-sm font-medium text-gray-700">Número ODT</label>
-                <input
-                  type="text"
-                  id="numeroODT"
-                  name="numeroODT"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.numeroODT}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label htmlFor="contactoCompras" className="block text-sm font-medium text-gray-700">Contacto Compras</label>
-                <input
-                  type="text"
-                  id="contactoCompras"
-                  name="contactoCompras"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.contactoCompras}
-                  onChange={handleChange}
-                />
-              </div>
+          {/* Sección: Comentarios */}
+          <h2 className="text-xl font-bold mb-4">Comentarios</h2>
+          <div className="mb-8">
+            <textarea
+              id="comentarios"
+              name="comentarios"
+              className="w-full p-2 border border-gray-300 rounded-md"
+              placeholder="Descripción aquí"
+              value={formData.comentarios}
+              onChange={handleChange}
+            />
+          </div>
+
+          {/* Sección: Responsables */}
+          <h2 className="text-xl font-bold mb-4">Responsables de seguimiento de agencia</h2>
+          <div className="grid grid-cols-2 gap-8 mb-8">
+            <div>
+              <label
+                htmlFor="tituloResponsable"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Título
+              </label>
+              <input
+                type="text"
+                id="tituloResponsable"
+                name="tituloResponsable"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Título aquí"
+                value={formData.tituloResponsable}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="nombreResponsable"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Nombre
+              </label>
+              <select
+                id="nombreResponsable"
+                name="nombreResponsable"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                value={formData.nombreResponsable}
+                onChange={handleChange}
+              >
+                <option value="">Seleccionar</option>
+                <option value="Pedro">Pedro</option>
+                <option value="María">María</option>
+                <option value="Juan">Juan</option>
+              </select>
             </div>
           </div>
-          <div className="flex justify-center space-x-4">
-            <button type="submit" className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded" >Atras</button>
-            <button type="submit" className="w-1/4 bg-red-500 text-white py-2 rounded" >Siguiente</button>
+
+          {/* Botones */}
+          <div className="flex justify-between space-x-4">
+            <button
+              type="button"
+              className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className="w-1/4 bg-red-500 text-white py-2 rounded"
+            >
+              Siguiente
+            </button>
           </div>
         </div>
-
-
       </form>
     </div>
   );
