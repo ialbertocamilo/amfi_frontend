@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaTimes, FaUpload } from "react-icons/fa";
 interface registroEntity {
   formData: any,
   handleChange: any;
@@ -60,197 +60,391 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
             </button>
           </div>
 
-          <h2 className="text-xl font-bold mb-4">Datos del proyecto</h2>
+          <h2 className="text-xl font-bold mb-4">Objetivos de marca</h2>
           <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
 
             <div>
-              <label htmlFor="anunciante" className="block text-sm font-medium text-gray-700">Anunciante</label>
-              <input
-                type="text"
-                id="anunciante"
-                name="anunciante"
+              <label htmlFor="objetivoComunicacion" className="block text-sm font-medium text-gray-700">Objetivos de comunicación</label>
+              <textarea
+                id="objetivoComunicacion"
+                name="objetivoComunicacion"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.anunciante}
+                value={formData.objetivoComunicacion}
                 onChange={handleChange}
+                maxLength={300}
               />
             </div>
+
             <div>
-              <label htmlFor="marca" className="block text-sm font-medium text-gray-700">Marca</label>
-              <input
-                type="text"
-                id="marca"
-                name="marca"
+              <label htmlFor="target" className="block text-sm font-medium text-gray-700">Target</label>
+              <textarea
+                id="target"
+                name="target"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.marca}
+                value={formData.target}
                 onChange={handleChange}
+                maxLength={300}
               />
             </div>
+
             <div>
-              <label htmlFor="producto" className="block text-sm font-medium text-gray-700">Producto</label>
-              <input
-                type="text"
-                id="producto"
-                name="producto"
+              <label htmlFor="lineamientosMarca" className="block text-sm font-medium text-gray-700">Lineamientos de marca</label>
+              <textarea
+                id="lineamientosMarca"
+                name="lineamientosMarca"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.producto}
+                value={formData.lineamientosMarca}
                 onChange={handleChange}
+                maxLength={300}
               />
-            </div>
-            <div>
-              <label htmlFor="categoria" className="block text-sm font-medium text-gray-700">Categoría</label>
-              <input
-                type="text"
-                id="categoria"
-                name="categoria"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.categoria}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="nombreProyecto" className="block text-sm font-medium text-gray-700">Nombre de Campaña / Proyecto</label>
-              <input
-                type="text"
-                id="nombreProyecto"
-                name="nombreProyecto"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.nombreProyecto}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="versiones" className="block text-sm font-medium text-gray-700">Versiones</label>
-              <input
-                type="text"
-                id="versiones"
-                name="versiones"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.versiones}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="cantidad" className="block text-sm font-medium text-gray-700">Cantidad</label>
-              <input
-                type="number"
-                id="cantidad"
-                name="cantidad"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.cantidad}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="cantidadSeleccionar" className="block text-sm font-medium text-gray-700">Cantidad Seleccionar</label>
-              <select
-                id="cantidadSeleccionar"
-                name="cantidadSeleccionar"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.cantidadSeleccionar}
-                onChange={handleChange}
-              >
-                <option value="">Seleccionar</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
             </div>
 
           </div>
 
           <div>
-            <h2 className="text-xl font-bold mb-4">Datos de la agencia</h2>
+            <h2 className="text-xl font-bold mb-4">Documentos</h2>
             <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
               <div>
-                <label htmlFor="agencia" className="block text-sm font-medium text-gray-700">Nombre de la agencia</label>
+                <label htmlFor="line1" className="block text-sm font-medium text-gray-700">Line</label>
                 <input
-                  type="text"
-                  id="agencia"
-                  name="agencia"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.agencia}
+                  type="file"
+                  id="line1"
+                  name="line1"
+                  className="hidden"
                   onChange={handleChange}
                 />
+                <label
+                  htmlFor="line1"
+                  className="mt-1 flex items-center justify-center w-full p-2 border border-gray-300 rounded-md text-green-500 cursor-pointer"
+                >
+                  <FaUpload className="mr-2" />
+                  Subir archivo
+                </label>
+                {formData.line1 && (
+                  <div className="mt-2 flex items-center">
+                    <p className="text-sm text-gray-500">Archivo seleccionado: {formData.line1}</p>
+                    <FaTimes
+                      className="ml-2 text-red-500 cursor-pointer"
+                      onClick={formData.line1 && (() => handleChange({ target: { name: 'line1', value: '' } }))}
+                    />
+                  </div>
+                )}
               </div>
+
               <div>
-                <label htmlFor="correoResponsable" className="block text-sm font-medium text-gray-700">Correo del responsable</label>
+                <label htmlFor="link1" className="block text-sm font-medium text-gray-700">Link</label>
                 <input
-                  type="email"
-                  id="correoResponsable"
-                  name="correoResponsable"
+                  type="url"
+                  id="link1"
+                  name="link1"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.correoResponsable}
+                  value={formData.link1}
                   onChange={handleChange}
+                  placeholder="www.google.com"
                 />
               </div>
+
               <div>
-                <label htmlFor="directorCreativo" className="block text-sm font-medium text-gray-700">Nombre del Director Creativo</label>
+                <label htmlFor="line2" className="block text-sm font-medium text-gray-700">Line</label>
                 <input
-                  type="text"
-                  id="directorCreativo"
-                  name="directorCreativo"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.directorCreativo}
+                  type="file"
+                  id="line2"
+                  name="line2"
+                  className="hidden"
                   onChange={handleChange}
                 />
+                <label
+                  htmlFor="line2"
+                  className="mt-1 flex items-center justify-center w-full p-2 border border-gray-300 rounded-md text-green-500 cursor-pointer"
+                >
+                  <FaUpload className="mr-2" />
+                  Subir archivo
+                </label>
+                {formData.line2 && (
+                  <div className="mt-2 flex items-center">
+                    <p className="text-sm text-gray-500">Archivo seleccionado: {formData.line2}</p>
+                    <FaTimes
+                      className="ml-2 text-red-500 cursor-pointer"
+                      onClick={formData.line2 && (() => handleChange({ target: { name: 'line2', value: '' } }))}
+                    />
+                  </div>
+                )}
               </div>
+
               <div>
-                <label htmlFor="contactoFinanzas" className="block text-sm font-medium text-gray-700">Contacto Finanzas</label>
+                <label htmlFor="link2" className="block text-sm font-medium text-gray-700">Link</label>
                 <input
-                  type="text"
-                  id="contactoFinanzas"
-                  name="contactoFinanzas"
+                  type="url"
+                  id="link2"
+                  name="link2"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.contactoFinanzas}
+                  value={formData.link2}
                   onChange={handleChange}
+                  placeholder="www.google.com"
                 />
               </div>
+
               <div>
-                <label htmlFor="directorCuentas" className="block text-sm font-medium text-gray-700">Nombre del Director de Cuentas</label>
+                <label htmlFor="line3" className="block text-sm font-medium text-gray-700">Line</label>
                 <input
-                  type="text"
-                  id="directorCuentas"
-                  name="directorCuentas"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.directorCuentas}
+                  type="file"
+                  id="line3"
+                  name="line3"
+                  className="hidden"
                   onChange={handleChange}
                 />
+                <label
+                  htmlFor="line3"
+                  className="mt-1 flex items-center justify-center w-full p-2 border border-gray-300 rounded-md text-green-500 cursor-pointer"
+                >
+                  <FaUpload className="mr-2" />
+                  Subir archivo
+                </label>
+                {formData.line3 && (
+                  <div className="mt-2 flex items-center">
+                    <p className="text-sm text-gray-500">Archivo seleccionado: {formData.line3}</p>
+                    <FaTimes
+                      className="ml-2 text-red-500 cursor-pointer"
+                      onClick={formData.line3 && (() => handleChange({ target: { name: 'line3', value: '' } }))}
+                    />
+                  </div>
+                )}
               </div>
+
               <div>
-                <label htmlFor="productorAgencia" className="block text-sm font-medium text-gray-700">Productor de la agencia</label>
+                <label htmlFor="link3" className="block text-sm font-medium text-gray-700">Link</label>
                 <input
-                  type="text"
-                  id="productorAgencia"
-                  name="productorAgencia"
+                  type="url"
+                  id="link3"
+                  name="link3"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.productorAgencia}
+                  value={formData.link3}
                   onChange={handleChange}
+                  placeholder="www.google.com"
                 />
               </div>
-              <div>
-                <label htmlFor="numeroODT" className="block text-sm font-medium text-gray-700">Número ODT</label>
-                <input
-                  type="text"
-                  id="numeroODT"
-                  name="numeroODT"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.numeroODT}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label htmlFor="contactoCompras" className="block text-sm font-medium text-gray-700">Contacto Compras</label>
-                <input
-                  type="text"
-                  id="contactoCompras"
-                  name="contactoCompras"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.contactoCompras}
-                  onChange={handleChange}
-                />
-              </div>
+
             </div>
           </div>
+
+          <div>
+            <h2 className="text-xl font-bold mb-4">Licitación Finanzas</h2>
+            <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
+
+              <div>
+                <label htmlFor="responsablePago" className="block text-sm font-medium text-gray-700">Responsable de pago</label>
+                <select
+                  id="responsablePago"
+                  name="responsablePago"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  value={formData.responsablePago}
+                  onChange={handleChange}
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="opcion1">Opción 1</option>
+                  <option value="opcion2">Opción 2</option>
+                  <option value="opcion3">Opción 3</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="momentoFacturacion" className="block text-sm font-medium text-gray-700">Momento de facturación de Agencia</label>
+                <select
+                  id="momentoFacturacion"
+                  name="momentoFacturacion"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  value={formData.momentoFacturacion}
+                  onChange={handleChange}
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="opcion1">Opción 1</option>
+                  <option value="opcion2">Opción 2</option>
+                  <option value="opcion3">Opción 3</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="politicaPago" className="block text-sm font-medium text-gray-700">Política de pago</label>
+                <select
+                  id="politicaPago"
+                  name="politicaPago"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  value={formData.politicaPago}
+                  onChange={handleChange}
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="opcion1">Opción 1</option>
+                  <option value="opcion2">Opción 2</option>
+                  <option value="opcion3">Opción 3</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="contratoProyecto" className="block text-sm font-medium text-gray-700">Contrato de proyecto</label>
+                <select
+                  id="contratoProyecto"
+                  name="contratoProyecto"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  value={formData.contratoProyecto}
+                  onChange={handleChange}
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="opcion1">Opción 1</option>
+                  <option value="opcion2">Opción 2</option>
+                  <option value="opcion3">Opción 3</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="tipoProyecto" className="block text-sm font-medium text-gray-700">Tipo de proyecto</label>
+                <select
+                  id="tipoProyecto"
+                  name="tipoProyecto"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  value={formData.tipoProyecto}
+                  onChange={handleChange}
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="opcion1">Opción 1</option>
+                  <option value="opcion2">Opción 2</option>
+                  <option value="opcion3">Opción 3</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="momentoFacturacion" className="block text-sm font-medium text-gray-700">Momento de facturación</label>
+                <select
+                  id="momentoFacturacion"
+                  name="momentoFacturacion"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  value={formData.momentoFacturacion}
+                  onChange={handleChange}
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="opcion1">Opción 1</option>
+                  <option value="opcion2">Opción 2</option>
+                  <option value="opcion3">Opción 3</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="rondaCotizacion" className="block text-sm font-medium text-gray-700">Ronda de cotización</label>
+                <select
+                  id="rondaCotizacion"
+                  name="rondaCotizacion"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  value={formData.rondaCotizacion}
+                  onChange={handleChange}
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="opcion1">Opción 1</option>
+                  <option value="opcion2">Opción 2</option>
+                  <option value="opcion3">Opción 3</option>
+                </select>
+              </div>
+                           <div>
+                <label className="block text-sm font-medium text-gray-700">Visualización</label>
+                <div className="mt-1 flex items-center">
+                  <input
+                    type="radio"
+                    id="visualizacionSi"
+                    name="visualizacion"
+                    value="si"
+                    className="mr-2"
+                    checked={formData.visualizacion === 'si'}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="visualizacionSi" className="mr-4">Sí</label>
+                  <input
+                    type="radio"
+                    id="visualizacionNo"
+                    name="visualizacion"
+                    value="no"
+                    className="mr-2"
+                    checked={formData.visualizacion === 'no'}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="visualizacionNo">No</label>
+                </div>
+              </div>
+
+              <div>
+              <label htmlFor="politicaAltaProveedor" className="block text-sm font-medium text-gray-700">Política de alta al proveedor</label>
+              <textarea
+                id="politicaAltaProveedor"
+                name="politicaAltaProveedor"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                value={formData.politicaAltaProveedor}
+                onChange={handleChange}
+                maxLength={300}
+              />
+            </div>
+
+            </div>
+          </div>
+
+          <div>
+            <h2 className="text-xl font-bold mb-4">Financiamiento</h2>
+            <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
+              
+
+             
+
+              <div>
+                <label htmlFor="porcentajeTasaAnticipo" className="block text-sm font-medium text-gray-700">Porcentaje de tasa sobre el anticipo</label>
+                <input
+                  type="number"
+                  id="porcentajeTasaAnticipo"
+                  name="porcentajeTasaAnticipo"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  value={formData.porcentajeTasaAnticipo}
+                  onChange={handleChange}
+                  placeholder="%"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="porcentajeTasaFiniquito" className="block text-sm font-medium text-gray-700">Porcentaje de tasa sobre el finiquito</label>
+                <input
+                  type="number"
+                  id="porcentajeTasaFiniquito"
+                  name="porcentajeTasaFiniquito"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  value={formData.porcentajeTasaFiniquito}
+                  onChange={handleChange}
+                  placeholder="%"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="porcentajeTasaTotal" className="block text-sm font-medium text-gray-700">Porcentade de tasa total</label>
+                <input
+                  type="number"
+                  id="porcentajeTasaTotal"
+                  name="porcentajeTasaTotal"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  value={formData.porcentajeTasaTotal}
+                  onChange={handleChange}
+                  placeholder="%"
+                />
+              </div>
+
+
+              <div>
+              <label htmlFor="informacionAdicional" className="block text-sm font-medium text-gray-700">Información adicional</label>
+              <textarea
+                id="informacionAdicional"
+                name="informacionAdicional"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                value={formData.informacionAdicional}
+                onChange={handleChange}
+                maxLength={300}
+              />
+            </div>
+
+            </div>
+          </div>
+
           <div className="flex justify-center space-x-4">
             <button type="submit" className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded" >Atras</button>
             <button type="submit" className="w-1/4 bg-red-500 text-white py-2 rounded" >Siguiente</button>
