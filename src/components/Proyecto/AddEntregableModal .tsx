@@ -21,8 +21,38 @@ const AddEntregableModal = ({ isOpen, onClose, onAdd, entregable, onUpdate }: Ad
     const [locutor, setLocutor] = useState(false);
     const [descripcionEntregable, setDescripcionEntregable] = useState('');
     const [tipo, setTipo] = useState('');
+    const [fullMedia, setFullMedia] = useState(false);
+    const [television, setTelevision] = useState(false);
+    const [cine, setCine] = useState(false);
+    const [web, setWeb] = useState(false);
+    const [pantallas, setPantallas] = useState(false);
+    const [rrss, setRrss] = useState(false);
+    const [facebook, setFacebook] = useState(false);
+    const [instagram, setInstagram] = useState(false);
+    const [linkedin, setLinkedin] = useState(false);
+    const [tiktok, setTiktok] = useState(false);
+    const [youtube, setYoutube] = useState(false);
+    const [otro, setOtro] = useState(false);
 
+    const renderSwitch = (label: string, checked: boolean, onChange: (value: boolean) => void) => (
+        <div className="flex items-center mb-4 w-1/2">
+            <label className="block text-sm font-medium text-gray-700 w-1/4">{label}</label>
 
+            <div className=" ml-5 mt-2 w-2/5">
+                <Switch
+                    checked={checked}
+                    onChange={onChange}
+                    className={`${checked ? 'bg-red-500' : 'bg-gray-200'}
+                relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none`}
+                >
+                    <span
+                        className={`${checked ? 'translate-x-6' : 'translate-x-1'}
+                  inline-block w-4 h-4 transform bg-white rounded-full transition-transform`}
+                    />
+                </Switch>
+            </div>
+        </div>
+    );
 
     useEffect(() => {
         if (entregable) {
@@ -72,7 +102,9 @@ const AddEntregableModal = ({ isOpen, onClose, onAdd, entregable, onUpdate }: Ad
         <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
                 <div className={styles.modalHeader}>
-                    <h2 className="text-2xl text-black font-bold">Agregar Entregables</h2>
+                    <h2 className="text-2xl text-black font-bold">
+                        {onAdd ? 'Agregar Entregables' : 'Editar Entregable'}
+                    </h2>
                     <button className={styles.closeButton} onClick={onClose}>×</button>
                 </div>
                 <span className="text-sm text-gray-400">Asegurate de configurar todas las opciones.</span>
@@ -111,6 +143,24 @@ const AddEntregableModal = ({ isOpen, onClose, onAdd, entregable, onUpdate }: Ad
                             </select>
                         </div>
                     </div>
+
+                    <div className="flex flex-wrap">
+                        {/* {renderSwitch('Locutor', locutor, setLocutor)} */}
+                        {renderSwitch('Full media', fullMedia, setFullMedia)}
+                        {renderSwitch('Television', television, setTelevision)}
+                        {renderSwitch('Cine', cine, setCine)}
+                        {renderSwitch('Web', web, setWeb)}
+                        {renderSwitch('RRSS', rrss, setRrss)}
+                        {renderSwitch('Pantallas', pantallas, setPantallas)}
+                        {renderSwitch('Facebook', facebook, setFacebook)}
+                        {renderSwitch('Instagram', instagram, setInstagram)}
+                        {renderSwitch('Linkedin', linkedin, setLinkedin)}
+                        {renderSwitch('TikTok', tiktok, setTiktok)}
+                        {renderSwitch('Youtube', youtube, setYoutube)}
+                        {renderSwitch('Otro', otro, setOtro)}
+                    </div>
+
+
                     <div className={styles.inlineGroup}>
                         <label>Locutor</label>
                         <div className="mt-2">
