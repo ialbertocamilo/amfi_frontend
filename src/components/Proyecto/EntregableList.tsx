@@ -1,4 +1,3 @@
-import { Director } from '@/entities/Director';
 import React, { useEffect, useState } from 'react';
 import AddEntregableModal from './AddEntregableModal ';
 
@@ -7,40 +6,40 @@ interface inputEntity {
     entregablesIni: any[];
 }
 
-const DirectorsList: React.FC<inputEntity> = ({ entregablesIni }) => {
+const EntregableList: React.FC<inputEntity> = ({ entregablesIni }) => {
     const [indexId, setIndexId] = useState('');
-    const [directors, setDirectors] = useState<Director[]>([]);
+    const [entregables, setEntregables] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentDirector, setCurrentDirector] = useState<Director | null>(null);
+    const [currentEntregable, setCurrentEntregable] = useState<any | null>(null);
 
     useEffect(() => {
-        setDirectors(entregablesIni);
+        setEntregables(entregablesIni);
     }, [entregablesIni]);
-    const handleEdit = (director: Director, index:number) => {
-        director.id = index;
-        setCurrentDirector(director);
+    const handleEdit = (entregable: any, index:number) => {
+        entregable.id = index;
+        setCurrentEntregable(entregable);
         setIndexId(index?.toString());
         setIsModalOpen(true);
     };
 
     const handleDelete = (index: number) => {
-        setDirectors(directors.filter((_, i) => i !== index));
+        setEntregables(entregables.filter((_, i) => i !== index));
     };
 
-    const handleUpdateDirector = (updatedDirector: Director) => {
+    const handleUpdateEntregable = (updatedEntregable: any) => {
 
-        setDirectors(directors.map((director,index) => index.toString() == indexId ? updatedDirector : director));
+        setEntregables(entregables.map((entregable,index) => index.toString() == indexId ? updatedEntregable : entregable));
         setIsModalOpen(false);
     };
 
     return (
         <div style={{ width: '300px', margin: 'auto', border: '1px solid #ccc', padding: '10px' }}>
             <ul style={{ listStyleType: 'none', padding: 0 }}>
-                {directors.map((director, index) => (
+                {entregables.map((entregable, index) => (
                     <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                        <span>{director.name}</span>
+                        <span>{entregable.version}</span>
                         <div>
-                            <button onClick={() => handleEdit(director, index)} style={{ marginRight: '10px' }}>
+                            <button onClick={() => handleEdit(entregable, index)} style={{ marginRight: '10px' }}>
                                 ✏️
                             </button>
                             <button onClick={() => handleDelete(index)}>
@@ -50,17 +49,17 @@ const DirectorsList: React.FC<inputEntity> = ({ entregablesIni }) => {
                     </li>
                 ))}
             </ul>
-            {currentDirector && (
+            {currentEntregable && (
                 <AddEntregableModal
                     onAdd={null}
-                    director={currentDirector}
+                    entregable={currentEntregable}
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
-                    onUpdate={handleUpdateDirector}
+                    onUpdate={handleUpdateEntregable}
                 />
             )}
         </div>
     );
 };
 
-export default DirectorsList;
+export default EntregableList;

@@ -30,9 +30,9 @@ const ProyectoSteep4 = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [entregables, setEntregables] = useState<any[]>([]);
 
-  const handleAddEntregable = (director: any) => {
-    const updatedDirectors = [...entregables, director];
-    setEntregables(updatedDirectors)
+  const handleAddEntregable = (entregable: any) => {
+    const updatedEntregable = [...entregables, entregable];
+    setEntregables(updatedEntregable)
 
   };
   return (
@@ -183,7 +183,7 @@ const ProyectoSteep4 = ({
                 Agregar Entregable
               </button>
               <AddEntregableModal
-                director={null}
+                entregable={null}
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onAdd={handleAddEntregable}
