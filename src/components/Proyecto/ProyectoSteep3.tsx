@@ -220,7 +220,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData.link3}
                   onChange={handleChange}
-                  placeholder="www.google.com"
+                  placeholder="www.google.com (Referencias)"
                 />
               </div>
 
@@ -446,8 +446,8 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
           </div>
 
           <div className="flex justify-center space-x-4">
-            <button type="submit" className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded" >Atras</button>
-            <button type="submit" className="w-1/4 bg-red-500 text-white py-2 rounded" >Siguiente</button>
+            <button type="submit" className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded" onClick={() => setactiveTab('2')}>Atras</button>
+            <button type="submit" className="w-1/4 bg-red-500 text-white py-2 rounded" onClick={() => setactiveTab('4')}>Siguiente</button>
           </div>
         </div>
 

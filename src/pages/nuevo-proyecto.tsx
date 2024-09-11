@@ -8,6 +8,7 @@ import ProyectoSteep2 from "@/components/Proyecto/ProyectoSteep2";
 import ProyectoSteep4 from "@/components/Proyecto/ProyectoSteep4";
 import ProyectoSteep3 from "@/components/Proyecto/ProyectoSteep3";
 import ProyectoSteep5 from "@/components/Proyecto/ProyectoSteep5";
+import CasasProductorasModal from "@/components/Proyecto/CasasProductorasModal";
 
 const NuevoProyecto = () => {
   const [formData, setFormData] = useState({
@@ -28,6 +29,7 @@ const NuevoProyecto = () => {
     numeroODT: "",
     contactoCompras: ""
   });
+  const [isCasasProductorasModalOpen, setIsCasasProductorasModalOpen] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
@@ -37,8 +39,11 @@ const NuevoProyecto = () => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    //e.preventDefault();
     console.log(formData);
+    console.log('entregables', entregables)
+    setIsCasasProductorasModalOpen(true); // Open the CasasProductorasModal
+
   };
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -82,6 +87,12 @@ const NuevoProyecto = () => {
           <ProyectoSteep5 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} activeTab={activeTab} setactiveTab={setActiveTab} />
         )}
       </div>
+
+      <CasasProductorasModal
+                isOpen={isCasasProductorasModalOpen}
+                onClose={() => setIsCasasProductorasModalOpen(false)}
+               
+              />
     </div>
     
   )

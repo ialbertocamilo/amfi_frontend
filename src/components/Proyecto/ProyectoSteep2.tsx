@@ -218,8 +218,8 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
             </div>
           </div>
           <div className="flex justify-center space-x-4">
-            <button type="submit" className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded" >Atras</button>
-            <button type="submit" className="w-1/4 bg-red-500 text-white py-2 rounded" >Siguiente</button>
+            <button type="submit" className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded" onClick={() => setactiveTab('1')}>Atras</button>
+            <button type="submit" className="w-1/4 bg-red-500 text-white py-2 rounded" onClick={() => setactiveTab('3')}>Siguiente</button>
           </div>
         </div>
 

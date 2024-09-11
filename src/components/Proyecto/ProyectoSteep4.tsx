@@ -295,12 +295,14 @@ const ProyectoSteep4 = ({
             <button
               type="button"
               className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded"
+              onClick={() => setactiveTab('3')}
             >
-              Cancelar
+              Atras
             </button>
             <button
               type="submit"
               className="w-1/4 bg-red-500 text-white py-2 rounded"
+              onClick={() => setactiveTab('5')}
             >
               Siguiente
             </button>
