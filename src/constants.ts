@@ -1,5 +1,6 @@
 
 
 export const storageConstants={
-    token:'token'
+    token:'token',
+    user:'user'
 }

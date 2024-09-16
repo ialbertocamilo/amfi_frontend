@@ -5,6 +5,7 @@ import {Link} from '@mui/material';
 import {useRouter} from 'next/router';
 import {api} from "@/lib/api";
 import toast from "react-hot-toast";
+import {storage} from "@/lib/storage";
 
 interface FormData {
 
@@ -37,14 +38,15 @@ const Login = () => {
 
         try {
 
-            await api.post("/auth/login", {
+            const result=await api.post("/auth/login", {
                 email: formData.email,
                 password: formData.password
             })
+
+            storage('user').set(result?.data)
             toast.success('Inicio de sesión exitoso')
             router.push('/dashboard');
         } catch (e: any) {
-
             if (e.status === 400)
                 e.response?.data?.message.forEach((value: any) => toast.error(value))
             if (e.status === 409)
