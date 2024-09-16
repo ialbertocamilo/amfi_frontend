@@ -39,6 +39,10 @@ const Sidebar: React.FC = () => {
               <a href="/lista-de-proyectos" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
                 <span>Listar proyectos</span>
               </a>
+
+              <a href="/lista-de-proyectos-admin" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+                <span>Listar proyectos admin</span>
+              </a>
             </div>
           )}
         </div>
