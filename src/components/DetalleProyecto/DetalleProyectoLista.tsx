@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 interface CasaProductora {
   name: string;
   status: 'Completado' | 'Pendiente' | 'Rechazado' | 'Aceptado';
@@ -28,6 +29,10 @@ const getStatusColor = (status: CasaProductora['status']) => {
 };
 
 const ProjectDetails: React.FC = () => {
+
+  const handleItemClick = () => {
+    window.location.href = '/evaluacion-casa-productora';
+  };
   return (
     <div className="mt-6 p-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl shadow-md space-y-6 px-4 lg:px-8">   
      <div className="flex justify-between items-start">
@@ -45,17 +50,21 @@ const ProjectDetails: React.FC = () => {
       {/* Casas Productoras Invitadas */}
       <div>
         <h2 className="text-lg font-medium mb-4">Casas Productoras invitadas</h2>
-        <ul className="space-y-4">
-          {casasProductoras.map((casa, index) => (
-            <li key={index} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow">
-              <span className="text-gray-700">{casa.name}</span>
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(casa.status)}`}>
-                {casa.status}
-              </span>
-              <button className="text-gray-400 hover:text-gray-600">&gt;</button>
-            </li>
-          ))}
-        </ul>
+        <ul>
+      {casasProductoras.map((casa, index) => (
+        <li
+          key={index}
+          className="flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow cursor-pointer mt-4"
+          onClick={handleItemClick}
+        >
+          <span className="text-gray-700">{casa.name}</span>
+          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(casa.status)}`}>
+            {casa.status}
+          </span>
+          <button className="text-gray-400 hover:text-gray-600">&gt;</button>
+        </li>
+      ))}
+    </ul>
       </div>
 
       {/* Notification Section */}
