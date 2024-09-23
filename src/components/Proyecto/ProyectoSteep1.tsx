@@ -9,54 +9,58 @@ interface registroEntity {
   handleSubmit: any;
   activeTab: string;
   setactiveTab: any;
+  isEditing?: boolean;
 }
 
-const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setactiveTab }: registroEntity) => {
+const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setactiveTab, isEditing }: registroEntity) => {
 
   const registrarProyecto = async () => {
-    const token = localStorage.getItem('token')?.replace(/"/g, '');
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-
-    const projectData: any = {
-      "brand": formData.brand,
-      "product": formData.product,
-      "category": formData.category,
-      "projectName": formData.projectName,
-      "versionName": formData.versionName,
-      "versionNumber": formData.versionNumber,
-      "agencyName": formData.agencia,
-      "agencyEmail": formData.agencyEmail,
-      "agencyCreativeDirector": formData.agencyCreativeDirector,
-      "agencyAccountDirector": formData.agencyAccountDirector,
-      "odtNumber": formData.odtNumber,
-      "buyerContact": formData.buyerContact,
-      "budget": 1,
-      "status": "En progreso",
-      "projectStep": 1,
-      "extra": {}
-    };
-    if (user.user.company.type === 'advertiser') {
-      projectData.advertiserId = user.user.company.id;
-    } else if (user.user.company.type === 'agency') {
-      projectData.agencyId = user.user.company.id;
-    }
-    try {
-      const response = await api.post(`/project/create`, projectData, {
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
-      });
-      localStorage.setItem('projectId', response.data.id);
-      toast.success('Registro de proyecto exitoso');
+    if (isEditing) {
       setactiveTab('2')
-    } catch (error: any) {
-      console.error("Registration error:", error);
-      if (error.status === 400)
-        error.response?.data?.message.forEach((value: any) => toast.error(value))
-      if (error.status === 409)
-        toast.error(error.response?.data?.clientMessage)
-    }
+    } else {
+      const token = localStorage.getItem('token')?.replace(/"/g, '');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
 
+      const projectData: any = {
+        "brand": formData.brand,
+        "product": formData.product,
+        "category": formData.category,
+        "projectName": formData.projectName,
+        "versionName": formData.versionName,
+        "versionNumber": formData.versionNumber,
+        "agencyName": formData.agencia,
+        "agencyEmail": formData.agencyEmail,
+        "agencyCreativeDirector": formData.agencyCreativeDirector,
+        "agencyAccountDirector": formData.agencyAccountDirector,
+        "odtNumber": formData.odtNumber,
+        "buyerContact": formData.buyerContact,
+        "budget": 1,
+        "status": "En progreso",
+        "projectStep": 1,
+        "extra": {}
+      };
+      if (user.user.company.type === 'advertiser') {
+        projectData.advertiserId = user.user.company.id;
+      } else if (user.user.company.type === 'agency') {
+        projectData.agencyId = user.user.company.id;
+      }
+      try {
+        const response = await api.post(`/project/create`, projectData, {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
+        localStorage.setItem('projectId', response.data.id);
+        toast.success('Registro de proyecto exitoso');
+        setactiveTab('2')
+      } catch (error: any) {
+        console.error("Registration error:", error);
+        if (error.status === 400)
+          error.response?.data?.message.forEach((value: any) => toast.error(value))
+        if (error.status === 409)
+          toast.error(error.response?.data?.clientMessage)
+      }
+    }
   }
 
 
@@ -117,6 +121,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               value={formData.anunciante}
               onChange={handleChange}
+              disabled={isEditing}
             />
           </div>
           <div>
@@ -128,6 +133,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               value={formData.brand}
               onChange={handleChange}
+              disabled={isEditing}
             />
           </div>
           <div>
@@ -139,6 +145,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               value={formData.product}
               onChange={handleChange}
+              disabled={isEditing}
             />
           </div>
           <div>
@@ -150,6 +157,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               value={formData.category}
               onChange={handleChange}
+              disabled={isEditing}
             />
           </div>
           <div>
@@ -161,6 +169,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               value={formData.projectName}
               onChange={handleChange}
+              disabled={isEditing}
             />
           </div>
           <div>
@@ -172,6 +181,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               value={formData.versionName}
               onChange={handleChange}
+              disabled={isEditing}
             />
           </div>
           <div>
@@ -183,6 +193,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               value={formData.versionNumber}
               onChange={handleChange}
+              disabled={isEditing}
             />
           </div>
 
@@ -201,6 +212,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.agencyName}
                 onChange={handleChange}
+                disabled={isEditing}
               />
             </div>
             <div>
@@ -212,6 +224,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.agencyEmail}
                 onChange={handleChange}
+                disabled={isEditing}
               />
             </div>
             <div>
@@ -223,6 +236,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.agencyCreativeDirector}
                 onChange={handleChange}
+                disabled={isEditing}
               />
             </div>
             <div>
@@ -234,6 +248,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.contactoFinanzas}
                 onChange={handleChange}
+                disabled={isEditing}
               />
             </div>
             <div>
@@ -245,6 +260,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.agencyAccountDirector}
                 onChange={handleChange}
+                disabled={isEditing}
               />
             </div>
             <div>
@@ -256,6 +272,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.productorAgencia}
                 onChange={handleChange}
+                disabled={isEditing}
               />
             </div>
             <div>
@@ -267,6 +284,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.odtNumber}
                 onChange={handleChange}
+                disabled={isEditing}
               />
             </div>
             <div>
@@ -278,6 +296,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.buyerContact}
                 onChange={handleChange}
+                disabled={isEditing}
               />
             </div>
           </div>

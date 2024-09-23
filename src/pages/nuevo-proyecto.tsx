@@ -38,6 +38,7 @@ const NuevoProyecto: React.FC = () => {
 
 
   const [isCasasProductorasModalOpen, setIsCasasProductorasModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
@@ -81,7 +82,7 @@ const NuevoProyecto: React.FC = () => {
 
 
   async function obtenerDetalle(projectId: any) {
-    console.log('formData', formData)
+    setIsEditing(true);
       const token = localStorage.getItem('token')?.replace(/"/g, '');
       //const projectId = localStorage.getItem('projectId')?.replace(/"/g, '');
   
@@ -91,9 +92,7 @@ const NuevoProyecto: React.FC = () => {
             'Authorization': 'Bearer ' + token
           }
         });
-        console.log('response.data.extra', response)
         setFormData(response.data.extra)
-        console.log('formData act', formData)
       } catch (error: any) {
         console.error("Actualizacion error:", error);
         if (error.status === 400)
@@ -106,7 +105,10 @@ const NuevoProyecto: React.FC = () => {
   useEffect(() => {
     if (id) {
       obtenerDetalle(id);
+    }else{
+      setIsEditing(false);
     }
+    console.log('isEditing', isEditing)
   }, [id]);
 
 
@@ -136,7 +138,7 @@ const NuevoProyecto: React.FC = () => {
           <Navbar />
         </div>
                 {activeTab === '1' && (
-          <ProyectoSteep1 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} activeTab={activeTab} setactiveTab={setActiveTab} />
+          <ProyectoSteep1 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} activeTab={activeTab} setactiveTab={setActiveTab} isEditing={isEditing} />
         )}
         {activeTab === '2' && (
           <ProyectoSteep2 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} activeTab={activeTab} setactiveTab={setActiveTab} />
