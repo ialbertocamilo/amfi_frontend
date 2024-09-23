@@ -112,7 +112,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
         <h2 className="text-xl font-bold mb-4">Datos del proyecto</h2>
         <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
 
-          <div>
+          {/* <div>
             <label htmlFor="anunciante" className="block text-sm font-medium text-gray-700">Anunciante</label>
             <input
               type="text"
@@ -123,7 +123,7 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
               onChange={handleChange}
               disabled={isEditing}
             />
-          </div>
+          </div> */}
           <div>
             <label htmlFor="brand" className="block text-sm font-medium text-gray-700">Marca</label>
             <input
