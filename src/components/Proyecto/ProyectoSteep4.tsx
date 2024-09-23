@@ -42,7 +42,7 @@ const ProyectoSteep4 = ({
         <span>Proyectos</span> {">"} <span>Nuevo proyecto</span>
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form >
         <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
           {/* Navegación de pestañas */}
           <div className="tabs flex justify-center space-x-10 mb-8">
@@ -298,16 +298,16 @@ const ProyectoSteep4 = ({
               onClick={() => 
                 {
                 setEntregables(entregables)
-                setactiveTab('3')}}
+                handleSubmit('3')}}
             >
               Atras
             </button>
             <button
-              type="submit"
+              type="button"
               className="w-1/4 bg-red-500 text-white py-2 rounded"
               onClick={() =>{
                 setEntregables(entregables)
-                setactiveTab('5')}} 
+                handleSubmit('5')}} 
             >
               Siguiente
             </button>

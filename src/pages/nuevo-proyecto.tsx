@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./globals.css";
 import ProyectoSteep1 from "@/components/Proyecto/ProyectoSteep1";
 import Navbar from "@/components/NavBar";
@@ -9,9 +9,12 @@ import ProyectoSteep4 from "@/components/Proyecto/ProyectoSteep4";
 import ProyectoSteep3 from "@/components/Proyecto/ProyectoSteep3";
 import ProyectoSteep5 from "@/components/Proyecto/ProyectoSteep5";
 import CasasProductorasModal from "@/components/Proyecto/CasasProductorasModal";
+import { api } from "@/lib/api";
+import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
-const NuevoProyecto = () => {
-  const [formData, setFormData] = useState({
+const NuevoProyecto: React.FC = () => {
+    const [formData, setFormData] = useState({
     anunciante: "",
     marca: "",
     producto: "",
@@ -29,6 +32,11 @@ const NuevoProyecto = () => {
     numeroODT: "",
     contactoCompras: ""
   });
+  const router = useRouter();
+  const { id } = router.query;
+
+
+
   const [isCasasProductorasModalOpen, setIsCasasProductorasModalOpen] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -38,13 +46,69 @@ const NuevoProyecto = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (page: string) => {
     //e.preventDefault();
-    console.log(formData);
-    console.log('entregables', entregables)
-    setIsCasasProductorasModalOpen(true); // Open the CasasProductorasModal
 
+    //console.log('entregables', entregables)
+    if(page==='6'){
+    setIsCasasProductorasModalOpen(true); // Open the CasasProductorasModal
+    }
+    await actualizar(page);
+    
+  
   };
+
+  async function actualizar(page: string) {
+      const token = localStorage.getItem('token')?.replace(/"/g, '');
+      const projectId = localStorage.getItem('projectId')?.replace(/"/g, '');
+  
+      try {
+        const response = await api.patch(`/project/${projectId}`, { extra: formData }, {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
+        toast.success('Actualizado correctamente');
+        setActiveTab(page)
+      } catch (error: any) {
+        console.error("Actualizacion error:", error);
+        if (error.status === 400)
+          error.response?.data?.message.forEach((value: any) => toast.error(value))
+        if (error.status === 409)
+          toast.error(error.response?.data?.clientMessage)
+      }
+  }
+
+
+  async function obtenerDetalle(projectId: any) {
+    console.log('formData', formData)
+      const token = localStorage.getItem('token')?.replace(/"/g, '');
+      //const projectId = localStorage.getItem('projectId')?.replace(/"/g, '');
+  
+      try {
+        const response = await api.get(`/project/${projectId}`, {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
+        console.log('response.data.extra', response)
+        setFormData(response.data.extra)
+        console.log('formData act', formData)
+      } catch (error: any) {
+        console.error("Actualizacion error:", error);
+        if (error.status === 400)
+          error.response?.data?.message.forEach((value: any) => toast.error(value))
+        if (error.status === 409)
+          toast.error(error.response?.data?.clientMessage)
+      }
+  }
+
+  useEffect(() => {
+    if (id) {
+      obtenerDetalle(id);
+    }
+  }, [id]);
+
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 

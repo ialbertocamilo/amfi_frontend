@@ -37,10 +37,15 @@ const Login = () => {
 
         try {
 
-            await api.post("/auth/login", {
+            const response = await api.post("/auth/login", {
                 email: formData.email,
                 password: formData.password
             })
+            const userData = response.data;
+
+            localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('token', JSON.stringify(userData.access_token));
+
             toast.success('Inicio de sesión exitoso')
             router.push('/dashboard');
         } catch (e: any) {

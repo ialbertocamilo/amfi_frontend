@@ -150,10 +150,10 @@ const ProyectoSteep5 = ({
 
           {/* Botones */}
           <div className="flex justify-between mt-6">
-            <button className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded" onClick={() => setactiveTab('4')}>
+            <button className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded" onClick={() => handleSubmit('5')}>
               Atras
             </button>
-            <button className="w-1/4 bg-red-500 text-white py-2 rounded" onClick={() => handleSubmit()}>
+            <button className="w-1/4 bg-red-500 text-white py-2 rounded" onClick={() => handleSubmit('6')}>
               Crear proyecto
             </button>
           </div>
