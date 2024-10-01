@@ -56,16 +56,195 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
 
 
 
+        <div className="max-w-4xl mx-auto p-4">
+          {/* Animación Section */}
+          <div>
+            <h2 className="text-xl font-bold mb-4">Animación</h2>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <input
+                type="number"
+                placeholder="2D"
+                className="border p-2 w-full"
+                value={formData.animacion.twoD}
+                onChange={(e) => handleChange('animacion', 'twoD', e.target.value)}
+              />
+              <input
+                type="number"
+                placeholder="3D"
+                className="border p-2 w-full"
+                value={formData.animacion.threeD}
+                onChange={(e) => handleChange('animacion', 'threeD', e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <input
+                type="number"
+                placeholder="VFX"
+                className="border p-2 w-full"
+                value={formData.animacion.vfx}
+                onChange={(e) => handleChange('animacion', 'vfx', e.target.value)}
+              />
+              <textarea
+                placeholder="Descripción Adicional"
+                className="border p-2 w-full"
+                value={formData.animacion.descripcion}
+                onChange={(e) => handleChange('animacion', 'descripcion', e.target.value)}
+              />
+            </div>
+          </div>
 
+          {/* Música Section */}
+          <div>
+            <h2 className="text-xl font-bold mb-4">Música</h2>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <input
+                type="number"
+                placeholder="Original"
+                className="border p-2 w-full"
+                value={formData.musica.original}
+                onChange={(e) => handleChange('musica', 'original', e.target.value)}
+              />
+              <input
+                type="number"
+                placeholder="Sound a like"
+                className="border p-2 w-full"
+                value={formData.musica.soundALike}
+                onChange={(e) => handleChange('musica', 'soundALike', e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <input
+                type="number"
+                placeholder="Stock"
+                className="border p-2 w-full"
+                value={formData.musica.stock}
+                onChange={(e) => handleChange('musica', 'stock', e.target.value)}
+              />
+              <input
+                type="number"
+                placeholder="Licencia"
+                className="border p-2 w-full"
+                value={formData.musica.licencia}
+                onChange={(e) => handleChange('musica', 'licencia', e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-1 gap-4 mb-4">
+              <textarea
+                placeholder="Otro"
+                className="border p-2 w-full"
+                value={formData.musica.otro}
+                onChange={(e) => handleChange('musica', 'otro', e.target.value)}
+              />
+              <textarea
+                placeholder="Descripción Adicional"
+                className="border p-2 w-full"
+                value={formData.musica.descripcion}
+                onChange={(e) => handleChange('musica', 'descripcion', e.target.value)}
+              />
+            </div>
+          </div>
+
+          {/* Locutor Section */}
+          <div>
+            <h2 className="text-xl font-bold mb-4">Locutor</h2>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <input
+                type="number"
+                placeholder="Institucional"
+                className="border p-2 w-full"
+                value={formData.locutor.institucional}
+                onChange={(e) => handleChange('locutor', 'institucional', e.target.value)}
+              />
+              <input
+                type="number"
+                placeholder="Principal"
+                className="border p-2 w-full"
+                value={formData.locutor.principal}
+                onChange={(e) => handleChange('locutor', 'principal', e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <input
+                type="number"
+                placeholder="Secundario"
+                className="border p-2 w-full"
+                value={formData.locutor.secundario}
+                onChange={(e) => handleChange('locutor', 'secundario', e.target.value)}
+              />
+              <input
+                type="number"
+                placeholder="Voces"
+                className="border p-2 w-full"
+                value={formData.locutor.voces}
+                onChange={(e) => handleChange('locutor', 'voces', e.target.value)}
+              />
+            </div>
+            <textarea
+              placeholder="Descripción adicional"
+              className="border p-2 w-full"
+              value={formData.locutor.descripcion}
+              onChange={(e) => handleChange('locutor', 'descripcion', e.target.value)}
+            />
+          </div>
+
+          {/* Entregables Section */}
+          <div>
+            <h2 className="text-xl font-bold mb-4">Entregables</h2>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <input
+                type="text"
+                placeholder="Título"
+                className="border p-2 w-full"
+                value={formData.entregables.titulo}
+                onChange={(e) => handleChange('entregables', 'titulo', e.target.value)}
+              />
+              <input
+                type="number"
+                placeholder="Duración"
+                className="border p-2 w-full"
+                value={formData.entregables.duracion}
+                onChange={(e) => handleChange('entregables', 'duracion', e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <input
+                type="text"
+                placeholder="Formato"
+                className="border p-2 w-full"
+                value={formData.entregables.formato}
+                onChange={(e) => handleChange('entregables', 'formato', e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Lift"
+                className="border p-2 w-full"
+                value={formData.entregables.lift}
+                onChange={(e) => handleChange('entregables', 'lift', e.target.value)}
+              />
+            </div>
+            <textarea
+              placeholder="Descripción adicional"
+              className="border p-2 w-full"
+              value={formData.entregables.descripcion}
+              onChange={(e) => handleChange('entregables', 'descripcion', e.target.value)}
+            />
+            <textarea
+              placeholder="Notas"
+              className="border p-2 w-full"
+              value={formData.entregables.notas}
+              onChange={(e) => handleChange('entregables', 'notas', e.target.value)}
+            />
+          </div>
+        </div>
         {/* Botones */}
 
         <div className="flex justify-center mt-8">
           <div className="flex space-x-4">
-            <button className="border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-50 transition">
+            <button className="border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-50 transition" onClick={() => handleSubmit('3')}>
               Atras
             </button>
-            <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
-              Siguiente
+            <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition" onClick={() => handleSubmit('5')}>
+              Enviar propuesta
             </button>
           </div>
         </div>

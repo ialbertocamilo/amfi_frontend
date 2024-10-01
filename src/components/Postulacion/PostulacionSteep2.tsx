@@ -14,6 +14,22 @@ interface registroEntity {
 
 const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setactiveTab }: registroEntity) => {
 
+  const getLabelText = (type: string) => {
+    switch (type) {
+      case 'principal':
+        return 'Principal';
+      case 'secundario':
+        return 'Secundario';
+      case 'adicional':
+        return 'Adicional';
+      case 'extras':
+        return 'Extras';
+      case 'total':
+        return 'Total';
+      default:
+        return '';
+    }
+  };
 
 
 
@@ -53,6 +69,84 @@ const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, se
 
         </div>
 
+        <div className="max-w-3xl mx-auto p-4">
+          {/* Talento Section */}
+          <div>
+            <h2 className="text-xl font-bold mb-4">Talento</h2>
+            {['principal', 'secundario', 'adicional', 'extras', 'total'].map((item) => (
+              <div key={item} className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label htmlFor="brand" className="block text-sm font-medium text-gray-700">{getLabelText(item)}</label>
+                  <input
+                    type="number"
+                    placeholder="Número"
+                    className="border p-2 w-full"
+                    value={(formData.talento as any)[item].numero}
+                    onChange={(e) => handleChange('talento', item, 'numero', e.target.value)}
+                  />
+                </div>
+                <div>
+                  <textarea
+                    placeholder="Texto"
+                    className="border p-2 w-full"
+                    maxLength={300}
+                    value={(formData.talento as any)[item].texto}
+                    onChange={(e) => handleChange('talento', item, 'texto', e.target.value)}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Vestuario Section */}
+          <div>
+            <h2 className="text-xl font-bold mb-4">Vestuario</h2>
+            {/* <label htmlFor="brand" className="block text-sm font-medium text-gray-700">Descripción adicional</label> */}
+            <textarea
+              placeholder="Descripción adicional"
+              className="border p-2 w-full"
+              maxLength={300}
+              value={formData.vestuario.descripcion}
+              onChange={(e) => handleChange('vestuario', 'descripcion', e.target.value)}
+            />
+          </div>
+
+          {/* Arte Section */}
+          <div>
+            <h2 className="text-xl font-bold mb-4">Arte</h2>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div>
+                <label htmlFor="brand" className="block text-sm font-medium text-gray-700">Sets</label>
+
+                <input
+                  type="text"
+                  placeholder="Sets"
+                  className="border p-2 w-full"
+                  value={formData.arte.sets}
+                  onChange={(e) => handleChange('arte', 'sets', e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="brand" className="block text-sm font-medium text-gray-700">Props</label>
+                <input
+                  type="text"
+                  placeholder="Props"
+                  className="border p-2 w-full"
+                  value={formData.arte.props}
+                  onChange={(e) => handleChange('arte', 'props', e.target.value)}
+                />
+              </div>
+            </div>
+            <label htmlFor="brand" className="block text-sm font-medium text-gray-700">Descripción adicional</label>
+            <textarea
+              placeholder="Descripción adicional"
+              className="border p-2 w-full"
+              maxLength={300}
+              value={formData.arte.descripcion}
+              onChange={(e) => handleChange('arte', 'descripcion', e.target.value)}
+            />
+          </div>
+        </div>
 
 
 
@@ -61,10 +155,10 @@ const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, se
 
         <div className="flex justify-center mt-8">
           <div className="flex space-x-4">
-            <button className="border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-50 transition">
+            <button className="border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-50 transition" onClick={() => handleSubmit('1')}>
               Atras
             </button>
-            <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+            <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition" onClick={() => handleSubmit('3')}>
               Siguiente
             </button>
           </div>

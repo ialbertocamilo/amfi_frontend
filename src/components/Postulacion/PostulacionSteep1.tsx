@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { api } from "@/lib/api";
 import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
 interface registroEntity {
   formData: any,
@@ -14,6 +15,10 @@ interface registroEntity {
 
 const PostulacionSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setactiveTab }: registroEntity) => {
 
+  const router = useRouter();
+  const redirect = () => {
+      router.push('/lista-de-proyectos');
+    };
 
 
 
@@ -196,10 +201,10 @@ const PostulacionSteep1 = ({ formData, handleChange, handleSubmit, activeTab, se
         {/* Botones */}
         <div className="flex justify-center mt-8">
           <div className="flex space-x-4">
-            <button className="border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-50 transition">
-              Guardar
+            <button className="border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-50 transition" onClick={() => redirect()}>
+              Atras
             </button>
-            <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+            <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition" onClick={() => handleSubmit('2')}>
               Siguiente
             </button>
           </div>
