@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 const ProjectInfo: React.FC = () => {
 
   const router = useRouter();
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [postulacion, setPostulacion] = useState(false);
@@ -14,19 +14,16 @@ const ProjectInfo: React.FC = () => {
 
   const handleConfirm = () => {
     // Lógica para confirmar la acción
-    console.log('Acción confirmada');
     setIsModalOpen(false);
     setPostulacion(true);
   };
 
   const handleCancel = () => {
     // Lógica para cancelar la acción
-    console.log('Acción cancelada');
     setIsModalOpen(false);
   };
 
   const iniciarPostulacion = () => {
-    console.log('Iniciar postulación');
     router.push('/postulacion-proceso');
   };
 
@@ -134,9 +131,13 @@ const ProjectInfo: React.FC = () => {
         </div>
       </div>
 
-
+<br />
       {postulacion && (
-        <><ResumenProyecto /><button className="bg-red-500 text-white py-2 px-4 rounded" onClick={() => iniciarPostulacion()}>Iniciar postulacion</button></>
+        <><ResumenProyecto /><div className="flex justify-center pt-8">
+          <button className="bg-red-500 text-white py-2 px-4 rounded" onClick={() => iniciarPostulacion()}>
+            Iniciar postulación
+          </button>
+        </div></>
       )}
 
 
