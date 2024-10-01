@@ -18,7 +18,16 @@ const ListaDeProyectos = () => {
   const router = useRouter();
 
   const handleRedirect = (projectId: string) => {
-    router.push(`/nuevo-proyecto?id=${projectId}`);
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if(user?.user?.company?.type === 'production-studio') {
+      router.push(`/postulacion?id=${projectId}`);
+    }else{
+      router.push(`/nuevo-proyecto?id=${projectId}`);
+    }
+  };
+
+  const handleRedirectCreate = (projectId: string) => {
+    router.push(`/nuevo-proyecto`);
   };
   const filteredProjects = projects.filter((project) =>
     project.name.toLowerCase().includes(filterText.toLowerCase())
