@@ -38,14 +38,18 @@ const Login = () => {
 
         try {
 
-            const result=await api.post("/auth/login", {
+            const response=await api.post("/auth/login", {
                 email: formData.email,
                 password: formData.password
             })
+            const userData = response.data;
 
-            storage('user').set(result?.data)
+            localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('token', JSON.stringify(userData.access_token));
+
+            storage('user').set(userData)
             toast.success('Inicio de sesión exitoso')
-            router.push('/dashboard');
+            await router.push('/dashboard');
         } catch (e: any) {
             if (e.status === 400)
                 e.response?.data?.message.forEach((value: any) => toast.error(value))

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { api } from "@/lib/api";
 import toast from "react-hot-toast";
+import {storage} from "@/lib/storage";
+import {storageConstants} from "@/constants";
 
 interface registroEntity {
   formData: any,
@@ -15,6 +17,9 @@ interface registroEntity {
 const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setactiveTab, isEditing }: registroEntity) => {
 
   const registrarProyecto = async () => {
+
+    const user = storage(storageConstants.user);
+    console.log(user.get())
     if (isEditing) {
       setactiveTab('2')
     } else {
@@ -39,10 +44,12 @@ const ProyectoSteep1 = ({ formData, handleChange, handleSubmit, activeTab, setac
         "projectStep": 1,
         "extra": {}
       };
-      if (user.user.company.type === 'advertiser') {
+      if (user.user?.company?.type === 'advertiser') {
         projectData.advertiserId = user.user.company.id;
-      } else if (user.user.company.type === 'agency') {
+      } else if (user.user?.company?.type === 'agency') {
         projectData.agencyId = user.user.company.id;
+      } else{
+        console.log('Is admin or moderator')
       }
       try {
         const response = await api.post(`/project/create`, projectData, {

@@ -64,11 +64,7 @@ const NuevoProyecto: React.FC = () => {
       const projectId = localStorage.getItem('projectId')?.replace(/"/g, '');
   
       try {
-        const response = await api.patch(`/project/${projectId}`, { extra: formData }, {
-          headers: {
-            'Authorization': 'Bearer ' + token
-          }
-        });
+        const response = await api.patch(`/project/${projectId}`, { extra: formData });
         toast.success('Actualizado correctamente');
         setActiveTab(page)
       } catch (error: any) {
