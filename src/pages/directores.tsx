@@ -4,7 +4,8 @@ import "./globals.css";
 import Navbar from '@/components/NavBar';
 import Sidebar from '@/components/Sidebar';
 import { FaBars } from 'react-icons/fa';
-import { useRouter } from 'next/router';
+import AddDirectorModal from '@/components/AddDirectorModal ';
+import { Director } from '@/entities/Director';
 
 
 interface User {
@@ -13,20 +14,27 @@ interface User {
   nombre: string;
   fechaRegistro: string;
   tipo: string;
+  residente: string;
 }
 
-const Usuarios = () => {
+const Directores = () => {
+  const [indexId, setIndexId] = useState('');
+  const [directors, setDirectors] = useState<Director[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentDirector, setCurrentDirector] = useState<Director | null>(null);
+
+  
   // Datos de ejemplo, puedes reemplazarlos con datos reales.
   const data: User[] = useMemo(
     () => [
-      { id: '00001', empresa: 'Christine Brooks', nombre: '089 Kutch Green Apt. 448', fechaRegistro: '04 Sep 2024', tipo: 'Anunciante' },
-      { id: '00002', empresa: 'Rosie Pearson', nombre: '979 Immanuel Ferry Suite 526', fechaRegistro: '28 May 2024', tipo: 'Agencia' },
-      { id: '00003', empresa: 'Darrell Caldwell', nombre: '8587 Frida Ports', fechaRegistro: '23 Nov 2024', tipo: 'Productora' },
-      { id: '00004', empresa: 'Gilbert Johnston', nombre: '768 Destiny Lake Suite 600', fechaRegistro: '05 Feb 2024', tipo: 'Agencia' },
-      { id: '00005', empresa: 'Alan Cain', nombre: '042 Mylene Throughway', fechaRegistro: '29 Jul 2024', tipo: 'Agencia' },
-      { id: '00006', empresa: 'Alfred Murray', nombre: '543 Weinmann Mountain', fechaRegistro: '15 Aug 2024', tipo: 'Agencia' },
-      { id: '00007', empresa: 'Maggie Sullivan', nombre: 'New Scottieberg', fechaRegistro: '21 Dec 2024', tipo: 'Anunciante' },
-      { id: '00008', empresa: 'Rosie Todd', nombre: 'New Jon', fechaRegistro: '30 Apr 2024', tipo: 'Agencia' },
+      { id: '00001', empresa: 'Christine Brooks', nombre: '089 Kutch Green Apt. 448', fechaRegistro: '04 Sep 2024', tipo: 'Anunciante' , residente: 'Si'},
+      { id: '00002', empresa: 'Rosie Pearson', nombre: '979 Immanuel Ferry Suite 526', fechaRegistro: '28 May 2024', tipo: 'Agencia', residente: 'No' },
+      { id: '00003', empresa: 'Darrell Caldwell', nombre: '8587 Frida Ports', fechaRegistro: '23 Nov 2024', tipo: 'Productora', residente: 'Si' },
+      { id: '00004', empresa: 'Gilbert Johnston', nombre: '768 Destiny Lake Suite 600', fechaRegistro: '05 Feb 2024', tipo: 'Agencia' , residente: 'No'},
+      { id: '00005', empresa: 'Alan Cain', nombre: '042 Mylene Throughway', fechaRegistro: '29 Jul 2024', tipo: 'Agencia', residente: 'Si' },
+      { id: '00006', empresa: 'Alfred Murray', nombre: '543 Weinmann Mountain', fechaRegistro: '15 Aug 2024', tipo: 'Agencia' , residente: 'No'},
+      { id: '00007', empresa: 'Maggie Sullivan', nombre: 'New Scottieberg', fechaRegistro: '21 Dec 2024', tipo: 'Anunciante', residente: 'Si' },
+      { id: '00008', empresa: 'Rosie Todd', nombre: 'New Jon', fechaRegistro: '30 Apr 2024', tipo: 'Agencia' , residente: 'No'},
     ],
     []
   );
@@ -34,16 +42,15 @@ const Usuarios = () => {
   const columns: Column<User>[] = useMemo(
     () => [
       { Header: 'ID', accessor: 'id' },
-      { Header: 'Empresa', accessor: 'empresa' },
-      { Header: 'Nombre', accessor: 'nombre' },
-      { Header: 'Fecha registro', accessor: 'fechaRegistro' },
-      { Header: 'Tipo', accessor: 'tipo' },
+      { Header: 'Nombre', accessor: 'empresa' },
+      { Header: 'Nacionalidad', accessor: 'nombre' },
+      { Header: 'Residente', accessor: 'residente' },
+      { Header: 'Año de nacimiento', accessor: 'fechaRegistro' },
+      { Header: 'Representación', accessor: 'tipo' },
     ],
     []
   );
 
-  const router = useRouter();
-  
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -52,11 +59,14 @@ const Usuarios = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const crearUsuario = () => {
-    router.push('/nuevo-usuario');
-  };
+  
+  const handleUpdateDirector = (updatedDirector: Director) => {
 
+    setDirectors(directors.map((director,index) => index.toString() == indexId ? updatedDirector : director));
+    setIsModalOpen(false);
+};
 
+  
   return (
     <div className="flex h-screen bg-gray-100">
       <div className={`fixed inset-0 z-30 transition-transform transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:${isSidebarOpen ? 'block' : 'hidden'}`}>
@@ -75,8 +85,8 @@ const Usuarios = () => {
         <main className="flex-1 p-6">
         <div className="p-8 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-semibold">Usuarios</h1>
-        <button className="bg-red-500 text-white py-2 px-4 rounded" onClick={()=> crearUsuario()}>+ Nuevo usuario</button>
+        <h1 className="text-2xl font-semibold">Directores</h1>
+        <button className="bg-red-500 text-white py-2 px-4 rounded"onClick={() => setIsModalOpen(true)}>+ Nuevo director</button>
       </div>
 
       <div className="flex mb-4">
@@ -133,10 +143,21 @@ const Usuarios = () => {
     </div>
         </main>
       </div>
+
+      {isModalOpen && (
+                <AddDirectorModal
+                    onAdd={null}
+                    director={currentDirector}
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onUpdate={handleUpdateDirector}
+                />
+            )}
+            
     </div>
 
     
   );
 };
 
-export default Usuarios;
+export default Directores;

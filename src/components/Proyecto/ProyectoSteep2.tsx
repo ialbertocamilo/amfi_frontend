@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
+import { api } from "@/lib/api";
+import toast from "react-hot-toast";
+
 interface registroEntity {
   formData: any,
   handleChange: any;
@@ -9,9 +12,6 @@ interface registroEntity {
 }
 
 const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setactiveTab }: registroEntity) => {
-
-
-
   return (
     <div className="space-y-8 p-4">
       <h1 className="text-2xl font-bold mb-6 space-y-4">Nuevo proyecto</h1>
@@ -19,41 +19,40 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
         <span>Proyectos</span> {">"} <span>Nuevo proyecto</span>
       </div>
 
-
-
-
-      <form onSubmit={handleSubmit}>
+      <form >
         <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
           <div className="tabs flex justify-center space-x-10">
             <button
+              type="button"
               onClick={() => setactiveTab('1')}
               className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= 1 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
             >
               {Number(activeTab) >= 1 ? <FaCheck /> : '1'}
             </button>
             <button
+              type="button"
               onClick={() => setactiveTab('2')}
               className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= 2 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
             >
               {Number(activeTab) >= 2 ? <FaCheck /> : '2'}
             </button>
-
             <button
+              type="button"
               onClick={() => setactiveTab('3')}
               className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= 3 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
             >
               {Number(activeTab) >= 3 ? <FaCheck /> : '3'}
             </button>
-
             <button
+              type="button"
               onClick={() => setactiveTab('4')}
               className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= 4 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
             >
               {Number(activeTab) >= 4 ? <FaCheck /> : '4'}
             </button>
-
             <button
-              onClick={() => setactiveTab('3')}
+              type="button"
+              onClick={() => setactiveTab('5')}
               className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= 5 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
             >
               {Number(activeTab) >= 5 ? <FaCheck /> : '5'}
@@ -62,7 +61,6 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
 
           <h2 className="text-xl font-bold mb-4">Lineamientos</h2>
           <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
-
             <div>
               <label htmlFor="medios" className="block text-sm font-medium text-gray-700">Medios</label>
               <input
@@ -142,9 +140,6 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 <option value="opcion3">Opción 3</option>
               </select>
             </div>
-
-
-
           </div>
 
           <div>
@@ -161,7 +156,6 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   onChange={handleChange}
                 />
               </div>
-
               <div>
                 <label htmlFor="entregaPresupuesto" className="block text-sm font-medium text-gray-700">Entrega presupuesto y TT</label>
                 <input
@@ -173,7 +167,6 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   onChange={handleChange}
                 />
               </div>
-
               <div>
                 <label htmlFor="visualizacion" className="block text-sm font-medium text-gray-700">Visualización</label>
                 <input
@@ -185,7 +178,6 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   onChange={handleChange}
                 />
               </div>
-
               <div>
                 <label htmlFor="entregaProyecto" className="block text-sm font-medium text-gray-700">Entrega proyecto</label>
                 <input
@@ -197,7 +189,6 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   onChange={handleChange}
                 />
               </div>
-
             </div>
           </div>
 
@@ -218,12 +209,10 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
             </div>
           </div>
           <div className="flex justify-center space-x-4">
-            <button type="submit" className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded" onClick={() => setactiveTab('1')}>Atras</button>
-            <button type="submit" className="w-1/4 bg-red-500 text-white py-2 rounded" onClick={() => setactiveTab('3')}>Siguiente</button>
+            <button type="button" className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded" onClick={() => handleSubmit('1')}>Atras</button>
+            <button type="button" className="w-1/4 bg-red-500 text-white py-2 rounded" onClick={() => handleSubmit('3')}>Siguiente</button>
           </div>
         </div>
-
-
       </form>
     </div>
   );

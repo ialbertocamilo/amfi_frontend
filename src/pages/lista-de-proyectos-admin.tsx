@@ -1,11 +1,12 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTable, Column } from 'react-table';
 import "./globals.css";
 import Navbar from '@/components/NavBar';
 import Sidebar from '@/components/Sidebar';
 import { FaBars } from 'react-icons/fa';
 import { useRouter } from 'next/router';
-
+import { api } from "@/lib/api";
+import toast from "react-hot-toast";
 
 interface User {
   id: string;
@@ -13,30 +14,21 @@ interface User {
   agencia: string;
   fechaRegistro: string;
   estado: string;
+  creador: string;
+  correlativo: number;
 }
 
 const ListaProyectosAdmin = () => {
-  const data: User[] = useMemo(
-    () => [
-      { id: '00001', proyecto: 'Christine Brooks', agencia: '089 Kutch Green Apt. 448', fechaRegistro: '04 Sep 2024', estado: 'Anunciante' },
-      { id: '00002', proyecto: 'Rosie Pearson', agencia: '979 Immanuel Ferry Suite 526', fechaRegistro: '28 May 2024', estado: 'Agencia' },
-      { id: '00003', proyecto: 'Darrell Caldwell', agencia: '8587 Frida Ports', fechaRegistro: '23 Nov 2024', estado: 'Productora' },
-      { id: '00004', proyecto: 'Gilbert Johnston', agencia: '768 Destiny Lake Suite 600', fechaRegistro: '05 Feb 2024', estado: 'Agencia' },
-      { id: '00005', proyecto: 'Alan Cain', agencia: '042 Mylene Throughway', fechaRegistro: '29 Jul 2024', estado: 'Agencia' },
-      { id: '00006', proyecto: 'Alfred Murray', agencia: '543 Weinmann Mountain', fechaRegistro: '15 Aug 2024', estado: 'Agencia' },
-      { id: '00007', proyecto: 'Maggie Sullivan', agencia: 'New Scottieberg', fechaRegistro: '21 Dec 2024', estado: 'Anunciante' },
-      { id: '00008', proyecto: 'Rosie Todd', agencia: 'New Jon', fechaRegistro: '30 Apr 2024', estado: 'Agencia' },
-    ],
-    []
-  );
-
+  const [data, setData] = useState<User[]>([]);
   const columns: Column<User>[] = useMemo(
     () => [
+      { Header: 'Correlativo', accessor: 'correlativo' },
       { Header: 'ID', accessor: 'id' },
       { Header: 'Empresa', accessor: 'proyecto' },
       { Header: 'Nombre', accessor: 'agencia' },
       { Header: 'Fecha registro', accessor: 'fechaRegistro' },
-      { Header: 'Tipo', accessor: 'estado' },
+      { Header: 'Creador', accessor: 'creador' },
+      { Header: 'Estado', accessor: 'estado' },
     ],
     []
   );
@@ -45,6 +37,7 @@ const ListaProyectosAdmin = () => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
+  const [projects, setProjects] = useState<any[]>([]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -56,9 +49,48 @@ const ListaProyectosAdmin = () => {
 
   const router = useRouter();
 
-  const handleEdit = () => {
+  const handleEdit = (projectId: string) => {
+    router.push(`/nuevo-proyecto?id=${projectId}`);
+  };
+
+  const verDetalle = () => {
     router.push('/detalle-proyecto');
   };
+  const crearProyecto = () => {
+    router.push('/nuevo-proyecto');
+  };
+
+  async function listarProyecto() {
+    const token = localStorage.getItem('token')?.replace(/"/g, '');
+
+    try {
+      const response = await api.get('/project', {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      });
+      const projectsData = response.data.map((proyecto: any, index: number) => ({
+        correlativo: index + 1,
+        id: proyecto.id,
+        proyecto: proyecto.name,
+        agencia: proyecto.agency?.name,
+        fechaRegistro: proyecto.creator?.createdAt,
+        estado: proyecto.status,
+        creador: proyecto.creator?.name
+      }));
+      setData(projectsData);
+    } catch (error: any) {
+      console.error("Obtencion de proyectos error:", error);
+      if (error.status === 400)
+        error.response?.data?.message.forEach((value: any) => toast.error(value));
+      if (error.status === 409)
+        toast.error(error.response?.data?.clientMessage);
+    }
+  }
+
+  useEffect(() => {
+    listarProyecto();
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -81,14 +113,19 @@ const ListaProyectosAdmin = () => {
               <h1 className="text-2xl font-semibold">Lista de proyectos</h1>
             </div>
 
-            <div className="flex mb-4">
-              <input
-                type="text"
-                placeholder="Filtrar tabla..."
-                className="p-2 border border-gray-300 rounded w-full"
-              />
-              <button className="ml-2 bg-red-500 text-white py-2 px-4 rounded">Ver</button>
+            <div className="flex mb-4 flex justify-between">
+              <div className=" w-1/4">
+                <input
+                  type="text"
+                  placeholder="Filtrar tabla..."
+                  className="p-2 border border-gray-300 rounded w-3/4"
+                />
+                <button className="ml-2 bg-red-500 text-white py-2 px-4 rounded">Ver</button>
+              </div>
+              <button className="ml-2 bg-red-500 text-white py-2 px-4 rounded" onClick={()=> crearProyecto()}>Nuevo proyecto</button>
+
             </div>
+
 
             <div className="bg-white shadow-md rounded">
               <table {...getTableProps()} className="min-w-full divide-y divide-gray-200">
@@ -133,7 +170,13 @@ const ListaProyectosAdmin = () => {
                             <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg z-10">
                               <button
                                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                onClick={handleEdit}
+                                onClick={verDetalle}
+                              >
+                                Ver detalle
+                              </button>
+                              <button
+                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                onClick={()=>handleEdit('e17e7ecf-bcc4-4696-88ce-dc230e99e7be')}  // cambia esto beba
                               >
                                 Editar
                               </button>
