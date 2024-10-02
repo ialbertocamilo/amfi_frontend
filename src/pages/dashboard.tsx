@@ -17,7 +17,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex bg-gray-100">
       <div className={`fixed inset-0 z-30 transition-transform transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:${isSidebarOpen ? 'block' : 'hidden'}`}>
       <Sidebar />
       </div>
@@ -32,7 +32,7 @@ export default function Home() {
           <Navbar />
         </div>
         <main className="flex-1 p-6">
-          <div className="container mx-auto p-4" style={{ backgroundColor: '#F5F5F5' }}>
+          <div className="container mx-auto p-4" >
             <h1 className="text-4xl font-bold mb-4">Panel</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
               <SummaryWidget title="Total Usuarios" count={32} link="#" icon="Icon.png" />
