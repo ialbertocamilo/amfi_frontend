@@ -53,6 +53,10 @@ const ListaProyectosAdmin = () => {
     router.push('/detalle-proyecto');
   };
 
+  const crearProyecto = () => {
+    router.push('/nuevo-proyecto');
+  };
+
   async function listarProyecto() {
     const token = localStorage.getItem('token')?.replace(/"/g, '');
 
@@ -106,14 +110,19 @@ const ListaProyectosAdmin = () => {
               <h1 className="text-2xl font-semibold">Lista de proyectos</h1>
             </div>
 
-            <div className="flex mb-4">
-              <input
-                type="text"
-                placeholder="Filtrar tabla..."
-                className="p-2 border border-gray-300 rounded w-full"
-              />
-              <button className="ml-2 bg-red-500 text-white py-2 px-4 rounded">Ver</button>
+            <div className="flex mb-4 flex justify-between">
+              <div className=" w-1/4">
+                <input
+                  type="text"
+                  placeholder="Filtrar tabla..."
+                  className="p-2 border border-gray-300 rounded w-3/4"
+                />
+                <button className="ml-2 bg-red-500 text-white py-2 px-4 rounded">Ver</button>
+              </div>
+              <button className="ml-2 bg-red-500 text-white py-2 px-4 rounded" onClick={()=> crearProyecto()}>Nuevo proyecto</button>
+
             </div>
+
 
             <div className="bg-white shadow-md rounded">
               <table {...getTableProps()} className="min-w-full divide-y divide-gray-200">

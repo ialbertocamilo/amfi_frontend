@@ -4,6 +4,8 @@ import { FaHome, FaCube, FaClock, FaUsers, FaChevronUp, FaChevronDown } from 're
 const Sidebar: React.FC = () => {
   const [isProjectsMenuOpen, setIsProjectsMenuOpen] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [type, setType] = useState<string | null>(null);
+
 
   const toggleProjectsMenu = () => {
     setIsProjectsMenuOpen(!isProjectsMenuOpen);
@@ -11,6 +13,7 @@ const Sidebar: React.FC = () => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
+    setType(user?.user?.company?.type)
     setUserRole(user.user.role);
   }, []);
   return (
@@ -27,38 +30,26 @@ const Sidebar: React.FC = () => {
           <img src="IconUsuarios.png" alt="Description" className="object-contain mr-2 " />
           <span>Usuarios</span>
         </a>
-        <div>
-          <button
-            onClick={toggleProjectsMenu}
-            className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md focus:outline-none"
-          >
-            <img src="IconProyectos.png" alt="Proyectos" className="object-contain mr-2" />
-            <span>Proyectos</span>
-            {isProjectsMenuOpen ? <FaChevronUp className="ml-auto" /> : <FaChevronDown className="ml-auto" />}
-          </button>
-          {isProjectsMenuOpen && (
-            <div className="ml-8 mt-2 space-y-2">
+        <a href="/directores" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+          <img src="IconUsuarios.png" alt="Description" className="object-contain mr-2 " />
+          <span>Directores</span>
+        </a>
 
-              {userRole == 'owner' && (
-              <a href="/nuevo-proyecto" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-                <span>Crear proyectos</span>
-              </a>
-              )}
-              {userRole == 'owner' && (
-              <a href="/lista-de-proyectos" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-                <span>Listar proyectos</span>
-              </a>
-              )}
-              {/* Other sidebar items */}
-              {userRole == 'super-admin' && (
-                <a href="/lista-de-proyectos-admin" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-                  <span>Listar proyectos</span>
-                </a>
-              )}
+        {(userRole == 'owner' && type !== 'production-studio') && (
+        <a href="/lista-de-proyectos" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+          <img src="IconProyectos.png" alt="Description" className="object-contain mr-2 " />
+          <span>Proyectos</span>
+        </a>
+        )}
+        {(userRole == 'super-admin' || type === 'production-studio') && (
+        <a href="/lista-de-proyectos-admin" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+          <img src="IconProyectos.png" alt="Description" className="object-contain mr-2 " />
+          <span>Proyectos</span>
+        </a>
 
-            </div>
-          )}
-        </div>
+        )}
+
+
         <a href="/productoras" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
           <img src="IconProductoras.png" alt="Description" className="object-contain mr-2 " />
           <span>Productoras</span>
