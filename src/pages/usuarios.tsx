@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from '@/components/NavBar';
 import Sidebar from '@/components/Sidebar';
 import { FaBars } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 
 
 interface User {
@@ -41,6 +42,8 @@ const Usuarios = () => {
     []
   );
 
+  const router = useRouter();
+  
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -49,7 +52,11 @@ const Usuarios = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  
+  const crearUsuario = () => {
+    router.push('/nuevo-usuario');
+  };
+
+
   return (
     <div className="flex h-screen bg-gray-100">
       <div className={`fixed inset-0 z-30 transition-transform transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:${isSidebarOpen ? 'block' : 'hidden'}`}>
@@ -69,7 +76,7 @@ const Usuarios = () => {
         <div className="p-8 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold">Usuarios</h1>
-        <button className="bg-red-500 text-white py-2 px-4 rounded">+ Nuevo usuario</button>
+        <button className="bg-red-500 text-white py-2 px-4 rounded" onClick={()=> crearUsuario()}>+ Nuevo usuario</button>
       </div>
 
       <div className="flex mb-4">
