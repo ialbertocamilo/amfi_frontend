@@ -35,13 +35,13 @@ const Sidebar: React.FC = () => {
           <span>Directores</span>
         </a>
 
-        {(userRole == 'owner' && type !== 'production-studio') && (
+        {(userRole == 'owner' && type === 'production-studio') && (
         <a href="/lista-de-proyectos" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
           <img src="IconProyectos.png" alt="Description" className="object-contain mr-2 " />
           <span>Proyectos</span>
         </a>
         )}
-        {(userRole == 'super-admin' || type === 'production-studio') && (
+        {(userRole == 'super-admin' || type !== 'production-studio') && (
         <a href="/lista-de-proyectos-admin" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
           <img src="IconProyectos.png" alt="Description" className="object-contain mr-2 " />
           <span>Proyectos</span>

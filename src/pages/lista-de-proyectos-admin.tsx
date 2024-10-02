@@ -49,10 +49,13 @@ const ListaProyectosAdmin = () => {
 
   const router = useRouter();
 
-  const handleEdit = () => {
-    router.push('/detalle-proyecto');
+  const handleEdit = (projectId: string) => {
+    router.push(`/nuevo-proyecto?id=${projectId}`);
   };
 
+  const verDetalle = () => {
+    router.push('/detalle-proyecto');
+  };
   const crearProyecto = () => {
     router.push('/nuevo-proyecto');
   };
@@ -167,7 +170,13 @@ const ListaProyectosAdmin = () => {
                             <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg z-10">
                               <button
                                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                onClick={handleEdit}
+                                onClick={verDetalle}
+                              >
+                                Ver detalle
+                              </button>
+                              <button
+                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                onClick={()=>handleEdit('e17e7ecf-bcc4-4696-88ce-dc230e99e7be')}  // cambia esto beba
                               >
                                 Editar
                               </button>
