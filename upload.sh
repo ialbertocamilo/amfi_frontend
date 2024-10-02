@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 APP_NAME="amfi_frontend"
 VERSION="latest"
