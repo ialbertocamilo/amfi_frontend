@@ -8,6 +8,7 @@ const Navbar: React.FC = () => {
     const [type, setType] = useState('')
     useEffect(() => {
         const user = storage('user').get()
+        console.log(user.user)
         if (user) setUser(user?.user)
         switch (user?.user.company?.type) {
             case 'agency':
@@ -19,6 +20,10 @@ const Navbar: React.FC = () => {
             case 'production-studio':
                 setType('Casa productora');
                 break;
+            default:
+                if (user?.user.role === 'super-admin') setType('Administrador');
+                else
+                    setType('Usuario');
         }
     }, []);
     return (
