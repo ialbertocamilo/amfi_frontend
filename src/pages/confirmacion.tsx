@@ -1,4 +1,3 @@
-// pages/confirmacion.tsx
 import { Button, CardContent, CardHeader } from "@mui/material";
 import Card from "@mui/material/Card";
 import { useRouter } from "next/router";
@@ -10,7 +9,7 @@ const Confirmacion = () => {
     const { payerName, amount, transactionId } = router.query;
     const [paymentProcessed, setPaymentProcessed] = useState(false);
   
-    const handlePaymentSuccess = (details) => {
+    const handlePaymentSuccess = (details: any) => {
       setPaymentProcessed(true);
       console.log('Payment details:', details);
     };

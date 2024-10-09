@@ -14,7 +14,7 @@ const Sidebar: React.FC = () => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     setType(user?.user?.company?.type)
-    setUserRole(user.user.role);
+    setUserRole(user?.user?.role);
   }, []);
   return (
     <div className="flex flex-col w-64 h-full bg-white shadow-md">

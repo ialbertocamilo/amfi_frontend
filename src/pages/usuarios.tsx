@@ -96,7 +96,7 @@ const Usuarios = () => {
                         </div>
 
                         <div className="bg-white shadow-md rounded">
-                            <PaginatedComponent headers={headers} items={filteredData} itemsPerPage={5} />
+                            <PaginatedComponent headers={headers} items={filteredData} itemsPerPage={10} />
                         </div>
                     </div>
                 </main>
