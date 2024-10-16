@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { FaHome, FaCube, FaClock, FaUsers, FaChevronUp, FaChevronDown } from 'react-icons/fa';
+import React, {useEffect, useState} from 'react';
 
 const Sidebar: React.FC = () => {
   const [isProjectsMenuOpen, setIsProjectsMenuOpen] = useState(false);

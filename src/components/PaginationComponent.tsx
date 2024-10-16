@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
@@ -13,10 +13,13 @@ interface PaginatedComponentProps {
     items: any[];
     itemsPerPage: number;
     headers: { key: string, label: string }[];
+
     [key: string]: any; // Allows any other parameter
 }
 
-const PaginatedComponent: React.FC<PaginatedComponentProps> = ({ items, itemsPerPage, headers, ...props }) => {
+const PaginatedComponent: React.FC<PaginatedComponentProps> = ({items, itemsPerPage, headers, ...props}) => {
+
+    if (!itemsPerPage) itemsPerPage = 15;
     const [currentItems, setCurrentItems] = useState<any[]>([]);
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState(1);
@@ -39,7 +42,8 @@ const PaginatedComponent: React.FC<PaginatedComponentProps> = ({ items, itemsPer
                     <TableHead>
                         <TableRow className="bg-gray-50">
                             {headers.map((header, index) => (
-                                <TableCell key={index}  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{header.label}</TableCell>
+                                <TableCell key={index}
+                                           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{header.label}</TableCell>
                             ))}
                         </TableRow>
                     </TableHead>

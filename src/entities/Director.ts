@@ -3,8 +3,10 @@ export interface Director {
     name: string;
     lastName: string;
     nationality: string;
-    residesInMexico: boolean;
     typeRepresentative: number;
     birthYear: string;
     directionYear: string;
+    representation: string;
+    isMexicanResident:string
+    createdAt:string
 }

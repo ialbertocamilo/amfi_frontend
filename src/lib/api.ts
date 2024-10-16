@@ -5,9 +5,6 @@ import {storageConstants} from "@/constants";
 export function ApiInstance() {
   const url = process.env.NEXT_PUBLIC_SOCKET_URL as string;
   const user = storage(storageConstants.user);
-  console.log(url)
-  console.log("user")
-  console.log(user.get())
   const instance = axios.create({
     baseURL: url,
     timeout: 10000,

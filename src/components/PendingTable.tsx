@@ -13,19 +13,6 @@ interface TableRow {
 }
 
 
-const columns: Column<TableRow>[] = [{
-    Header: 'Anunciante', accessor: 'anunciante',
-}, {
-    Header: 'Proyecto', accessor: 'proyecto',
-}, {
-    Header: 'Fecha de licitación', accessor: 'fecha',
-}, {
-    Header: 'Empresas licitando', accessor: 'empresas',
-}, {
-    Header: 'Status', accessor: 'status', Cell: ({value}) => (<span
-        className={`py-1 px-3 rounded-md text-white font-bold flex items-center justify-center ${getStatusClass(value)}`}>{value}</span>),
-},];
-
 const PendingTable: React.FC = () => {
 
 
