@@ -30,8 +30,7 @@ const CambiarPassword: React.FC = () => {
 
     return (<AuthGuard>
             <Layout>
-                <div className="max-w-md mx-auto mt-10 bg-white p-8 rounded shadow-md">
-                    <h1 className="text-2xl font-semibold mb-6">Cambiar Contraseña</h1>
+                    <h1 className="text-3xl font-bold mb-6 text-center">Cambiar Contraseña</h1>
                     <div className="mb-4">
                         <label className="block text-gray-700">Contraseña Actual</label>
                         <input
@@ -65,7 +64,6 @@ const CambiarPassword: React.FC = () => {
                     >
                         Cambiar Contraseña
                     </button>
-                </div>
             </Layout></AuthGuard>);
 };
 
