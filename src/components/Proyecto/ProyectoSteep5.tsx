@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
 
-interface CasaProductora {
-  nombre: string;
-  seleccionada: boolean;
-  directores: string[];
-  detallesVisible: boolean;
-}
+import { useEffect } from 'react';
+import axios from 'axios';
+import { getProductoras } from '@/api/productoraApi';
+
 interface registroEntity {
   formData: any;
   handleChange: any;
@@ -14,6 +12,26 @@ interface registroEntity {
   activeTab: string;
   setactiveTab: any;
 
+}
+interface CasaProductora {
+  additionalInfo: string | null;
+  amfiId: string | null;
+  certificationId: string;
+  createdAt: string;
+  facebook_url: string;
+  foundingYear: number;
+  id: string;
+  instagram_url: string;
+  legalName: string;
+  linkedin_url: string;
+  name: string;
+  nationalIdentifierOrRFC: string;
+  slug: string;
+  type: string;
+  web_url: string;
+  selected:boolean;
+  details:boolean
+  directors:any[]
 }
 
 const ProyectoSteep5 = ({
@@ -24,12 +42,22 @@ const ProyectoSteep5 = ({
   setactiveTab,
 
 }: registroEntity) => {
+
+
+  const fetchCasasProductoras = async () => {
+    try {
+      const data:CasaProductora[]= await getProductoras()
+      console.log(data)
+      setCasasProductoras(data);
+    } catch (error) {
+      console.error('Error fetching casas productoras:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCasasProductoras();
+  }, []);
   const [casasProductoras, setCasasProductoras] = useState<CasaProductora[]>([
-    { nombre: 'Grupo Traziende', seleccionada: false, directores: ['Ari Aster', 'Barry Jenkins'], detallesVisible: false },
-    { nombre: 'Ikarus', seleccionada: false, directores: [], detallesVisible: false },
-    { nombre: 'Filmmaking', seleccionada: false, directores: [], detallesVisible: false },
-    { nombre: 'Dr. Comunication', seleccionada: true, directores: [], detallesVisible: false },
-    { nombre: 'Grupo de León', seleccionada: false, directores: [], detallesVisible: false },
   ]);
 
   const [buscar, setBuscar] = useState('');
@@ -37,15 +65,15 @@ const ProyectoSteep5 = ({
 
   const toggleSeleccion = (index: number) => {
     const updatedCasas = [...casasProductoras];
-    updatedCasas[index].seleccionada = !updatedCasas[index].seleccionada;
+    updatedCasas[index].selected = !updatedCasas[index].selected;
     setCasasProductoras(updatedCasas);
   };
 
-  const toggleDetalles = (index: number) => {
-    const updatedCasas = [...casasProductoras];
-    updatedCasas[index].detallesVisible = !updatedCasas[index].detallesVisible;
-    setCasasProductoras(updatedCasas);
-  };
+  // const toggleDetalles = (index: number) => {
+  //   const updatedCasas = [...casasProductoras];
+  //   updatedCasas[index].detallesVisible = !updatedCasas[index].detallesVisible;
+  //   setCasasProductoras(updatedCasas);
+  // };
 
   return (
 
@@ -88,30 +116,30 @@ const ProyectoSteep5 = ({
           {/* Lista de casas productoras */}
           <div className="space-y-4">
             {casasProductoras
-              .filter((casa) => casa.nombre.toLowerCase().includes(buscar.toLowerCase()))
+              .filter((casa) => casa.name.toLowerCase().includes(buscar.toLowerCase()))
               .map((casa, index) => (
                 <div key={index} className="border border-gray-300 rounded-lg p-4">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center space-x-4">
                       <input
                         type="checkbox"
-                        checked={casa.seleccionada}
+                        checked={casa.selected}
                         onChange={() => toggleSeleccion(index)}
                         className="form-checkbox h-5 w-5 text-red-500"
                       />
-                      <span className="text-lg font-medium">{casa.nombre}</span>
+                      <span className="text-lg font-medium">{casa.name}</span>
                     </div>
                     <button
                       className="text-red-500 font-semibold"
-                      onClick={() => toggleDetalles(index)}
+                      // onClick={() => toggleDetalles(index)}
                     >
-                      {casa.detallesVisible ? 'Ocultar detalle' : 'Ver detalle'}
+                      {casa?.details ? 'Ocultar detalle' : 'Ver detalle'}
                     </button>
                   </div>
-                  {casa.detallesVisible && (
+                  {casa?.details && (
                     <div className="mt-4 space-y-2">
-                      {casa.directores.length > 0 ? (
-                        casa.directores.map((director, i) => (
+                      {casa?.directors.length > 0 ? (
+                        casa?.directors.map((director, i) => (
                           <div key={i} className="flex items-center">
                             <input
                               type="checkbox"

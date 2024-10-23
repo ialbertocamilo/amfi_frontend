@@ -1,38 +1,52 @@
+import { getActivePlans, getAllPlans } from '@/api/planApi';
 import Plan from '../components/Plan';
 import "./globals.css";
 import AuthGuard from "@/components/AuthGuard";
-
+import { useEffect, useState } from 'react';
+export interface Plan {
+    id: string;
+    name: string;
+    title:string;
+    price: number;
+    credits: number;
+    description: string;
+    active: boolean;
+    features: string[];
+    color:string;
+    createdAt: Date;
+    isHighlighted:boolean
+  }
 export default function Home() {
-    const plans = [{
-        title: 'Básico',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing.',
-        features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4',],
-        buttonText: 'Elegir',
-        color: '#DDEBFB', // Azul claro
-        price: 4
-    }, {
-        title: 'Básico',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing.',
-        features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4',],
-        buttonText: 'Elegir',
-        color: '#FCECCB', // Amarillo
-        price: 5
-    }, {
-        title: 'Básico',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing.',
-        features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4',],
-        buttonText: 'Elegir',
-        color: '#FFD8D8', // Rojo
-        isHighlighted: true,
-        price: 20
-    }, {
-        title: 'Premium',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing.',
-        features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4',],
-        buttonText: 'Elegir',
-        color: '#E1E3EB', // Gris
-        price: 10
-    },];
+
+
+    useEffect(() => {
+        const fetchPlans = async () => {
+            const fetchedPlans = await getActivePlans();
+            const colorMap: { [key: string]: string } = {
+                'basic': '#DDEBFB', // Azul claro
+                'medium': '#E1E3EB', // Amarillo
+                'premium': '#FFD8D8', // Rojo
+                'gold': '#FCECCB', // Gris
+              };
+            const highlightedPlans = ['premium'];
+    
+            const mappedPlans = fetchedPlans.map((plan) => ({
+                ...plan,
+                color: colorMap[plan.name] || '#EEEEEE',
+                features: plan?.features??[],
+                isHighlighted: highlightedPlans.includes(plan.name),
+            }));
+    
+            setPlans(mappedPlans);
+        };
+
+        fetchPlans();
+    }, []);
+
+    
+    const [plans, setPlans] = useState<Plan[]>([]);
+
+
 
     return (<AuthGuard>
             <div className="container mx-auto p-10">
@@ -44,12 +58,13 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {plans.map((plan, index) => (<Plan
                             key={index}
+                            id={plan.id}
                             title={plan.title}
                             description={plan.description}
-                            features={plan.features}
-                            buttonText={plan.buttonText}
+                            features={plan?.features}
+                            buttonText={'Elegir'}
                             color={plan.color}
-                            isHighlighted={plan.isHighlighted}
+                            isHighlighted={plan?.isHighlighted}
                             price={plan.price}
                         />))}
                 </div>

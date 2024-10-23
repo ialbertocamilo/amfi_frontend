@@ -43,7 +43,7 @@ export default function Home() {
                         <h1 className="text-4xl font-bold mb-4">Panel</h1>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                             <SummaryWidget title="Total Usuarios" count={stats.totalUsers} link="#" icon="Icon.png" />
-                            <SummaryWidget title="Proyectos" count={stats.totalProjects} link="#" icon="Icon2.png" />
+                            <SummaryWidget title="Licitaciones" count={stats.totalProjects} link="#" icon="Icon2.png" />
                             <SummaryWidget title="Proyectos activos" count={stats.activeProjects} link="#" icon="Icon3.png" />
                         </div>
                         <div className="mb-8">

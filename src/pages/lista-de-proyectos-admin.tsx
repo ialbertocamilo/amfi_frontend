@@ -39,7 +39,7 @@ const ListaProyectosAdmin = () => {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
-    const [projects, setProjects] = useState<any[]>([]);
+    const [data, setData] = useState<any[]>([]);
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -61,7 +61,12 @@ const ListaProyectosAdmin = () => {
     const crearProyecto = () => {
         router.push('/nuevo-proyecto');
     };
+    const [filter, setFilter] = useState('');
 
+
+    const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setFilter(event.target.value);
+    };
     useEffect(() => {
         const fetchProjects = async () => {
             try {
@@ -75,7 +80,8 @@ const ListaProyectosAdmin = () => {
                     estado: ProjectStatusMap[proyecto.status] || proyecto.status,
                     creador: proyecto.creator?.name
                 }));
-                setProjects(projectsData);
+                setData(projectsData);
+                setFilteredData(projectsData);
             } catch (error: any) {
                 console.error("Error fetching projects:", error);
                 if (error.status === 400) error.response?.data?.message.forEach((value: any) => toast.error(value));
@@ -85,6 +91,18 @@ const ListaProyectosAdmin = () => {
 
         fetchProjects();
     }, []);
+    const [filteredData, setFilteredData] = useState<any[]>([]);
+
+    useEffect(() => {
+        setFilteredData(
+            data.filter(value =>
+                value.proyecto.toLowerCase().includes(filter.toLowerCase()) ||
+                value.creador.toLowerCase().includes(filter.toLowerCase()) ||
+                value.agencia.toLowerCase().includes(filter.toLowerCase()) ||
+                value.estado.toLowerCase().includes(filter.toLowerCase()) 
+            )
+        );
+    }, [filter, data]);
 
     return (<div className="flex flex-col md:flex-row bg-gray-100 min-h-screen">
             <div
@@ -107,22 +125,20 @@ const ListaProyectosAdmin = () => {
                             <h1 className="text-2xl font-semibold">Lista de proyectos</h1>
                         </div>
 
-                        <div className="flex flex-col md:flex-row mb-4 justify-between">
-                            <div className="flex w-full md:w-1/4 mb-2 md:mb-0">
-                                <input
-                                    type="text"
-                                    placeholder="Filtrar tabla..."
-                                    className="p-2 border border-gray-300 rounded w-full"
-                                />
-                                <button className="ml-2 bg-red-500 text-white py-2 px-4 rounded">Ver</button>
-                            </div>
-                            <button className="bg-red-500 text-white py-2 px-4 rounded" onClick={crearProyecto}>Nuevo
-                                proyecto
-                            </button>
+                        <div className="flex mb-4 ">
+                            <input
+                                type="text"
+                                placeholder="Filtrar por empresa, nombre, Creador"
+                                className="p-2 mr-2 border border-gray-300 rounded w-full"
+                                value={filter}
+                                onChange={handleFilterChange}
+                            />            <button className="bg-red-500 text-white py-2 px-4 rounded" onClick={crearProyecto}>Nuevo
+                            proyecto
+                        </button>
                         </div>
 
                         <div className="bg-white shadow-md rounded">
-                            <PaginatedComponent headers={headers} items={projects} itemsPerPage={10}/>
+                            <PaginatedComponent headers={headers} items={filteredData} itemsPerPage={10}/>
                         </div>
                     </div>
                 </main>

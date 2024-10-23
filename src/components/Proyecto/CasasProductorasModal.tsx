@@ -9,11 +9,7 @@ const CasasProductorasModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   const casasSeleccionadas = [
-    'Grupo Traziende',
-    'Ikarus',
-    'Filmmaking',
-    'Dr. Comunication',
-    'Grupo de León',
+    'Shepard Bryan Traders',
   ];
 
   return (
@@ -30,7 +26,7 @@ const CasasProductorasModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
         {/* Body */}
         <p className="text-sm text-gray-700 mb-4">
-          Estás invitando a la licitación del proyecto Plutón a las siguientes Casas productoras:
+          Estás invitando a la licitación del proyecto a las siguientes Casas productoras:
         </p>
 
         <ul className="space-y-2 mb-6">

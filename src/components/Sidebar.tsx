@@ -53,6 +53,13 @@ const Sidebar: React.FC = () => {
           <img src="IconProductoras.png" alt="Description" className="object-contain mr-2 " />
           <span>Productoras</span>
         </a>
+        {(userRole == 'super-admin' || type !== 'production-studio') && (
+        <a href="/editar-planes" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+          <img src="IconProyectos.png" alt="Description" className="object-contain mr-2 " />
+          <span>Planes</span>
+        </a>
+
+        )}
       </div>
       {/* Sección inferior */}
       <div className="px-4 pb-8 space-y-6">
