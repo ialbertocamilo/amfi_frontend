@@ -1,7 +1,6 @@
-
-
-import { api } from "@/lib/api";
+import {api} from "@/lib/api";
 import toast from "react-hot-toast";
+import {storage} from "@/lib/storage";
 
 
 export const checkToken = async (token: string) => {
@@ -27,5 +26,22 @@ export const getCurrentUser = async () => {
     } catch (error) {
         toast.error(error?.response?.data?.message || 'Error when getting user')
         return false
+    }
+};
+
+export const changePassword = async (currentPassword: string, newPassword: string) => {
+    return await api.post(`/auth/update-password`, {
+            currentPassword,
+            newPassword,
+        });
+};
+
+export const logout = async () => {
+    try {
+        await api.post(`/auth/logout`);
+        storage('user').removeItem();
+        window.location.href = '/login';
+    } catch (error) {
+        toast.error(error?.response?.data?.message || 'Error when logging out');
     }
 };

@@ -33,7 +33,7 @@ export class UserMapper{
             case 'production-studio':
                 return 'Casa productora';
             default:
-                return 'Desconocido';
+                return 'AMFI';
         }
     }
 }

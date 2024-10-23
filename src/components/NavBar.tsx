@@ -2,28 +2,27 @@ import React, {Fragment, useEffect, useState} from 'react';
 import {Menu, Transition} from '@headlessui/react';
 import {storage} from "@/lib/storage";
 import {UserMapper} from "@/mappers/user.mapper";
+import toast from "react-hot-toast";
 
 
 const Navbar: React.FC = () => {
 
-    const defineRole=(role:string)=>{
-        switch (role) {
-            case 'super-admin':
-                return 'Administrador';
-            case 'support':
-                return 'Moderador';
-            default:
-                return 'Usuario';
-        }
-    }
-    const [user, setUser] = useState({name: '', lastname: '', company: {type: ''}})
+    const [user, setUser] = useState({name: '', lastname: '', company: {type: ''},role:''})
     const [type, setType] = useState('')
+
     useEffect(() => {
         const user = storage('user').get()
         if (user) setUser(user?.user)
         const companyType=UserMapper.mapCompanyType(user?.user.company?.type)
-        setType(defineRole(user?.user.role) + ' - ' + companyType)
+        const role =UserMapper.mapRole(user?.user?.role)
+        setType(role + ' - ' + companyType)
     }, []);
+    const logout=async ()=>{
+        await logout()
+        toast.success('Sesión cerrada exitosamente')
+        location.href='/login'
+    }
+
     return (
         <div className="flex items-center justify-between px-6 py-4  ">
             <Menu as="div" className="relative inline-block text-left">
@@ -70,7 +69,7 @@ const Navbar: React.FC = () => {
                             <Menu.Item>
                                 {({active}) => (
                                     <a
-                                        href="/reset-password"
+                                        href="/cambiar-password"
                                         className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                                         } block px-4 py-2 text-sm`}
                                     >

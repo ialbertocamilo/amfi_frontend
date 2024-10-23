@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from '@/components/Sidebar';
 import Navbar from '@/components/NavBar';
 import { FaBars } from 'react-icons/fa';
+import "../pages/globals.css";
 
 interface LayoutProps {
     children: React.ReactNode;
