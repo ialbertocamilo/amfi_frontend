@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from '@/components/Sidebar';
 import Navbar from '@/components/NavBar';
 import { FaBars } from 'react-icons/fa';
-import "../pages/globals.css";
+import "../app/globals.css";
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -31,7 +31,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     <Navbar />
                 </div>
                 <main className="flex-1 p-6">
-                    <div className="p-8 bg-gray-50 min-h-screen">
+                    <div className="p-8 bg-white min-h-screen">
                         {children}
                     </div>
                 </main>

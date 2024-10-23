@@ -22,7 +22,6 @@ const Plan: React.FC<PlanProps> = ({
 
     const handleButtonClick = () => {
         const user=storage(storageConstants.user)
-        console.log(user.get())
         router.push(`/confirmacion?plan_id=${id}`);
     };
     return (<div
@@ -35,9 +34,9 @@ const Plan: React.FC<PlanProps> = ({
             </div>
             <ul className="mb-6 p-6">
                 {features.map((feature, index) => (<li key={index} className="flex items-center mb-2">
-                        <span className="text-green-500 mr-2">✔</span>
-                        {feature}
-                    </li>))}
+                    <span className="text-green-500 mr-2">✔️</span>
+                    {feature}
+                </li>))}
             </ul>
             <div className="flex justify-center mb-6">
                 <button className="bg-red-500 text-white py-2 mx-2 w-full rounded" onClick={handleButtonClick}>
