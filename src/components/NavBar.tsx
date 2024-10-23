@@ -1,36 +1,34 @@
 import React, {Fragment, useEffect, useState} from 'react';
 import {Menu, Transition} from '@headlessui/react';
 import {storage} from "@/lib/storage";
+import {UserMapper} from "@/mappers/user.mapper";
 
 
 const Navbar: React.FC = () => {
+
+    const defineRole=(role:string)=>{
+        switch (role) {
+            case 'super-admin':
+                return 'Administrador';
+            case 'support':
+                return 'Moderador';
+            default:
+                return 'Usuario';
+        }
+    }
     const [user, setUser] = useState({name: '', lastname: '', company: {type: ''}})
     const [type, setType] = useState('')
     useEffect(() => {
         const user = storage('user').get()
-        console.log(user.user)
         if (user) setUser(user?.user)
-        switch (user?.user.company?.type) {
-            case 'agency':
-                setType('Agencia');
-                break;
-            case 'advertiser':
-                setType('Anunciante');
-                break;
-            case 'production-studio':
-                setType('Casa productora');
-                break;
-            default:
-                if (user?.user.role === 'super-admin') setType('Administrador');
-                else
-                    setType('Usuario');
-        }
+        const companyType=UserMapper.mapCompanyType(user?.user.company?.type)
+        setType(defineRole(user?.user.role) + ' - ' + companyType)
     }, []);
     return (
         <div className="flex items-center justify-between px-6 py-4  ">
             <Menu as="div" className="relative inline-block text-left">
                 <div className="flex items-center">
-                    <img src="persona.png" alt="Description" className="w-10 h-10 object-contain mr-2 rounded-full"/>
+                    <img src="person.webp" alt="Description" className="w-10 h-10 object-contain mr-2 rounded-full"/>
                     <Menu.Button
                         className="inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 whitespace-nowrap">
                         {user.name} {user.lastname}
@@ -61,7 +59,7 @@ const Navbar: React.FC = () => {
                             <Menu.Item>
                                 {({active}) => (
                                     <a
-                                        href="#"
+                                        href="/perfil"
                                         className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                                         } block px-4 py-2 text-sm`}
                                     >
