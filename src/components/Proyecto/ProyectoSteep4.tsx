@@ -12,13 +12,6 @@ interface registroEntity {
   setEntregables: any;
   entregables: any[];
 }
-
-
-
-
-
-
-
 const ProyectoSteep4 = ({
   formData,
   handleChange,
@@ -134,7 +127,7 @@ const ProyectoSteep4 = ({
                 id="cantidadAsistentes"
                 name="cantidadAsistentes"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.cantidadAsistentes}
+                value={formData?.cantidadAsistentes}
                 onChange={handleChange}
               />
             </div>
@@ -149,7 +142,7 @@ const ProyectoSteep4 = ({
                 id="puestoAsistentes"
                 name="puestoAsistentes"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.puestoAsistentes}
+                value={formData?.puestoAsistentes}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -200,12 +193,10 @@ const ProyectoSteep4 = ({
                 id="comentarioEntregables"
                 name="comentarioEntregables"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.comentarioEntregables}
+                value={formData?.comentarioEntregables}
                 onChange={handleChange}
                 maxLength={300}
               />
-
-
 
 
             </div>
@@ -243,7 +234,7 @@ const ProyectoSteep4 = ({
               name="comentarios"
               className="w-full p-2 border border-gray-300 rounded-md"
               placeholder="Descripción aquí"
-              value={formData.comentarios}
+              value={formData?.comentarios}
               onChange={handleChange}
             />
           </div>
@@ -264,7 +255,7 @@ const ProyectoSteep4 = ({
                 name="tituloResponsable"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Título aquí"
-                value={formData.tituloResponsable}
+                value={formData?.tituloResponsable}
                 onChange={handleChange}
               />
             </div>
@@ -279,7 +270,7 @@ const ProyectoSteep4 = ({
                 id="nombreResponsable"
                 name="nombreResponsable"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.nombreResponsable}
+                value={formData?.nombreResponsable}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -295,7 +286,7 @@ const ProyectoSteep4 = ({
             <button
               type="button"
               className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded"
-              onClick={() => 
+              onClick={() =>
                 {
                 setEntregables(entregables)
                 handleSubmit('3')}}
@@ -307,7 +298,7 @@ const ProyectoSteep4 = ({
               className="w-1/4 bg-red-500 text-white py-2 rounded"
               onClick={() =>{
                 setEntregables(entregables)
-                handleSubmit('5')}} 
+                handleSubmit('5')}}
             >
               Siguiente
             </button>

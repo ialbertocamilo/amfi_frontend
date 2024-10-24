@@ -14,7 +14,7 @@ interface StorageState<T> {
 export function storage<T>(storageKey: string) {
     let key = storageKey;
 
-    const removeItem = () => {
+    const remove = () => {
         if (typeof window !== 'undefined') {
             localStorage.removeItem(key);
         }
@@ -34,5 +34,5 @@ export function storage<T>(storageKey: string) {
         }
     };
 
-    return { get, set, removeItem };
+    return { get, set, removeItem: remove };
 }

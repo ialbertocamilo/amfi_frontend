@@ -18,6 +18,7 @@ export const checkToken = async (token: string) => {
     }
 };
 
+
 export const getCurrentUser = async () => {
     console.log("Getting user")
     try {
@@ -36,7 +37,7 @@ export const changePassword = async (currentPassword: string, newPassword: strin
         });
 };
 
-export const logout = async () => {
+export const signOut = async () => {
     try {
         await api.post(`/auth/logout`);
         storage('user').removeItem();

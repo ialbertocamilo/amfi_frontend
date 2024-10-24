@@ -69,7 +69,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 id="objetivoComunicacion"
                 name="objetivoComunicacion"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.objetivoComunicacion}
+                value={formData?.objetivoComunicacion}
                 onChange={handleChange}
                 maxLength={300}
               />
@@ -81,7 +81,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 id="target"
                 name="target"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.target}
+                value={formData?.target}
                 onChange={handleChange}
                 maxLength={300}
               />
@@ -93,7 +93,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 id="lineamientosMarca"
                 name="lineamientosMarca"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.lineamientosMarca}
+                value={formData?.lineamientosMarca}
                 onChange={handleChange}
                 maxLength={300}
               />
@@ -120,12 +120,12 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   <FaUpload className="mr-2" />
                   Subir archivo
                 </label>
-                {formData.line1 && (
+                {formData?.line1 && (
                   <div className="mt-2 flex items-center">
-                    <p className="text-sm text-gray-500">Archivo seleccionado: {formData.line1}</p>
+                    <p className="text-sm text-gray-500">Archivo seleccionado: {formData?.line1}</p>
                     <FaTimes
                       className="ml-2 text-red-500 cursor-pointer"
-                      onClick={formData.line1 && (() => handleChange({ target: { name: 'line1', value: '' } }))}
+                      onClick={formData?.line1 && (() => handleChange({ target: { name: 'line1', value: '' } }))}
                     />
                   </div>
                 )}
@@ -138,7 +138,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="link1"
                   name="link1"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.link1}
+                  value={formData?.link1}
                   onChange={handleChange}
                   placeholder="www.google.com"
                 />
@@ -160,12 +160,12 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   <FaUpload className="mr-2" />
                   Subir archivo
                 </label>
-                {formData.line2 && (
+                {formData?.line2 && (
                   <div className="mt-2 flex items-center">
-                    <p className="text-sm text-gray-500">Archivo seleccionado: {formData.line2}</p>
+                    <p className="text-sm text-gray-500">Archivo seleccionado: {formData?.line2}</p>
                     <FaTimes
                       className="ml-2 text-red-500 cursor-pointer"
-                      onClick={formData.line2 && (() => handleChange({ target: { name: 'line2', value: '' } }))}
+                      onClick={formData?.line2 && (() => handleChange({ target: { name: 'line2', value: '' } }))}
                     />
                   </div>
                 )}
@@ -178,7 +178,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="link2"
                   name="link2"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.link2}
+                  value={formData?.link2}
                   onChange={handleChange}
                   placeholder="www.google.com"
                 />
@@ -200,12 +200,12 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   <FaUpload className="mr-2" />
                   Subir archivo
                 </label>
-                {formData.line3 && (
+                {formData?.line3 && (
                   <div className="mt-2 flex items-center">
-                    <p className="text-sm text-gray-500">Archivo seleccionado: {formData.line3}</p>
+                    <p className="text-sm text-gray-500">Archivo seleccionado: {formData?.line3}</p>
                     <FaTimes
                       className="ml-2 text-red-500 cursor-pointer"
-                      onClick={formData.line3 && (() => handleChange({ target: { name: 'line3', value: '' } }))}
+                      onClick={formData?.line3 && (() => handleChange({ target: { name: 'line3', value: '' } }))}
                     />
                   </div>
                 )}
@@ -218,7 +218,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="link3"
                   name="link3"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.link3}
+                  value={formData?.link3}
                   onChange={handleChange}
                   placeholder="www.google.com (Referencias)"
                 />
@@ -237,7 +237,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="responsablePago"
                   name="responsablePago"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.responsablePago}
+                  value={formData?.responsablePago}
                   onChange={handleChange}
                 >
                   <option value="">Seleccionar</option>
@@ -253,7 +253,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="momentoFacturacion"
                   name="momentoFacturacion"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.momentoFacturacion}
+                  value={formData?.momentoFacturacion}
                   onChange={handleChange}
                 >
                   <option value="">Seleccionar</option>
@@ -269,7 +269,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="politicaPago"
                   name="politicaPago"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.politicaPago}
+                  value={formData?.politicaPago}
                   onChange={handleChange}
                 >
                   <option value="">Seleccionar</option>
@@ -285,7 +285,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="contratoProyecto"
                   name="contratoProyecto"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.contratoProyecto}
+                  value={formData?.contratoProyecto}
                   onChange={handleChange}
                 >
                   <option value="">Seleccionar</option>
@@ -301,7 +301,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="tipoProyecto"
                   name="tipoProyecto"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.tipoProyecto}
+                  value={formData?.tipoProyecto}
                   onChange={handleChange}
                 >
                   <option value="">Seleccionar</option>
@@ -317,7 +317,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="momentoFacturacion"
                   name="momentoFacturacion"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.momentoFacturacion}
+                  value={formData?.momentoFacturacion}
                   onChange={handleChange}
                 >
                   <option value="">Seleccionar</option>
@@ -333,7 +333,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="rondaCotizacion"
                   name="rondaCotizacion"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.rondaCotizacion}
+                  value={formData?.rondaCotizacion}
                   onChange={handleChange}
                 >
                   <option value="">Seleccionar</option>
@@ -351,7 +351,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                     name="visualizacion"
                     value="si"
                     className="mr-2"
-                    checked={formData.visualizacion === 'si'}
+                    checked={formData?.visualizacion === 'si'}
                     onChange={handleChange}
                   />
                   <label htmlFor="visualizacionSi" className="mr-4">Sí</label>
@@ -361,7 +361,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                     name="visualizacion"
                     value="no"
                     className="mr-2"
-                    checked={formData.visualizacion === 'no'}
+                    checked={formData?.visualizacion === 'no'}
                     onChange={handleChange}
                   />
                   <label htmlFor="visualizacionNo">No</label>
@@ -374,7 +374,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 id="politicaAltaProveedor"
                 name="politicaAltaProveedor"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.politicaAltaProveedor}
+                value={formData?.politicaAltaProveedor}
                 onChange={handleChange}
                 maxLength={300}
               />
@@ -397,7 +397,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="porcentajeTasaAnticipo"
                   name="porcentajeTasaAnticipo"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.porcentajeTasaAnticipo}
+                  value={formData?.porcentajeTasaAnticipo}
                   onChange={handleChange}
                   placeholder="%"
                 />
@@ -410,7 +410,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="porcentajeTasaFiniquito"
                   name="porcentajeTasaFiniquito"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.porcentajeTasaFiniquito}
+                  value={formData?.porcentajeTasaFiniquito}
                   onChange={handleChange}
                   placeholder="%"
                 />
@@ -423,7 +423,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="porcentajeTasaTotal"
                   name="porcentajeTasaTotal"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.porcentajeTasaTotal}
+                  value={formData?.porcentajeTasaTotal}
                   onChange={handleChange}
                   placeholder="%"
                 />
@@ -436,7 +436,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 id="informacionAdicional"
                 name="informacionAdicional"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.informacionAdicional}
+                value={formData?.informacionAdicional}
                 onChange={handleChange}
                 maxLength={300}
               />

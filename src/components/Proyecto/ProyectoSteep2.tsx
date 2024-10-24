@@ -68,7 +68,7 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 id="medios"
                 name="medios"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.medios}
+                value={formData?.medios}
                 onChange={handleChange}
               />
             </div>
@@ -78,7 +78,7 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 id="temporalidad"
                 name="temporalidad"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.temporalidad}
+                value={formData?.temporalidad}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -94,7 +94,7 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 id="desglose"
                 name="desglose"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.desglose}
+                value={formData?.desglose}
                 onChange={handleChange}
               />
             </div>
@@ -104,7 +104,7 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 id="territorio"
                 name="territorio"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.territorio}
+                value={formData?.territorio}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -121,7 +121,7 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 id="derechos"
                 name="derechos"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.derechos}
+                value={formData?.derechos}
                 onChange={handleChange}
               />
             </div>
@@ -131,7 +131,7 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                 id="formaCotizacion"
                 name="formaCotizacion"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData.formaCotizacion}
+                value={formData?.formaCotizacion}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -152,7 +152,7 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="entregaBrief"
                   name="entregaBrief"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.entregaBrief}
+                  value={formData?.entregaBrief}
                   onChange={handleChange}
                 />
               </div>
@@ -163,7 +163,7 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="entregaPresupuesto"
                   name="entregaPresupuesto"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.entregaPresupuesto}
+                  value={formData?.entregaPresupuesto}
                   onChange={handleChange}
                 />
               </div>
@@ -174,7 +174,7 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="visualizacion"
                   name="visualizacion"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.visualizacion}
+                  value={formData?.visualizacion}
                   onChange={handleChange}
                 />
               </div>
@@ -185,7 +185,7 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="entregaProyecto"
                   name="entregaProyecto"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.entregaProyecto}
+                  value={formData?.entregaProyecto}
                   onChange={handleChange}
                 />
               </div>
@@ -202,7 +202,7 @@ const ProyectoSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="presupuesto"
                   name="presupuesto"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData.presupuesto}
+                  value={formData?.presupuesto}
                   onChange={handleChange}
                 />
               </div>

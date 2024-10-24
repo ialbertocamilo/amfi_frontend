@@ -7,7 +7,8 @@ export const getProjects = async () => {
         const response = await api.get(`/project`);
         return response.data;
     } catch (error) {
-        throw new Error(error.response?.data?.message || 'Error fetching projects data');
+        console.warn('Error fetching projects :', error);
+        return null;
     }
 };
 

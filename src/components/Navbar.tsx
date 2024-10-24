@@ -3,24 +3,25 @@ import {Menu, Transition} from '@headlessui/react';
 import {storage} from "@/lib/storage";
 import {UserMapper} from "@/mappers/user.mapper";
 import toast from "react-hot-toast";
+import {signOut} from "@/api/authenticationApi";
 
 
 const Navbar: React.FC = () => {
 
-    const [user, setUser] = useState({name: '', lastname: '', company: {type: ''},role:''})
+    const [user, setUser] = useState({name: '', lastname: '', company: {type: ''}, role: ''})
     const [type, setType] = useState('')
 
     useEffect(() => {
         const user = storage('user').get()
         if (user) setUser(user?.user)
-        const companyType=UserMapper.mapCompanyType(user?.user.company?.type)
-        const role =UserMapper.mapRole(user?.user?.role)
+        const companyType = UserMapper.mapCompanyType(user?.user.company?.type)
+        const role = UserMapper.mapRole(user?.user?.role)
         setType(role + ' - ' + companyType)
     }, []);
-    const logout=async ()=>{
-        await logout()
+    const logout = async () => {
+        await signOut()
         toast.success('Sesión cerrada exitosamente')
-        location.href='/login'
+        location.href = '/login'
     }
 
     return (
@@ -80,8 +81,7 @@ const Navbar: React.FC = () => {
                             <Menu.Item>
                                 {({active}) => (
                                     <a
-                                        href="/login"
-                                        onClick={()=>logout()}
+                                        onClick={() => logout()}
                                         className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                                         } block px-4 py-2 text-sm`}
                                     >

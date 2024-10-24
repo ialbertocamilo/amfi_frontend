@@ -53,7 +53,7 @@ const ListaProyectosAdmin = () => {
   const router = useRouter();
 
   const crearProyecto = () => {
-    router.push("/nuevo-proyecto");
+    router.push("/proyecto");
   };
 
   const user = useUser();
