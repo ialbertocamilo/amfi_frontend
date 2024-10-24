@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./globals.css";
 import ProyectoSteep1 from "@/components/Proyecto/ProyectoSteep1";
-import Navbar from "@/components/NavBar";
+import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import { FaBars } from "react-icons/fa";
 import ProyectoSteep2 from "@/components/Proyecto/ProyectoSteep2";

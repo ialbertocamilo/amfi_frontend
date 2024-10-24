@@ -5,7 +5,7 @@ import "./globals.css";
 import AuthGuard from "@/components/AuthGuard";
 import React, {useEffect, useState} from 'react';
 import {FaBars} from 'react-icons/fa';
-import Navbar from '@/components/NavBar';
+import Navbar from '@/components/Navbar';
 import Layout from "@/components/Layout";
 import {useRouter} from "next/router";
 
@@ -38,7 +38,7 @@ export default function EditarPlanes() {
 
         const highlightedPlans = ['premium'];
 
-        const mappedPlans = fetchedPlans.map((plan) => ({
+        const mappedPlans = fetchedPlans?.map((plan) => ({
             ...plan,
             color: colorMap[plan.name] || '#FFFFFF',
             features: plan?.features ?? [],
@@ -74,7 +74,6 @@ export default function EditarPlanes() {
         fetchPlans();
     };
 
-    const router = useRouter()
     return (<AuthGuard>
         <Layout>
             <div className="container mx-auto p-10">
@@ -85,7 +84,7 @@ export default function EditarPlanes() {
                 <h1 className="text-4xl text-center font-bold mb-8">Editar Planes</h1>
                 <p className="text-center text-lg mb-8">Edita los planes según sea necesario</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {plans.map((plan, index) => (<PlanEditForm
+                    {plans?.map((plan, index) => (<PlanEditForm
                         key={index}
                         plan={plan}
                         editedPlan={editedPlans[plan.id] || plan}

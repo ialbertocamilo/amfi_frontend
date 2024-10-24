@@ -1,9 +1,9 @@
 // components/PendingTable.tsx
 import React, {useEffect, useState} from 'react';
-import {Column} from 'react-table';
 import {api} from "@/lib/api";
 import PaginatedComponent from "@/components/PaginationComponent";
 
+import moment from 'moment';
 interface TableRow {
     advertiser: string;
     projectName: string;
@@ -25,8 +25,12 @@ const PendingTable: React.FC = () => {
     const [data, setData] = useState([])
     useEffect(() => {
         api.get('/project/bids').then(response => {
-            const transformed = response.data.map((row: any) => ({...row, status: getStatusClass(row.status)}))
 
+            const transformed = response.data.map((row: any) => ({
+                ...row,
+                status: getStatusClass(row.status),
+                bidDate: row.bidDate ? moment(row.bidDate).format('DD/MM/YYYY, HH:mm') : 'N/A'
+            }));
             setData(transformed)
         })
     }, []);

@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import "./globals.css";
-import Navbar from '@/components/NavBar';
+import Navbar from '@/components/Navbar';
 import {FaBars} from 'react-icons/fa';
 import Sidebar from '@/components/Sidebar';
 import {toast} from "react-hot-toast";

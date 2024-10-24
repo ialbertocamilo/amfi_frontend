@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./globals.css";
-import Navbar from "@/components/NavBar";
+import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import { FaBars } from "react-icons/fa";
 import { api } from "@/lib/api";

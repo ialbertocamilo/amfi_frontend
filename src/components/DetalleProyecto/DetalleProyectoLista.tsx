@@ -1,5 +1,8 @@
-import React from 'react';
+import { getProjectById } from '@/api/projectApi';
+import { ProjectMapper } from '@/mappers/project.mapper';
+import React, { useEffect, useState } from 'react';
 
+import moment from 'moment';
 
 interface CasaProductora {
   name: string;
@@ -28,7 +31,61 @@ const getStatusColor = (status: CasaProductora['status']) => {
   }
 };
 
-const ProjectDetails: React.FC = () => {
+interface ProjectDetailsProps {
+  id: string;
+}
+
+const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
+  const [formData, setFormData] = useState({
+    anunciante: "",
+    marca: "",
+    producto: "",
+    categoria: "",
+    nombreProyecto: "",
+    versiones: "",
+    cantidad: 1,
+    cantidadSeleccionar: "",
+    agencia: "",
+    correoResponsable: "",
+    directorCreativo: "",
+    contactoFinanzas: "",
+    directorCuentas: "",
+    productorAgencia: "",
+    numeroODT: "",
+    contactoCompras: "",
+    creado:'',
+    estado:''
+  });
+  const fetchProject = async () => {
+    const projectData = await getProjectById(id as string);
+    if (projectData) {
+
+      setFormData({
+        anunciante: projectData.brand || "",
+        marca: projectData.brand || "",
+        producto: projectData.product || "",
+        categoria: projectData.category || "",
+        nombreProyecto: projectData.name || "",
+        versiones: projectData.versions.name || "",
+        cantidad: projectData.budget || 1,
+        cantidadSeleccionar: projectData.maxProducers || "",
+        agencia: projectData.agencyName || "-",
+        correoResponsable: projectData.creator.email || "",
+        directorCreativo: projectData.creator.jobPosition || "",
+        contactoFinanzas: projectData.isFinancialInfoUnlocked ? "Sí" : "No",
+        directorCuentas: `${projectData.creator.name} ${projectData.creator.lastname}` || "",
+        productorAgencia: projectData.creator.name || "",
+        numeroODT: projectData.id || "",
+        contactoCompras: projectData.creator.nationalIdentifierOrRFC || "",
+        creado: moment(projectData?.createdAt).format('DD/MM/YYYY') || '',
+        estado: ProjectMapper.mapProjectStatus(projectData?.status) || ''
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (id) fetchProject();
+  }, [id]);
 
   const handleItemClick = () => {
     window.location.href = '/evaluacion-casa-productora';
@@ -37,13 +94,13 @@ const ProjectDetails: React.FC = () => {
     <div className="mt-6 p-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl shadow-md space-y-6 px-4 lg:px-8">   
      <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-xl font-semibold">Proyecto León</h1>
-          <p className="text-sm text-gray-500">Creador: Luna Rangiflo</p>
-          <p className="text-sm text-gray-500">Agencia: New Scottishborg</p>
+          <h1 className="text-xl font-semibold">{formData?.nombreProyecto}</h1>
+          <p className="text-sm text-gray-500">Anunciante:  {formData?.anunciante}</p>
+          <p className="text-sm text-gray-500">Agencia: {formData?.agencia}</p>
         </div>
         <div>
-          <p className="text-sm text-gray-500">Creado: 08 de junio 2026</p>
-          <p className="text-sm text-gray-500">Estado: En Proceso</p>
+          <p className="text-sm text-gray-500">Creado: {formData?.creado}</p>
+          <p className="text-sm text-gray-500">Estado: {formData?.estado}</p>
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./globals.css";
-import Navbar from "@/components/NavBar";
+import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import { FaBars } from "react-icons/fa";
 import DetalleEvaluacionCasaProductora from "@/components/DetalleProyecto/DetalleEvaluacionCasaProductora";

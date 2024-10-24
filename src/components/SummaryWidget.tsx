@@ -11,7 +11,7 @@ interface SummaryWidgetProps {
 const SummaryWidget: React.FC<SummaryWidgetProps> = ({ title, count, link, icon }) => {
   return (
 
-    <div className="bg-white rounded-lg h-200px w-100px p-4">
+    <div className="bg-gray-50 rounded-lg h-200px w-100px p-4">
       <div className="flex h-full">
         <div className="flex-1">
           <h3 className="text-lg font-semibold">{title}</h3>
