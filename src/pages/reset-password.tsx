@@ -3,7 +3,7 @@ import "./globals.css";
 import {useRouter} from 'next/router';
 
 import {Link} from '@mui/material';
-import {api} from "@/lib/api";
+import api from "@/lib/api";
 import toast from "react-hot-toast";
 
 interface FormData {

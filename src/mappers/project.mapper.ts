@@ -31,4 +31,12 @@ export class ProjectMapper {
                 return EstadoProyecto.Borrador;
         }
     }
+    static mapRepresentationType(type: string): string {
+        switch (type) {
+            case 'freelance': return 'Freelance'; 
+            case 'represented': return 'Representado'; 
+            case 'co-represented': return 'Co-representado'; 
+            default: return ''; 
+        }
+    }
 }

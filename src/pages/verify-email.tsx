@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
 import {toast} from 'react-hot-toast';
-import {api} from '@/lib/api';
+import api from '@/lib/api';
 import './globals.css';
 
 const VerifyEmail: React.FC = () => {

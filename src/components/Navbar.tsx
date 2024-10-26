@@ -13,8 +13,10 @@ const Navbar: React.FC = () => {
 
     useEffect(() => {
         const user = storage('user').get()
-        if (user) setUser(user?.user)
-        const companyType = UserMapper.mapCompanyType(user?.user.company?.type)
+        console.log(user);
+        
+        if (user) setUser(user)
+        const companyType = UserMapper.mapCompanyType(user?.company?.type)
         const role = UserMapper.mapRole(user?.user?.role)
         setType(role + ' - ' + companyType)
     }, []);
@@ -27,11 +29,14 @@ const Navbar: React.FC = () => {
     return (
         <div className="flex items-center justify-between px-6 py-4  ">
             <Menu as="div" className="relative inline-block text-left">
-                <div className="flex items-center">
-                    <img src="person.webp" alt="Description" className="w-10 h-10 object-contain mr-2 rounded-full"/>
+                <div className="flex items-center space-x-2">
+                    <span className='h2'>
+                    🧑‍💻
+                    </span>
                     <Menu.Button
-                        className="inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 whitespace-nowrap">
-                        {user.name} {user.lastname}
+                        className="inline-flex justify-center rounded-md border border-gray-100 shadow-sm px-4 py-2 bg-g text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 whitespace-nowrap">
+                        {user?.name} {user?.lastname}
+                        
                     </Menu.Button>
                 </div>
                 <Transition

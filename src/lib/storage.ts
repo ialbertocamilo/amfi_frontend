@@ -23,14 +23,19 @@ export function storage<T>(storageKey: string) {
     const get = () => {
         if (typeof window !== 'undefined') {
             const data = localStorage.getItem(key);
-            if (data) return JSON.parse(data);
+            if (data) {
+                return JSON.parse(data);
+            }
         }
         return null;
     };
 
     const set = (data: any | null) => {
         if (typeof window !== 'undefined') {
-            localStorage.setItem(key, JSON.stringify(data));
+            if (typeof data === 'string') {
+                localStorage.setItem(key, data);
+            } else
+                localStorage.setItem(key, JSON.stringify(data));
         }
     };
 

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { getCurrentUser } from '@/api/authenticationApi';
 import { IUser } from '@/interfaces/user.interface';
+import { storageConstants } from '@/constants';
 
 
 
@@ -35,6 +36,7 @@ const useUser = () => {
           company: userData.company
         };
 
+        localStorage.setItem(storageConstants.user, JSON.stringify(mappedUser));
         setUser(mappedUser);
       } catch (err) {
         setError('Error fetching user data');

@@ -2,8 +2,8 @@ import {useEffect, useState} from 'react';
 import {createProject, getProjectById, updateProjectById} from '@/api/projectApi';
 import {Project} from '@/interfaces/project.interface';
 import toast from 'react-hot-toast';
-import {CreateProjectDto} from '../../dto/create-project.dto';
-import {UpdateProjectDto} from '../../dto/update-project.dto';
+import {CreateProjectDto} from '../dto/create-project.dto';
+import {UpdateProjectDto} from '../dto/update-project.dto';
 import useUser from './user.hook';
 import {CompanyType} from '@/constants';
 
@@ -36,6 +36,7 @@ const useProject = (projectId: string | null) => {
             if (err?.status === 400) err?.response?.data?.message.forEach((value: any) => toast.error(value));
             if (err?.status === 409) toast.error(err?.response?.data?.clientMessage);
             setError(err.message || 'Error desconocido');
+            location.href = '/dashboard';
         } finally {
             setLoading(false);
         }
@@ -66,10 +67,12 @@ const useProject = (projectId: string | null) => {
             setProject(data);
             setProjectJson(data?.extra);
             toast.success('Proyecto guardado correctamente');
+            return data
         } catch (err: any) {
             if (err?.status === 400) err?.response?.data?.message.forEach((value: any) => toast.error(value));
             if (err?.status === 409) toast.error(err?.response?.data?.clientMessage);
             setError(err.message || 'Error desconocido');
+            return null
         } finally {
             setLoading(false);
         }
@@ -86,14 +89,17 @@ const useProject = (projectId: string | null) => {
             setProject(data);
             setProjectJson(data?.extra);
             toast.success('Proyecto actualizado correctamente');
+            return data
         } catch (err: any) {
             if (err?.status === 400) err?.response?.data?.message.forEach((value: any) => toast.error(value));
             if (err?.status === 409) toast.error(err?.response?.data?.clientMessage);
             setError(err.message || 'Error desconocido');
+            return null
         } finally {
             setLoading(false);
         }
     };
+
 
     return {project, loading, error, fetchProject, projectJson, saveOrUpdateProject};
 };

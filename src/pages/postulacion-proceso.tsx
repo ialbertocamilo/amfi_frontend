@@ -3,7 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import { FaBars } from "react-icons/fa";
-import { api } from "@/lib/api";
+import api from "@/lib/api";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import ProjectInfo from "@/components/Postulacion/ProjectInfo";

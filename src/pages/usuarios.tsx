@@ -2,19 +2,12 @@ import React, { useEffect, useState } from "react";
 import "./globals.css";
 import { useRouter } from "next/router";
 import PaginatedComponent from "@/components/PaginationComponent";
-import { api } from "@/lib/api";
+import api from "@/lib/api";
 import Layout from "@/components/Layout";
 import { UserMapper } from "@/mappers/user.mapper";
 import { IUser } from "@/interfaces/user.interface";
 import moment from "moment";
-
-interface User {
-  id: string;
-  company: string;
-  name: string;
-  registrationDate: string;
-  type: string;
-}
+import { fetchUserInfo, User } from "@/api/userApi";
 
 const Usuarios = () => {
   const headers = [
@@ -33,12 +26,7 @@ const Usuarios = () => {
   };
 
   useEffect(() => {
-    api.get("/user/info").then((response) => {
-      const transformedData = response.data.map((user: User) => ({
-        ...user,
-        registrationDate: moment(user.registrationDate).format('DD/MM/YYYY HH:mm'),
-        type: UserMapper.mapRole(user.type),
-      }));
+    fetchUserInfo().then((transformedData) => {
       setData(transformedData);
       setFilteredData(transformedData);
     });
@@ -47,12 +35,13 @@ const Usuarios = () => {
   const [filter, setFilter] = useState("");
   const [filteredData, setFilteredData] = useState<User[]>([]);
   useEffect(() => {
+    if (data?.length)
     setFilteredData(
-      data.filter(
+      data?.filter(
         (user) =>
-          user.name.toLowerCase().includes(filter.toLowerCase()) ||
-          user.company.toLowerCase().includes(filter.toLowerCase()) ||
-          user.type.toLowerCase().includes(filter.toLowerCase())
+          user?.name.toLowerCase().includes(filter.toLowerCase()) ||
+          user?.company.toLowerCase().includes(filter.toLowerCase()) ||
+          user?.type.toLowerCase().includes(filter.toLowerCase())
       )
     );
   }, [filter, data]);
@@ -63,34 +52,34 @@ const Usuarios = () => {
 
   return (
     <Layout>
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-semibold">Usuarios</h1>
-            <button
-              type="button"
-              className="bg-red-500 text-white py-2 px-4 rounded"
-              onClick={crearUsuario}
-            >
-              + Nuevo usuario
-            </button>
-          </div>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-semibold">Usuarios</h1>
+        <button
+          type="button"
+          className="bg-red-500 text-white py-2 px-4 rounded"
+          onClick={crearUsuario}
+        >
+          + Nuevo usuario
+        </button>
+      </div>
 
-          <div className="flex mb-4">
-            <input
-              type="text"
-              placeholder="Filtrar por nombre, compañia, tipo"
-              className="p-2 border border-gray-300 rounded w-full"
-              value={filter}
-              onChange={handleFilterChange}
-            />
-          </div>
+      <div className="flex mb-4">
+        <input
+          type="text"
+          placeholder="Filtrar por nombre, compañia, tipo"
+           className="p-2 border border-gray-300 rounded w-full"
+          value={filter}
+          onChange={handleFilterChange}
+        />
+      </div>
 
-          <div className="bg-white shadow-md rounded">
-            <PaginatedComponent
-              headers={headers}
-              items={filteredData}
-              itemsPerPage={10}
-            />
-          </div>
+      <div className="bg-white shadow-md rounded">
+        <PaginatedComponent
+          headers={headers}
+          items={filteredData}
+          itemsPerPage={10}
+        />
+      </div>
     </Layout>
   );
 };

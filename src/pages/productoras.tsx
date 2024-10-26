@@ -22,30 +22,33 @@ const Productoras = () => {
     { label: "Acción", key: "action" },
   ];
 
+  const {user}= useUser();
+
+  const fetchProductoras = async () => {
+    try {
+      const response = await getProductoras();
+
+      const productorasData = response.map((productora: any) => ({
+        id: productora.id,
+        slug: productora.slug,
+        name: productora.name,
+        legalName: productora.legalName,
+        nationalIdentifierOrRFC: productora.nationalIdentifierOrRFC,
+        foundingYear: productora.foundingYear,
+        createdAt: moment(productora.createdAt).format("DD/MM/YYYY"),
+        action:<ActionRole id={productora.id} userRole={user?.role as string}></ActionRole>
+      }));
+      setProductoras(productorasData);
+    } catch (error: any) {
+      console.error("Error fetching productoras:", error);
+      toast.error("Error al tratar de obtener productoras");
+    }
+  };
+
   useEffect(() => {
-    const fetchProductoras = async () => {
-      try {
-        const response = await getProductoras();
-
-        const productorasData = response.map((productora: any) => ({
-          id: productora.id,
-          slug: productora.slug,
-          name: productora.name,
-          legalName: productora.legalName,
-          nationalIdentifierOrRFC: productora.nationalIdentifierOrRFC,
-          foundingYear: productora.foundingYear,
-          createdAt: moment(productora.createdAt).format("DD/MM/YYYY"),
-          action:<ActionRole id={productora.id}></ActionRole>
-        }));
-        setProductoras(productorasData);
-      } catch (error: any) {
-        console.error("Error fetching productoras:", error);
-        toast.error("Error al tratar de obtener productoras");
-      }
-    };
-
+    if (user)
     fetchProductoras();
-  }, []);
+  }, [user]);
 
   const [filter, setFilter] = useState("");
 
@@ -64,8 +67,6 @@ const Productoras = () => {
       )
     );
   }, [filter, productoras]);
-
-  const user= useUser();
   
   return (
     <Layout>  

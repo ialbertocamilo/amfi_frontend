@@ -4,8 +4,8 @@ import SummaryWidget from "../components/SummaryWidget";
 import Chart from "../components/Chart";
 import PendingTable from "../components/PendingTable";
 import "../app/globals.css";
-import { api } from "@/lib/api";
 import Layout from "@/components/Layout";
+import api from "@/lib/api";
 
 export default function Home() {
   const [stats, setStats] = useState({

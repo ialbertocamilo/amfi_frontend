@@ -1,12 +1,14 @@
 export interface Director {
-    id: number | null,
-    name: string;
-    lastName: string;
+    id: string | null,
+    name?: string;
+    lastName?: string;
     nationality: string;
-    typeRepresentative: number;
-    birthYear: string;
+    birthDate?: string;
     directionYear: string;
-    representation: string;
-    isMexicanResident:string
-    createdAt:string
+    representation?: string;
+    isMexicanResident?:boolean
+    startedExperienceYear?:number;
+    nationalIdentifierOrRFC?:string;
+    isAvailable?:boolean
+    createdAt?:string
 }

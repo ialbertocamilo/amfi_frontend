@@ -9,7 +9,8 @@ import CasasProductorasModal from "@/components/Proyecto/CasasProductorasModal";
 import {useRouter} from "next/router";
 import Layout from "@/components/Layout";
 import useProject from "@/hooks/project.hook";
-import {CreateProjectDto} from "../../dto/create-project.dto";
+import {CreateProjectDto} from "../dto/create-project.dto";
+import { UpdateProjectDto } from "../dto/update-project.dto";
 
 const NuevoProyecto: React.FC = () => {
     const [formData, setFormData] = useState<Record<string, any>>({});
@@ -30,29 +31,25 @@ const NuevoProyecto: React.FC = () => {
     };
 
     const project = useProject(id as string);
+    const {projectJson, loading, fetchProject} = useProject(id as string);
     const handleSubmit = async (page: string) => {
-        console.log(formData)
+        
         if (page === "6") {
-            setIsCasasProductorasModalOpen(true); // Open the CasasProductorasModal
+            setIsCasasProductorasModalOpen(true); 
         }
-        const data: CreateProjectDto = {
+        const data: CreateProjectDto | UpdateProjectDto = {
+            "id": id as string??undefined,
             "brand": formData?.brand,
             "product": formData?.product,
             "projectName": formData?.projectName,
             "extra": formData
         };
-        await project.saveOrUpdateProject(data);
+        const createdProject=await project.saveOrUpdateProject(data);
+        if (createdProject?.id)
+        router.replace(`/proyecto?id=${createdProject.id}`);
         setActiveTab(page);
     };
 
-    useEffect(() => {
-        console.log('projectjson')
-        console.log(project.projectJson)
-        if (project.projectJson)
-            setFormData(project.projectJson);
-
-        console.log(formData)
-    }, [project.projectJson]);
 
     useEffect(() => {
         if (id) {
@@ -62,6 +59,17 @@ const NuevoProyecto: React.FC = () => {
             setReadonly(false);
         }
     }, [id]);
+
+
+    useEffect(() => {
+        if (projectJson) {
+            console.log('Cargando proyecto', projectJson);
+            setFormData({
+                ...formData,
+                ...projectJson
+            });
+        }
+    },[projectJson])
 
 
     const [activeTab, setActiveTab] = useState<string>("1");
@@ -80,7 +88,6 @@ const NuevoProyecto: React.FC = () => {
             </div>
         );
     };
-    const {projectJson, loading, fetchProject} = useProject(id as string);
 
     if (loading) return <div>Cargando...</div>;
     return (
@@ -89,7 +96,7 @@ const NuevoProyecto: React.FC = () => {
             <div>
                 {activeTab === "1" && (
                     <ProyectoSteep1
-                        formData={projectJson}
+                        formData={formData}
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
                         activeTab={activeTab}
@@ -100,7 +107,7 @@ const NuevoProyecto: React.FC = () => {
                 )}
                 {activeTab === "2" && (
                     <ProyectoSteep2
-                        formData={projectJson}
+                        formData={formData}
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
                         activeTab={activeTab}
@@ -109,7 +116,7 @@ const NuevoProyecto: React.FC = () => {
                 )}
                 {activeTab === "3" && (
                     <ProyectoSteep3
-                        formData={projectJson}
+                        formData={formData}
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
                         activeTab={activeTab}
@@ -118,7 +125,7 @@ const NuevoProyecto: React.FC = () => {
                 )}
                 {activeTab === "4" && (
                     <ProyectoSteep4
-                        formData={projectJson}
+                        formData={formData}
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
                         activeTab={activeTab}
@@ -129,7 +136,7 @@ const NuevoProyecto: React.FC = () => {
                 )}
                 {activeTab === "5" && (
                     <ProyectoSteep5
-                        formData={projectJson}
+                        formData={formData}
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
                         activeTab={activeTab}

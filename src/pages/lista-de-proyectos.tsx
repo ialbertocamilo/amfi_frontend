@@ -3,7 +3,7 @@ import "./globals.css";
 import Sidebar from '@/components/Sidebar';
 import { FaBars } from 'react-icons/fa';
 import Navbar from '@/components/Navbar';
-import { api } from "@/lib/api";
+import api from "@/lib/api";
 import toast from "react-hot-toast";
 import { useRouter } from 'next/router';
 
@@ -19,7 +19,7 @@ const ListaDeProyectos = () => {
 
   const handleRedirect = (projectId: string) => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if(user?.user?.company?.type === 'production-studio') {
+    if(user?.company?.type === 'production-studio') {
       router.push(`/postulacion?id=${projectId}`);
     }else{
       router.push(`/proyecto?id=${projectId}`);

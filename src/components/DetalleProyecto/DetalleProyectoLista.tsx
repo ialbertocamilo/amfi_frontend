@@ -61,22 +61,22 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
     if (projectData) {
 
       setFormData({
-        anunciante: projectData.brand || "",
-        marca: projectData.brand || "",
-        producto: projectData.product || "",
-        categoria: projectData.category || "",
-        nombreProyecto: projectData.name || "",
-        versiones: projectData.versions.name || "",
-        cantidad: projectData.budget || 1,
-        cantidadSeleccionar: projectData.maxProducers || "",
-        agencia: projectData.agencyName || "-",
-        correoResponsable: projectData.creator.email || "",
-        directorCreativo: projectData.creator.jobPosition || "",
-        contactoFinanzas: projectData.isFinancialInfoUnlocked ? "Sí" : "No",
-        directorCuentas: `${projectData.creator.name} ${projectData.creator.lastname}` || "",
-        productorAgencia: projectData.creator.name || "",
-        numeroODT: projectData.id || "",
-        contactoCompras: projectData.creator.nationalIdentifierOrRFC || "",
+        anunciante: projectData?.brand || "",
+        marca: projectData?.brand || "",
+        producto: projectData?.product || "",
+        categoria: projectData?.category || "",
+        nombreProyecto: projectData?.name || "",
+        versiones: projectData?.versions?.name || "",
+        cantidad: projectData?.budget || 1,
+        cantidadSeleccionar: projectData?.maxProducers || "",
+        agencia: projectData?.agencyName || "-",
+        correoResponsable: projectData?.creator?.email || "",
+        directorCreativo: projectData?.creator?.jobPosition || "",
+        contactoFinanzas: projectData?.isFinancialInfoUnlocked ? "Sí" : "No",
+        directorCuentas: `${projectData?.creator?.name} ${projectData?.creator.lastname}` || "",
+        productorAgencia: projectData?.creator?.name || "",
+        numeroODT: projectData?.id || "",
+        contactoCompras: projectData?.creator?.nationalIdentifierOrRFC || "",
         creado: moment(projectData?.createdAt).format('DD/MM/YYYY') || '',
         estado: ProjectMapper.mapProjectStatus(projectData?.status) || ''
       });
@@ -114,9 +114,9 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
           className="flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow cursor-pointer mt-4"
           onClick={handleItemClick}
         >
-          <span className="text-gray-700">{casa.name}</span>
-          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(casa.status)}`}>
-            {casa.status}
+          <span className="text-gray-700">{casa?.name}</span>
+          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(casa?.status)}`}>
+            {casa?.status}
           </span>
           <button className="text-gray-400 hover:text-gray-600">&gt;</button>
         </li>

@@ -34,6 +34,10 @@ const roleActionsMap: Record<string, string[]> = {
   owner: ["Ver", "Eliminar"],
   user: ["Ver"],
 };
+export interface ActionRoleProps {
+  id: string;
+  userRole: string;
+}
 
 const ActionRole: React.FC<ActionRoleProps> = ({ id, userRole }) => {
   const availableActions = useMemo(() => {

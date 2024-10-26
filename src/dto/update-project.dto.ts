@@ -1,4 +1,5 @@
 export class UpdateProjectDto {
+  id?:string
   advertiserId?: string;
   agencyId?: string;
   brand?: string;
@@ -14,6 +15,7 @@ export class UpdateProjectDto {
   projectStep?: number;
 
   constructor(obj: Partial<UpdateProjectDto> = {}) {
+    this.id = obj.id;
     this.advertiserId = obj.advertiserId;
     this.agencyId = obj.agencyId;
     this.brand = obj.brand;

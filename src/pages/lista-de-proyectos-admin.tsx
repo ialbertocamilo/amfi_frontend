@@ -32,12 +32,16 @@ const ListaProyectosAdmin = () => {
     { label: "Correlativo", key: "correlativo" },
     { label: "ID", key: "id" },
     {
-      label: "Empresa",
+      label: "Nombre",
       key: "proyecto",
     },
     {
-      label: "Nombre",
+      label: "Agencia",
       key: "agencia",
+    },
+    {
+      label: "Anunciante",
+      key: "anunciante",
     },
     { label: "Fecha registro", key: "fechaRegistro" },
     { label: "Creador", key: "creador" },
@@ -56,7 +60,7 @@ const ListaProyectosAdmin = () => {
     router.push("/proyecto");
   };
 
-  const user = useUser();
+  const {user,loading} = useUser();
   const fetchProjects = async () => {
     try {
       const response = await getProjects();
@@ -65,13 +69,14 @@ const ListaProyectosAdmin = () => {
         id: proyecto.id,
         proyecto: proyecto.name,
         agencia: proyecto.agency?.name,
+        anunciante: proyecto.advertiser?.name??'-',
         fechaRegistro: moment(proyecto.creator?.createdAt).format("DD/MM/YYYY"),
         estado: ProjectMapper.mapProjectStatus(proyecto.status),
         creador: proyecto.creator?.name,
         action: (
           <ActionProjects
             id={proyecto.id}
-            userRole={user?.user?.role as string}
+            userRole={user?.role as string}
           ></ActionProjects>
         ),
       }));
@@ -88,9 +93,9 @@ const ListaProyectosAdmin = () => {
   };
 
   useEffect(() => {
-    if (!user.loading)
+    if (!loading)
       fetchProjects();
-  }, [user.loading]);
+  }, [loading]);
 
   return (
     <Layout>

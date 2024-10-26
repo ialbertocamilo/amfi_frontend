@@ -9,7 +9,7 @@ import ProyectoSteep4 from "@/components/Proyecto/ProyectoSteep4";
 import ProyectoSteep3 from "@/components/Proyecto/ProyectoSteep3";
 import ProyectoSteep5 from "@/components/Proyecto/ProyectoSteep5";
 import CasasProductorasModal from "@/components/Proyecto/CasasProductorasModal";
-import { api } from "@/lib/api";
+import api from "@/lib/api";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import ProjectInfo from "@/components/Postulacion/ProjectInfo";

@@ -9,7 +9,7 @@ import {Director} from '@/entities/Director';
 import {useRouter} from 'next/router';
 import styles from "@/components/AddDirectorModal.module.css";
 import AddDirectorModal from "@/components/AddDirectorModal ";
-import {api} from "@/lib/api";
+import api from "@/lib/api";
 import toast from "react-hot-toast";
 
 interface FormData {

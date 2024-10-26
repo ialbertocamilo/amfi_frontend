@@ -1,4 +1,5 @@
-import {api} from "@/lib/api";
+import { CreateDirectorDto } from "@/dto/create-director.dto";
+import api from "@/lib/api";
 
 
 export const getAllDirectors = async () => {
@@ -6,6 +7,12 @@ export const getAllDirectors = async () => {
         const response = await api.get(`/director`);
         return response.data;
     } catch (error) {
-        throw new Error(error.response?.data?.message || 'Error fetching directors data');
+        console.warn(error?.response?.data?.message || 'Error creating director');
+        return []
     }
+};
+
+export const createDirector = async (dto:CreateDirectorDto) => {
+        const response = await api.post(`/director`, dto);
+        return response.data;
 };

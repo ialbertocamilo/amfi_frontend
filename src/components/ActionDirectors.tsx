@@ -10,17 +10,16 @@ const view = (id: string) => {
 const enum Actions {
   view = "Ver",
   edit = "Editar",
-  pause = "Pausar",
-  cancel = "Cancelar",
+  delete = "Eliminar",
 }
 const roleActionsMap: Record<string, string[]> = {
-  "super-admin": [Actions.view, Actions.edit, Actions.pause, Actions.cancel],
+  "super-admin": [Actions.view,  Actions.delete],
   support: [Actions.view],
-  owner: [Actions.view, Actions.pause, Actions.cancel],
-  user: [Actions.view, Actions.edit, Actions.pause, Actions.cancel],
+  owner: [Actions.view, Actions.delete],
+  user: [Actions.view,   Actions.delete],
 };
 
-const ActionProjects: React.FC<ActionRoleProps> = ({ id, userRole }) => {
+const ActionDirectors: React.FC<ActionRoleProps> = ({ id, userRole }) => {
   const router = useRouter();
   const handleEdit = (projectId: string) => {
     router.push(`/proyecto?id=${projectId}`);
@@ -45,15 +44,9 @@ const ActionProjects: React.FC<ActionRoleProps> = ({ id, userRole }) => {
     },
     {
       id: "3",
-      name: Actions.pause,
-      description: "Pausar proyecto",
-      onClick: (id:string) => handlePause(id),
-    },
-    {
-      id: "4",
-      name: Actions.cancel,
-      description: "Cancelar ",
-      onClick: (id:string) => console.log("Cancelar"),
+      name: Actions.delete,
+      description: "Eliminar ",
+      onClick: (id:string) => console.log("Eliminar"),
     },
   ];
   const availableActions = useMemo(() => {
@@ -69,4 +62,4 @@ const ActionProjects: React.FC<ActionRoleProps> = ({ id, userRole }) => {
   );
 };
 
-export default ActionProjects;
+export default ActionDirectors;
