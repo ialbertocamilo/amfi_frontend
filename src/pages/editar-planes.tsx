@@ -38,7 +38,7 @@ export default function EditarPlanes() {
 
         const highlightedPlans = ['premium'];
 
-        const mappedPlans = fetchedPlans?.map((plan) => ({
+        const mappedPlans = fetchedPlans?.map((plan:any) => ({
             ...plan,
             color: colorMap[plan.name] || '#FFFFFF',
             features: plan?.features ?? [],

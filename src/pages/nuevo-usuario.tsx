@@ -66,7 +66,7 @@ const NewUserPage = () => {
                             <h1 className="text-2xl font-bold text-gray-700 mb-4 text-center">Ingresa los datos del
                                 nuevo usuario</h1>
                             <form onSubmit={handleSubmit}>
-                                {['firstName', 'lastName', 'email'].map((field, idx) => (
+                                {(['firstName', 'lastName', 'email'] as (keyof typeof formData)[]).map((field, idx) => (
                                     <div className="mb-4" key={idx}>
                                         <label htmlFor={field} className="block text-gray-700 font-semibold mb-2">
                                             {field === 'firstName' ? 'Nombres' : field === 'lastName' ? 'Apellidos' : 'Correo Electrónico empresarial'}

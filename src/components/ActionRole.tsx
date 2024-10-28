@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import ActionList from "./ActionList";
-import {ActionRoleProps} from "@/interfaces/action-role-props.interface";
 
 
 const view = (id: string) => {

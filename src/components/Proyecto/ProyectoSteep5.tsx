@@ -52,7 +52,7 @@ const ProyectoSteep5 = ({
         detailsEnabled: false,
       }));
       setCasasProductoras(filtered);
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error fetching casas productoras:", error);
     }
   };

@@ -5,13 +5,25 @@ import React, {FormEvent, useState} from 'react';
 import RegistroProductora2 from '../components/registroProductora2';
 import {FaCheck, FaExclamationCircle} from 'react-icons/fa';
 import DirectorsList from '@/components/directorList';
-import {Director} from '@/entities/Director';
 import {useRouter} from 'next/router';
 import styles from "@/components/AddDirectorModal.module.css";
 import AddDirectorModal from "@/components/AddDirectorModal ";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
-
+export interface Director {
+    id: string | null;
+    name?: string;
+    lastName?: string;
+    nationality: string;
+    birthYear?: string;
+    directionYear: string;
+    typeRepresentative?: number;
+    residesInMexico?: boolean;
+    startedExperienceYear?: number;
+    nationalIdentifierOrRFC?: string;
+    isAvailable?: boolean;
+    createdAt?: string;
+  }
 interface FormData {
     companyName: string;
     legalName: string;

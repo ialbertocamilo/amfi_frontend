@@ -53,13 +53,13 @@ const Directores = () => {
         birthDate: moment(director.birthDate).format("DD/MM/YYYY"),
         action: (
           <ActionDirectors
-            id={director.id}
+            id={director.id as string }
             userRole={user?.role as string}
           ></ActionDirectors>
         ),
       }));
       setDirectors(transformedData);
-    } catch (error) {
+    } catch (error:any) {
       console.error("Error fetching directors:", error);
     }
   };

@@ -1,12 +1,10 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import "./globals.css";
 
 import { Link } from "@mui/material";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
-import { storage } from "@/lib/storage";
-import ApiService, { ApiInstance } from "@/lib/api";
-import { AxiosInstance } from "axios";
+import ApiService from "@/lib/api";
 import { storageConstants } from "@/constants";
 
 interface FormData {
@@ -37,9 +35,12 @@ const Login = () => {
       const response = await ApiService.post("/auth/login", {
         email: formData.email,
         password: formData.password,
-      })
+      });
       const userData = response.data;
-      localStorage.setItem(storageConstants.user, JSON.stringify(userData.user));
+      localStorage.setItem(
+        storageConstants.user,
+        JSON.stringify(userData.user)
+      );
       localStorage.setItem(storageConstants.token, userData.access_token);
       ApiService.updateToken(userData?.access_token);
       toast.success("Inicio de sesión exitoso");

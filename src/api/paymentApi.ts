@@ -6,7 +6,7 @@ export const verifyPayment = async (orderId: string) => {
     try {
         const response = await api.post('/payment/verify-payment', { orderId });
         return response.data;
-    } catch (error) {
+    } catch (error:any) {
         console.error(error)
         toast.error('Error verificando el pago, consulte con soporte.')
         return null

@@ -20,7 +20,7 @@ export const fetchUserInfo = async () => {
             type: UserMapper.mapRole(user.type),
         }));
         return transformedData;
-    } catch (error) {
+    } catch (error:any) {
         console.error("Error fetching user info:", error);
         return error
     }

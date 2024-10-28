@@ -23,7 +23,7 @@ const CambiarPassword: React.FC = () => {
                 setNewPassword('');
                 setConfirmPassword('');
             }
-        } catch (error) {
+        } catch (error:any) {
             toast.error(error?.response?.data?.clientMessage ?? 'Error al cambiar la contraseña');
         }
     };

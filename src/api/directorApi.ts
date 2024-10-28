@@ -6,7 +6,7 @@ export const getAllDirectors = async () => {
     try {
         const response = await api.get(`/director`);
         return response.data;
-    } catch (error) {
+    } catch (error:any) {
         console.warn(error?.response?.data?.message || 'Error creating director');
         return []
     }

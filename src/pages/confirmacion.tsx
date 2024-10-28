@@ -99,7 +99,7 @@ const Confirmacion = () => {
             </div>
           ) : (
             <PayPalButton
-              amount={amount}
+              amount={amount as string}
               onPaymentSuccess={handlePaymentSuccess}
             />
           )}

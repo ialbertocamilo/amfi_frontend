@@ -7,7 +7,7 @@ export const getProjects = async () => {
     try {
         const response = await ApiService.get(`/project`);
         return response.data;
-    } catch (error) {
+    } catch (error:any) {
         console.warn('Error fetching projects :', error);
         return null;
     }
@@ -17,7 +17,7 @@ export const getProjectById = async (id: string) => {
     try {
         const response = await ApiService.get(`/project/${id}`);
         return response.data;
-    } catch (error) {
+    } catch (error:any) {
         console.warn('Error fetching project by id:', error);
         return null;
     }
@@ -27,7 +27,7 @@ export const updateProjectById = async (id: string, projectData: UpdateProjectDt
     try {
         const response = await ApiService.patch(`/project/${id}`, projectData);
         return response.data;
-    } catch (error) {
+    } catch (error:any) {
         console.warn('Error updating project by id:', error);
         return null;
     }
@@ -37,7 +37,7 @@ export const createProject = async (projectData: CreateProjectDto) => {
     try {
         const response = await ApiService.post(`/project`, projectData);
         return response.data;
-    } catch (error) {
+    } catch (error:any) {
         console.warn('Error creating project:', error);
         return null;
     }

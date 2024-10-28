@@ -16,7 +16,7 @@ const DirectorsList: React.FC<inputEntity> = ({ directorsIni }) => {
     useEffect(() => {
         setDirectors(directorsIni);
     }, [directorsIni]);
-    const handleEdit = (director: Director, index:number) => {
+    const handleEdit = (director: Director, index:string) => {
         director.id = index;
         setCurrentDirector(director);
         setIndexId(index?.toString());
@@ -40,7 +40,7 @@ const DirectorsList: React.FC<inputEntity> = ({ directorsIni }) => {
                     <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                         <span>{director.name}</span>
                         <div>
-                            <button onClick={() => handleEdit(director, index)} style={{ marginRight: '10px' }}>
+                            <button onClick={() => handleEdit(director, String(index))} style={{ marginRight: '10px' }}>
                                 ✏️
                             </button>
                             <button onClick={() => handleDelete(index)}>

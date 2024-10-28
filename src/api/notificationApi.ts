@@ -5,7 +5,7 @@ export const sendInvitationEmail = async (object: { email: string, name: string 
     try {
         const response = await api.post('/notification/invite-user', object);
         return response.data;
-    } catch (error) {
+    } catch (error:any) {
         toast.error(error.response?.data?.clientMessage || 'Error sending invitation email');
         return null
     }

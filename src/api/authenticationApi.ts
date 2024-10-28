@@ -14,8 +14,9 @@ export const checkToken = async (token: string) => {
             params: { token }
         });
         return response.data;
-    } catch (error) {
-        throw new Error(error.response?.data?.message || 'Error when checking token');
+    } catch (error:any) {
+        toast.error(error?.response?.data?.message || 'Error when checking token')
+        return 
     }
 };
 
@@ -25,7 +26,7 @@ export const getCurrentUser = async () => {
     try {
         const response = await api.get(`/auth/profile`);
         return response.data;
-    } catch (error) {
+    } catch (error:any) {
         toast.error(error?.response?.data?.message || 'Error when getting user')
         return false
     }
@@ -43,7 +44,7 @@ export const signOut = async () => {
         await api.post(`/auth/logout`);
         storage(storageConstants.user).removeItem();
         storage(storageConstants.token).removeItem();
-    } catch (error) {
+    } catch (error:any) {
         toast.error(error?.response?.data?.message || 'Error when logging out');
     }
 };

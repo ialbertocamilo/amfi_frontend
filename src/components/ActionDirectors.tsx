@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import ActionList from "./ActionList";
-import { ActionRoleProps } from "@/interfaces/action-role-props.interface";
 import { useRouter } from "next/router";
+import { ActionRoleProps } from "./ActionRole";
 
 const view = (id: string) => {
   console.log(id);
