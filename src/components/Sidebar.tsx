@@ -32,8 +32,9 @@ const Sidebar: React.FC = () => {
       { href: '/lista-de-proyectos-admin', icon: 'IconProyectos.png', label: 'Proyectos' },
       { href: '/productoras', icon: 'IconProductoras.png', label: 'Productoras' },
       { href: '/directores', icon: 'IconDirectores.png', label: 'Directores' },
-      { href: '/configuracion', icon: 'IconConfiguracion.png', label: 'Configuración' },
-      { href: '/reportes', icon: 'IconReportes.png', label: 'Reportes' },
+      { href: '/editar-planes', icon: 'IconPlan.png', label: 'Planes' },
+      // { href: '/configuracion', icon: 'IconConfiguracion.png', label: 'Configuración' },
+      // { href: '/reportes', icon: 'IconReportes.png', label: 'Reportes' },
     ],
   };
 

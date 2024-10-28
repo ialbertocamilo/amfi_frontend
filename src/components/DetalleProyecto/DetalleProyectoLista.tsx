@@ -73,7 +73,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
         correoResponsable: projectData?.creator?.email || "",
         directorCreativo: projectData?.creator?.jobPosition || "",
         contactoFinanzas: projectData?.isFinancialInfoUnlocked ? "Sí" : "No",
-        directorCuentas: `${projectData?.creator?.name} ${projectData?.creator.lastname}` || "",
+        directorCuentas: `${projectData?.creator?.name} ${projectData?.creator?.lastname}` || "",
         productorAgencia: projectData?.creator?.name || "",
         numeroODT: projectData?.id || "",
         contactoCompras: projectData?.creator?.nationalIdentifierOrRFC || "",

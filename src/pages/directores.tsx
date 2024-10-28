@@ -17,6 +17,7 @@ import {
   CreateDirectorDto,
   UpdateDirectorDto,
 } from "@/dto/create-director.dto";
+import AddDirectorModal2 from "@/components/AddDirectorModal2";
 
 const Directores = () => {
   const [directors, setDirectors] = useState<Director[]>([]);
@@ -114,7 +115,7 @@ const Directores = () => {
         />
       </div>
       {isModalOpen && (
-        <AddDirectorModal
+        <AddDirectorModal2
           director={currentDirector}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}

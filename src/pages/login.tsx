@@ -37,7 +37,7 @@ const Login = () => {
       const response = await ApiService.post("/auth/login", {
         email: formData.email,
         password: formData.password,
-      });
+      })
       const userData = response.data;
       localStorage.setItem(storageConstants.user, JSON.stringify(userData.user));
       localStorage.setItem(storageConstants.token, userData.access_token);

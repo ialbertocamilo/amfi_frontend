@@ -28,11 +28,7 @@ class ApiService {
             ApiService.instance.interceptors.response.use(
                 (response) => response,
                 (error) => {
-                    if (error?.response?.status === 401) {
-                        toast.error('Su sesión ha expirado, por favor inicie sesión nuevamente.');
-                        location.href = '/login';
-                        return;
-                    } else if (error?.code === "ERR_NETWORK") {
+                     if (error?.code === "ERR_NETWORK") {
                         toast.error('Ocurrió un error al establecer conexión con el servidor, intente nuevamente.');
                     } else if (error?.response?.status == 500) {
                         toast.error('Ocurrió un error no controlado, comuníquese con soporte.');

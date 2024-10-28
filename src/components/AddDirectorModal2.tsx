@@ -1,44 +1,34 @@
 import React, { useEffect, useState } from "react";
 import styles from "./AddDirectorModal.module.css";
-import  api  from "@/lib/api";
+import { Director } from "@/entities/Director";
+import api from "@/lib/api";
 import { FaExclamationCircle } from "react-icons/fa";
-export interface Director {
-  id: string | null;
-  name?: string;
-  lastName?: string;
-  nationality: string;
-  birthYear?: string;
-  directionYear: string;
-  typeRepresentative?: number;
-  residesInMexico?: boolean;
-  startedExperienceYear?: number;
-  nationalIdentifierOrRFC?: string;
-  isAvailable?: boolean;
-  createdAt?: string;
-}
+import { ProjectMapper } from "@/mappers/project.mapper";
+import { CreateDirectorDto, UpdateDirectorDto } from "@/dto/create-director.dto";
+
 type AddDirectorModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: ((data: any) => void) | null;
-  onUpdate: ((director: Director) => void) | null;
+  onAdd?: ((data: any) => void) | null;
   director: Director | null;
+  onSave: (dto:CreateDirectorDto|UpdateDirectorDto) => void;
 };
 
-const AddDirectorModal = ({
+const AddDirectorModal2 = ({
   isOpen,
   onClose,
   onAdd,
   director,
-  onUpdate,
+  onSave,
 }: AddDirectorModalProps) => {
   const [timer, setTimer] = useState<any>(null);
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [nationality, setNationality] = useState("");
-  const [typeRepresentative, setTypeRepresentative] = useState(1);
+  const [typeRepresentative, setTypeRepresentative] = useState("freelance");
   const [residesInMexico, setResidesInMexico] = useState(false);
   const [birthYear, setBirthYear] = useState("");
-  const [directionYear, setDirectionYear] = useState("");
+  const [directionYear, setDirectionYear] = useState(0);
 
   const [representationAlert, setRepresentationAlert] = useState(false);
 
@@ -48,8 +38,6 @@ const AddDirectorModal = ({
       if (timer) {
         clearTimeout(timer);
       }
-      setRepresentationAlert(false);
-      setRepresentationString("");
       setTimer(
         setTimeout(() => {
           api
@@ -58,23 +46,16 @@ const AddDirectorModal = ({
               lastname: lastName,
               birthDate: birthYear,
               nationality: nationality,
+              
             })
             .then((data) => {
-              switch (data.data?.content) {
-                case "freelance":
-                  setRepresentationString("Freelance");
-                  break;
-                case "represented":
-                  setRepresentationString("Representado");
-                  break;
-                case "co-represented":
-                  setRepresentationString("Co-representado");
-                  break;
-              }
+              setRepresentationString(
+                ProjectMapper.mapRepresentationType(data.data?.content)
+              );
               setRepresentationAlert(true);
-            }).catch(() => {
-              setRepresentationAlert(false);
-            })
+            }).catch((e)=>{
+              console.log('error',e)
+            });
         }, 1000)
       );
     }
@@ -84,11 +65,11 @@ const AddDirectorModal = ({
     if (director) {
       setName(director?.name || "");
       setNationality(director?.nationality || "");
-      setResidesInMexico(director?.residesInMexico || false);
-      setBirthYear(director?.birthYear || "");
-      setDirectionYear(director?.directionYear || "");
+      setResidesInMexico(!!director?.isMexicanResident || false);
+      setBirthYear(director?.birthDate || "");
+      setDirectionYear(Number(director?.directionYear) || 0);
       setLastName(director?.lastName || "");
-      setTypeRepresentative(director?.typeRepresentative || 1);
+      setTypeRepresentative(director?.representation || "freelance");
     }
   }, [director]);
 
@@ -97,7 +78,7 @@ const AddDirectorModal = ({
       onAdd({
         name: name,
         lastName: lastName,
-        typeRepresentative: typeRepresentative,
+        representation: typeRepresentative,
         directionYear: directionYear,
         nationality: nationality,
         residesInMexico: residesInMexico,
@@ -116,9 +97,9 @@ const AddDirectorModal = ({
     setNationality("");
     setResidesInMexico(false);
     setBirthYear("");
-    setDirectionYear("");
+    setDirectionYear(0);
     setLastName("");
-    setTypeRepresentative(1);
+    setTypeRepresentative("freelance");
   };
 
   const RepresentationComponent = () => {
@@ -133,6 +114,7 @@ const AddDirectorModal = ({
     return <></>;
   };
   if (!isOpen) return null;
+
 
   return (
     <div className={styles.modalOverlay}>
@@ -164,7 +146,11 @@ const AddDirectorModal = ({
               onChange={(e) => setLastName(e.target.value)}
             />
           </div>
-     <RepresentationComponent/>
+          {representationAlert && (
+            <div className={styles.formGroup}>
+              <RepresentationComponent />
+            </div>
+          )}
           <div className={styles.formGroup}>
             <label>Nacionalidad</label>
             <select
@@ -201,11 +187,11 @@ const AddDirectorModal = ({
             <label>Tipo de representación</label>
             <select
               value={typeRepresentative}
-              onChange={(e) => setTypeRepresentative(Number(e.target.value))}
+              onChange={(e) => setTypeRepresentative(e.target.value)}
             >
-              <option value={1}>Freelance</option>
-              <option value={2}>Representado</option>
-              <option value={3}>Co-representado</option>
+              <option value={"freelance"}>Freelance</option>
+              <option value={"represented"}>Representado</option>
+              <option value={"co-represented"}>Co-representado</option>
             </select>
           </div>
           <div className={styles.formGroup}>
@@ -222,7 +208,7 @@ const AddDirectorModal = ({
             <input
               type="date"
               value={directionYear}
-              onChange={(e) => setDirectionYear(e.target.value)}
+              onChange={(e) => setDirectionYear(Number(e.target.value))}
               placeholder="Elige el año"
             />
           </div>
@@ -239,20 +225,17 @@ const AddDirectorModal = ({
           <button
             className={styles.primaryButton}
             onClick={() => {
-              if (onUpdate) {
-                onUpdate({
+                console.log('onSave',)
+                onSave({
                   name: name,
                   nationality: nationality,
-                  residesInMexico: residesInMexico,
-                  birthYear: birthYear,
-                  id: director?.id || null,
-                  lastName: lastName,
-                  directionYear: directionYear,
-                  typeRepresentative: Number(typeRepresentative),
+                  isMexicanResident: residesInMexico,
+                  birthDate: birthYear,
+                  id: director?.id || undefined,
+                  lastname: lastName,
+                  startedExperienceYear: directionYear,
+                  representation: typeRepresentative,
                 });
-              } else {
-                handleAdd(true);
-              }
             }}
           >
             Aceptar
@@ -263,4 +246,4 @@ const AddDirectorModal = ({
   );
 };
 
-export default AddDirectorModal;
+export default AddDirectorModal2;
