@@ -247,7 +247,7 @@ const ProyectoSteep4 = ({
                 htmlFor="tituloResponsable"
                 className="block text-sm font-medium text-gray-700"
               >
-                Título
+                Títular
               </label>
               <input
                 type="text"

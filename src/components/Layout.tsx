@@ -3,6 +3,7 @@ import { FaBars } from "react-icons/fa";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import '../app/globals.css';
+import RecoilContextProvider from "./RecoilContextProvider";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -53,7 +54,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Navbar />
           </div>
           <main className="flex-1 p-6 overflow-auto">
-            <div className="bg-white min-h-screen p-6">{children}</div>
+            <div className="bg-white min-h-screen p-6">  <RecoilContextProvider>{children}</RecoilContextProvider></div>
           </main>
         </div>
       </div>

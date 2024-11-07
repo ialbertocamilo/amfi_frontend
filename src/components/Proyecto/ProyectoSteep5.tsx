@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import { getProductoras } from "@/api/productoraApi";
 import { ProjectMapper } from "@/mappers/project.mapper";
 import CasaDetails from "../CasaDetails";
+import ListaCasasProductoras from "../ListaCasasProductoras";
+import toast from "react-hot-toast";
 
 interface registroEntity {
   formData: any;
@@ -41,6 +43,23 @@ const ProyectoSteep5 = ({
   activeTab,
   setactiveTab,
 }: registroEntity) => {
+  const [error, setError] = useState<string | null>(null);
+
+  
+  const validateSelection = () => {
+    
+    return false;
+  };
+  const handleSave = () => {
+    if (!validateSelection()) {
+      return;
+    }
+    setError(null);
+
+    
+    handleSubmit("6");
+  };
+
   const fetchCasasProductoras = async () => {
     try {
       const data: CasaProductora[] = await getProductoras();
@@ -52,7 +71,7 @@ const ProyectoSteep5 = ({
         detailsEnabled: false,
       }));
       setCasasProductoras(filtered);
-    } catch (error:any) {
+    } catch (error: any) {
       console.error("Error fetching casas productoras:", error);
     }
   };
@@ -68,6 +87,7 @@ const ProyectoSteep5 = ({
   const [revisarPropuesta, setRevisarPropuesta] = useState(false);
 
   const toggleSeleccion = (index: number) => {
+    
     const updatedCasas = [...casasProductoras];
     updatedCasas[index].selected = !updatedCasas[index].selected;
     setCasasProductoras(updatedCasas);
@@ -94,11 +114,10 @@ const ProyectoSteep5 = ({
               <button
                 key={step}
                 onClick={() => setactiveTab(step.toString())}
-                className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                  Number(activeTab) >= step
-                    ? "bg-red-500 text-white"
-                    : "bg-gray-200 text-black"
-                }`}
+                className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= step
+                  ? "bg-red-500 text-white"
+                  : "bg-gray-200 text-black"
+                  }`}
               >
                 {Number(activeTab) >= step ? <FaCheck /> : step}
               </button>
@@ -117,39 +136,8 @@ const ProyectoSteep5 = ({
             />
           </div>
 
-          {/* Lista de casas productoras */}
-          <div className="space-y-4">
-            {casasProductoras
-              .filter((casa) =>
-                casa.name.toLowerCase().includes(buscar.toLowerCase())
-              )
-              .map((casa, index) => (
-                <div
-                  key={index}
-                  className="border border-gray-300 rounded-lg p-4"
-                >
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center space-x-4">
-                      <input
-                        type="checkbox"
-                        checked={casa.selected}
-                        onChange={() => toggleSeleccion(index)}
-                        className="form-checkbox h-5 w-5 text-red-500"
-                      />
-                      <span className="text-lg font-medium">{casa.name}</span>
-                    </div>
-                    <button
-                      className="text-red-500 font-semibold"
-                      onClick={() => toggleDetalles(index)}
-                    >
-                      {casa?.details ? "Ocultar detalle" : "Ver detalle"}
-                    </button>
-                  </div>
-                  
-                  <CasaDetails casa={casa} index={index} toggleDetalles={toggleDetalles} />
-                </div>
-              ))}
-          </div>
+          <ListaCasasProductoras casasProductoras={casasProductoras} buscar={buscar.toLowerCase()}
+           toggleDetalles={toggleDetalles} toggleSeleccion={(index) => toggleSeleccion(index)} />
 
           {/* Mensaje informativo */}
           <div
@@ -186,7 +174,7 @@ const ProyectoSteep5 = ({
             </button>
             <button
               className="w-1/4 bg-red-500 text-white py-2 rounded"
-              onClick={() => handleSubmit("6")}
+              onClick={handleSave}
             >
               Guardar proyecto
             </button>

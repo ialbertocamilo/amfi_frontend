@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaCheck, FaTimes, FaUpload } from "react-icons/fa";
+import UploaderComponent from "../UploaderComponent";
 interface registroEntity {
   formData: any,
   handleChange: any;
@@ -104,112 +105,26 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
           <div>
             <h2 className="text-xl font-bold mb-4">Documentos</h2>
             <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
-              <div>
-                <label htmlFor="line1" className="block text-sm font-medium text-gray-700">Line</label>
-                <input
-                  type="file"
-                  id="line1"
-                  name="line1"
-                  className="hidden"
-                  onChange={handleChange}
-                />
-                <label
-                  htmlFor="line1"
-                  className="mt-1 flex items-center justify-center w-full p-2 border border-gray-300 rounded-md text-green-500 cursor-pointer"
-                >
-                  <FaUpload className="mr-2" />
-                  Subir archivo
-                </label>
-                {formData?.line1 && (
-                  <div className="mt-2 flex items-center">
-                    <p className="text-sm text-gray-500">Archivo seleccionado: {formData?.line1}</p>
-                    <FaTimes
-                      className="ml-2 text-red-500 cursor-pointer"
-                      onClick={formData?.line1 && (() => handleChange({ target: { name: 'line1', value: '' } }))}
-                    />
-                  </div>
-                )}
-              </div>
 
+            <div>        
+                <label htmlFor="line1" className="block text-sm font-medium text-gray-700">Subir archivo</label>
+                <UploaderComponent /></div>
               <div>
-                <label htmlFor="link1" className="block text-sm font-medium text-gray-700">Link</label>
+                <label htmlFor="link3" className="block text-sm font-medium text-gray-700">Link</label>
                 <input
                   type="url"
-                  id="link1"
-                  name="link1"
+                  id="link3"
+                  name="link3"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.link1}
                   onChange={handleChange}
-                  placeholder="www.google.com"
+                  placeholder="www.google.com (Referencias)"
                 />
               </div>
 
-              <div>
-                <label htmlFor="line2" className="block text-sm font-medium text-gray-700">Line</label>
-                <input
-                  type="file"
-                  id="line2"
-                  name="line2"
-                  className="hidden"
-                  onChange={handleChange}
-                />
-                <label
-                  htmlFor="line2"
-                  className="mt-1 flex items-center justify-center w-full p-2 border border-gray-300 rounded-md text-green-500 cursor-pointer"
-                >
-                  <FaUpload className="mr-2" />
-                  Subir archivo
-                </label>
-                {formData?.line2 && (
-                  <div className="mt-2 flex items-center">
-                    <p className="text-sm text-gray-500">Archivo seleccionado: {formData?.line2}</p>
-                    <FaTimes
-                      className="ml-2 text-red-500 cursor-pointer"
-                      onClick={formData?.line2 && (() => handleChange({ target: { name: 'line2', value: '' } }))}
-                    />
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="link2" className="block text-sm font-medium text-gray-700">Link</label>
-                <input
-                  type="url"
-                  id="link2"
-                  name="link2"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData?.link2}
-                  onChange={handleChange}
-                  placeholder="www.google.com"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="line3" className="block text-sm font-medium text-gray-700">Line</label>
-                <input
-                  type="file"
-                  id="line3"
-                  name="line3"
-                  className="hidden"
-                  onChange={handleChange}
-                />
-                <label
-                  htmlFor="line3"
-                  className="mt-1 flex items-center justify-center w-full p-2 border border-gray-300 rounded-md text-green-500 cursor-pointer"
-                >
-                  <FaUpload className="mr-2" />
-                  Subir archivo
-                </label>
-                {formData?.line3 && (
-                  <div className="mt-2 flex items-center">
-                    <p className="text-sm text-gray-500">Archivo seleccionado: {formData?.line3}</p>
-                    <FaTimes
-                      className="ml-2 text-red-500 cursor-pointer"
-                      onClick={formData?.line3 && (() => handleChange({ target: { name: 'line3', value: '' } }))}
-                    />
-                  </div>
-                )}
-              </div>
+              <div>        
+                <label htmlFor="line1" className="block text-sm font-medium text-gray-700">Referencias</label>
+                <UploaderComponent /></div>
 
               <div>
                 <label htmlFor="link3" className="block text-sm font-medium text-gray-700">Link</label>
@@ -218,7 +133,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="link3"
                   name="link3"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData?.link3}
+                  value={formData?.link1}
                   onChange={handleChange}
                   placeholder="www.google.com (Referencias)"
                 />
@@ -342,7 +257,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   <option value="opcion3">Opción 3</option>
                 </select>
               </div>
-                           <div>
+              <div>
                 <label className="block text-sm font-medium text-gray-700">Visualización</label>
                 <div className="mt-1 flex items-center">
                   <input
@@ -369,16 +284,16 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
               </div>
 
               <div>
-              <label htmlFor="politicaAltaProveedor" className="block text-sm font-medium text-gray-700">Política de alta al proveedor</label>
-              <textarea
-                id="politicaAltaProveedor"
-                name="politicaAltaProveedor"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.politicaAltaProveedor}
-                onChange={handleChange}
-                maxLength={300}
-              />
-            </div>
+                <label htmlFor="politicaAltaProveedor" className="block text-sm font-medium text-gray-700">Política de alta al proveedor</label>
+                <textarea
+                  id="politicaAltaProveedor"
+                  name="politicaAltaProveedor"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  value={formData?.politicaAltaProveedor}
+                  onChange={handleChange}
+                  maxLength={300}
+                />
+              </div>
 
             </div>
           </div>
@@ -386,9 +301,9 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
           <div>
             <h2 className="text-xl font-bold mb-4">Financiamiento</h2>
             <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
-              
 
-             
+
+
 
               <div>
                 <label htmlFor="porcentajeTasaAnticipo" className="block text-sm font-medium text-gray-700">Porcentaje de tasa sobre el anticipo</label>
@@ -431,16 +346,16 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
 
 
               <div>
-              <label htmlFor="informacionAdicional" className="block text-sm font-medium text-gray-700">Información adicional</label>
-              <textarea
-                id="informacionAdicional"
-                name="informacionAdicional"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.informacionAdicional}
-                onChange={handleChange}
-                maxLength={300}
-              />
-            </div>
+                <label htmlFor="informacionAdicional" className="block text-sm font-medium text-gray-700">Información adicional</label>
+                <textarea
+                  id="informacionAdicional"
+                  name="informacionAdicional"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  value={formData?.informacionAdicional}
+                  onChange={handleChange}
+                  maxLength={300}
+                />
+              </div>
 
             </div>
           </div>
