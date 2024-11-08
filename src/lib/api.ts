@@ -1,7 +1,6 @@
-import axios, { AxiosInstance } from "axios";
 import { storageConstants } from "@/constants";
+import axios, { AxiosInstance } from "axios";
 import toast from "react-hot-toast";
-import Router from 'next/router';
 
 class ApiService {
     private static instance: AxiosInstance | null = null;
@@ -32,6 +31,9 @@ class ApiService {
                         toast.error('Ocurrió un error al establecer conexión con el servidor, intente nuevamente.');
                     } else if (error?.response?.status == 500) {
                         toast.error('Ocurrió un error no controlado, comuníquese con soporte.');
+                    } else if (error?.status ==401){
+                        toast.error('Sesión expirada, por favor inicie sesión nuevamente.');    
+                        location.href = "/login";
                     }
                     return Promise.reject(error);
                 },

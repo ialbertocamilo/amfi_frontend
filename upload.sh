@@ -19,6 +19,6 @@ echo "Etiquetando la imagen..."
 docker tag "$APP_NAME:$VERSION" "$DOCKER_USERNAME/$APP_NAME:$VERSION"
 
 echo "Subiendo la imagen a Docker Hub..."
-docker push "$DOCKER_USERNAME/$APP_NAME:latest"
+docker push "$DOCKER_USERNAME/$APP_NAME:$VERSION"
 
 echo "¡Imagen subida con éxito!"

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { casasProductorasSelected } from '@/state/producerState';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 interface ModalProps {
   isOpen: boolean;
@@ -6,11 +7,10 @@ interface ModalProps {
 }
 
 const CasasProductorasModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+  const casaProductorasSelected = useRecoilValue(casasProductorasSelected);
+
   if (!isOpen) return null;
 
-  const casasSeleccionadas = [
-    'Shepard Bryan Traders',
-  ];
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -30,7 +30,7 @@ const CasasProductorasModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         </p>
 
         <ul className="space-y-2 mb-6">
-          {casasSeleccionadas.map((casa, index) => (
+          {casaProductorasSelected.map((casa, index) => (
             <li key={index} className="flex items-center space-x-2">
               <span className="text-green-500">&#x2714;</span>
               <span>{casa}</span>

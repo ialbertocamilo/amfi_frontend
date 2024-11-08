@@ -1,7 +1,7 @@
-import api from "@/lib/api";
-import toast from "react-hot-toast";
-import {storage} from "@/lib/storage";
 import { storageConstants } from "@/constants";
+import api from "@/lib/api";
+import { storage } from "@/lib/storage";
+import toast from "react-hot-toast";
 
 
 export const checkToken = async (token: string) => {
@@ -28,6 +28,7 @@ export const getCurrentUser = async () => {
         return response.data;
     } catch (error:any) {
         toast.error(error?.response?.data?.message || 'Error when getting user')
+        location.href='/login'
         return false
     }
 };

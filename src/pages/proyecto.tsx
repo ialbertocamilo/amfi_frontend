@@ -30,8 +30,7 @@ const NuevoProyecto: React.FC = () => {
         });
     };
 
-    const project = useProject(id as string);
-    const {projectJson, loading, fetchProject} = useProject(id as string);
+    const {projectJson, loading, fetchProject,saveOrUpdateProject} = useProject(id as string);
     const handleSubmit = async (page: string) => {
         
         if (page === "6") {
@@ -44,7 +43,7 @@ const NuevoProyecto: React.FC = () => {
             "projectName": formData?.projectName,
             "extra": formData
         };
-        const createdProject=await project.saveOrUpdateProject(data);
+        const createdProject=await saveOrUpdateProject(data);
         if (createdProject?.id)
         router.replace(`/proyecto?id=${createdProject.id}`);
         setActiveTab(page);

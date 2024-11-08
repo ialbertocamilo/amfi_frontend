@@ -119,7 +119,6 @@ const ListaCasasProductoras: React.FC<ListaCasasProductorasProps> = ({ buscar })
                 casa={casa}
                 index={index}
                 toggleDetalles={toggleDetalles}
-                toggleDirectorSeleccion={toggleDirectorSeleccion}
               />
             )}
           </div>

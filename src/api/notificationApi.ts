@@ -1,5 +1,5 @@
 import api from "@/lib/api";
-import {toast} from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 export const sendInvitationEmail = async (object: { email: string, name: string }) => {
     try {
@@ -7,6 +7,7 @@ export const sendInvitationEmail = async (object: { email: string, name: string 
         return response.data;
     } catch (error:any) {
         toast.error(error.response?.data?.clientMessage || 'Error sending invitation email');
+
         return null
     }
 };

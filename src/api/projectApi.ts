@@ -56,3 +56,14 @@ export const getProjectBids = async () => {
     }
 };
 
+
+export const addDirectorsToProject = async (data:{projectId: string, directorId: string, productionHouseId: string}[]) => {
+    console.log('Adding directors to project:', data);
+    try {
+        const response = await ApiService.post(`/project-director/add`, data);
+        return [false,response.data];
+    } catch (error:any) {
+        console.warn('Error adding directors to project:', error);
+        return [true,error.response?.data.message || 'Error adding directors to project']
+    }
+}

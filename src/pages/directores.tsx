@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from "react";
-import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
-import { FaBars } from "react-icons/fa";
-import AddDirectorModal from "@/components/AddDirectorModal ";
-import { Director } from "@/entities/Director";
 import { createDirector, getAllDirectors } from "@/api/directorApi";
-import PaginatedComponent from "@/components/PaginationComponent";
-import moment from "moment";
-import ActionRole from "@/components/ActionRole";
-import useUser from "@/hooks/user.hook";
 import ActionDirectors from "@/components/ActionDirectors";
+import AddDirectorModal2 from "@/components/AddDirectorModal2";
 import Layout from "@/components/Layout";
-import toast from "react-hot-toast";
+import PaginatedComponent from "@/components/PaginationComponent";
 import {
   CreateDirectorDto,
   UpdateDirectorDto,
 } from "@/dto/create-director.dto";
-import AddDirectorModal2 from "@/components/AddDirectorModal2";
+import { Director } from "@/entities/Director";
+import useUser from "@/hooks/user.hook";
+import moment from "moment";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import "./globals.css";
 
 const Directores = () => {
   const [directors, setDirectors] = useState<Director[]>([]);
@@ -53,13 +48,13 @@ const Directores = () => {
         birthDate: moment(director.birthDate).format("DD/MM/YYYY"),
         action: (
           <ActionDirectors
-            id={director.id as string }
+            id={director.id as string}
             userRole={user?.role as string}
           ></ActionDirectors>
         ),
       }));
       setDirectors(transformedData);
-    } catch (error:any) {
+    } catch (error: any) {
       console.error("Error fetching directors:", error);
     }
   };
@@ -67,25 +62,23 @@ const Directores = () => {
     if (user) fetchDirectors();
   }, [user]);
 
-
   const handleSaveDirector = (dto: CreateDirectorDto | UpdateDirectorDto) => {
     createDirector({
-        ...dto,
-        birthDate: moment(dto.birthDate, "YYYY-MM-DD").toISOString(),
+      ...dto,
+      birthDate: moment(dto.birthDate, "YYYY-MM-DD").toISOString(),
+    })
+      .then(() => {
+        fetchDirectors();
       })
-        .then(() => {
-          fetchDirectors();
-        })
-        .catch((error) => {
-          console.log(error);
-          if (error?.code == '"ERR_BAD_REQUEST"') {
-            toast.error(error?.response.data.message || "Error de validación");
-          }
-          toast.error("Error al actualizar el director");
-        });
-        setIsModalOpen(false);
-  
-  }
+      .catch((error) => {
+        console.log(error);
+        if (error?.code == '"ERR_BAD_REQUEST"') {
+          toast.error(error?.response.data.message || "Error de validación");
+        }
+        toast.error("Error al actualizar el director");
+      });
+    setIsModalOpen(false);
+  };
 
   return (
     <Layout>

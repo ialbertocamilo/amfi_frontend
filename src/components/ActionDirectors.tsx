@@ -12,6 +12,12 @@ const enum Actions {
   edit = "Editar",
   delete = "Eliminar",
 }
+
+new File
+
+
+
+
 const roleActionsMap: Record<string, string[]> = {
   "super-admin": [Actions.view,  Actions.delete],
   support: [Actions.view],
@@ -20,7 +26,7 @@ const roleActionsMap: Record<string, string[]> = {
 };
 
 const ActionDirectors: React.FC<ActionRoleProps> = ({ id, userRole }) => {
-  const router = useRouter();
+    const router = useRouter();
   const handleEdit = (projectId: string) => {
     router.push(`/proyecto?id=${projectId}`);
   };
@@ -39,8 +45,10 @@ const ActionDirectors: React.FC<ActionRoleProps> = ({ id, userRole }) => {
     {
       id: "2",
       name: Actions.edit,
-      description: "Editar ",
-      onClick: (id: string) => handleEdit(id),
+      description: "Editar"
+
+
+      onClick: (id: string) => handleEdit(id)
     },
     {
       id: "3",

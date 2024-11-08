@@ -25,6 +25,7 @@ export const getActivePlans = async () => {
 export const getPlanById = async (id: string) => {
     try {
         const response = await api.get(`/plans/${id}`);
+        
         return response.data;
     } catch (error:any) {
         console.error(error);

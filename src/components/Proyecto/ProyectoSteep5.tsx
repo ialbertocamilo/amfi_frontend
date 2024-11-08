@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
 
-import { useEffect } from "react";
 import { getProductoras } from "@/api/productoraApi";
-import { ProjectMapper } from "@/mappers/project.mapper";
-import CasaDetails from "../CasaDetails";
-import ListaCasasProductoras from "../ListaCasasProductoras";
+import { addDirectorsToProject } from "@/api/projectApi";
+import { casasProductorasSelected, selectedCasasProductorasState } from "@/state/producerState";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
+import { useRecoilState, useRecoilValue } from "recoil";
+import ListaCasasProductoras from "../ListaCasasProductoras";
 
 interface registroEntity {
   formData: any;
@@ -45,25 +47,62 @@ const ProyectoSteep5 = ({
 }: registroEntity) => {
   const [error, setError] = useState<string | null>(null);
 
-  
-  const validateSelection = () => {
-    
+  const router = useRouter();
+
+  const { id } = router.query;
+  const selectedCasas = useRecoilValue(selectedCasasProductorasState);
+  const [casasProductorasNames, setCasasProductorasNames] = useRecoilState(casasProductorasSelected);
+  const arrInvitedProductors: { projectId: string, directorId: string, productionHouseId: string }[] = []
+  const validateSelection = async () => {
+    if (!selectedCasas.length) {
+      toast.error("Debe seleccionar al menos una casa productora y un director.");
+      return false;
+    }
+    try {
+
+      for (const casa of selectedCasas) {
+        const haveSelected = casa.directors.some((director) => director.selected == true)
+        if (!haveSelected) {
+          toast.error("Debe seleccionar un director.");
+          throw new Error("Debe seleccionar un director.")
+        }
+
+        const selected = casa.directors.filter((director) => director.selected == true)
+        if (selected.length > 1) {
+          toast.error("Debe seleccionar solo un director.");
+          throw new Error("Debe seleccionar un director.")
+        }
+        const selectedDirector = casa.directors.find((director) => director.selected == true)
+        if (selectedDirector?.id && id) {
+          arrInvitedProductors.push({ projectId: id as string, directorId: selectedDirector.id, productionHouseId: casa.id })
+        }
+      }
+      const [error, response] = await addDirectorsToProject(arrInvitedProductors);
+      if (error) {
+        toast.error(response)
+        return false
+      }
+      setCasasProductorasNames(selectedCasas.map(casa => casa.name))
+      return true
+    } catch (error) {
+      console.warn(error)
+      toast.error("Error al invitar a las casas productoras.")
+    }
+
     return false;
   };
-  const handleSave = () => {
-    if (!validateSelection()) {
+  const handleSave = async () => {
+    const validate = await validateSelection()
+    if (!validate) {
       return;
     }
     setError(null);
-
-    
     handleSubmit("6");
   };
 
   const fetchCasasProductoras = async () => {
     try {
       const data: CasaProductora[] = await getProductoras();
-      console.log(data);
       const filtered = data.map((casa) => ({
         ...casa,
         selected: false,
@@ -87,7 +126,7 @@ const ProyectoSteep5 = ({
   const [revisarPropuesta, setRevisarPropuesta] = useState(false);
 
   const toggleSeleccion = (index: number) => {
-    
+
     const updatedCasas = [...casasProductoras];
     updatedCasas[index].selected = !updatedCasas[index].selected;
     setCasasProductoras(updatedCasas);
@@ -136,8 +175,7 @@ const ProyectoSteep5 = ({
             />
           </div>
 
-          <ListaCasasProductoras casasProductoras={casasProductoras} buscar={buscar.toLowerCase()}
-           toggleDetalles={toggleDetalles} toggleSeleccion={(index) => toggleSeleccion(index)} />
+          <ListaCasasProductoras buscar={buscar.toLowerCase()} />
 
           {/* Mensaje informativo */}
           <div

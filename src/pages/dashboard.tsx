@@ -6,6 +6,7 @@ import PendingTable from "../components/PendingTable";
 import "../app/globals.css";
 import Layout from "@/components/Layout";
 import api from "@/lib/api";
+import toast from "react-hot-toast";
 
 export default function Home() {
   const [stats, setStats] = useState({
@@ -16,6 +17,13 @@ export default function Home() {
   useEffect(() => {
     api.get("/company/stats").then((data) => {
       setStats(data.data);
+    }).catch(error=>{
+      if (error?.response?.status === 401) {
+        toast.error('No autorizado. Por favor, inicie sesión nuevamente.');
+        location.href='/login'  
+      } else {
+        toast.error('Ocurrió un error al obtener las estadísticas.');
+      }
     });
   }, []);
   return (

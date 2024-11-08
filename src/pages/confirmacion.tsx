@@ -15,6 +15,7 @@ const Confirmacion = () => {
   const { payerName, amount, transactionId } = router.query;
   const [paymentProcessed, setPaymentProcessed] = useState(false);
   const [paymentDetails, setPaymentDetails] = useState<any>(null);
+  
 
   const handlePaymentSuccess = (details: any) => {
     setPaymentProcessed(true);
@@ -49,7 +50,7 @@ const Confirmacion = () => {
   }, [plan_id]);
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <Card className="w-full max-w-md bg-white shadow-lg rounded-lg overflow-hidden">
+      <Card className="w-full max-w-md bg-white shadow-lg rounded-lg o:verflow-hidden">
         <div className="py-4 bg-gradient-to-r from-blue-600 to-purple-700 text-white">
           <div className="text-center text-2xl font-bold">
             Confirmación de Pago

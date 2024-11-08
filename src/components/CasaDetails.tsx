@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { ProjectMapper } from '@/mappers/project.mapper';
-import { CasaProductora, casasProductorasState } from '@/state/producerState';
+import { CasaProductora, casasProductorasState, Director } from '@/state/producerState';
 
 interface CasaDetailsProps {
   casa: CasaProductora;
@@ -31,7 +31,7 @@ const DirectorItem: React.FC<DirectorItemProps> = ({ director, isSelected, onSel
   );
 };
 
-const CasaDetails: React.FC<CasaDetailsProps> = ({ casa, index, toggleDetalles }) => {
+const CasaDetails: React.FC<CasaDetailsProps> = ({ casa, index }) => {
   const [casasProductoras, setCasasProductoras] = useRecoilState(casasProductorasState);
   const [error, setError] = useState<string | null>(null);
 
