@@ -1,22 +1,22 @@
-import { Director } from '@/entities/Director';
+import { CreateDirectorDTO } from '@/entities/CreateDirectorDTO';
 import React, { useEffect, useState } from 'react';
 import AddDirectorModal from './AddDirectorModal ';
 
 
 interface inputEntity {
-    directorsIni: Director[];
+    directorsIni: CreateDirectorDTO[];
 }
 
 const DirectorsList: React.FC<inputEntity> = ({ directorsIni }) => {
     const [indexId, setIndexId] = useState('');
-    const [directors, setDirectors] = useState<Director[]>([]);
+    const [directors, setDirectors] = useState<CreateDirectorDTO[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentDirector, setCurrentDirector] = useState<Director | null>(null);
+    const [currentDirector, setCurrentDirector] = useState<CreateDirectorDTO | null>(null);
 
     useEffect(() => {
         setDirectors(directorsIni);
     }, [directorsIni]);
-    const handleEdit = (director: Director, index:string) => {
+    const handleEdit = (director: CreateDirectorDTO, index:string) => {
         director.id = index;
         setCurrentDirector(director);
         setIndexId(index?.toString());
@@ -27,7 +27,7 @@ const DirectorsList: React.FC<inputEntity> = ({ directorsIni }) => {
         setDirectors(directors.filter((_, i) => i !== index));
     };
 
-    const handleUpdateDirector = (updatedDirector: Director) => {
+    const handleUpdateDirector = (updatedDirector: CreateDirectorDTO) => {
 
         setDirectors(directors.map((director,index) => index.toString() == indexId ? updatedDirector : director));
         setIsModalOpen(false);

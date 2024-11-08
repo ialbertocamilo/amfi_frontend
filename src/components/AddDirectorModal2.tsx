@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./AddDirectorModal.module.css";
-import { Director } from "@/entities/Director";
+import { CreateDirectorDTO } from "@/entities/CreateDirectorDTO";
 import api from "@/lib/api";
 import { FaExclamationCircle } from "react-icons/fa";
 import { ProjectMapper } from "@/mappers/project.mapper";
@@ -10,7 +10,7 @@ type AddDirectorModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onAdd?: ((data: any) => void) | null;
-  director: Director | null;
+  director: CreateDirectorDTO | null;
   onSave: (dto:CreateDirectorDto|UpdateDirectorDto) => void;
 };
 
@@ -46,7 +46,8 @@ const AddDirectorModal2 = ({
               lastname: lastName,
               birthDate: birthYear,
               nationality: nationality,
-              
+              isMexicanResident: residesInMexico,
+              representation: typeRepresentative
             })
             .then((data) => {
               setRepresentationString(
@@ -206,7 +207,7 @@ const AddDirectorModal2 = ({
           <div className={styles.formGroup}>
             <label>¿En qué año empezó a dirigir?</label>
             <input
-              type="date"
+              type="number"
               value={directionYear}
               onChange={(e) => setDirectionYear(Number(e.target.value))}
               placeholder="Elige el año"

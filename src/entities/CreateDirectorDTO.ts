@@ -1,4 +1,4 @@
-export interface Director {
+export interface CreateDirectorDTO {
     id: string | null,
     name?: string;
     lastName?: string;

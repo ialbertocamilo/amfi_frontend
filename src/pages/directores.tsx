@@ -7,7 +7,7 @@ import {
   CreateDirectorDto,
   UpdateDirectorDto,
 } from "@/dto/create-director.dto";
-import { Director } from "@/entities/Director";
+import { CreateDirectorDTO } from "@/entities/CreateDirectorDTO";
 import useUser from "@/hooks/user.hook";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -15,9 +15,9 @@ import toast from "react-hot-toast";
 import "./globals.css";
 
 const Directores = () => {
-  const [directors, setDirectors] = useState<Director[]>([]);
+  const [directors, setDirectors] = useState<CreateDirectorDTO[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentDirector, setCurrentDirector] = useState<Director | null>(null);
+  const [currentDirector, setCurrentDirector] = useState<CreateDirectorDTO | null>(null);
 
   const headers = [
     { key: "id", label: "ID" },
@@ -34,7 +34,7 @@ const Directores = () => {
   const fetchDirectors = async () => {
     try {
       const directorsData = await getAllDirectors();
-      const transformedData = directorsData.map((director: Director) => ({
+      const transformedData = directorsData.map((director: CreateDirectorDTO) => ({
         ...director,
         representation:
           director.representation === "freelance"
@@ -75,7 +75,7 @@ const Directores = () => {
         if (error?.code == '"ERR_BAD_REQUEST"') {
           toast.error(error?.response.data.message || "Error de validación");
         }
-        toast.error("Error al actualizar el director");
+        toast.error("Error al guardar el director");
       });
     setIsModalOpen(false);
   };
