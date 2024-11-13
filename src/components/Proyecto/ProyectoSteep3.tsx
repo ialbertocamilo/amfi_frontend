@@ -133,7 +133,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   id="link3"
                   name="link3"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData?.link1}
+                  value={formData?.link2}
                   onChange={handleChange}
                   placeholder="www.google.com (Referencias)"
                 />

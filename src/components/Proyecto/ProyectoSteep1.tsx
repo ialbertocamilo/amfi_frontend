@@ -1,7 +1,4 @@
 import { FaCheck } from "react-icons/fa";
-import useProject from "@/hooks/project.hook";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 interface registroEntity {
   formData: any;
@@ -19,7 +16,6 @@ const ProyectoSteep1 = ({
   handleSubmit,
   activeTab,
   setactiveTab,
-  isEditing,
   readonly,
 }: registroEntity) => {
 
@@ -176,17 +172,17 @@ const ProyectoSteep1 = ({
           </div>
           <div>
             <label
-              htmlFor="versionNumber"
+              htmlFor="quantity"
               className="block text-sm font-medium text-gray-700"
             >
               Cantidad
             </label>
             <input
               type="number"
-              id="versionNumber"
-              name="versionNumber"
+              id="quantity"
+              name="quantity"
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              value={formData?.versionNumber}
+              value={formData?.quantity}
               onChange={handleChange}
               disabled={readonly}
             />

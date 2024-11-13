@@ -1,4 +1,4 @@
-export interface DirectorEntity {
+export interface IDirector {
     id: string;
     uniqueCode: string;
     name: string;

@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import { getInvitedDirectors } from '@/api/directorApi';
+import { IPostulationData } from '@/api/postulationApi';
+import { confirmInvitation } from '@/api/projectApi';
+import { ProjectDirectorInvited } from '@/interfaces/project-director.interface';
+import { ProjectMapper, ProjectStatus } from '@/mappers/project.mapper';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import ConfirmacionParticipacion from './ConfirmacionParticipacion';
 import ResumenProyecto from './ResumenProyecto';
-import { useRouter } from 'next/router';
 
-const ProjectInfo: React.FC = () => {
+const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({ data }) => {
 
   const router = useRouter();
 
+  const { token } = router.query
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [postulacion, setPostulacion] = useState(false);
@@ -14,6 +21,9 @@ const ProjectInfo: React.FC = () => {
 
   const handleConfirm = () => {
     // Lógica para confirmar la acción
+    const invitation = confirmInvitation(token as string)
+    if (!invitation) toast.error('Error al confirmar la invitación')
+    else toast.success('Invitación confirmada correctamente')
     setIsModalOpen(false);
     setPostulacion(true);
   };
@@ -23,29 +33,42 @@ const ProjectInfo: React.FC = () => {
     setIsModalOpen(false);
   };
 
+
+  const [invitedDirectors, setInvitedDirectors] = useState<ProjectDirectorInvited[]>([]);
+  const [project, setProject] = useState<any>()
+  useEffect(() => {
+    if (data) {
+      if (data.project.status ===ProjectStatus.Closed){
+        toast.error('El proyecto se encuentra cerrado')
+        return;
+      }
+      setProject(data.project.extra)
+      getInvitedDirectors(data.project.id).then((res) => {
+        const result = res.filter(value => !value.accepted)
+        setInvitedDirectors(result)
+      })
+
+    }
+  }, [data])
+
+
   const iniciarPostulacion = () => {
     router.push('/postulacion-proceso');
   };
 
   return (
-    <div className="container mx-auto p-6 bg-white shadow-lg rounded-md">
+    <div className="container mt-4 mx-auto p-6 bg-white shadow-lg rounded-md">
       {/* Header */}
       <div className="flex justify-between items-start border-b pb-4 mb-4">
         <div>
-          <h1 className="text-2xl font-bold">Proyecto León</h1>
-          <p>Creador: <strong>Luna Rengifo</strong></p>
-          <p>Agencia: New Scottsberg</p>
-          <p>Estado: <strong>En Proceso</strong></p>
+          <h1 className="text-2xl font-bold">{data?.project?.name}</h1>
+          <p>Creador: <strong>{data?.director?.name}</strong></p>
+          <p>Agencia: {project?.agencyName}</p>
+          <p>Estado: <strong>{ProjectMapper.mapProjectStatus(data?.project?.status)}</strong></p>
         </div>
         <div className="text-right">
-          <p>Creado: 08 de junio 2026</p>
+          <p>Creado: {new Date(data?.project?.createdAt).toLocaleDateString()}</p>
           <div className="flex items-center space-x-4 mt-2">
-            <div className="text-sm">
-              <span className="text-yellow-500 font-bold">⭐ Créditos disponibles: 16</span>
-            </div>
-            <button className="bg-white text-red-500 border border-red-500 py-2 px-4 rounded">
-              Comprar
-            </button>
           </div>
         </div>
       </div>
@@ -55,25 +78,25 @@ const ProjectInfo: React.FC = () => {
         <h2 className="text-lg font-semibold mb-4">Información de proyecto</h2>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <p><strong>Anunciante:</strong> Luna Rengifo</p>
-            <p><strong>Marca:</strong> New Scottsberg</p>
-            <p><strong>Producto:</strong> New Scottsberg</p>
-            <p><strong>Categoría:</strong> Lorem Ipsum</p>
-            <p><strong>Campaña:</strong> Dolor Sit Amet</p>
+            <p><strong>Anunciante:</strong> {data?.project?.advertiser}</p>
+            <p><strong>Marca:</strong> {project?.brand}</p>
+            <p><strong>Producto:</strong> {project?.product}</p>
+            <p><strong>Categoría:</strong> {project?.category}</p>
+            <p><strong>Campaña:</strong> {project?.campaign}</p>
           </div>
           <div>
-            <p><strong>Cantidad:</strong> 30</p>
-            <p><strong>Duración:</strong> 102 seg</p>
-            <p><strong>Aspecto:</strong> Dato de lista</p>
-            <p><strong>Formato:</strong> Dato de lista</p>
+            <p><strong>Cantidad:</strong> {project?.quantity}</p>
+            <p><strong>Duración:</strong> {project?.entregables?.duracion}</p>
+            <p><strong>Aspecto:</strong> {project?.entregables?.aspecto}</p>
+            <p><strong>Formato:</strong> {project?.entregables?.formato}</p>
           </div>
           <div>
-            <p><strong>Brief:</strong> 12/12/25</p>
-            <p><strong>Visualización:</strong> 01/12/25</p>
+            <p><strong>Brief:</strong> {new Date(project?.entregaBrief).toLocaleDateString()}</p>
+            <p><strong>Visualización:</strong> {new Date(project?.visualizacion).toLocaleDateString()}</p>
           </div>
           <div>
-            <p><strong>Entrega de presupuestos y TT:</strong> 23/12/25</p>
-            <p><strong>Entrega proyecto:</strong> 12/07/25</p>
+            <p><strong>Entrega de presupuestos y TT:</strong> {new Date(project?.entregaPresupuesto).toLocaleDateString()}</p>
+            <p><strong>Entrega proyecto:</strong> {new Date(project?.entregaProyecto).toLocaleDateString()}</p>
           </div>
         </div>
       </div>
@@ -95,12 +118,10 @@ const ProjectInfo: React.FC = () => {
 
       {/* Links */}
       <div className="mb-8">
-        <h2 className="text-lg font-semibold mb-4">Link</h2>
+        <h2 className="text-lg font-semibold mb-4">Links</h2>
         <div className="grid grid-cols-2 gap-4">
-          <p>Link 1</p>
-          <p>Link 2</p>
-          <p>Link 3</p>
-          <p>Link 4</p>
+          <p>{project?.link1}</p>
+          <p>{project?.link2}</p>
         </div>
       </div>
 
@@ -108,55 +129,47 @@ const ProjectInfo: React.FC = () => {
       <div className="mb-8">
         <h2 className="text-lg font-semibold mb-4">Casas productoras Licitantes</h2>
         <div className="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <p className="flex items-center"><span className="text-green-500 mr-2">✔</span> Grupo Traziente</p>
-            <p>Director licitante: Ali Aaker</p>
-          </div>
-          <div>
-            <p className="flex items-center"><span className="text-green-500 mr-2">✔</span> Dr. Communication</p>
-            <p>Director licitante: Panos Cosmatos</p>
-          </div>
-          <div>
-            <p className="flex items-center"><span className="text-green-500 mr-2">✔</span> Kuatrix</p>
-            <p>Director licitante: Julia Docournea</p>
-          </div>
-          <div>
-            <p className="flex items-center"><span className="text-green-500 mr-2">✔</span> Dr. Communication</p>
-            <p>Director licitante: Shane Carruth</p>
-          </div>
-          <div>
-            <p className="flex items-center"><span className="text-green-500 mr-2">✔</span> Filmmaking</p>
-            <p>Director licitante: Debra Granik</p>
-          </div>
+          {invitedDirectors.map((director) => (
+            <div key={director.id}>
+              <p className="flex items-center"><span className="text-green-500 mr-2">✔</span> {director.productionHouse.name}</p>
+              <p>Director licitante: {director.director.name} {director.director.lastname}</p>
+            </div>
+          ))}
         </div>
       </div>
 
-<br />
-      {postulacion && (
-        <><ResumenProyecto /><div className="flex justify-center pt-8">
-          <button className="bg-red-500 text-white py-2 px-4 rounded" onClick={() => iniciarPostulacion()}>
-            Iniciar postulación
-          </button>
-        </div></>
-      )}
+      <br />
+      {
+        postulacion && (
+          <><ResumenProyecto /><div className="flex justify-center pt-8">
+            <button className="bg-red-500 text-white py-2 px-4 rounded" onClick={() => iniciarPostulacion()}>
+              Iniciar postulación
+            </button>
+          </div></>
+        )
+      }
 
 
       {/* Botones de acción */}
-      {!postulacion && (
-        <div className="flex justify-center">
-          <div className="flex space-x-4">
-            <button className="bg-white text-red-500 border border-red-500 py-2 px-4 rounded">No participar</button>
-            <button className="bg-red-500 text-white py-2 px-4 rounded" onClick={() => setIsModalOpen(true)}>Participar</button>
+      {
+        !postulacion && (
+          <div className="flex justify-center">
+            <div className="flex space-x-4">
+              <button className="bg-white text-red-500 border border-red-500 py-2 px-4 rounded">No participar</button>
+              <button className="bg-red-500 text-white py-2 px-4 rounded" onClick={() => setIsModalOpen(true)}>Participar</button>
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
-      {isModalOpen && (
-        <ConfirmacionParticipacion onConfirm={handleConfirm} onCancel={handleCancel} />
-      )}
+      {
+        isModalOpen && (
+          <ConfirmacionParticipacion onConfirm={handleConfirm} onCancel={handleCancel} />
+        )
+      }
 
 
-    </div>
+    </div >
   );
 };
 

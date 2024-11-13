@@ -36,6 +36,7 @@ const roleActionsMap: Record<string, string[]> = {
 export interface ActionRoleProps {
   id: string;
   userRole: string;
+  onDelete?: () => void;
 }
 
 const ActionRole: React.FC<ActionRoleProps> = ({ id, userRole }) => {

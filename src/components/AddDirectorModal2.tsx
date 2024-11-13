@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from "react";
-import styles from "./AddDirectorModal.module.css";
+import { CreateDirectorDto, UpdateDirectorDto } from "@/dto/create-director.dto";
 import { CreateDirectorDTO } from "@/entities/CreateDirectorDTO";
 import api from "@/lib/api";
-import { FaExclamationCircle } from "react-icons/fa";
 import { ProjectMapper } from "@/mappers/project.mapper";
-import { CreateDirectorDto, UpdateDirectorDto } from "@/dto/create-director.dto";
+import React, { useEffect, useState } from "react";
+import { FaExclamationCircle } from "react-icons/fa";
+import styles from "./AddDirectorModal.module.css";
+import { COUNTRIES } from "./countries/countries";
+import CountrySelector from "./countries/selector";
 
 type AddDirectorModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onAdd?: ((data: any) => void) | null;
   director: CreateDirectorDTO | null;
-  onSave: (dto:CreateDirectorDto|UpdateDirectorDto) => void;
+  onSave: (dto: CreateDirectorDto | UpdateDirectorDto) => void;
 };
 
 const AddDirectorModal2 = ({
@@ -33,6 +35,7 @@ const AddDirectorModal2 = ({
   const [representationAlert, setRepresentationAlert] = useState(false);
 
   const [representationString, setRepresentationString] = useState("");
+
   useEffect(() => {
     if (name && lastName && birthYear && nationality) {
       if (timer) {
@@ -54,8 +57,8 @@ const AddDirectorModal2 = ({
                 ProjectMapper.mapRepresentationType(data.data?.content)
               );
               setRepresentationAlert(true);
-            }).catch((e)=>{
-              console.log('error',e)
+            }).catch((e) => {
+              console.log('error', e)
             });
         }, 1000)
       );
@@ -159,7 +162,11 @@ const AddDirectorModal2 = ({
               onChange={(e) => setNationality(e.target.value)}
             >
               <option value="">Seleccionar</option>
-              <option value="Mexicana">Mexicana</option>
+              {COUNTRIES.map((country) => (
+                <option key={country.value} value={country.value}>
+                  {country.title}
+                </option>
+              ))}
               {/* Agregar más opciones según sea necesario */}
             </select>
           </div>
@@ -226,17 +233,16 @@ const AddDirectorModal2 = ({
           <button
             className={styles.primaryButton}
             onClick={() => {
-                console.log('onSave',)
-                onSave({
-                  name: name,
-                  nationality: nationality,
-                  isMexicanResident: residesInMexico,
-                  birthDate: birthYear,
-                  id: director?.id || undefined,
-                  lastname: lastName,
-                  startedExperienceYear: directionYear,
-                  representation: typeRepresentative,
-                });
+              onSave({
+                name: name,
+                nationality: nationality,
+                isMexicanResident: residesInMexico,
+                birthDate: birthYear,
+                id: director?.id || undefined,
+                lastname: lastName,
+                startedExperienceYear: directionYear,
+                representation: typeRepresentative,
+              });
             }}
           >
             Aceptar

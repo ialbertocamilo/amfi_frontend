@@ -19,7 +19,7 @@ const roleActionsMap: Record<string, string[]> = {
     user: [Actions.view, Actions.delete],
 };
 
-const ActionDirectors: React.FC<ActionRoleProps> = ({id, userRole}) => {
+const ActionDirectors: React.FC<ActionRoleProps> = ({id, userRole,onDelete}) => {
     const router = useRouter();
     const [actions, setActions] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,6 +44,8 @@ const ActionDirectors: React.FC<ActionRoleProps> = ({id, userRole}) => {
     const confirmDelete = () => {
         deleteDirector(deleteId as string).then(r => toast.success('Director eliminado'));
         setIsModalOpen(false);
+        if (onDelete)
+        onDelete()
     };
 
     const allActions = [

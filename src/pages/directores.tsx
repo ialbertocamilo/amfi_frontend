@@ -30,6 +30,13 @@ const Directores = () => {
   ];
 
   const { user } = useUser();
+  const handleDelete = async () => {
+    try {
+      fetchDirectors();
+    } catch (error: any) {
+      console.error("Error deleting director:", error);
+    }
+  };
 
   const fetchDirectors = async () => {
     try {
@@ -40,17 +47,17 @@ const Directores = () => {
           director.representation === "freelance"
             ? "Freelance"
             : director.representation === "co-represented"
-            ? "Co-representado"
-            : director.representation === "represented"
-            ? "Representado"
-            : director.representation,
+              ? "Co-representado"
+              : director.representation === "represented"
+                ? "Representado"
+                : director.representation,
         isMexicanResident: director.isMexicanResident ? "Sí" : "No",
         birthDate: moment(director.birthDate).format("DD/MM/YYYY"),
-        action: (
-          <ActionDirectors
-            id={director.id as string}
-            userRole={user?.role as string}
-          ></ActionDirectors>
+        action: (<ActionDirectors
+          id={director.id as string}
+          userRole={user?.role as string}
+          onDelete={() => handleDelete()}
+        ></ActionDirectors>
         ),
       }));
       setDirectors(transformedData);
@@ -63,19 +70,15 @@ const Directores = () => {
   }, [user]);
 
   const handleSaveDirector = (dto: CreateDirectorDto | UpdateDirectorDto) => {
-    createDirector({
-      ...dto,
-      birthDate: moment(dto.birthDate, "YYYY-MM-DD").toISOString(),
-    })
+    createDirector(dto)
       .then(() => {
         fetchDirectors();
       })
       .catch((error) => {
-        console.log(error);
-        if (error?.code == '"ERR_BAD_REQUEST"') {
-          toast.error(error?.response.data.message || "Error de validación");
-        }
-        toast.error("Error al guardar el director");
+        if (error?.status == 400) {
+          toast.error(error?.response.data.clientMessage || "Error de validación");
+        } else
+          toast.error("Error al guardar el director");
       });
     setIsModalOpen(false);
   };

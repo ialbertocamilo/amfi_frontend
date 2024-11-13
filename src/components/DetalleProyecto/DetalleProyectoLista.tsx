@@ -1,33 +1,55 @@
-import { getProjectById } from '@/api/projectApi';
-import { ProjectMapper } from '@/mappers/project.mapper';
+import { getProjectById, updateProjectStatus } from '@/api/projectApi';
+import { ProjectMapper, ProjectStatus } from '@/mappers/project.mapper';
 import React, { useEffect, useState } from 'react';
 
+import { getInvitedDirectors } from '@/api/directorApi';
+import { sendReminderToProductionHouses } from '@/api/productoraApi';
+import { ProjectDirectorInvited } from '@/interfaces/project-director.interface';
 import moment from 'moment';
+import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 
-interface CasaProductora {
-  name: string;
-  status: 'Completado' | 'Pendiente' | 'Rechazado' | 'Aceptado';
+
+
+const getStatusColor = (status: boolean) => {
+  switch (status) {
+    case false:
+      return 'bg-red-200 text-red-800';
+    case true:
+      return 'bg-green-200 text-green-800';
+    default:
+      return 'bg-teal-200 text-teal-800';
+  }
+};
+
+const getStatusProposalColor = (statusProposal:boolean)=>{
+
+  switch (statusProposal) {
+    case true:
+      return 'bg-green-200 text-green-800';
+    case false:
+      return 'bg-teal-200 text-teal-800';
+  }
 }
 
-const casasProductoras: CasaProductora[] = [
-  { name: 'Grupo Traziende', status: 'Completado' },
-  { name: 'Ikarus', status: 'Pendiente' },
-  { name: 'Grupo de León', status: 'Rechazado' },
-  { name: 'Grupo de León', status: 'Aceptado' },
-];
+const getStatusProposal = (statusProposal:boolean)=>{
 
-const getStatusColor = (status: CasaProductora['status']) => {
+  switch (statusProposal) {
+    case true:
+      return 'Documento subido';
+    case false:
+      return 'Documento por subir';
+  }
+}
+
+const getStatusName = (status: boolean) => {
   switch (status) {
-    case 'Completado':
-      return 'bg-teal-200 text-teal-800';
-    case 'Pendiente':
-      return 'bg-yellow-200 text-yellow-800';
-    case 'Rechazado':
-      return 'bg-red-200 text-red-800';
-    case 'Aceptado':
-      return 'bg-purple-200 text-purple-800';
+    case false:
+      return 'Rechazado'
+    case true:
+      return 'Aceptado'
     default:
-      return '';
+      return 'Pendiente';
   }
 };
 
@@ -53,8 +75,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
     productorAgencia: "",
     numeroODT: "",
     contactoCompras: "",
-    creado:'',
-    estado:''
+    creado: '',
+    estado: ''
   });
   const fetchProject = async () => {
     const projectData = await getProjectById(id as string);
@@ -83,16 +105,44 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
     }
   };
 
+
+  const sendReminder = ()=>{
+    console.log('sending reminder')
+    sendReminderToProductionHouses(id as string).then((data)=>{
+        toast.success('Recordatorio enviado')
+    }).catch((error)=>{
+
+      toast.error('Error al enviar recordatorio')
+    })
+  }
+
+  const router=useRouter()
+  const closeProject=()=>{
+    console.log('closing project')
+
+    updateProjectStatus(id as string,ProjectStatus.Closed).then((data)=>{
+      toast.success('Convocatoria cerrada')
+      router.push('/lista-de-proyectos-admin')
+    })
+  }
+
+  const [projectDirectorInvited, setProjectDirectorInvited] = useState<ProjectDirectorInvited[]>()
   useEffect(() => {
-    if (id) fetchProject();
+    if (id) {
+      fetchProject();
+
+      getInvitedDirectors(id as string).then((data) => {
+        setProjectDirectorInvited(data)
+      })
+    }
   }, [id]);
 
   const handleItemClick = () => {
     window.location.href = '/evaluacion-casa-productora';
   };
   return (
-    <div className="mt-6 p-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl shadow-md space-y-6 px-4 lg:px-8">   
-     <div className="flex justify-between items-start">
+    <div className="mt-6 p-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl shadow-md space-y-6 px-4 lg:px-8">
+      <div className="flex justify-between items-start">
         <div>
           <h1 className="text-xl font-semibold">{formData?.nombreProyecto}</h1>
           <p className="text-sm text-gray-500">Anunciante:  {formData?.anunciante}</p>
@@ -108,20 +158,23 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
       <div>
         <h2 className="text-lg font-medium mb-4">Casas Productoras invitadas</h2>
         <ul>
-      {casasProductoras.map((casa, index) => (
-        <li
+          {projectDirectorInvited?.map((casa, index) => (
+        <div
           key={index}
-          className="flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow cursor-pointer mt-4"
-          onClick={handleItemClick}
+          className={`flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow mt-4 ${casa.proposalUploaded ? 'cursor-pointer' : ''}`}
+          onClick={casa.proposalUploaded ? handleItemClick : undefined}
         >
-          <span className="text-gray-700">{casa?.name}</span>
-          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(casa?.status)}`}>
-            {casa?.status}
+          <span className="text-gray-700"> {casa.productionHouse?.name}</span>
+          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(casa?.accepted)}`}>
+            {getStatusName(casa?.accepted)}
+          </span>
+          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusProposalColor(casa?.proposalUploaded)}`}>
+            {getStatusProposal(casa?.proposalUploaded)}
           </span>
           <button className="text-gray-400 hover:text-gray-600">&gt;</button>
-        </li>
-      ))}
-    </ul>
+        </div>
+          ))}
+        </ul>
       </div>
 
       {/* Notification Section */}
@@ -130,7 +183,14 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
           Se enviará un correo electrónico recordando a los participantes que no hayan aceptado aún su participación o
           los que no hayan completado la postulación.
         </p>
-        <button className="text-red-500 hover:text-red-600 font-semibold">Enviar recordatorio</button>
+        <button className="text-red-500 hover:text-red-600 font-semibold" onClick={()=>sendReminder()}>Enviar recordatorio</button>
+      </div>
+
+      {/* Close Call Section */}
+      <div className="flex justify-start">
+        {formData?.estado!=='Cerrado' && <button className="border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white" onClick={()=>closeProject()}>
+          Cerrar Convocatoria
+        </button>}
       </div>
     </div>
   );

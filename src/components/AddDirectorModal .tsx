@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
-import styles from "./AddDirectorModal.module.css";
-import  api  from "@/lib/api";
+import api from "@/lib/api";
+import { useEffect, useState } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
+import styles from "./AddDirectorModal.module.css";
+import { COUNTRIES } from "./countries/countries";
 export interface Director {
   id: string | null;
   name?: string;
@@ -43,6 +44,8 @@ const AddDirectorModal = ({
   const [representationAlert, setRepresentationAlert] = useState(false);
 
   const [representationString, setRepresentationString] = useState("");
+
+
   useEffect(() => {
     if (name && lastName && birthYear && nationality) {
       if (timer) {
@@ -164,7 +167,7 @@ const AddDirectorModal = ({
               onChange={(e) => setLastName(e.target.value)}
             />
           </div>
-     <RepresentationComponent/>
+          <RepresentationComponent />
           <div className={styles.formGroup}>
             <label>Nacionalidad</label>
             <select
@@ -172,8 +175,11 @@ const AddDirectorModal = ({
               onChange={(e) => setNationality(e.target.value)}
             >
               <option value="">Seleccionar</option>
-              <option value="Mexicana">Mexicana</option>
-              {/* Agregar más opciones según sea necesario */}
+              {COUNTRIES.map((country) => (
+                <option key={country.value} value={country.value}>
+                  {country.title}
+                </option>
+              ))}
             </select>
           </div>
           <div className={styles.inlineGroup}>

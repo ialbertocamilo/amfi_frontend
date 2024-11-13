@@ -1,18 +1,9 @@
+import { decodeInvitationToken, IPostulationData } from "@/api/postulationApi";
+import Layout from "@/components/Layout";
+import ProjectInfo from "@/components/Postulacion/ProjectInfo";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import "./globals.css";
-import ProyectoSteep1 from "@/components/Proyecto/ProyectoSteep1";
-import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
-import { FaBars } from "react-icons/fa";
-import ProyectoSteep2 from "@/components/Proyecto/ProyectoSteep2";
-import ProyectoSteep4 from "@/components/Proyecto/ProyectoSteep4";
-import ProyectoSteep3 from "@/components/Proyecto/ProyectoSteep3";
-import ProyectoSteep5 from "@/components/Proyecto/ProyectoSteep5";
-import CasasProductorasModal from "@/components/Proyecto/CasasProductorasModal";
-import api from "@/lib/api";
-import toast from "react-hot-toast";
-import { useRouter } from "next/router";
-import ProjectInfo from "@/components/Postulacion/ProjectInfo";
 
 const Postulacion: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -34,56 +25,43 @@ const Postulacion: React.FC = () => {
     contactoCompras: ""
   });
   const router = useRouter();
-  const { id } = router.query;
+  const { token } = router.query;
 
 
+  const [postulationData, setPostulationData] = useState<IPostulationData >();
 
 
-
-
-
-
-
-
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-
+  const [message, setMessage] = useState<string | null>(null);
+  useEffect(() => {
+    if (token) {
+      decodeInvitationToken(token as string).then((response) => {
+        if (response) {
+          setPostulationData(response.result);
+        }
+      })
+    }
+  }, [token]);
 
 
   return (
-    <div className="flex  bg-gray-100">
-      <div className={`fixed inset-0 z-30 transition-transform transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:${isSidebarOpen ? 'block' : 'hidden'}`}>
-        <Sidebar />
-      </div>
-      <div className="flex-1 flex flex-col">
-        <div className="flex items-center justify-between p-4 bg-white shadow-md">
-          <button
-            className="p-2 focus:outline-none focus:bg-gray-200 z-40"
-            onClick={toggleSidebar}
-          >
-            <FaBars className="w-6 h-6" />
-          </button>
-          <Navbar />
-        </div>
-        <div className="space-y-8 p-4">
-          <h1 className="text-2xl font-bold mb-6 space-y-4">Proyecto</h1>
-          <div className="text-sm text-gray-500 mb-8">
-            <span>Lista de Proyectos</span> {">"} <span>Nuevo Leon</span>
-          </div>
-          <ProjectInfo />
+  <div>
+
+
+    {message && <p>{message}</p>}
+    {!postulationData ? (
+      <div className="flex items-center justify-center h-full">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <strong className="font-bold">Error:</strong>
+          <span className="block sm:inline"> No se puede postular a este proyecto.</span>
         </div>
       </div>
 
+    ) : (
+      <ProjectInfo data={postulationData} />
+    )}
 
-    </div>
 
-
-
+  </div>
   )
 };
 

@@ -1,15 +1,15 @@
 "use client";
 
-import '../app/globals.css'
-import React, {FormEvent, useState} from 'react';
-import RegistroProductora2 from '../components/registroProductora2';
-import {FaCheck, FaExclamationCircle} from 'react-icons/fa';
-import DirectorsList from '@/components/directorList';
-import {useRouter} from 'next/router';
-import styles from "@/components/AddDirectorModal.module.css";
 import AddDirectorModal from "@/components/AddDirectorModal ";
+import styles from "@/components/AddDirectorModal.module.css";
+import DirectorsList from '@/components/directorList';
 import api from "@/lib/api";
+import { useRouter } from 'next/router';
+import { FormEvent, useState } from 'react';
 import toast from "react-hot-toast";
+import { FaCheck, FaExclamationCircle } from 'react-icons/fa';
+import '../app/globals.css';
+import RegistroProductora2 from '../components/registroProductora2';
 export interface Director {
     id: string | null;
     name?: string;
@@ -75,27 +75,6 @@ const Register = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [directors, setDirectors] = useState<Director[]>([]);
 
-    // let directorsTmp: Director[] = [
-    //     {
-    //         id: 1, name: 'Alfonso Portillo',
-    //         nationality: 'Mexicana',
-    //         residesInMexico: true,
-    //         birthYear: '2025'
-    //     },
-    //     {
-    //         id: 2, name: 'Camilo Vizcarra',
-    //         nationality: 'Mexicana',
-    //         residesInMexico: true,
-    //         birthYear: '2024'
-    //     },
-    //     {
-    //         id: 3, name: 'Sebastian Rodas',
-    //         nationality: 'Mexicana',
-    //         residesInMexico: false,
-    //         birthYear: ''
-    //     }
-    // ];
-    // setDirectors(directorsTmp)
 
     const handleAddDirector = (director: Director) => {
         const updatedDirectors = [...directors, director];
@@ -141,6 +120,29 @@ const Register = () => {
 
         return true;
     };
+    const emptyFormData =()=>{
+        setFormData({
+            companyName: '',
+            legalName: '',
+            email: '',
+            jobTitle: '',
+            password: '',
+            confirmPassword: '',
+            termsAccepted: false,
+            idCertificacion: '',
+            rfc: '',
+            isMenberANFI: true,
+            anio: 2024,
+            nroSocio: '',
+            linkInstagram: '',
+            linkFacebook: '',
+            linkLinkedin: '',
+            linkPaginaWeb: '',
+            name: '',
+            lastName: '',
+            type: ''
+        });
+    }
 
     const registrar = async () => {
 
@@ -164,7 +166,8 @@ const Register = () => {
 
 
                 toast.success('Registro exitoso, debe confirmar su cuenta, revise su bandeja de entrada.');
-                router.push('/login');
+                emptyFormData();
+                // router.push('/login');
             } catch (error: any) {
                 console.error("Registration error:", error);
                 if (error.status === 400)
@@ -212,7 +215,7 @@ const Register = () => {
                     }
 
                 toast.success('Registro exitoso, debe confirmar su cuenta, revise su bandeja de entrada.');
-                router.push('/login');
+                emptyFormData();
             } catch (error: any) {
                 console.error("Registration error:", error);
                 if (error.status === 400)

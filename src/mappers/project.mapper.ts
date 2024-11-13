@@ -4,6 +4,7 @@ export enum EstadoProyecto {
     EnRevision = 'En revisión',
     Terminado = 'Terminado',
     Cerrado = 'Cerrado',
+    Pausado = 'Pausado',
 }
 export enum ProjectStatus {
     Draft = 'draft',
@@ -11,6 +12,7 @@ export enum ProjectStatus {
     InRevision = 'revision',
     Finished = 'finished',
     Closed = 'closed',
+    Paused = 'paused'
 }
 
 
@@ -27,6 +29,8 @@ export class ProjectMapper {
                 return EstadoProyecto.Terminado;
             case ProjectStatus.Closed:
                 return EstadoProyecto.Cerrado;
+            case ProjectStatus.Paused:
+                return EstadoProyecto.Pausado;
             default:
                 return EstadoProyecto.Borrador;
         }

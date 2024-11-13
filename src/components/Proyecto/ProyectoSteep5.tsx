@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useRecoilState, useRecoilValue } from "recoil";
 import ListaCasasProductoras from "../ListaCasasProductoras";
+import CasasProductorasModal from "./CasasProductorasModal";
 
 interface registroEntity {
   formData: any;
@@ -53,6 +54,14 @@ const ProyectoSteep5 = ({
   const selectedCasas = useRecoilValue(selectedCasasProductorasState);
   const [casasProductorasNames, setCasasProductorasNames] = useRecoilState(casasProductorasSelected);
   const arrInvitedProductors: { projectId: string, directorId: string, productionHouseId: string }[] = []
+
+
+  useEffect(() => {
+    const names = selectedCasas.map(casa => casa.name);
+    console.log('names', names);
+    setCasasProductorasNames(names);
+  }, [selectedCasas, setCasasProductorasNames]);
+
   const validateSelection = async () => {
     if (!selectedCasas.length) {
       toast.error("Debe seleccionar al menos una casa productora y un director.");
@@ -64,13 +73,13 @@ const ProyectoSteep5 = ({
         const haveSelected = casa.directors.some((director) => director.selected == true)
         if (!haveSelected) {
           toast.error("Debe seleccionar un director.");
-          throw new Error("Debe seleccionar un director.")
+          return false
         }
 
         const selected = casa.directors.filter((director) => director.selected == true)
         if (selected.length > 1) {
           toast.error("Debe seleccionar solo un director.");
-          throw new Error("Debe seleccionar un director.")
+          return false
         }
         const selectedDirector = casa.directors.find((director) => director.selected == true)
         if (selectedDirector?.id && id) {
@@ -82,7 +91,6 @@ const ProyectoSteep5 = ({
         toast.error(response)
         return false
       }
-      setCasasProductorasNames(selectedCasas.map(casa => casa.name))
       return true
     } catch (error) {
       console.warn(error)
@@ -92,13 +100,21 @@ const ProyectoSteep5 = ({
     return false;
   };
   const handleSave = async () => {
+
+    setIsCasasProductorasModalOpen(true)
+  };
+
+  const onSave = async () => {
+    console.log('Saving project')
+
     const validate = await validateSelection()
     if (!validate) {
       return;
     }
     setError(null);
-    handleSubmit("6");
-  };
+    setIsCasasProductorasModalOpen(false)
+    handleSubmit("6")
+  }
 
   const fetchCasasProductoras = async () => {
     try {
@@ -125,18 +141,8 @@ const ProyectoSteep5 = ({
   const [buscar, setBuscar] = useState("");
   const [revisarPropuesta, setRevisarPropuesta] = useState(false);
 
-  const toggleSeleccion = (index: number) => {
-
-    const updatedCasas = [...casasProductoras];
-    updatedCasas[index].selected = !updatedCasas[index].selected;
-    setCasasProductoras(updatedCasas);
-  };
-
-  const toggleDetalles = (index: number) => {
-    const updatedCasas = [...casasProductoras];
-    updatedCasas[index].details = !updatedCasas[index].details;
-    setCasasProductoras(updatedCasas);
-  };
+  const [isCasasProductorasModalOpen, setIsCasasProductorasModalOpen] =
+    useState(false);
 
   return (
     <div className="space-y-8 p-4">
@@ -219,6 +225,12 @@ const ProyectoSteep5 = ({
           </div>
         </div>
       </div>
+      <CasasProductorasModal
+        casas={casasProductorasNames}
+        isOpen={isCasasProductorasModalOpen}
+        onClose={() => setIsCasasProductorasModalOpen(false)}
+        onSave={() => onSave()}
+      />
     </div>
   );
 };

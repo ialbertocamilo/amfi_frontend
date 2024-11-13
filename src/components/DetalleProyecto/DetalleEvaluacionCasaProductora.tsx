@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Evaluacion from './Evaluacion';
 import Comparacion from './Comparacion';
+import Evaluacion from './Evaluacion';
 
 
 
@@ -12,7 +12,7 @@ const DetalleEvaluacionCasaProductora: React.FC = () => {
 
   return (
 
-    <div className="w-full p-6 bg-gray-100 shadow-md rounded-lg">
+    <div >
       <div className="mt-6 p-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl shadow-md space-y-6 px-4 lg:px-8">
 
         <header className="mb-6">

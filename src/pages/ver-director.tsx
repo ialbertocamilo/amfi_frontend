@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {DirectorEntity} from "@/interfaces/director.interface";
-import {getDirector} from "@/api/directorApi";
-import {useRouter} from "next/router";
+import { getDirector } from "@/api/directorApi";
 import Layout from "@/components/Layout";
-import {ProjectMapper} from "@/mappers/project.mapper";
+import { IDirector } from "@/interfaces/director.interface";
+import { ProjectMapper } from "@/mappers/project.mapper";
+import { useRouter } from "next/router";
+import { useEffect, useState } from 'react';
 
 const VerDirector = () => {
-    const [director, setDirector] = useState<DirectorEntity>();
+    const [director, setDirector] = useState<IDirector>();
     const {id} = useRouter().query;
     useEffect(() => {
         if (id)

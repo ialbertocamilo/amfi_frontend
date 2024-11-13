@@ -5,7 +5,6 @@ import ProyectoSteep2 from "@/components/Proyecto/ProyectoSteep2";
 import ProyectoSteep4 from "@/components/Proyecto/ProyectoSteep4";
 import ProyectoSteep3 from "@/components/Proyecto/ProyectoSteep3";
 import ProyectoSteep5 from "@/components/Proyecto/ProyectoSteep5";
-import CasasProductorasModal from "@/components/Proyecto/CasasProductorasModal";
 import {useRouter} from "next/router";
 import Layout from "@/components/Layout";
 import useProject from "@/hooks/project.hook";
@@ -17,8 +16,6 @@ const NuevoProyecto: React.FC = () => {
     const router = useRouter();
     const {id} = router.query;
 
-    const [isCasasProductorasModalOpen, setIsCasasProductorasModalOpen] =
-        useState(false);
     const [readonly, setReadonly] = useState(false);
 
     const handleChange = (
@@ -32,10 +29,6 @@ const NuevoProyecto: React.FC = () => {
 
     const {projectJson, loading, fetchProject,saveOrUpdateProject} = useProject(id as string);
     const handleSubmit = async (page: string) => {
-        
-        if (page === "6") {
-            setIsCasasProductorasModalOpen(true); 
-        }
         const data: CreateProjectDto | UpdateProjectDto = {
             "id": id as string??undefined,
             "brand": formData?.brand,
@@ -47,6 +40,9 @@ const NuevoProyecto: React.FC = () => {
         if (createdProject?.id)
         router.replace(`/proyecto?id=${createdProject.id}`);
         setActiveTab(page);
+
+        if (page==='6')
+            router.push('/lista-proyectos-admin')
     };
 
 
@@ -62,7 +58,6 @@ const NuevoProyecto: React.FC = () => {
 
     useEffect(() => {
         if (projectJson) {
-            console.log('Cargando proyecto', projectJson);
             setFormData({
                 ...formData,
                 ...projectJson
@@ -143,10 +138,6 @@ const NuevoProyecto: React.FC = () => {
                     />
                 )}
             </div>
-            <CasasProductorasModal
-                isOpen={isCasasProductorasModalOpen}
-                onClose={() => setIsCasasProductorasModalOpen(false)}
-            />
         </Layout>
     );
 };

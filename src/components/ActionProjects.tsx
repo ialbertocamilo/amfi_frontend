@@ -2,6 +2,8 @@ import React, { useMemo } from "react";
 import ActionList from "./ActionList";
 import { useRouter } from "next/router";
 import { ActionRoleProps } from "./ActionRole";
+import { updateProjectStatus } from "@/api/projectApi";
+import { ProjectStatus } from "@/mappers/project.mapper";
 
 const view = (id: string) => {
   console.log(id);
@@ -28,6 +30,12 @@ const ActionProjects: React.FC<ActionRoleProps> = ({ id, userRole }) => {
 
   const handlePause = (projectId: string) => {
     console.log("Pausar proyecto");
+
+    updateProjectStatus(projectId, ProjectStatus.Paused).then(() => {
+      location.reload();
+    }).catch((err) => {
+      console.log(err);
+    })
   }
 
   const allActions = [
@@ -47,13 +55,13 @@ const ActionProjects: React.FC<ActionRoleProps> = ({ id, userRole }) => {
       id: "3",
       name: Actions.pause,
       description: "Pausar proyecto",
-      onClick: (id:string) => handlePause(id),
+      onClick: (id: string) => handlePause(id),
     },
     {
       id: "4",
       name: Actions.cancel,
       description: "Cancelar ",
-      onClick: (id:string) => console.log("Cancelar"),
+      onClick: (id: string) => console.log("Cancelar"),
     },
   ];
   const availableActions = useMemo(() => {

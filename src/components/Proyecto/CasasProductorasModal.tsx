@@ -1,13 +1,12 @@
-import { casasProductorasSelected } from '@/state/producerState';
-import { useRecoilState, useRecoilValue } from 'recoil';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
+  casas:any[]
+  onSave: ()=>void
 }
 
-const CasasProductorasModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
-  const casaProductorasSelected = useRecoilValue(casasProductorasSelected);
+const CasasProductorasModal: React.FC<ModalProps> = ({ isOpen, onClose,casas,onSave }) => {
 
   if (!isOpen) return null;
 
@@ -30,19 +29,13 @@ const CasasProductorasModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         </p>
 
         <ul className="space-y-2 mb-6">
-          {casaProductorasSelected.map((casa, index) => (
+          {casas.map((casa, index) => (
             <li key={index} className="flex items-center space-x-2">
               <span className="text-green-500">&#x2714;</span>
               <span>{casa}</span>
             </li>
           ))}
         </ul>
-
-        {/* Crédits info */}
-        <div className="bg-yellow-100 text-yellow-700 p-4 rounded-md text-center mb-6">
-          <span className="font-bold">Utilizarás 5 créditos</span>
-        </div>
-
         {/* Footer */}
         <div className="flex justify-between">
           <button
@@ -52,7 +45,7 @@ const CasasProductorasModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
             Regresar
           </button>
           <button
-            onClick={() => alert('Proyecto aceptado')}
+            onClick={onSave}
             className="w-1/2 bg-red-500 text-white py-2 rounded-md hover:bg-red-600"
           >
             Aceptar

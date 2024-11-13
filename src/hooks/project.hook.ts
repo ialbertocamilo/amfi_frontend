@@ -1,14 +1,14 @@
-import {useEffect, useState} from 'react';
-import {createProject, getProjectById, updateProjectById} from '@/api/projectApi';
-import {Project} from '@/interfaces/project.interface';
+import { createProject, getProjectById, updateProjectById } from '@/api/projectApi';
+import { CompanyType } from '@/constants';
+import { IProject } from '@/interfaces/project.interface';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import {CreateProjectDto} from '../dto/create-project.dto';
-import {UpdateProjectDto} from '../dto/update-project.dto';
+import { CreateProjectDto } from '../dto/create-project.dto';
+import { UpdateProjectDto } from '../dto/update-project.dto';
 import useUser from './user.hook';
-import {CompanyType} from '@/constants';
 
 const useProject = (projectId: string | null) => {
-    const [project, setProject] = useState<Project | null>(null);
+    const [project, setProject] = useState<IProject | null>(null);
     const [projectJson, setProjectJson] = useState<Record<string, any> | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -29,7 +29,7 @@ const useProject = (projectId: string | null) => {
             if (!response) {
                 throw new Error('Error al obtener el proyecto');
             }
-            const data: Project = response;
+            const data: IProject = response;
             setProject(data);
             setProjectJson(data?.extra)
         } catch (err: any) {
@@ -63,7 +63,7 @@ const useProject = (projectId: string | null) => {
             if (!response) {
                 throw new Error('Error al guardar el proyecto');
             }
-            const data: Project = response;
+            const data: IProject = response;
             setProject(data);
             setProjectJson(data?.extra);
             toast.success('Proyecto guardado correctamente');
@@ -85,7 +85,7 @@ const useProject = (projectId: string | null) => {
             if (!response) {
                 throw new Error('Error al actualizar el proyecto');
             }
-            const data: Project = response;
+            const data: IProject = response;
             setProject(data);
             setProjectJson(data?.extra);
             toast.success('Proyecto actualizado correctamente');
