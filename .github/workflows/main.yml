@@ -3,7 +3,7 @@ name: Next Deployment Workflow
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
