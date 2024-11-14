@@ -10,7 +10,7 @@ const VerDirector = () => {
     const {id} = useRouter().query;
     useEffect(() => {
         if (id)
-        getDirector(id).then(fetchedDirectores => setDirector(fetchedDirectores));
+        getDirector(id as string).then(fetchedDirectores => setDirector(fetchedDirectores));
     }, [id]);
 
     return (

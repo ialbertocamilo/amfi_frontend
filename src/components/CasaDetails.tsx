@@ -12,7 +12,7 @@ interface CasaDetailsProps {
 interface DirectorItemProps {
   director: Director;
   isSelected: boolean;
-  onSelect: (id: number) => void;
+  onSelect: (id: string) => void;
 }
 
 const DirectorItem: React.FC<DirectorItemProps> = ({ director, isSelected, onSelect }) => {
@@ -22,7 +22,7 @@ const DirectorItem: React.FC<DirectorItemProps> = ({ director, isSelected, onSel
         type="checkbox"
         className="form-checkbox h-4 w-4 text-red-500 mr-2"
         checked={isSelected}
-        onChange={() => onSelect(director.id)}
+        onChange={() => onSelect(director?.id)}
       />
       <span>
         {director.name} ({ProjectMapper.mapRepresentationType(director.type)})
@@ -35,7 +35,7 @@ const CasaDetails: React.FC<CasaDetailsProps> = ({ casa, index }) => {
   const [casasProductoras, setCasasProductoras] = useRecoilState(casasProductorasState);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSelectDirector = (directorId: number) => {
+  const handleSelectDirector = (directorId: string) => {
     setCasasProductoras(prevState => {
       const newState = prevState.map((casa, i) => {
         if (i === index) {

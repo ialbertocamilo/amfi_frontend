@@ -17,7 +17,7 @@ export enum ProjectStatus {
 
 
 export class ProjectMapper {
-    static mapProjectStatus(status: ProjectStatus): EstadoProyecto {
+    static mapProjectStatus(status: ProjectStatus|string): EstadoProyecto {
         switch (status) {
             case ProjectStatus.Draft:
                 return EstadoProyecto.Borrador;

@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { casasProductorasState, selectedCasasProductorasState, CasaProductora } from "@/state/producerState";
-import CasaDetails from "./CasaDetails";
 import { getProductoras } from "@/api/productoraApi";
+import { CasaProductora, casasProductorasState } from "@/state/producerState";
+import React, { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import CasaDetails from "./CasaDetails";
 
 interface ListaCasasProductorasProps {
   buscar: string;
@@ -10,7 +10,6 @@ interface ListaCasasProductorasProps {
 
 const ListaCasasProductoras: React.FC<ListaCasasProductorasProps> = ({ buscar }) => {
   const [casasProductoras, setCasasProductoras] = useRecoilState(casasProductorasState);
-  const selectedCasasProductoras = useRecoilValue(selectedCasasProductorasState);
 
   useEffect(() => {
     const fetchCasasProductoras = async () => {
@@ -57,30 +56,6 @@ const ListaCasasProductoras: React.FC<ListaCasasProductorasProps> = ({ buscar })
           return {
             ...casa,
             details: !casa.details,
-          };
-        }
-        return casa;
-      });
-      return newState;
-    });
-  };
-
-  const toggleDirectorSeleccion = (casaIndex: number, directorId: number) => {
-    setCasasProductoras(prevState => {
-      const newState = prevState.map((casa, i) => {
-        if (i === casaIndex) {
-          const updatedDirectors = casa.directors.map(director => {
-            if (director.id === directorId) {
-              return {
-                ...director,
-                selected: !director.selected,
-              };
-            }
-            return director;
-          });
-          return {
-            ...casa,
-            directors: updatedDirectors,
           };
         }
         return casa;

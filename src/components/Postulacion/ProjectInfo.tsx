@@ -64,10 +64,10 @@ const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({ data }) => {
           <h1 className="text-2xl font-bold">{data?.project?.name}</h1>
           <p>Creador: <strong>{data?.director?.name}</strong></p>
           <p>Agencia: {project?.agencyName}</p>
-          <p>Estado: <strong>{ProjectMapper.mapProjectStatus(data?.project?.status)}</strong></p>
+          <p>Estado: <strong>{ProjectMapper.mapProjectStatus(data?.project?.status as string )}</strong></p>
         </div>
         <div className="text-right">
-          <p>Creado: {new Date(data?.project?.createdAt).toLocaleDateString()}</p>
+          <p>Creado: {new Date(data?.project?.createdAt as string).toLocaleDateString()}</p>
           <div className="flex items-center space-x-4 mt-2">
           </div>
         </div>
@@ -78,7 +78,6 @@ const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({ data }) => {
         <h2 className="text-lg font-semibold mb-4">Información de proyecto</h2>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <p><strong>Anunciante:</strong> {data?.project?.advertiser}</p>
             <p><strong>Marca:</strong> {project?.brand}</p>
             <p><strong>Producto:</strong> {project?.product}</p>
             <p><strong>Categoría:</strong> {project?.category}</p>

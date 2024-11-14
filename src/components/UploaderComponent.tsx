@@ -74,7 +74,7 @@ const styles = {
     border: "2px dashed #ccc",
     borderRadius: "8px",
     padding: "20px",
-    textAlign: "center",
+    TextAlign: "center",
     transition: "border-color 0.3s",
     cursor: "pointer",
   },

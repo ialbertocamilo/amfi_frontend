@@ -4,11 +4,13 @@ APP_NAME="amfi_frontend"
 VERSION="latest"
 DOCKER_USERNAME="isvgxd"
 
+set -e 
+
 echo $DOCKER_USERNAME
-echo "$DOCKER_PASSWORD"
+echo $DOCKER_PASSWORD
 
 
-echo "$DOCKER_USERNAME/$APP_NAME:latest"
+echo "$DOCKER_USERNAME/$APP_NAME:$VERSION"
 echo "Iniciando sesión en Docker Hub..."
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD"
 
