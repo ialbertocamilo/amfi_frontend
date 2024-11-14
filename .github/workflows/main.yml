@@ -19,7 +19,7 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}  
+          username: svg.z32@gmail.com
           password: ${{ secrets.DOCKER_PASSWORD }}  
 
       - name: Create .env.production file
