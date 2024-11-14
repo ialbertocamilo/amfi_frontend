@@ -40,11 +40,11 @@ jobs:
     needs: build
     steps:
       - name: SSH Deploy to VPS
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.HOST }}
           username: ec2-user
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_KEY }}
           script: |
             cd /home/ec2-user/amfi_mx/production
             ./update.sh
