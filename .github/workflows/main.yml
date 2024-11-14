@@ -1,14 +1,13 @@
-name: Next Deployment Workflow
+name: Docker Image CI
 
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
-  deploy:
+  setup:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -16,35 +15,61 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+  build:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}  
-          password: ${{ secrets.DOCKER_PASSWORD }}  
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Create .env.production file
-        run: |
-            echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_SOCKET_URL }}" >> .env.production
-            echo "NEXT_PUBLIC_OTHER_VARIABLE=${{ secrets.NEXT_PUBLIC_PAYPAL_CLIENT }}" >> .env.production
-  
       - name: Build Docker image
-        run: |
-          docker build -t amfi_frontend/latest .  
+        run: docker build -t isvgxd/amfi_frontend:latest .
 
-      - name: Tagging Docker image
-        run: |
-          docker tag amfi_frontend/latest isvgxd/amfi_frontend:latest
+  tag:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+  push:
+    runs-on: ubuntu-latest
+    needs: tag
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push Docker image to Docker Hub
-        run: |
-          docker push isvgxd/amfi_frontend:latest
+        run: docker push isvgxd/amfi_frontend:latest
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: push
+    steps:
       - name: SSH Deploy to VPS
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}  
-          username: ec2-user  
-          key: ${{ secrets.SSH_PRIVATE_KEY }}  
+          host: ${{ secrets.HOST }}
+          username: ec2-user
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/ec2-user/amfi_mx/production
             ./update.sh
