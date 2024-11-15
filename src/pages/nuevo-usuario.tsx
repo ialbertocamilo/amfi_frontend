@@ -32,11 +32,11 @@ const NewUserPage = () => {
         sendInvitationEmail({email, name: `${firstName} ${lastName}`}).then((data) => {
             if (!data) return
             else
-            setTimeout(() => {
-                setLoading(false);
-                toast.success('¡Datos del usuario enviados con éxito!');
-                router.push('/usuarios');
-            }, 2000);
+                setTimeout(() => {
+                    setLoading(false);
+                    toast.success('¡Datos del usuario enviados con éxito!');
+                    router.push('/usuarios');
+                }, 2000);
         });
     };
 
@@ -56,7 +56,7 @@ const NewUserPage = () => {
                     <Navbar/>
                 </div>
                 <div className="space-y-8 p-4">
-                    <h1 className="text-2xl font-bold mb-6">Nuevo proyecto</h1>
+                    <h1 className="text-2xl font-bold mb-6">Nuevo usuario</h1>
                     <div className="text-sm text-gray-500 mb-8">
                         <span>Usuarios</span> {">"} <span>Usuario Nuevo</span>
                     </div>
