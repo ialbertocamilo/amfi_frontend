@@ -1,4 +1,6 @@
+import {storage} from "@/lib/storage";
 
+import toast from 'react-hot-toast';
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -6,10 +8,12 @@ interface ModalProps {
   onSave: ()=>void
 }
 
-const CasasProductorasModal: React.FC<ModalProps> = ({ isOpen, onClose,casas,onSave }) => {
-
+const CasasProductorasModal: React.FC<ModalProps> = ({ isOpen, onClose, casas, onSave }) => {
   if (!isOpen) return null;
 
+  const  handleClick = async (e: React.FormEvent) => {
+    onClose()
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -45,7 +49,8 @@ const CasasProductorasModal: React.FC<ModalProps> = ({ isOpen, onClose,casas,onS
             Regresar
           </button>
           <button
-            onClick={onSave}
+            onClick={(e) => { onSave(), handleClick(e)} 
+            }
             className="w-1/2 bg-red-500 text-white py-2 rounded-md hover:bg-red-600"
           >
             Aceptar

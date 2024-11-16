@@ -10,6 +10,7 @@ import Layout from "@/components/Layout";
 import useProject from "@/hooks/project.hook";
 import {CreateProjectDto} from "../dto/create-project.dto";
 import { UpdateProjectDto } from "../dto/update-project.dto";
+import ProyectCreated from "@/components/Proyecto/ProjectCreated";
 
 const NuevoProyecto: React.FC = () => {
     const [formData, setFormData] = useState<Record<string, any>>({});
@@ -38,11 +39,9 @@ const NuevoProyecto: React.FC = () => {
         };
         const createdProject=await saveOrUpdateProject(data);
         if (createdProject?.id)
+            
         router.replace(`/proyecto?id=${createdProject.id}`);
         setActiveTab(page);
-
-        if (page==='6')
-            router.push('/lista-proyectos-admin')
     };
 
 
@@ -137,6 +136,9 @@ const NuevoProyecto: React.FC = () => {
                         setactiveTab={setActiveTab}
                     />
                 )}
+                {
+                    activeTab === "6" && (<ProyectCreated/>)
+                }
             </div>
         </Layout>
     );

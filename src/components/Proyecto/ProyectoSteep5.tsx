@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { FaCheck } from "react-icons/fa";
-
 import { getProductoras } from "@/api/productoraApi";
 import { addDirectorsToProject } from "@/api/projectApi";
 import { casasProductorasSelected, selectedCasasProductorasState } from "@/state/producerState";
@@ -10,6 +8,7 @@ import toast from "react-hot-toast";
 import { useRecoilState, useRecoilValue } from "recoil";
 import ListaCasasProductoras from "../ListaCasasProductoras";
 import CasasProductorasModal from "./CasasProductorasModal";
+import StepIndicator from "./StepIndicator/StepIndicator";
 
 interface registroEntity {
   formData: any;
@@ -154,20 +153,10 @@ const ProyectoSteep5 = ({
       <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
         <div className="space-y-8 p-4">
           {/* Navegación de pestañas */}
-          <div className="tabs flex justify-center space-x-10 mb-8">
-            {[1, 2, 3, 4, 5].map((step) => (
-              <button
-                key={step}
-                onClick={() => setactiveTab(step.toString())}
-                className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= step
-                  ? "bg-red-500 text-white"
-                  : "bg-gray-200 text-black"
-                  }`}
-              >
-                {Number(activeTab) >= step ? <FaCheck /> : step}
-              </button>
-            ))}
+          <div className="tabs flex justify-center space-x-10">
+            <StepIndicator activeTab={activeTab} setactiveTab={setactiveTab} />
           </div>
+          
           <h2 className="text-xl font-bold mb-4">Invitar Casas Productoras</h2>
 
           {/* Buscar productora */}
