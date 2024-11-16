@@ -2,7 +2,8 @@
 
 export const storageConstants={
     token:'token',
-    user:'user'
+    user:'user',
+    projectData:'projectData'
 }
 
 export enum CompanyType {

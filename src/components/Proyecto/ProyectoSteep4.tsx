@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { FaCheck, FaExclamationCircle } from "react-icons/fa";
+import { FaExclamationCircle } from "react-icons/fa";
 import EntregableList from "./EntregableList";
 import AddEntregableModal from "./AddEntregableModal ";
+import StepIndicator from "./StepIndicator/StepIndicator";
 
 interface registroEntity {
   formData: any;
@@ -38,19 +39,8 @@ const ProyectoSteep4 = ({
       <form >
         <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
           {/* Navegación de pestañas */}
-          <div className="tabs flex justify-center space-x-10 mb-8">
-            {[1, 2, 3, 4, 5].map((step) => (
-              <button
-                key={step}
-                onClick={() => setactiveTab(step.toString())}
-                className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= step
-                  ? "bg-red-500 text-white"
-                  : "bg-gray-200 text-black"
-                  }`}
-              >
-                {Number(activeTab) >= step ? <FaCheck /> : step}
-              </button>
-            ))}
+          <div className="tabs flex justify-center space-x-10">
+            <StepIndicator activeTab={activeTab} setactiveTab={setactiveTab} />
           </div>
 
           {/* Sección: Desglose Creativo */}
