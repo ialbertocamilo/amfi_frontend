@@ -6,7 +6,15 @@
   --background-start-color: #d6dbdc;
   --background-end-color: #ffffff;
 }
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
+.no-spinner {
+  -moz-appearance: textfield;
+}
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-color: #ffffff;

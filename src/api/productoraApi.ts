@@ -18,3 +18,12 @@ export const sendReminderToProductionHouses = async (projectId: string) => {
         return null
     }
 };
+
+export const getProductoraById = async (id: string) => {
+    try {
+        const response = await api.get(`/company/${id}`);
+        return response.data;
+    } catch (error: any) {
+        throw new Error(error.response?.data?.message || 'Error fetching productora details');
+    }
+};

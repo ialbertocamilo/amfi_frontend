@@ -46,7 +46,7 @@ const Sidebar: React.FC = () => {
         roleLinks = [
           { href: '/dashboard', icon: 'IconHome.png', label: 'Inicio' },
           { href: '/usuarios', icon: 'IconUsuarios.png', label: 'Usuarios' },
-          { href: '/lista-de-proyectos-admin', icon: 'IconProyectos.png', label: 'Proyectos' },
+          { href: '/lista-de-proyectos', icon: 'IconProyectos.png', label: 'Proyectos' },
           { href: '/directores', icon: 'IconDirectores.png', label: 'Directores' },
         ];
       }

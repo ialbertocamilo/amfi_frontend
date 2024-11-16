@@ -1,4 +1,5 @@
 import { FaCheck } from "react-icons/fa";
+import {useRouter} from "next/router";
 
 interface StepIndicatorProps {
   activeTab: string;
@@ -7,10 +8,11 @@ interface StepIndicatorProps {
 
 const StepIndicator = ({ activeTab, setactiveTab }: StepIndicatorProps) => {
   const indicator = ["1", "2", "3", "4", "5"];
-
+  const router=useRouter()
+  const {id}=router.query
   return (
     <div className="tabs flex justify-center space-x-10">
-      {indicator.map((item,index) => (
+      {id && indicator.map((item,index) => (
         <button
           key={index}
           onClick={() => setactiveTab(item)}

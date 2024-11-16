@@ -4,12 +4,13 @@ import AddDirectorModal from "@/components/AddDirectorModal ";
 import styles from "@/components/AddDirectorModal.module.css";
 import DirectorsList from '@/components/directorList';
 import api from "@/lib/api";
-import { useRouter } from 'next/router';
-import { FormEvent, useState } from 'react';
+import {useRouter} from 'next/router';
+import {FormEvent, useState} from 'react';
 import toast from "react-hot-toast";
-import { FaCheck, FaExclamationCircle } from 'react-icons/fa';
+import {FaCheck, FaExclamationCircle} from 'react-icons/fa';
 import '../app/globals.css';
 import RegistroProductora2 from '../components/registroProductora2';
+
 export interface Director {
     id: string | null;
     name?: string;
@@ -23,7 +24,8 @@ export interface Director {
     nationalIdentifierOrRFC?: string;
     isAvailable?: boolean;
     createdAt?: string;
-  }
+}
+
 interface FormData {
     companyName: string;
     legalName: string;
@@ -79,7 +81,6 @@ const Register = () => {
     const handleAddDirector = (director: Director) => {
         const updatedDirectors = [...directors, director];
         setDirectors(updatedDirectors)
-
     };
 
 
@@ -98,6 +99,9 @@ const Register = () => {
     const [canSend, setCanSend] = useState(false)
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
+        setTimeout(()=>{
+            router.push('/login')
+        },2000)
     };
 
     const changeTab = (tab: string) => {
@@ -120,7 +124,7 @@ const Register = () => {
 
         return true;
     };
-    const emptyFormData =()=>{
+    const emptyFormData = () => {
         setFormData({
             companyName: '',
             legalName: '',
@@ -163,11 +167,11 @@ const Register = () => {
                     "email": formData.email,
                     "password": formData.password
                 })
-
-
                 toast.success('Registro exitoso, debe confirmar su cuenta, revise su bandeja de entrada.');
                 emptyFormData();
-                // router.push('/login');
+                setTimeout(() => {
+                    router.push('/login');
+                }, 2000);
             } catch (error: any) {
                 console.error("Registration error:", error);
                 if (error.status === 400)
@@ -176,10 +180,10 @@ const Register = () => {
                     toast.error(error.response?.data?.clientMessage)
             }
         } else {
-        if (!formData.termsAccepted) {
-            toast.error('Debe aceptar los términos y condiciones');
-            return false;
-        }
+            if (!formData.termsAccepted) {
+                toast.error('Debe aceptar los términos y condiciones');
+                return false;
+            }
             try {
                 const companyResult = await api.post(`/company/production-studio`, {
                     "comercialName": formData.companyName,
@@ -202,7 +206,7 @@ const Register = () => {
 
                 if (directors.length > 0 && productionStudioId)
                     for (const value of directors) {
-                        const representation=value.typeRepresentative==1?'freelance':value.typeRepresentative==2?'represented':'co-represented'
+                        const representation = value.typeRepresentative == 1 ? 'freelance' : value.typeRepresentative == 2 ? 'represented' : 'co-represented'
                         await api.post(`/director/${productionStudioId}`, {
                             "name": value.name,
                             "lastname": value.lastName,

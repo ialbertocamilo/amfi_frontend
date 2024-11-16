@@ -23,7 +23,7 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
             <form>
                 <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
                     <div className="tabs flex justify-center space-x-10">
-                        <StepIndicator activeTab={activeTab} setactiveTab={setactiveTab} />
+                        <StepIndicator activeTab={activeTab} setactiveTab={setactiveTab}/>
                     </div>
 
                     <h2 className="text-xl font-bold mb-4">Objetivos de marca</h2>
@@ -142,9 +142,11 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                     onChange={handleChange}
                                 >
                                     <option value="">Seleccionar</option>
-                                    <option value="opcion1">Opción 1</option>
-                                    <option value="opcion2">Opción 2</option>
-                                    <option value="opcion3">Opción 3</option>
+                                    <option value="asignacion">Asignación</option>
+                                    <option value="primerDiaProduccion">1er día de prod.</option>
+                                    <option value="ct">CT</option>
+                                    <option value="entrega">Entrega</option>
+                                    <option value="posterior">Posterior</option>
                                 </select>
                             </div>
 
@@ -182,9 +184,8 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                     onChange={handleChange}
                                 >
                                     <option value="">Seleccionar</option>
-                                    <option value="opcion1">Opción 1</option>
-                                    <option value="opcion2">Opción 2</option>
-                                    <option value="opcion3">Opción 3</option>
+                                    <option value="si">Si</option>
+                                    <option value="no">No</option>
                                 </select>
                             </div>
 
@@ -199,14 +200,14 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                     onChange={handleChange}
                                 >
                                     <option value="">Seleccionar</option>
-                                    <option value="opcion1">Opción 1</option>
-                                    <option value="opcion2">Opción 2</option>
-                                    <option value="opcion3">Opción 3</option>
+                                    <option value="tv">TV</option>
+                                    <option value="digital">Digital</option>
+                                    <option value="fotografia">Fotografía</option>
                                 </select>
                             </div>
 
                             <div>
-                                <label htmlFor="momentoFacturacion" className="block text-sm font-medium text-gray-700">Momento
+                            <label htmlFor="momentoFacturacion" className="block text-sm font-medium text-gray-700">Momento
                                     de facturación</label>
                                 <select
                                     id="momentoFacturacion"
@@ -216,9 +217,11 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                     onChange={handleChange}
                                 >
                                     <option value="">Seleccionar</option>
-                                    <option value="opcion1">Opción 1</option>
-                                    <option value="opcion2">Opción 2</option>
-                                    <option value="opcion3">Opción 3</option>
+                                    <option value="asignacion">Asignación</option>
+                                    <option value="primerDiaProduccion">1er día de prod.</option>
+                                    <option value="ct">CT</option>
+                                    <option value="entrega">Entrega</option>
+                                    <option value="posterior">Posterior</option>
                                 </select>
                             </div>
 
@@ -233,9 +236,9 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                     onChange={handleChange}
                                 >
                                     <option value="">Seleccionar</option>
-                                    <option value="opcion1">Opción 1</option>
-                                    <option value="opcion2">Opción 2</option>
-                                    <option value="opcion3">Opción 3</option>
+                                    <option value="1">1ª </option>
+                                    <option value="2">2ª</option>
+                                    <option value="3">3ª</option>
                                 </select>
                             </div>
                             <div>

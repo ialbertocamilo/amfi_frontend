@@ -1,4 +1,5 @@
 import StepIndicator from "./StepIndicator/StepIndicator";
+import {useEffect} from "react";
 
 interface registroEntity {
     formData: any,
@@ -9,6 +10,7 @@ interface registroEntity {
 }
 
 const ProyectoSteep2 = ({formData, handleChange, handleSubmit, activeTab, setactiveTab}: registroEntity) => {
+
     return (
         <div className="space-y-8 p-4">
             <h1 className="text-2xl font-bold mb-6 space-y-4">Nuevo proyecto</h1>

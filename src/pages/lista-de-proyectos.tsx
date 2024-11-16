@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import api from "@/lib/api";
 import toast from "react-hot-toast";
 import { useRouter } from 'next/router';
+import Layout from "@/components/Layout";
 
 const ListaDeProyectos = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -26,9 +27,6 @@ const ListaDeProyectos = () => {
     }
   };
 
-  const handleRedirectCreate = (projectId: string) => {
-    router.push(`/proyecto`);
-  };
   const filteredProjects = projects.filter((project) =>
     project.name.toLowerCase().includes(filterText.toLowerCase())
   );
@@ -59,22 +57,8 @@ const ListaDeProyectos = () => {
   }, []);
 
   return (
-    <div className="flex  bg-gray-100">
-      <div className={`fixed inset-0 z-30 transition-transform transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:${isSidebarOpen ? 'block' : 'hidden'}`}>
-        <Sidebar />
-      </div>
-      <div className="flex-1 flex flex-col">
-        <div className="flex items-center justify-between p-4 bg-white shadow-md">
-          <button
-            className="p-2 focus:outline-none focus:bg-gray-200 z-40"
-            onClick={toggleSidebar}
-          >
-            <FaBars className="w-6 h-6" />
-          </button>
-          <Navbar />
-        </div>
-        <main className="flex-1 p-6">
-          <div className="p-8 bg-gray-50 min-h-screen">
+
+      <Layout>
             <div className="flex justify-between items-center mb-4">
               <h1 className="text-2xl font-semibold">Lista de Proyectos</h1>
             </div>
@@ -123,11 +107,9 @@ const ListaDeProyectos = () => {
                   </button>
                 </div>
               ))}
-            </div>
           </div>
-        </main>
-      </div>
-    </div>
+
+      </Layout>
   );
 };
 

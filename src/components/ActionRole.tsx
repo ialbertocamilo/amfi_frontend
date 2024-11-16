@@ -8,22 +8,10 @@ const view = (id: string) => {
 
 const allActions = [
   {
-    id: "1",
-    name: "Ver",
-    description: "Ver detalles",
-    onClick: (id: string) => view(id),
-  },
-  {
     id: "2",
     name: "Editar",
     description: "Editar detalles",
     onClick: () => console.log("Editar"),
-  },
-  {
-    id: "3",
-    name: "Eliminar",
-    description: "Eliminar detalles",
-    onClick: () => console.log("Eliminar"),
   },
 ];
 
@@ -41,7 +29,6 @@ export interface ActionRoleProps {
 
 const ActionRole: React.FC<ActionRoleProps> = ({ id, userRole }) => {
   const availableActions = useMemo(() => {
-    console.log(userRole);
     return allActions.filter((action) =>
         roleActionsMap[userRole]?.includes(action.name)
     );

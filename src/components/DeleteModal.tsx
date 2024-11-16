@@ -6,10 +6,9 @@ interface DeleteModalProps {
     onClose: () => void;
     onDelete: () => void;
     itemName: string;
-    id:string | null
 }
 
-const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose, onDelete, itemName,id }) => {
+const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose, onDelete, itemName }) => {
     if (!isOpen) return null;
 
     return (
@@ -22,7 +21,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose, onDelete, it
                     </button>
                 </div>
                 <div className={styles.modalBody}>
-                    <p>¿Estás seguro de que deseas eliminar {itemName} con ID: {id}?</p>
+                    <p>¿Estás seguro de que deseas eliminar {itemName}?</p>
                 </div>
                 <div className={styles.modalFooter}>
                     <button className={styles.secondaryButton} onClick={onClose}>
