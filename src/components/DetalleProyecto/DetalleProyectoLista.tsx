@@ -8,6 +8,7 @@ import { ProjectDirectorInvited } from '@/interfaces/project-director.interface'
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
+import Evaluacion from './Evaluacion';
 
 
 
@@ -192,6 +193,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
           Cerrar Convocatoria
         </button>}
       </div>
+      <Evaluacion setShowEvaluacion={(show: boolean) => { /* your logic here */ }}></Evaluacion>
     </div>
   );
 };
