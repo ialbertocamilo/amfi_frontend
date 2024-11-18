@@ -1,4 +1,4 @@
-import { getProductoras } from "@/api/productoraApi";
+import {getProductoras, getProductorasWithDirectors} from "@/api/productoraApi";
 import { CasaProductora, casasProductorasState } from "@/state/producerState";
 import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
@@ -14,7 +14,7 @@ const ListaCasasProductoras: React.FC<ListaCasasProductorasProps> = ({ buscar })
   useEffect(() => {
     const fetchCasasProductoras = async () => {
       try {
-        const response = await getProductoras(); // Reemplaza con la URL de tu API
+        const response = await getProductorasWithDirectors(); // Reemplaza con la URL de tu API
         const data: CasaProductora[] = response;
         const formattedData = data.map(casa => ({
           ...casa,

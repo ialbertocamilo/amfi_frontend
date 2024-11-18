@@ -55,6 +55,7 @@ const Login = () => {
         toast.error(
           "Ocurrio un error al iniciar sesión, revise su email o contraseña"
         );
+        return
     }
   };
 

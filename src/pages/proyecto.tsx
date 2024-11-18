@@ -11,6 +11,7 @@ import useProject from "@/hooks/project.hook";
 import {CreateProjectDto} from "../dto/create-project.dto";
 import { UpdateProjectDto } from "../dto/update-project.dto";
 import ProyectCreated from "@/components/Proyecto/ProjectCreated";
+import {ProjectStatus} from "@/mappers/project.mapper";
 
 const NuevoProyecto: React.FC = () => {
     const [formData, setFormData] = useState<Record<string, any>>({});
@@ -19,28 +20,26 @@ const NuevoProyecto: React.FC = () => {
 
     const [readonly, setReadonly] = useState(false);
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
+            ...formData, [e.target.name]: e.target.value,
         });
     };
 
-    const {projectJson, loading, fetchProject,saveOrUpdateProject} = useProject(id as string);
+    const {projectJson, loading, fetchProject, saveOrUpdateProject} = useProject(id as string);
     const handleSubmit = async (page: string) => {
+
         const data: CreateProjectDto | UpdateProjectDto = {
-            "id": id as string??undefined,
+            "id": id as string ?? undefined,
             "brand": formData?.brand,
             "product": formData?.product,
             "projectName": formData?.projectName,
-            "extra": formData
+            "extra": formData,
+            "status": page == '6' ? ProjectStatus.InProgress : ProjectStatus.Draft // Cuando termina de crear el proyecto, se cambia el estado a En Progreso
         };
-        const createdProject=await saveOrUpdateProject(data);
+        const createdProject = await saveOrUpdateProject(data);
         if (createdProject?.id)
-            
-        await router.replace(`/proyecto?id=${createdProject.id}`);
+            await router.replace(`/proyecto?id=${createdProject.id}`);
         setActiveTab(page);
     };
 
@@ -58,11 +57,10 @@ const NuevoProyecto: React.FC = () => {
     useEffect(() => {
         if (projectJson) {
             setFormData({
-                ...formData,
-                ...projectJson
+                ...formData, ...projectJson
             });
         }
-    },[projectJson])
+    }, [projectJson])
 
 
     const [activeTab, setActiveTab] = useState<string>("1");
@@ -70,77 +68,62 @@ const NuevoProyecto: React.FC = () => {
 
 
     const ReadonlyBadge = ({readonly}: { readonly: boolean }) => {
-        return (
-            <div className="relative sm:container">
-                {readonly && (
-                    <span
-                        className={`absolute top-0 right-0 m-2 py-1 px-2 rounded-md font-bold flex items-center justify-center bg-green-500 text-white text-xs`}
-                    >
+        return (<div className="relative sm:container">
+            {readonly && (<span
+                className={`absolute top-0 right-0 m-2 py-1 px-2 rounded-md font-bold flex items-center justify-center bg-green-500 text-white text-xs`}
+            >
             Solo lectura
-          </span>
-                )}
-            </div>
-        );
+          </span>)}
+        </div>);
     };
 
-    if (loading) return <div>Cargando...</div>;
-    return (
-        <Layout>
-            <ReadonlyBadge readonly={readonly}/>
-            <div>
-            {activeTab === "1" && (
-                <ProyectoSteep1
-                    formData={formData}
-                    handleChange={handleChange}
-                    handleSubmit={handleSubmit}
-                    activeTab={activeTab}
-                    setactiveTab={setActiveTab}
-                    isEditing={readonly}
-                    readonly={readonly}
-                />
-            )}
-            {activeTab === "2" && (
-                <ProyectoSteep2
-                    formData={formData}
-                    handleChange={handleChange}
-                    handleSubmit={handleSubmit}
-                    activeTab={activeTab}
-                    setactiveTab={setActiveTab}
-                />
-            )}
-            { activeTab === "3" && (
-                <ProyectoSteep3
-                    formData={formData}
-                    handleChange={handleChange}
-                    handleSubmit={handleSubmit}
-                    activeTab={activeTab}
-                    setactiveTab={setActiveTab}
-                />
-            )}
-            {activeTab === "4" && (
-                <ProyectoSteep4
-                    formData={formData}
-                    handleChange={handleChange}
-                    handleSubmit={handleSubmit}
-                    activeTab={activeTab}
-                    setactiveTab={setActiveTab}
-                    entregables={entregables}
-                    setEntregables={setEntregables}
-                />
-            )}
-            {activeTab === "5" && (
-                <ProyectoSteep5
-                    formData={formData}
-                    handleChange={handleChange}
-                    handleSubmit={handleSubmit}
-                    activeTab={activeTab}
-                    setactiveTab={setActiveTab}
-                />
-            )}
+    return (<Layout>
+        {loading && <div>Cargando...</div>}
+        <ReadonlyBadge readonly={readonly}/>
+        <div>
+
+            {activeTab === "1" && (<ProyectoSteep1
+                formData={formData}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                activeTab={activeTab}
+                setactiveTab={setActiveTab}
+                isEditing={readonly}
+                readonly={readonly}
+            />)}
+            {activeTab === "2" && (<ProyectoSteep2
+                formData={formData}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                activeTab={activeTab}
+                setactiveTab={setActiveTab}
+            />)}
+            {activeTab === "3" && (<ProyectoSteep3
+                formData={formData}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                activeTab={activeTab}
+                setactiveTab={setActiveTab}
+            />)}
+            {activeTab === "4" && (<ProyectoSteep4
+                formData={formData}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                activeTab={activeTab}
+                setactiveTab={setActiveTab}
+                entregables={entregables}
+                setEntregables={setEntregables}
+            />)}
+            {activeTab === "5" && (<ProyectoSteep5
+                formData={formData}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                activeTab={activeTab}
+                setactiveTab={setActiveTab}
+            />)}
             {activeTab === "6" && (<ProyectCreated/>)}
-            </div>
-        </Layout>
-    );
+        </div>
+    </Layout>);
 };
 
 export default NuevoProyecto;

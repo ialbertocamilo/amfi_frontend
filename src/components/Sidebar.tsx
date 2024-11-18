@@ -57,8 +57,8 @@ const Sidebar: React.FC = () => {
 
   return (
       <div className="flex flex-col w-64 h-screen bg-white shadow-md">
-        <div className="flex items-center justify-center h-16 text-white">
-          <img src="amfi.png" alt="Description" className="w-2/3 h-2/3 object-contain" />
+        <div className="flex items-center justify-center h-28 text-white">
+          <img src="logo.png" alt="Description" className="w-3/3 h-2/3 object-contain" />
         </div>
         <div className="flex-1 px-4 py-8 space-y-4 overflow-y-auto">
           {getLinksForRole(userRole, companyType).map((link, index) => (
@@ -93,7 +93,6 @@ const Sidebar: React.FC = () => {
               <img src="miniaturas/youtube.png" alt="Description" className="w-6 h-6" />
             </a>
           </div>
-          <p className="text-center text-sm text-red-600">amfi.mx</p>
         </div>
       </div>
   );

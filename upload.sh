@@ -3,7 +3,7 @@
 APP_NAME="amfi_frontend"
 VERSION="latest"
 DOCKER_USERNAME="isvgxd"
-DOCKER_PASSWORD=""
+DOCKER_PASSWORD="Donkeykong993."
 set -e 
 
 echo $DOCKER_USERNAME

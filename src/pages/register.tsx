@@ -226,6 +226,7 @@ const Register = () => {
                     error.response?.data?.message.forEach((value: any) => toast.error(value))
                 if (error.status === 409)
                     toast.error(error.response?.data?.clientMessage)
+                return ;
             }
         }
 

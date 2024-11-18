@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getProductoras } from "@/api/productoraApi";
+import {getProductorasWithDirectors} from "@/api/productoraApi";
 import { addDirectorsToProject } from "@/api/projectApi";
 import { casasProductorasSelected, selectedCasasProductorasState } from "@/state/producerState";
 import { useRouter } from "next/router";
@@ -57,7 +57,6 @@ const ProyectoSteep5 = ({
 
   useEffect(() => {
     const names = selectedCasas.map(casa => casa.name);
-    console.log('names', names);
     setCasasProductorasNames(names);
   }, [selectedCasas, setCasasProductorasNames]);
 
@@ -104,7 +103,6 @@ const ProyectoSteep5 = ({
   };
 
   const onSave = async () => {
-    console.log('Saving project')
 
     const validate = await validateSelection()
     if (!validate) {
@@ -115,27 +113,6 @@ const ProyectoSteep5 = ({
     handleSubmit("6")
   }
 
-  const fetchCasasProductoras = async () => {
-    try {
-      const data: CasaProductora[] = await getProductoras();
-      const filtered = data.map((casa) => ({
-        ...casa,
-        selected: false,
-        details: false,
-        detailsEnabled: false,
-      }));
-      setCasasProductoras(filtered);
-    } catch (error: any) {
-      console.error("Error fetching casas productoras:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCasasProductoras();
-  }, []);
-  const [casasProductoras, setCasasProductoras] = useState<CasaProductora[]>(
-    []
-  );
 
   const [buscar, setBuscar] = useState("");
   const [revisarPropuesta, setRevisarPropuesta] = useState(false);
@@ -154,28 +131,34 @@ const ProyectoSteep5 = ({
         <div className="space-y-8 p-4">
           {/* Navegación de pestañas */}
           <div className="tabs flex justify-center space-x-10">
-            <StepIndicator activeTab={activeTab} setactiveTab={setactiveTab} />
+            <StepIndicator activeTab={activeTab} setactiveTab={setactiveTab}/>
           </div>
-          
+
           <h2 className="text-xl font-bold mb-4">Invitar Casas Productoras</h2>
 
           {/* Buscar productora */}
           <div className="relative mb-4">
             <input
-              type="text"
-              className="w-full p-2 border border-gray-300 rounded-md"
-              placeholder="Buscar productora"
-              value={buscar}
-              onChange={(e) => setBuscar(e.target.value)}
+                type="text"
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Buscar productora"
+                value={buscar}
+                onChange={(e) => setBuscar(e.target.value)}
             />
           </div>
 
-          <ListaCasasProductoras buscar={buscar.toLowerCase()} />
+          <ListaCasasProductoras buscar={buscar.toLowerCase()}/>
 
           {/* Mensaje informativo */}
           <div
-            className="mt-6 p-4 text-black-700 rounded-lg"
-            style={{ backgroundColor: "#DFF9FF" }}
+              className="mt-6 p-4 text-black-700 rounded-lg"
+              style={{backgroundColor: "#DFF9FF"}}
+          >
+          La lista muestra casas productoras que tienen al menos un director.
+          </div>
+          <div
+              className="mt-6 p-4 text-black-700 rounded-lg"
+              style={{backgroundColor: "#DFF9FF"}}
           >
             Te recomendamos que solo invites a 5 Casas Productoras como máximo.
           </div>
@@ -186,10 +169,10 @@ const ProyectoSteep5 = ({
               Revisión de propuesta creativa
             </span>
             <input
-              type="checkbox"
-              checked={revisarPropuesta}
-              onChange={() => setRevisarPropuesta(!revisarPropuesta)}
-              className="form-checkbox h-5 w-5 text-red-500"
+                type="checkbox"
+                checked={revisarPropuesta}
+                onChange={() => setRevisarPropuesta(!revisarPropuesta)}
+                className="form-checkbox h-5 w-5 text-red-500"
             />
           </div>
           <p className="text-sm text-gray-500">
@@ -200,14 +183,14 @@ const ProyectoSteep5 = ({
           {/* Botones */}
           <div className="flex justify-between mt-6">
             <button
-              className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded"
-              onClick={() => handleSubmit("5")}
+                className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded"
+                onClick={() => handleSubmit("5")}
             >
               Atras
             </button>
             <button
-              className="w-1/4 bg-red-500 text-white py-2 rounded"
-              onClick={handleSave}
+                className="w-1/4 bg-red-500 text-white py-2 rounded"
+                onClick={handleSave}
             >
               Guardar proyecto
             </button>
@@ -215,10 +198,10 @@ const ProyectoSteep5 = ({
         </div>
       </div>
       <CasasProductorasModal
-        casas={casasProductorasNames}
-        isOpen={isCasasProductorasModalOpen}
-        onClose={() => setIsCasasProductorasModalOpen(false)}
-        onSave={() => onSave()}
+          casas={casasProductorasNames}
+          isOpen={isCasasProductorasModalOpen}
+          onClose={() => setIsCasasProductorasModalOpen(false)}
+          onSave={() => onSave()}
       />
     </div>
   );
