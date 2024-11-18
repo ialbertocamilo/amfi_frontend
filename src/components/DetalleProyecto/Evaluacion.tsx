@@ -1,32 +1,10 @@
 import React, { useState } from 'react';
+import StarRating from '../Commons/StarRating/StarRating';
+import BinaryChoice from '../Commons/BinaryChoice/BinaryChoice';
+import PercentageSelector from '../Commons/PercentageSelector/PercentageSelector';
+import InfoLink from '../Commons/InfoLink/InfoLink';
 
-type StarRatingProps = {
-  value: number;
-  max: number;
-  onChange: (value: number) => void;
-};
-
-const StarRating: React.FC<StarRatingProps> = ({ value, max, onChange }) => {
-  return (
-    <div className="flex space-x-1">
-      {Array.from({ length: max }).map((_, index) => (
-        <svg
-          key={index}
-          xmlns="http://www.w3.org/2000/svg"
-          className={`h-5 w-5 cursor-pointer ${index < value ? 'text-yellow-400' : 'text-gray-300'
-            }`}
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          onClick={() => onChange(index + 1)}
-        >
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.668 5.13h5.386c.97 0 1.371 1.24.588 1.81l-4.346 3.073 1.668 5.131c.3.922-.755 1.688-1.538 1.118L10 15.347l-4.346 3.073c-.783.57-1.838-.196-1.538-1.118l1.668-5.131-4.346-3.073c-.783-.57-.382-1.81.588-1.81h5.386l1.668-5.13z" />
-        </svg>
-      ))}
-    </div>
-  );
-};
-
-const questions = [
+const creativeProposal = [
   'Nivel de singularidad',
   'Tipo de estructura',
   'Calidad de producción',
@@ -45,6 +23,7 @@ const questionsEmpresa = [
   '¿La empresa tiene proyectos relevantes para la licitación?',
   '¿La empresa está ordenada en materia fiscal?'
 ];
+const questionsEmpresaStartIndex = creativeProposal.length;
 
 const questionsRespaldo = [
   '¿La empresa está afiliada a alguna asociación?',
@@ -52,19 +31,21 @@ const questionsRespaldo = [
   '¿Se tienen algún reporte negativo de la empresa?',
   '¿La empresa cuenta con buena reputación en RRSS?'
 ];
+const questionsRespaldoStartIndex = creativeProposal.length + questionsEmpresa.length;
 
 const questionsDirector = [
   '¿Se tiene experiencia previa con el director?',
   '¿Es talento joven? (menos 2 años en el mercado)',
   '¿El reel contiene piezas relevantes para el proyecto?'
 ];
+const questionsDirectorStartIndex = creativeProposal.length + questionsEmpresa.length + questionsRespaldo.length;
 
 const Evaluacion: React.FC<{ setShowEvaluacion: (show: boolean) => void }> = ({ setShowEvaluacion }) => {
 
-  const [ratings, setRatings] = useState(Array(questions.length).fill(0));
+  const [ratings, setRatings] = useState(Array(creativeProposal.length).fill(0));
   const [porcentajeProduestaCreativa, setPorcentajeProduestaCreativa] = useState(0);
   const [porcentajeExpereiencia, setPorcentajeExpereiencia] = useState(0);
-  const [answers, setAnswers] = useState(Array(questions.length).fill(''));
+  const [answers, setAnswers] = useState(Array(creativeProposal.length).fill(''));
 
   const handleAnswerChange = (index: number, answer: string) => {
     const newAnswers = [...answers];
@@ -93,40 +74,25 @@ const Evaluacion: React.FC<{ setShowEvaluacion: (show: boolean) => void }> = ({ 
 <div className="mt-6 p-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl shadow-md space-y-6 px-4 lg:px-8">
         {/* Evaluación */}
         <section className="mb-8">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center pb-4">
             <h3 className="text-xl font-semibold">Evaluación</h3>
-            <input
-              type="number"
-              value={porcentajeProduestaCreativa}
-              onChange={(e) => handlePercentageChange(e as unknown as React.ChangeEvent<HTMLSelectElement>)}
-              min={0}
-              max={100}
-              className="ml-4 p-2 border border-gray-300 rounded-md w-20"
-              placeholder="%"
-            />
           </div>
 
           {/* Propuesta creativa */}
-          <div className="border-b pb-6 mb-6">
-            <div className="flex justify-between items-center">
-              <h4 className="font-bold">Propuesta creativa</h4>
-              <select
+          <div className="pb-6 mb-6">
+            <div className="border-b flex justify-between items-center">
+              <PercentageSelector
+                label="Propuesta creativa"
                 value={porcentajeProduestaCreativa}
                 onChange={handlePercentageChange}
-                className="ml-4 p-2 border border-gray-300 rounded-md"
-              >
-                {Array.from(Array(11).keys()).map((num) => (
-                  <option key={num} value={num * 10}>
-                    {num * 10}%
-                  </option>
-                ))}
-              </select>
+              ></PercentageSelector>
+              <InfoLink label='Ver puntaje de sección'></InfoLink>
             </div>
             <div className="grid grid-cols-2 gap-6 mt-4">
-              {questions.map((question, index) => (
+              {creativeProposal.map((question, index) => (
                 <div key={index}>
-                  <p>{question}:</p>
                   <StarRating
+                    label= {question}
                     value={ratings[index]}
                     max={5}
                     onChange={(value: number) => handleRatingChange(index, value)}
@@ -137,136 +103,73 @@ const Evaluacion: React.FC<{ setShowEvaluacion: (show: boolean) => void }> = ({ 
           </div>
 
           {/* Experiencia */}
-          <div className="border-b pb-6 mb-6">
+          <div className="pb-6 mb-6">
             <div className="flex justify-between items-center">
-              <h3 className="text-xl font-semibold">Experiencia</h3>
-              <input
-                type="number"
-                value={porcentajeExpereiencia}
-                onChange={(e) => handlePercentageChangeExperiencia(e as unknown as React.ChangeEvent<HTMLSelectElement>)}
-                min={0}
-                max={100}
-                className="ml-4 p-2 border border-gray-300 rounded-md w-20"
-                placeholder="%"
-              />
+              <PercentageSelector
+              label="Experiencia"
+              value={porcentajeProduestaCreativa}
+              onChange={handlePercentageChange}
+              ></PercentageSelector>
+              <InfoLink label='Ver puntaje de sección'></InfoLink>
             </div>
 
             <hr className="border-gray-300 my-4" />
-
             {/* Preguntas empresa */}
             <div>
-              <h3 className="text-xl font-semibold">Empresa</h3>
-
+              <h3 className="text-xl font">Empresa</h3>
               <div className="grid grid-cols-2 gap-6 mt-4">
-
-                {questionsEmpresa.map((question, index) => (
-                  <div key={index} className="flex items-center justify-between mb-4">
-                    <p className="w-1/2">{question}</p>
-                    <div className="flex space-x-4 w-1/2 justify-end">
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          name={`question-${index}`}
-                          value="Si"
-                          checked={answers[index] === 'Si'}
-                          onChange={() => handleAnswerChange(index, 'Si')}
-                        />
-                        <span>Si</span>
-                      </label>
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          name={`question-${index}`}
-                          value="No"
-                          checked={answers[index] === 'No'}
-                          onChange={() => handleAnswerChange(index, 'No')}
-                        />
-                        <span>No</span>
-                      </label>
-                    </div>
-                  </div>
-                ))}
+              {questionsEmpresa.map((question, index) => (
+                <div key={index + questionsEmpresaStartIndex}>
+                  <BinaryChoice
+                    label={question}
+                    index={index  + questionsEmpresaStartIndex}
+                    answer={answers[index  + questionsEmpresaStartIndex]}
+                    handleAnswerChange={handleAnswerChange}
+                  ></BinaryChoice>
+                </div>
+              ))}
               </div>
             </div>
             <br />
             {/* Preguntas empresa */}
             <div>
               <h3 className="text-xl font-semibold">Respaldo</h3>
-
               <div className="grid grid-cols-2 gap-6 mt-4">
-
-                {questionsRespaldo.map((question, index) => (
-                  <div key={index} className="flex items-center justify-between mb-4">
-                    <p className="w-1/2">{question}</p>
-                    <div className="flex space-x-4 w-1/2 justify-end">
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          name={`question-${index}`}
-                          value="Si"
-                          checked={answers[index] === 'Si'}
-                          onChange={() => handleAnswerChange(index, 'Si')}
-                        />
-                        <span>Si</span>
-                      </label>
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          name={`question-${index}`}
-                          value="No"
-                          checked={answers[index] === 'No'}
-                          onChange={() => handleAnswerChange(index, 'No')}
-                        />
-                        <span>No</span>
-                      </label>
-                    </div>
-                  </div>
-                ))}
+              {questionsRespaldo.map((question, index) => (
+                <div key={index + questionsRespaldoStartIndex}>
+                  <BinaryChoice
+                    label={question}
+                    index={index  + questionsRespaldoStartIndex}
+                    answer={answers[index  + questionsRespaldoStartIndex]}
+                    handleAnswerChange={handleAnswerChange}
+                  ></BinaryChoice>
+                </div>
+              ))}
               </div>
             </div>
-
-
+            
             <br />
             {/* Preguntas director */}
             <div>
               <h3 className="text-xl font-semibold">Director</h3>
-
               <div className="grid grid-cols-2 gap-6 mt-4">
-
-                {questionsDirector.map((question, index) => (
-                  <div key={index} className="flex items-center justify-between mb-4">
-                    <p className="w-1/2">{question}</p>
-                    <div className="flex space-x-4 w-1/2 justify-end">
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          name={`question-${index}`}
-                          value="Si"
-                          checked={answers[index] === 'Si'}
-                          onChange={() => handleAnswerChange(index, 'Si')}
-                        />
-                        <span>Si</span>
-                      </label>
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="radio"
-                          name={`question-${index}`}
-                          value="No"
-                          checked={answers[index] === 'No'}
-                          onChange={() => handleAnswerChange(index, 'No')}
-                        />
-                        <span>No</span>
-                      </label>
-                    </div>
-                  </div>
-                ))}
+              {questionsDirector.map((question, index) => (
+                <div key={index + questionsDirectorStartIndex}>
+                  <BinaryChoice
+                    label={question}
+                    index={index + questionsDirectorStartIndex}
+                    answer={answers[index + questionsDirectorStartIndex]}
+                    handleAnswerChange={handleAnswerChange}
+                  ></BinaryChoice>
+                </div>
+              ))}
               </div>
             </div>
 
           </div>
           {/* Presupuesto */}
           <div>
-            <h4 className="font-bold">Presupuesto</h4>
+            <h4 className="border-b font-bold">Presupuesto</h4>
             <div className="mt-4">
               <div className="flex justify-center">
                 <img src="presupuestoBloqueado.png" alt="Presupuesto" className="max-w-full h-auto" />
