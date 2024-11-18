@@ -1,64 +1,39 @@
-import { getProjectById, updateProjectStatus } from '@/api/projectApi';
-import { ProjectMapper, ProjectStatus } from '@/mappers/project.mapper';
-import React, { useEffect, useState } from 'react';
+import {
+  getInvitationsByProjectId,
+  getProjectById,
+  updateProjectStatus,
+} from "@/api/projectApi";
+import { ProjectMapper, ProjectStatus } from "@/mappers/project.mapper";
+import React, { useEffect, useState } from "react";
 
-import { getInvitedDirectors } from '@/api/directorApi';
-import { sendReminderToProductionHouses } from '@/api/productoraApi';
-import { ProjectDirectorInvited } from '@/interfaces/project-director.interface';
-import moment from 'moment';
-import { useRouter } from 'next/router';
-import toast from 'react-hot-toast';
-import Evaluacion from './Evaluacion';
-
-
-
-const getStatusColor = (status: boolean) => {
-  switch (status) {
-    case false:
-      return 'bg-red-200 text-red-800';
-    case true:
-      return 'bg-green-200 text-green-800';
-    default:
-      return 'bg-teal-200 text-teal-800';
-  }
-};
-
-const getStatusProposalColor = (statusProposal:boolean)=>{
-
-  switch (statusProposal) {
-    case true:
-      return 'bg-green-200 text-green-800';
-    case false:
-      return 'bg-teal-200 text-teal-800';
-  }
-}
-
-const getStatusProposal = (statusProposal:boolean)=>{
-
-  switch (statusProposal) {
-    case true:
-      return 'Documento subido';
-    case false:
-      return 'Documento por subir';
-  }
-}
-
-const getStatusName = (status: boolean) => {
-  switch (status) {
-    case false:
-      return 'Rechazado'
-    case true:
-      return 'Aceptado'
-    default:
-      return 'Pendiente';
-  }
-};
+import { getInvitedDirectors } from "@/api/directorApi";
+import { sendReminderToProductionHouses } from "@/api/productoraApi";
+import { ProjectDirectorInvited } from "@/interfaces/project-director.interface";
+import moment from "moment";
+import { useRouter } from "next/router";
+import toast from "react-hot-toast";
+import Evaluacion from "./Evaluacion";
+import ListadoInvitaciones from "./ListadoInvitaciones";
+import Comparacion from "./Comparacion";
+import { InvitedDirectorsResponse } from "@/api/interface/api.interface";
 
 interface ProjectDetailsProps {
   id: string;
 }
 
 const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
+  const [showListadoInvitaciones, setShowListadoInvitaciones] = useState(true);
+  const [showEvaluacion, setShowEvaluacion] = useState(false);
+  const [showComparacion, setShowComparacion] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+
+  const [invitationData, setInvitationData] =
+    useState<InvitedDirectorsResponse | null>({
+      result: [{}],
+      message: "",
+    } as any);
+  const [invitationId, setInvitationId] = useState<string | null>(null);
+
   const [formData, setFormData] = useState({
     anunciante: "",
     marca: "",
@@ -76,13 +51,15 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
     productorAgencia: "",
     numeroODT: "",
     contactoCompras: "",
-    creado: '',
-    estado: ''
+    creado: "",
+    estado: "",
   });
-  const fetchProject = async () => {
-    const projectData = await getProjectById(id as string);
-    if (projectData) {
 
+  const onInit = async () => {
+    const projectData = await getProjectById(id);
+    const invitationData = await getInvitationsByProjectId(id);
+
+    if (projectData) {
       setFormData({
         anunciante: projectData?.brand || "",
         marca: projectData?.brand || "",
@@ -96,104 +73,147 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
         correoResponsable: projectData?.creator?.email || "",
         directorCreativo: projectData?.creator?.jobPosition || "",
         contactoFinanzas: projectData?.isFinancialInfoUnlocked ? "Sí" : "No",
-        directorCuentas: `${projectData?.creator?.name} ${projectData?.creator?.lastname}` || "",
+        directorCuentas:
+          `${projectData?.creator?.name} ${projectData?.creator?.lastname}` ||
+          "",
         productorAgencia: projectData?.creator?.name || "",
         numeroODT: projectData?.id || "",
         contactoCompras: projectData?.creator?.nationalIdentifierOrRFC || "",
-        creado: moment(projectData?.createdAt).format('DD/MM/YYYY') || '',
-        estado: ProjectMapper.mapProjectStatus(projectData?.status) || ''
+        creado: moment(projectData?.createdAt).format("DD/MM/YYYY") || "",
+        estado: ProjectMapper.mapProjectStatus(projectData?.status) || "",
       });
+    }
+
+    if (invitationData) {
+      console.log("invitationDataResult", invitationData);
+      setInvitationData(invitationData);
     }
   };
 
+  const sendReminder = () => {
+    console.log("sending reminder");
+    sendReminderToProductionHouses(id as string)
+      .then((data) => {
+        toast.success("Recordatorio enviado");
+      })
+      .catch((error) => {
+        toast.error("Error al enviar recordatorio");
+      });
+  };
 
-  const sendReminder = ()=>{
-    console.log('sending reminder')
-    sendReminderToProductionHouses(id as string).then((data)=>{
-        toast.success('Recordatorio enviado')
-    }).catch((error)=>{
+  const router = useRouter();
+  const closeProject = () => {
+    console.log("closing project");
 
-      toast.error('Error al enviar recordatorio')
-    })
-  }
+    updateProjectStatus(id as string, ProjectStatus.Closed).then((data) => {
+      toast.success("Convocatoria cerrada");
+      router.push("/lista-de-proyectos-admin");
+    });
+  };
 
-  const router=useRouter()
-  const closeProject=()=>{
-    console.log('closing project')
+  const [projectDirectorInvited, setProjectDirectorInvited] =
+    useState<ProjectDirectorInvited[]>();
 
-    updateProjectStatus(id as string,ProjectStatus.Closed).then((data)=>{
-      toast.success('Convocatoria cerrada')
-      router.push('/lista-de-proyectos-admin')
-    })
-  }
-
-  const [projectDirectorInvited, setProjectDirectorInvited] = useState<ProjectDirectorInvited[]>()
   useEffect(() => {
     if (id) {
-      fetchProject();
+      onInit();
 
       getInvitedDirectors(id as string).then((data) => {
-        setProjectDirectorInvited(data)
-      })
+        setProjectDirectorInvited(data);
+      });
     }
   }, [id]);
 
   const handleItemClick = () => {
-    window.location.href = '/evaluacion-casa-productora';
+    setShowListadoInvitaciones(false);
+    setShowEvaluacion(true);
   };
+
+  const showComponent = (
+    componentName: "list" | "evaluation" | "comparison"
+  ) => {
+    switch (componentName) {
+      case "list":
+        setShowListadoInvitaciones(true);
+        setShowEvaluacion(false);
+        setShowComparacion(false);
+        break;
+      case "evaluation":
+        setShowListadoInvitaciones(false);
+        setShowEvaluacion(true);
+        setShowComparacion(false);
+        break;
+      case "comparison":
+        setShowListadoInvitaciones(false);
+        setShowEvaluacion(false);
+        setShowComparacion(true);
+        break;
+      default:
+        setShowListadoInvitaciones(true);
+    }
+  };
+
   return (
-    <div className="mt-6 p-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl shadow-md space-y-6 px-4 lg:px-8">
-      <div className="flex justify-between items-start">
-        <div>
-          <h1 className="text-xl font-semibold">{formData?.nombreProyecto}</h1>
-          <p className="text-sm text-gray-500">Anunciante:  {formData?.anunciante}</p>
-          <p className="text-sm text-gray-500">Agencia: {formData?.agencia}</p>
+    <div className="mt-6 px-4 w-full max-w-screen-xxl mx-auto bg-white rounded-xl space-y-6 lg:px-8">
+      <div className="flex flex-col border-b">
+        <h1 className="text-xl font-semibold pb-4">
+          {formData?.nombreProyecto}
+        </h1>
+        <div className="flex justify-between pb-4">
+          <div>
+            <p className="text-sm font-medium text-gray-600 pb-2">
+              Creador: {formData?.anunciante}
+            </p>
+            <p className="text-sm font-medium text-gray-600 pb-2">
+              Agencia: {formData?.agencia}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm font-medium text-gray-600 pb-2">
+              Creado: {formData?.creado}
+            </p>
+            <p className="text-sm font-medium text-gray-600 pb-2">
+              Estado: {formData?.estado}
+            </p>
+          </div>
+          <div className="flex items-end min-w-[10%]">
+            <p
+              onClick={() => setIsVisible(!isVisible)}
+              className="text-sm text-orange-500 font-medium hover:underline"
+            >
+              {isVisible ? "Ocultar detalle" : "Ver detalle"}
+            </p>
+          </div>
         </div>
-        <div>
-          <p className="text-sm text-gray-500">Creado: {formData?.creado}</p>
-          <p className="text-sm text-gray-500">Estado: {formData?.estado}</p>
-        </div>
       </div>
-
-      {/* Casas Productoras Invitadas */}
-      <div>
-        <h2 className="text-lg font-medium mb-4">Casas Productoras invitadas</h2>
-        <ul>
-          {projectDirectorInvited?.map((casa, index) => (
-        <div
-          key={index}
-          className={`flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow mt-4 ${casa.proposalUploaded ? 'cursor-pointer' : ''}`}
-          onClick={casa.proposalUploaded ? handleItemClick : undefined}
-        >
-          <span className="text-gray-700"> {casa.productionHouse?.name}</span>
-          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(casa?.accepted)}`}>
-            {getStatusName(casa?.accepted)}
-          </span>
-          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusProposalColor(casa?.proposalUploaded)}`}>
-            {getStatusProposal(casa?.proposalUploaded)}
-          </span>
-          <button className="text-gray-400 hover:text-gray-600">&gt;</button>
-        </div>
-          ))}
-        </ul>
+      <div className={isVisible ? "" : "hidden"}>
+        {showListadoInvitaciones ? (
+          <ListadoInvitaciones
+            invitationData={invitationData!}
+            setInvitationId={setInvitationId}
+            showComponent={showComponent}
+            formData={formData}
+            handleItemClick={handleItemClick}
+            closeProject={closeProject}
+            sendReminder={sendReminder}
+          ></ListadoInvitaciones>
+        ) : (
+          <></>
+        )}
+        {showEvaluacion ? (
+          <Evaluacion
+            invitationId={invitationId}
+            showComponent={showComponent}
+          ></Evaluacion>
+        ) : (
+          <></>
+        )}
+        {showComparacion ? (
+          <Comparacion showComponent={showComponent}></Comparacion>
+        ) : (
+          <></>
+        )}
       </div>
-
-      {/* Notification Section */}
-      <div className="bg-blue-100 text-blue-600 p-4 rounded-lg flex justify-between items-center">
-        <p className="text-sm">
-          Se enviará un correo electrónico recordando a los participantes que no hayan aceptado aún su participación o
-          los que no hayan completado la postulación.
-        </p>
-        <button className="text-red-500 hover:text-red-600 font-semibold" onClick={()=>sendReminder()}>Enviar recordatorio</button>
-      </div>
-
-      {/* Close Call Section */}
-      <div className="flex justify-start">
-        {formData?.estado!=='Cerrado' && <button className="border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white" onClick={()=>closeProject()}>
-          Cerrar Convocatoria
-        </button>}
-      </div>
-      <Evaluacion setShowEvaluacion={(show: boolean) => { /* your logic here */ }}></Evaluacion>
     </div>
   );
 };

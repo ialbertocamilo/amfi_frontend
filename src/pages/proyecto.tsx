@@ -87,59 +87,58 @@ const NuevoProyecto: React.FC = () => {
     return (
         <Layout>
             <ReadonlyBadge readonly={readonly}/>
-<div>
-
-    {activeTab === "1" && (
-        <ProyectoSteep1
-            formData={formData}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            activeTab={activeTab}
-            setactiveTab={setActiveTab}
-            isEditing={readonly}
-            readonly={readonly}
-        />
-    )}
-    {activeTab === "2" && (
-        <ProyectoSteep2
-            formData={formData}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            activeTab={activeTab}
-            setactiveTab={setActiveTab}
-        />
-    )}
-    { activeTab === "3" && (
-        <ProyectoSteep3
-            formData={formData}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            activeTab={activeTab}
-            setactiveTab={setActiveTab}
-        />
-    )}
-    {activeTab === "4" && (
-        <ProyectoSteep4
-            formData={formData}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            activeTab={activeTab}
-            setactiveTab={setActiveTab}
-            entregables={entregables}
-            setEntregables={setEntregables}
-        />
-    )}
-    {activeTab === "5" && (
-        <ProyectoSteep5
-            formData={formData}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            activeTab={activeTab}
-            setactiveTab={setActiveTab}
-        />
-    )}
-    {activeTab === "6" && (<ProyectCreated/>)}
-</div>
+            <div>
+            {activeTab === "1" && (
+                <ProyectoSteep1
+                    formData={formData}
+                    handleChange={handleChange}
+                    handleSubmit={handleSubmit}
+                    activeTab={activeTab}
+                    setactiveTab={setActiveTab}
+                    isEditing={readonly}
+                    readonly={readonly}
+                />
+            )}
+            {activeTab === "2" && (
+                <ProyectoSteep2
+                    formData={formData}
+                    handleChange={handleChange}
+                    handleSubmit={handleSubmit}
+                    activeTab={activeTab}
+                    setactiveTab={setActiveTab}
+                />
+            )}
+            { activeTab === "3" && (
+                <ProyectoSteep3
+                    formData={formData}
+                    handleChange={handleChange}
+                    handleSubmit={handleSubmit}
+                    activeTab={activeTab}
+                    setactiveTab={setActiveTab}
+                />
+            )}
+            {activeTab === "4" && (
+                <ProyectoSteep4
+                    formData={formData}
+                    handleChange={handleChange}
+                    handleSubmit={handleSubmit}
+                    activeTab={activeTab}
+                    setactiveTab={setActiveTab}
+                    entregables={entregables}
+                    setEntregables={setEntregables}
+                />
+            )}
+            {activeTab === "5" && (
+                <ProyectoSteep5
+                    formData={formData}
+                    handleChange={handleChange}
+                    handleSubmit={handleSubmit}
+                    activeTab={activeTab}
+                    setactiveTab={setActiveTab}
+                />
+            )}
+            {activeTab === "6" && (<ProyectCreated/>)}
+            </div>
         </Layout>
     );
 };

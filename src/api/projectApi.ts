@@ -2,6 +2,7 @@ import ApiService from "@/lib/api";
 import { CreateProjectDto } from "../dto/create-project.dto";
 import { UpdateProjectDto } from "../dto/update-project.dto";
 import moment from 'moment';
+import { InvitedDirectorsResponse } from "./interface/api.interface";
 
 export const getProjects = async () => {
     try {
@@ -89,3 +90,18 @@ export const updateProjectStatus = async (projectId: string, status: string) => 
         return null;
     }
 };
+
+export const getInvitationsByProjectId = async (
+    projectId: string
+  ): Promise<InvitedDirectorsResponse | null> => {
+    try {
+      const response = await ApiService.post(
+        `/project-director/get-invited/${projectId}`,{}
+      );
+      return response.data;
+    } catch (error: any) {
+      console.warn("Error updating project status:", error);
+      return null;
+    }
+  };
+

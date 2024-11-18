@@ -18,10 +18,10 @@ const Perfil: React.FC = () => {
         <Layout>
                 <h1 className="text-3xl font-bold mb-6 text-center">Perfil</h1>
                 <div className="mb-4">
-                    <p className="text-lg"><strong>Nombre:</strong> {user.name} {user.lastname}</p>
+                    <p className="text-lg"><strong>Nombre:</strong> {user?.name} {user?.lastname}</p>
                 </div>
                 <div className="mb-4">
-                    <p className="text-lg"><strong>Email:</strong> {user.email}</p>
+                    <p className="text-lg"><strong>Email:</strong> {user?.email}</p>
                 </div>
                 <div className="mb-4">
                     <p className="text-lg"><strong>Tipo de Empresa:</strong> {UserMapper.mapCompanyType(user?.company?.type)}</p>
