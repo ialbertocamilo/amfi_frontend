@@ -43,8 +43,8 @@ jobs:
         uses: appleboy/ssh-action@v1.1.0
         with:
           host: ${{ secrets.HOST }}
-          username: ec2-user
+          username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /home/ec2-user/amfi_mx/production
-            ./update.sh
+            cd /root/server
+            ./reboot.sh
