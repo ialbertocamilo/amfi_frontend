@@ -62,7 +62,7 @@ const groups: GroupData[] = [
   },
 ];
 
-const Comparacion: React.FC<{ setShowEvaluacion: (show: boolean) => void }> = ({ setShowEvaluacion }) => {
+const Comparacion: React.FC<{ showComponent: (componentName: "list" | "evaluation" | "comparison") => void; }> = ({ showComponent }) => {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
 
   const handleCheckboxChange = (name: string) => {
@@ -140,7 +140,7 @@ const Comparacion: React.FC<{ setShowEvaluacion: (show: boolean) => void }> = ({
         </div>
 
         <div className="flex justify-center space-x-4">
-          <button type="submit" className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded " onClick={() => setShowEvaluacion(true)}>Atras</button>
+          <button type="submit" className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded " onClick={() => showComponent("evaluation")}>Atras</button>
           <button type="submit" className="w-1/4 bg-red-500 text-white py-2 rounded" >Asignar proyecto</button>
 
         </div>
