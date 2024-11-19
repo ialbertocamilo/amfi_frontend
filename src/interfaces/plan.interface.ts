@@ -8,4 +8,5 @@ export interface IPlan {
     name: string;
     price: string; // Assuming price is a string
     title: string;
+    maxUsers:number;
   }

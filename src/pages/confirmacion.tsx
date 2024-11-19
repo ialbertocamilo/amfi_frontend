@@ -1,21 +1,22 @@
-import { Button, CardContent, CardHeader } from "@mui/material";
+import { verifyPayment } from "@/api/paymentApi";
+import { getPlanById } from "@/api/planApi";
+import PayPalButton from "@/components/PaypalButton";
+import { IPlan } from "@/interfaces/plan.interface";
+import { IUser } from "@/interfaces/user.interface";
+import { Button, CardContent } from "@mui/material";
 import Card from "@mui/material/Card";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import "./globals.css";
-import PayPalButton from "@/components/PaypalButton";
-import { verifyPayment } from "@/api/paymentApi";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { getCurrentUser } from "@/api/authenticationApi";
-import { IUser } from "@/interfaces/user.interface";
-import { getPlanById } from "@/api/planApi";
-import { IPlan } from "@/interfaces/plan.interface";
+import "./globals.css";
+import { CompanyType } from "@/constants";
+import createCompanyUser from "@/api/companyApi";
+import ApiService from "@/lib/api";
 const Confirmacion = () => {
   const router = useRouter();
-  const { payerName, amount, transactionId } = router.query;
   const [paymentProcessed, setPaymentProcessed] = useState(false);
   const [paymentDetails, setPaymentDetails] = useState<any>(null);
-  
+
 
   const handlePaymentSuccess = (details: any) => {
     setPaymentProcessed(true);
@@ -23,17 +24,84 @@ const Confirmacion = () => {
     console.log("Payment details:", details);
   };
 
-  const handleConfirm = () => {
-    if (paymentDetails?.id)
-      verifyPayment(paymentDetails?.id).then((data) => {
-        if (data.status === "COMPLETED") {
-          toast.success("El pago se ha confirmado satisfactoriamente.");
-          router.push("/");
+  const registerAnuncerOrAgency = async (type: string, formData) => {
+
+    const response = await createCompanyUser(type, formData)
+    if (response) {
+      toast.success('Registro exitoso, debe confirmar su cuenta, revise su bandeja de entrada.');
+
+    }
+  }
+
+  const registerProductionStudio = async (directors, formData) => {
+    try {
+      const companyResult = await ApiService.post(`/company/production-studio`, {
+        "comercialName": formData.companyName,
+        "legalName": formData.legalName,
+        "name": formData.name,
+        "lastname": formData.lastName,
+        "jobPosition": formData.jobTitle,
+        "email": formData.email,
+        "password": formData.password,
+        "nationalIdentifierOrRFC": formData.rfc,
+        "fundingYear": formData.anio ? Number(formData.anio) : null,
+        "certificationId": formData.idCertificacion,
+        "instagramUrl": formData.linkInstagram,
+        "facebookUrl": formData.linkFacebook,
+        "linkedinUrl": formData.linkLinkedin,
+        "webUrl": formData.linkPaginaWeb
+      })
+
+      const productionStudioId = companyResult?.data?.content?.company?.id
+
+      if (directors.length > 0 && productionStudioId)
+        for (const value of directors) {
+          const representation = value.typeRepresentative == 1 ? 'freelance' : value.typeRepresentative == 2 ? 'represented' : 'co-represented'
+          await ApiService.post(`/director/${productionStudioId}`, {
+            "name": value.name,
+            "lastname": value.lastName,
+            "nationality": value.nationality,
+            "birthDate": value.birthYear,
+            "isMexicanResident": value.residesInMexico,
+            "representation": representation,
+          })
         }
-      });
+
+      toast.success('Registro exitoso, debe confirmar su cuenta, revise su bandeja de entrada.');
+    } catch (error: any) {
+      if (error.status === 400)
+        error.response?.data?.message.forEach((value: any) => toast.error(value))
+      if (error.status === 409)
+        toast.error(error.response?.data?.clientMessage)
+      return;
+    }
+  }
+  const handleConfirm = () => {
+    const existsFormData = localStorage.getItem('formData')
+    const type = localStorage.getItem('type')
+    const existsDirectors = localStorage.getItem('directors')
+    if (existsFormData) {
+      const formData = JSON.parse(existsFormData)
+
+      const directors = existsDirectors ? JSON.parse(existsDirectors) : []
+      if (paymentDetails?.id)
+        verifyPayment(paymentDetails?.id, formData.email, plan_id as string).then((data) => {
+          if (data?.status === "COMPLETED") {
+            toast.success("El pago se ha confirmado satisfactoriamente.");
+            setTimeout(() => {
+              if (type === CompanyType.ProductionStudio) {
+                registerProductionStudio(directors, formData)
+              } else {
+                if (type)
+                  registerAnuncerOrAgency(type, formData)
+              }
+              router.push('/login');
+            }, 1500);
+          }
+        });
+    }
   };
 
-  const [currentUser, setCurrentUser] = useState<IUser | null>(null);
 
   const [plan, setPlan] = useState<IPlan | null>(null);
   const { plan_id } = router.query;
@@ -44,9 +112,9 @@ const Confirmacion = () => {
       setPlan(data)
       console.log(data)
     });
-    getCurrentUser().then((data: IUser) => {
-      setCurrentUser(data);
-    });
+    // getCurrentUser().then((data: IUser) => {
+    // setCurrentUser(data);
+    // });
   }, [plan_id]);
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -58,9 +126,9 @@ const Confirmacion = () => {
         </div>
         <CardContent className="p-6 text-center">
           <p className="mb-4 text-lg font-semibold text-gray-700">
-            Gracias, {currentUser?.name} {currentUser?.lastname}!
+            Gracias, vas a comprar el plan {plan?.title}
           </p>
-          <p className="mb-4 text-lg text-gray-600">Estas comprando <b>{plan?.credits} créditos </b></p>
+          <p className="mb-4 text-lg text-gray-600">Estas comprando <b>{plan?.maxUsers} usuarios adicionales. </b></p>
           <p className="mb-4 text-lg text-gray-600">Monto a pagar: $ {plan?.price} MXN</p>
 
           {paymentProcessed ? (
@@ -99,10 +167,12 @@ const Confirmacion = () => {
               </Button>
             </div>
           ) : (
-            <PayPalButton
-              amount={amount as string}
-              onPaymentSuccess={handlePaymentSuccess}
-            />
+            plan && (
+              <PayPalButton
+                amount={String(plan?.price)}
+                onPaymentSuccess={handlePaymentSuccess}
+              />
+            )
           )}
         </CardContent>
       </Card>

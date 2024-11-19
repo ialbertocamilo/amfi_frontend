@@ -1,6 +1,5 @@
 import {getActivePlans} from '@/api/planApi';
 import Plan from '../components/Plan';
-import AuthGuard from "@/components/AuthGuard";
 import {useEffect, useState} from 'react';
 import {PlanEntity} from "@/pages/editar-planes";
 import './globals.css'
@@ -33,7 +32,6 @@ export default function Home() {
     }, []);
 
     return (
-        <AuthGuard>
             <div className="container mx-auto p-10">
                 <div className="flex items-center justify-center h-32 text-white mb-8">
                     <img src="amfi-large.png" alt="Description" className="object-contain w-24 h-24"/>
@@ -56,6 +54,5 @@ export default function Home() {
                     ))}
                 </div>
             </div>
-        </AuthGuard>
     );
 }
