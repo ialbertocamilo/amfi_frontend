@@ -12,6 +12,7 @@ export interface InvitedDirector {
     project: ProductionHouse;
     director: Director;
     productionHouse: ProductionHouse;
+    evaluation: Evaluation | null;
 }
 
 export interface ProjectInvitation {
@@ -81,3 +82,31 @@ export interface ProductionHouse {
     updatedAt: string;
     maxUsers: number;
 }
+
+export interface Evaluation {
+    // Creative Proposal (Scale 1-5)
+    uniquenessLevel: number;
+    productionQuality: number;
+    originality: number;
+    messageClarity: number;
+    relevance: number;
+    structureType: number;
+    creativity: number;
+    visualImpact: number;
+    innovation: number;
+    technicalExecution: number;
+    // Company (Boolean)
+    hasPreviousExperienceWithProductionCompany: boolean;
+    companyLegallyEstablished: boolean;
+    companyHasRelevantProjects: boolean;
+    companyTaxCompliance: boolean;
+    // Support (Boolean)
+    companyAffiliatedWithAssociation: boolean;
+    negativeReportsExist: boolean;
+    companyHasMoreThanXYearsInMarket: boolean;
+    goodSocialMediaReputation: boolean;
+    // Director (Boolean)
+    hasPreviousExperienceWithDirector: boolean;
+    isYoungTalent: boolean;
+    reelContainsRelevantPieces: boolean;
+  }
