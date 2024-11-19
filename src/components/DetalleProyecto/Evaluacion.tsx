@@ -1,62 +1,152 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import StarRating from "../Commons/StarRating/StarRating";
 import BinaryChoice from "../Commons/BinaryChoice/BinaryChoice";
 import PercentageSelector from "../Commons/PercentageSelector/PercentageSelector";
 import InfoLink from "../Commons/InfoLink/InfoLink";
+import { Evaluation } from "@/api/interface/api.interface";
 
-const creativeProposal = [
-  "Nivel de singularidad",
-  "Tipo de estructura",
-  "Calidad de producción",
-  "Creatividad",
-  "Originalidad",
-  "Impacto visual",
-  "Claridad del mensaje",
-  "Innovación",
-  "Relevancia",
-  "Ejecución técnica",
-];
+interface ProposalItem {
+  key: string;
+  label: string;
+  value: number;
+}
 
-const questionsEmpresa = [
-  "¿Se tiene experiencia previa con la productora?",
-  "¿La empresa está constituida legalmente?",
-  "¿La empresa tiene proyectos relevantes para la licitación?",
-  "¿La empresa está ordenada en materia fiscal?",
-];
-const questionsEmpresaStartIndex = creativeProposal.length;
+interface QuestionItem {
+  key: string;
+  label: string;
+  value: boolean | null;
+}
 
-const questionsRespaldo = [
-  "¿La empresa está afiliada a alguna asociación?",
-  "¿Cuántos años en el mercado tiene la empresa?",
-  "¿Se tienen algún reporte negativo de la empresa?",
-  "¿La empresa cuenta con buena reputación en RRSS?",
-];
-const questionsRespaldoStartIndex =
-  creativeProposal.length + questionsEmpresa.length;
+interface EvaluacionProps {
+  evaluation: Evaluation | null;
+  showComponent: (componentName: "list" | "evaluation" | "comparison") => void;
+}
 
-const questionsDirector = [
-  "¿Se tiene experiencia previa con el director?",
-  "¿Es talento joven? (menos 2 años en el mercado)",
-  "¿El reel contiene piezas relevantes para el proyecto?",
-];
-const questionsDirectorStartIndex =
-  creativeProposal.length + questionsEmpresa.length + questionsRespaldo.length;
-
-
-
-
-const Evaluacion: React.FC<{ invitationId:string | null, showComponent: (componentName: "list" | "evaluation" | "comparison") => void; }> = ({
+const Evaluacion: React.FC<EvaluacionProps> = ({
+  evaluation,
   showComponent,
 }) => {
+  const [creativeProposal, setCreativeProposal] = useState<ProposalItem[]>([
+    { key: "uniquenessLevel", label: "Nivel de singularidad", value: 0 },
+    { key: "structureType", label: "Tipo de estructura", value: 0 },
+    { key: "productionQuality", label: "Calidad de producción", value: 0 },
+    { key: "creativity", label: "Creatividad", value: 0 },
+    { key: "originality", label: "Originalidad", value: 0 },
+    { key: "visualImpact", label: "Impacto visual", value: 0 },
+    { key: "messageClarity", label: "Claridad del mensaje", value: 0 },
+    { key: "innovation", label: "Innovación", value: 0 },
+    { key: "relevance", label: "Relevancia", value: 0 },
+    { key: "technicalExecution", label: "Ejecución técnica", value: 0 },
+  ]);
+
+  const [questionsEmpresa, setQuestionsEmpresa] = useState<QuestionItem[]>([
+    {
+      key: "hasPreviousExperienceWithProductionCompany",
+      label: "¿Se tiene experiencia previa con la productora?",
+      value: null,
+    },
+    {
+      key: "companyLegallyEstablished",
+      label: "¿La empresa está constituida legalmente?",
+      value: null,
+    },
+    {
+      key: "companyHasRelevantProjects",
+      label: "¿La empresa tiene proyectos relevantes para la licitación?",
+      value: null,
+    },
+    {
+      key: "companyTaxCompliance",
+      label: "¿La empresa está ordenada en materia fiscal?",
+      value: null,
+    },
+  ]);
+
+  const [questionsRespaldo, setQuestionsRespaldo] = useState<QuestionItem[]>([
+    {
+      key: "companyAffiliatedWithAssociation",
+      label: "¿La empresa está afiliada a alguna asociación?",
+      value: null,
+    },
+    {
+      key: "companyYearsInMarket",
+      label: "¿Cuántos años en el mercado tiene la empresa?",
+      value: null,
+    },
+    {
+      key: "negativeReportsExist",
+      label: "¿Se tienen algún reporte negativo de la empresa?",
+      value: null,
+    },
+    {
+      key: "goodSocialMediaReputation",
+      label: "¿La empresa cuenta con buena reputación en RRSS?",
+      value: null,
+    },
+  ]);
+
+  const [questionsDirector, setQuestionsDirector] = useState<QuestionItem[]>([
+    {
+      key: "hasPreviousExperienceWithDirector",
+      label: "¿Se tiene experiencia previa con el director?",
+      value: null,
+    },
+    {
+      key: "isYoungTalent",
+      label: "¿Es talento joven? (menos 2 años en el mercado)",
+      value: null,
+    },
+    {
+      key: "reelContainsRelevantPieces",
+      label: "¿El reel contiene piezas relevantes para el proyecto?",
+      value: null,
+    },
+  ]);
+
+  const questionsEmpresaStartIndex = creativeProposal.length;
+  const questionsRespaldoStartIndex =
+    creativeProposal.length + questionsEmpresa.length;
+  const questionsDirectorStartIndex =
+    creativeProposal.length +
+    questionsEmpresa.length +
+    questionsRespaldo.length;
+
+  const [hideSection, setHideSection] = useState(true);
+
   const [ratings, setRatings] = useState(
     Array(creativeProposal.length).fill(0)
   );
+
   const [porcentajeProduestaCreativa, setPorcentajeProduestaCreativa] =
-    useState(0);
-  const [porcentajeExpereiencia, setPorcentajeExpereiencia] = useState(0);
+    useState(40);
   const [answers, setAnswers] = useState(
     Array(creativeProposal.length).fill("")
   );
+
+  const updateEvaluation = (
+    proposal: ProposalItem[] | QuestionItem[],
+    evaluation: Evaluation
+  ) => {
+    return proposal.map((item) => ({
+      ...item,
+      value:
+        evaluation[item.key] !== undefined ? evaluation[item.key] : item.value,
+    }));
+  };
+
+  const onInit = async () => {
+    if (evaluation) {
+      setCreativeProposal(updateEvaluation(creativeProposal, evaluation));
+      setQuestionsEmpresa(updateEvaluation(questionsEmpresa, evaluation));
+      setQuestionsRespaldo(updateEvaluation(questionsRespaldo, evaluation));
+      setQuestionsDirector(updateEvaluation(questionsDirector, evaluation));
+    }
+  };
+
+  useEffect(() => {
+    onInit();
+  }, [evaluation]);
 
   const handleAnswerChange = (index: number, answer: string) => {
     const newAnswers = [...answers];
@@ -76,12 +166,6 @@ const Evaluacion: React.FC<{ invitationId:string | null, showComponent: (compone
     setPorcentajeProduestaCreativa(Number(e.target.value));
   };
 
-  const handlePercentageChangeExperiencia = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setPorcentajeExpereiencia(Number(e.target.value));
-  };
-
   return (
     <div className="mt-6 p-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl shadow-md space-y-6 px-4 lg:px-8">
       {/* Evaluación */}
@@ -96,6 +180,7 @@ const Evaluacion: React.FC<{ invitationId:string | null, showComponent: (compone
             <PercentageSelector
               label="Propuesta creativa"
               value={porcentajeProduestaCreativa}
+              startRange={30}
               onChange={handlePercentageChange}
             ></PercentageSelector>
             <InfoLink label="Ver puntaje de sección"></InfoLink>
@@ -105,8 +190,8 @@ const Evaluacion: React.FC<{ invitationId:string | null, showComponent: (compone
             {creativeProposal.map((question, index) => (
               <div key={index}>
                 <StarRating
-                  label={question}
-                  value={ratings[index]}
+                  label={question.label}
+                  value={question.value}
                   max={5}
                   onChange={(value: number) => handleRatingChange(index, value)}
                 />
@@ -120,7 +205,8 @@ const Evaluacion: React.FC<{ invitationId:string | null, showComponent: (compone
           <div className="border-b flex justify-between items-center pb-3">
             <PercentageSelector
               label="Experiencia"
-              value={porcentajeProduestaCreativa}
+              blocked={true}
+              value={20}
               onChange={handlePercentageChange}
             ></PercentageSelector>
             <InfoLink label="Ver puntaje de sección"></InfoLink>
@@ -132,9 +218,9 @@ const Evaluacion: React.FC<{ invitationId:string | null, showComponent: (compone
               {questionsEmpresa.map((question, index) => (
                 <div key={index + questionsEmpresaStartIndex}>
                   <BinaryChoice
-                    label={question}
+                    label={question.label}
                     index={index + questionsEmpresaStartIndex}
-                    answer={answers[index + questionsEmpresaStartIndex]}
+                    answer={question.value}
                     handleAnswerChange={handleAnswerChange}
                   ></BinaryChoice>
                 </div>
@@ -149,9 +235,9 @@ const Evaluacion: React.FC<{ invitationId:string | null, showComponent: (compone
               {questionsRespaldo.map((question, index) => (
                 <div key={index + questionsRespaldoStartIndex}>
                   <BinaryChoice
-                    label={question}
+                    label={question.label}
                     index={index + questionsRespaldoStartIndex}
-                    answer={answers[index + questionsRespaldoStartIndex]}
+                    answer={question.value}
                     handleAnswerChange={handleAnswerChange}
                   ></BinaryChoice>
                 </div>
@@ -167,9 +253,9 @@ const Evaluacion: React.FC<{ invitationId:string | null, showComponent: (compone
               {questionsDirector.map((question, index) => (
                 <div key={index + questionsDirectorStartIndex}>
                   <BinaryChoice
-                    label={question}
+                    label={question.label}
                     index={index + questionsDirectorStartIndex}
-                    answer={answers[index + questionsDirectorStartIndex]}
+                    answer={question.value}
                     handleAnswerChange={handleAnswerChange}
                   ></BinaryChoice>
                 </div>
@@ -179,7 +265,27 @@ const Evaluacion: React.FC<{ invitationId:string | null, showComponent: (compone
         </div>
         {/* Presupuesto */}
         <div>
-          <h4 className="border-b font-bold pb-3">Presupuesto</h4>
+          <div className="border-b flex justify-between items-center pb-3">
+            <div className="flex items-center">
+              <PercentageSelector
+                label="Presupuesto"
+                blocked={true}
+                hide={hideSection}
+                value={80 - porcentajeProduestaCreativa}
+                onChange={handlePercentageChange}
+              ></PercentageSelector>
+              <div className="pl-5  flex justify-between items-center">
+                {hideSection ? <FiEyeOff></FiEyeOff> : <FiEye></FiEye>}
+                <div
+                  className="pl-2 text-base font-semibold hover:underline"
+                  onClick={() => setHideSection(!hideSection)}
+                >
+                  {hideSection ? "Desbloquear sección" : "Ocultar sección"}
+                </div>
+              </div>
+            </div>
+            <InfoLink label="Ver puntaje de sección"></InfoLink>
+          </div>
           <div className="mt-4">
             <div className="flex justify-center">
               <img

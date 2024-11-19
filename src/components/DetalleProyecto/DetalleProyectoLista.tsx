@@ -15,7 +15,7 @@ import toast from "react-hot-toast";
 import Evaluacion from "./Evaluacion";
 import ListadoInvitaciones from "./ListadoInvitaciones";
 import Comparacion from "./Comparacion";
-import { InvitedDirectorsResponse } from "@/api/interface/api.interface";
+import { Evaluation, InvitedDirectorsResponse } from "@/api/interface/api.interface";
 
 interface ProjectDetailsProps {
   id: string;
@@ -32,7 +32,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
       result: [{}],
       message: "",
     } as any);
-  const [invitationId, setInvitationId] = useState<string | null>(null);
+  const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
 
   const [formData, setFormData] = useState({
     anunciante: "",
@@ -190,7 +190,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
         {showListadoInvitaciones ? (
           <ListadoInvitaciones
             invitationData={invitationData!}
-            setInvitationId={setInvitationId}
+            setEvaluation={setEvaluation}
             showComponent={showComponent}
             formData={formData}
             handleItemClick={handleItemClick}
@@ -202,7 +202,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
         )}
         {showEvaluacion ? (
           <Evaluacion
-            invitationId={invitationId}
+            evaluation={evaluation}
             showComponent={showComponent}
           ></Evaluacion>
         ) : (
