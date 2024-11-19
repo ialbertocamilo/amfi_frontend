@@ -29,7 +29,7 @@ const NewUserPage = () => {
 
         setLoading(true);
 
-        sendInvitationEmail({email, name: `${firstName} ${lastName}`}).then((data) => {
+        sendInvitationEmail({email, name: firstName,lastname: lastName}).then((data) => {
             if (!data) return
             else
                 setTimeout(() => {

@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import {FaCheck, FaExclamationCircle} from 'react-icons/fa';
 import '../app/globals.css';
 import RegistroProductora2 from '../components/registroProductora2';
+import createCompanyUser from "@/api/companyApi";
 
 export interface Director {
     id: string | null;
@@ -99,9 +100,7 @@ const Register = () => {
     const [canSend, setCanSend] = useState(false)
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        setTimeout(()=>{
-            router.push('/login')
-        },2000)
+
     };
 
     const changeTab = (tab: string) => {
@@ -150,84 +149,76 @@ const Register = () => {
 
     const registrar = async () => {
 
-        if (activeTab == 'agencia') {
-            if (!validateForm()) return;
+        try {
+            if (activeTab == 'agencia') {
+                if (!validateForm()) return;
 
-            if (!type) {
-                toast.error('Debe seleccionar el tipo: Agencia o Anunciante')
-                return
-            }
-            try {
-                await api.post(`/company/${type}`, {
-                    "comercialName": formData.companyName,
-                    "legalName": formData.legalName,
-                    "name": formData.name,
-                    "lastname": formData.lastName,
-                    "jobPosition": formData.jobTitle,
-                    "email": formData.email,
-                    "password": formData.password
-                })
-                toast.success('Registro exitoso, debe confirmar su cuenta, revise su bandeja de entrada.');
-                emptyFormData();
-                setTimeout(() => {
-                    router.push('/login');
-                }, 2000);
-            } catch (error: any) {
-                console.error("Registration error:", error);
-                if (error.status === 400)
-                    error.response?.data?.message.forEach((value: any) => toast.error(value))
-                if (error.status === 409)
-                    toast.error(error.response?.data?.clientMessage)
-            }
-        } else {
-            if (!formData.termsAccepted) {
-                toast.error('Debe aceptar los términos y condiciones');
-                return false;
-            }
-            try {
-                const companyResult = await api.post(`/company/production-studio`, {
-                    "comercialName": formData.companyName,
-                    "legalName": formData.legalName,
-                    "name": formData.name,
-                    "lastname": formData.lastName,
-                    "jobPosition": formData.jobTitle,
-                    "email": formData.email,
-                    "password": formData.password,
-                    "nationalIdentifierOrRFC": formData.rfc,
-                    "fundingYear": formData.anio ? Number(formData.anio) : null,
-                    "certificationId": formData.idCertificacion,
-                    "instagramUrl": formData.linkInstagram,
-                    "facebookUrl": formData.linkFacebook,
-                    "linkedinUrl": formData.linkLinkedin,
-                    "webUrl": formData.linkPaginaWeb
-                })
+                if (!type) {
+                    toast.error('Debe seleccionar el tipo: Agencia o Anunciante')
+                    return
+                }
+                const response = await createCompanyUser(type, formData)
+                if (response) {
+                    toast.success('Registro exitoso, debe confirmar su cuenta, revise su bandeja de entrada.');
+                    emptyFormData();
+                    setTimeout(() => {
+                        router.push('/login');
+                    }, 2000);
+                }
+            } else {
+                if (!formData.termsAccepted) {
+                    toast.error('Debe aceptar los términos y condiciones');
+                    return false;
+                }
+                try {
+                    const companyResult = await api.post(`/company/production-studio`, {
+                        "comercialName": formData.companyName,
+                        "legalName": formData.legalName,
+                        "name": formData.name,
+                        "lastname": formData.lastName,
+                        "jobPosition": formData.jobTitle,
+                        "email": formData.email,
+                        "password": formData.password,
+                        "nationalIdentifierOrRFC": formData.rfc,
+                        "fundingYear": formData.anio ? Number(formData.anio) : null,
+                        "certificationId": formData.idCertificacion,
+                        "instagramUrl": formData.linkInstagram,
+                        "facebookUrl": formData.linkFacebook,
+                        "linkedinUrl": formData.linkLinkedin,
+                        "webUrl": formData.linkPaginaWeb
+                    })
 
-                const productionStudioId = companyResult?.data?.content?.company?.id
+                    const productionStudioId = companyResult?.data?.content?.company?.id
 
-                if (directors.length > 0 && productionStudioId)
-                    for (const value of directors) {
-                        const representation = value.typeRepresentative == 1 ? 'freelance' : value.typeRepresentative == 2 ? 'represented' : 'co-represented'
-                        await api.post(`/director/${productionStudioId}`, {
-                            "name": value.name,
-                            "lastname": value.lastName,
-                            "nationality": value.nationality,
-                            "birthDate": value.birthYear,
-                            "isMexicanResident": value.residesInMexico,
-                            "representation": representation,
-                            // "startedExperienceYear": value.directionYear,
-                        })
-                    }
+                    if (directors.length > 0 && productionStudioId)
+                        for (const value of directors) {
+                            const representation = value.typeRepresentative == 1 ? 'freelance' : value.typeRepresentative == 2 ? 'represented' : 'co-represented'
+                            await api.post(`/director/${productionStudioId}`, {
+                                "name": value.name,
+                                "lastname": value.lastName,
+                                "nationality": value.nationality,
+                                "birthDate": value.birthYear,
+                                "isMexicanResident": value.residesInMexico,
+                                "representation": representation,
+                            })
+                        }
 
-                toast.success('Registro exitoso, debe confirmar su cuenta, revise su bandeja de entrada.');
-                emptyFormData();
-            } catch (error: any) {
-                console.error("Registration error:", error);
-                if (error.status === 400)
-                    error.response?.data?.message.forEach((value: any) => toast.error(value))
-                if (error.status === 409)
-                    toast.error(error.response?.data?.clientMessage)
-                return ;
+                    toast.success('Registro exitoso, debe confirmar su cuenta, revise su bandeja de entrada.');
+                    emptyFormData();
+                    setTimeout(() => {
+                        router.push('/login');
+                    }, 2000);
+                } catch (error: any) {
+                    if (error.status === 400)
+                        error.response?.data?.message.forEach((value: any) => toast.error(value))
+                    if (error.status === 409)
+                        toast.error(error.response?.data?.clientMessage)
+                    return;
+                }
             }
+        } catch (error: any) {
+            console.error("Unexpected error:", error);
+            toast.error('Ocurrió un error inesperado');
         }
 
     }
@@ -235,7 +226,7 @@ const Register = () => {
 
     return (
         <div className="flex flex-col md:flex-row">
-            <div className="flex-1 flex items-center justify-center bg-gray-800 ">
+            <div className="flex-1 flex items-center justify-center bg-gray-800">
                 <img src="/camera-setup.png" alt="Camera setup" className="w-full h-full "/>
             </div>
             <div className="flex-1 flex flex-col items-center justify-center p-8">
@@ -325,8 +316,14 @@ const Register = () => {
                                 <label htmlFor="termsAccepted" className="text-gray-700">He leído y acepto los términos
                                     y condiciones.</label>
                             </div>
-                            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded"
+                            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded mb-4"
                                     onClick={() => registrar()}>Registrarme
+                            </button>
+
+                            <button type="button"
+                                    className="w-full text-red-500 py-2 rounded"
+                                    onClick={() => router.push('/login')}>
+                                Ir a Login
                             </button>
                         </form>
                     )}

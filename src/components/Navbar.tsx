@@ -8,17 +8,18 @@ import {signOut} from "@/api/authenticationApi";
 
 const Navbar: React.FC = () => {
 
-    const [user, setUser] = useState({name: '', lastname: '', company: {type: ''}, role: ''})
+    const [user, setUser] = useState({name: '', lastname: '', company: {type: '', name: ''}, role: ''})
     const [type, setType] = useState('')
 
+    const [company, setCompany] = useState('')
     useEffect(() => {
         const user = storage('user').get()
-        console.log(user);
-        
         if (user) setUser(user)
+        console.log(user.role)
         const companyType = UserMapper.mapCompanyType(user?.company?.type)
-        const role = UserMapper.mapRole(user?.user?.role)
-        setType(role + ' - ' + companyType)
+        const role = UserMapper.mapRole(user?.role)
+        setType('Rol: '+ role )
+        setCompany(companyType)
     }, []);
     const logout = async () => {
         await signOut()
@@ -35,8 +36,8 @@ const Navbar: React.FC = () => {
                     </span>
                     <Menu.Button
                         className="inline-flex justify-center rounded-md border border-gray-100 shadow-sm px-4 py-2 bg-g text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 whitespace-nowrap">
-                        {user?.name} {user?.lastname}
-                        
+                        {user?.name}  {user?.lastname}
+
                     </Menu.Button>
                 </div>
                 <Transition
@@ -52,15 +53,25 @@ const Navbar: React.FC = () => {
                         className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <div className="py-1 ">
                             <Menu.Item>
-                                {({active}) => (
-                                    <span
-                                        className={`${active ? 'bg-gray-100 text-gray-900 font-bold' : 'text-gray-700 font-bold'
-                                        } block px-4 py-2 text-sm`}
-                                    >
+                            {({active}) => (
+                                <span
+                                    className={`${active ? 'bg-gray-100 text-gray-900 font-bold' : 'text-gray-700 font-bold'
+                                    } block px-4 py-2 text-sm`}
+                                >
                                         {type}
                                     </span>
-                                )}
-                            </Menu.Item>
+                            )}
+                        </Menu.Item>
+                            <Menu.Item>
+                            {({active}) => (
+                                <span
+                                    className={`${active ? 'bg-gray-100 text-gray-900 font-bold' : 'text-gray-700 font-bold'
+                                    } block px-4 py-2 text-sm`}
+                                >
+                                        {company} {user?.company?.name}
+                                    </span>
+                            )}
+                        </Menu.Item>
                             <Menu.Item>
                                 {({active}) => (
                                     <a

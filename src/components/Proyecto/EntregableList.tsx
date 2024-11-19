@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import AddEntregableModal from './AddEntregableModal ';
-
+import AddEntregableModal from "@/components/Proyecto/AddEntregableModal ";
 
 interface inputEntity {
     entregablesIni: any[];
@@ -15,25 +14,33 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesIni }) => {
     useEffect(() => {
         setEntregables(entregablesIni);
     }, [entregablesIni]);
-    const handleEdit = (entregable: any, index:number) => {
-        entregable.id = index;
-        setCurrentEntregable(entregable);
-        setIndexId(index?.toString());
+
+    const handleEdit = (entregable: any, index: number) => {
+        setCurrentEntregable({ ...entregable, id: index });
+        setIndexId(index.toString());
         setIsModalOpen(true);
     };
 
     const handleDelete = (index: number) => {
-        setEntregables(entregables.filter((_, i) => i !== index));
+        const updatedEntregables = entregables.filter((_, i) => i !== index);
+        setEntregables(updatedEntregables);
+    };
+
+    const handleAddEntregable = (newEntregable: any) => {
+        setEntregables(prevEntregables => [...prevEntregables, newEntregable]);
+        setIsModalOpen(false);
     };
 
     const handleUpdateEntregable = (updatedEntregable: any) => {
-
-        setEntregables(entregables.map((entregable,index) => index.toString() == indexId ? updatedEntregable : entregable));
+        const updatedEntregables = entregables.map((entregable, index) =>
+            index.toString() === indexId ? updatedEntregable : entregable
+        );
+        setEntregables(updatedEntregables);
         setIsModalOpen(false);
     };
 
     return (
-        <div style={{ width: '300px', margin: 'auto', border: '1px solid #ccc', padding: '10px' }}>
+        <div className="w-72 border border-gray-300 p-2.5 w-full">
             <ul style={{ listStyleType: 'none', padding: 0 }}>
                 {entregables.map((entregable, index) => (
                     <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
@@ -49,9 +56,9 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesIni }) => {
                     </li>
                 ))}
             </ul>
-            {currentEntregable && (
+            {isModalOpen && (
                 <AddEntregableModal
-                    onAdd={null}
+                    onAdd={handleAddEntregable}
                     entregable={currentEntregable}
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}

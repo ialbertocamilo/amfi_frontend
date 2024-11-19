@@ -8,8 +8,8 @@ import ProyectoSteep5 from "@/components/Proyecto/ProyectoSteep5";
 import {useRouter} from "next/router";
 import Layout from "@/components/Layout";
 import useProject from "@/hooks/project.hook";
-import {CreateProjectDto} from "../dto/create-project.dto";
-import { UpdateProjectDto } from "../dto/update-project.dto";
+import {CreateProjectDto} from "@/dto/create-project.dto";
+import {UpdateProjectDto} from "@/dto/update-project.dto";
 import ProyectCreated from "@/components/Proyecto/ProjectCreated";
 import {ProjectStatus} from "@/mappers/project.mapper";
 

@@ -8,6 +8,7 @@ export enum Role {
 
 export class UserMapper{
     static mapRole(role: string): string {
+        console.log(role)
         switch (role) {
             case Role.Superadmin:
                 return 'Administrador';

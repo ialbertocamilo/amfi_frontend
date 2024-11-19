@@ -27,13 +27,15 @@ class ApiService {
             ApiService.instance.interceptors.response.use(
                 (response) => response,
                 (error) => {
-                     if (error?.code === "ERR_NETWORK") {
+                    if (error?.code === "ERR_NETWORK") {
                         toast.error('Ocurrió un error al establecer conexión con el servidor, intente nuevamente.');
-                    } else if (error?.response?.status == 500) {
+                    } else if (error?.response?.status === 500) {
                         toast.error('Ocurrió un error no controlado, comuníquese con soporte.');
-                    } else if (error?.status ==401){
-                        toast.error('Sesión expirada, por favor inicie sesión nuevamente.');    
+                    } else if (error?.response?.status === 401) {
+                        toast.error('Sesión expirada, por favor inicie sesión nuevamente.');
                         location.href = "/login";
+                    } else if (error?.response?.status === 400) {
+                        toast.error('Solicitud incorrecta, por favor verifique los datos ingresados.');
                     }
                     return Promise.reject(error);
                 },

@@ -8,22 +8,22 @@ const VerifyEmail: React.FC = () => {
     const [isValid, setIsValid] = useState<boolean | null>(null);
     const router = useRouter();
 
+    const {token} = router.query;
+    const verifyToken = async () => {
+        try {
+            const response = await api.get('/auth/check-token', {
+                params: {token}
+            });
+            setIsValid(response.data?.content?.status);
+        } catch (error: any) {
+            console.error('Token verification error:', error);
+            toast.error('Error verifying token');
+            setIsValid(false);
+        }
+    };
     useEffect(() => {
-        const {token} = router.query;
 
         if (token) {
-            const verifyToken = async () => {
-                try {
-                    const response = await api.get('/auth/check-token', {
-                        params: {token}
-                    });
-                    setIsValid(response.data?.content?.status);
-                } catch (error: any) {
-                    console.error('Token verification error:', error);
-                    toast.error('Error verifying token');
-                    setIsValid(false);
-                }
-            };
 
             verifyToken();
         } else {

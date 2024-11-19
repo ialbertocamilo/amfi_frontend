@@ -49,3 +49,15 @@ export const signOut = async () => {
         toast.error(error?.response?.data?.message || 'Error when logging out');
     }
 };
+
+export const createNewPassword = async (token: string, password: string) => {
+    try {
+        const response = await api.post(`/auth/new-password/${token}`, {
+            password
+        });
+        return response.data;
+    } catch (error:any) {
+        toast.error(error?.response?.data?.message || 'Error when creating new password')
+        return false
+    }
+}
