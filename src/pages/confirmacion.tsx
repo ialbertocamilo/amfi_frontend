@@ -82,7 +82,6 @@ const Confirmacion = () => {
     const existsDirectors = localStorage.getItem('directors')
     if (existsFormData) {
       const formData = JSON.parse(existsFormData)
-
       const directors = existsDirectors ? JSON.parse(existsDirectors) : []
       if (paymentDetails?.id)
         verifyPayment(paymentDetails?.id, formData.email, plan_id as string).then((data) => {
