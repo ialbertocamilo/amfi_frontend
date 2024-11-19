@@ -3,6 +3,7 @@ import { IDirector } from "@/interfaces/director.interface";
 import { IProject } from "@/interfaces/project.interface";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
+import {CheckProjectInvitationStatusResponse} from "@/interfaces/project-director.interface";
 
 export interface IPostulationData{
     project: IProject;
@@ -28,3 +29,15 @@ export const decodeInvitationToken = async (token: string) => {
         return null
     }
 };
+
+
+
+export const checkInvitationStatus = async (projectId:string)=>{
+    try {
+        const response = await api.get(`/project-director/check-invitation-status/${projectId}`);
+        return response.data as CheckProjectInvitationStatusResponse;
+    } catch (error: any) {
+        toast.error('Error al obtener el estado de la invitación');
+        return null
+    }
+}

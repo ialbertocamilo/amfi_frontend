@@ -13,6 +13,8 @@ import PostulacionSteep2 from "@/components/Postulacion/PostulacionSteep2";
 import PostulacionSteep3 from "@/components/Postulacion/PostulacionSteep3";
 import PostulacionSteep4 from "@/components/Postulacion/PostulacionSteep4";
 import PostulacionConfirmacionFinal from "@/components/Postulacion/PostulacionConfirmacionFinal";
+import Layout from "@/components/Layout";
+import {checkInvitationStatus} from "@/api/postulationApi";
 
 const PostulacionProceso: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -81,14 +83,16 @@ const PostulacionProceso: React.FC = () => {
     },
   });
   const router = useRouter();
-  const { id } = router.query;
+  const { projectId } = router.query;
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
+  useEffect(() => {
+    if (projectId)
+    checkInvitationStatus(projectId as string).then((response) => {
+      if (!response) {
+        router.push('/404');
+      }
+    })
+  }, [projectId]);
   const [activeTab, setActiveTab] = useState<string>('1');
 
 
@@ -105,22 +109,9 @@ const PostulacionProceso: React.FC = () => {
   };
 
   return (
-    <div className="flex  bg-gray-100">
-      <div className={`fixed inset-0 z-30 transition-transform transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 md:${isSidebarOpen ? 'block' : 'hidden'}`}>
-        <Sidebar />
-      </div>
-      <div className="flex-1 flex flex-col">
-        <div className="flex items-center justify-between p-4 bg-white shadow-md">
-          <button
-            className="p-2 focus:outline-none focus:bg-gray-200 z-40"
-            onClick={toggleSidebar}
-          >
-            <FaBars className="w-6 h-6" />
-          </button>
-          <Navbar />
-        </div>
-        <div className="space-y-8 p-4">
-          <h1 className="text-2xl font-bold mb-6 space-y-4">Proyecto</h1>
+      <Layout>
+        <div className="">
+          <h1 className="text-2xl font-bold mb-6 ">Proyecto</h1>
           <div className="text-sm text-gray-500 mb-8">
             <span>Lista de Proyectos</span> {">"} <span>Nuevo Leon</span> {">"} <span>Postular</span>
           </div>
@@ -149,8 +140,7 @@ const PostulacionProceso: React.FC = () => {
 
 
         </div>
-      </div>
-    </div>
+      </Layout>
   )
 };
 
