@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import '../app/globals.css';
 import Navbar from "./Navbar";
@@ -50,9 +50,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     </button>
                     <Navbar />
                 </div>
-                <main className="flex-1 p-6 overflow-auto">
+                <main className="flex-1 p-3 overflow-auto h-screen">
                     <RecoilContextProvider>
-                        <div className="bg-white min-h-screen p-6">
+                        <div className="bg-white p-6 max-w-full">
                             {children}
                         </div>
                     </RecoilContextProvider>

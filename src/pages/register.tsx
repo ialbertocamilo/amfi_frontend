@@ -1,17 +1,17 @@
 "use client";
 
 import createCompanyUser from "@/api/companyApi";
+import { createTransaction } from "@/api/transactionApi";
 import AddDirectorModal from "@/components/AddDirectorModal ";
 import styles from "@/components/AddDirectorModal.module.css";
 import DirectorsList from '@/components/directorList';
 import ApiService from "@/lib/api";
-import {useRouter} from 'next/router';
-import {FormEvent, useState} from 'react';
+import { useRouter } from 'next/router';
+import { FormEvent, useState } from 'react';
 import toast from "react-hot-toast";
-import {FaCheck, FaExclamationCircle} from 'react-icons/fa';
+import { FaCheck, FaExclamationCircle } from 'react-icons/fa';
 import '../app/globals.css';
 import RegistroProductora2 from '../components/registroProductora2';
-import {createTransaction} from "@/api/transactionApi";
 
 export interface Director {
     id: string | null;
@@ -193,6 +193,54 @@ const Register = () => {
             }
         }
     };
+    const validateFormProductora = () => {
+        if (!formData.companyName) {
+          toast.error('El nombre comercial de la empresa es obligatorio');
+          return false;
+        }
+        if (!formData.legalName) {
+          toast.error('La razón social es obligatoria');
+          return false;
+        }
+        if (!formData.name) {
+          toast.error('El nombre es obligatorio');
+          return false;
+        }
+        if (!formData.lastName) {
+          toast.error('El apellido es obligatorio');
+          return false;
+        }
+        if (!formData.jobTitle) {
+          toast.error('El cargo o puesto es obligatorio');
+          return false;
+        }
+        if (!formData.email) {
+          toast.error('El correo electrónico es obligatorio');
+          return false;
+        }
+        if (!formData.password) {
+          toast.error('La contraseña es obligatoria');
+          return false;
+        }
+        if (formData.password.length < 6 || formData.password.length > 20) {
+          toast.error('La contraseña debe tener entre 6 y 20 caracteres');
+          return false;
+        }
+        if (!/\d/.test(formData.password)) {
+          toast.error('La contraseña debe contener al menos un número');
+          return false;
+        }
+        if (formData.password !== formData.confirmPassword) {
+          toast.error('Las contraseñas deben coincidir');
+          return false;
+        }
+        if (!formData.termsAccepted) {
+          toast.error('Debe aceptar los términos y condiciones');
+          return false;
+        }
+        return true;
+      };
+    
     const registrar = async () => {
 
         try {
@@ -204,6 +252,7 @@ const Register = () => {
                 }
                 await registerAnuncerOrAgency(type, formData)
             } else {
+                if (!validateFormProductora()) return;
                 if (!formData.termsAccepted) {
                     toast.error('Debe aceptar los términos y condiciones');
                     return false;

@@ -2,11 +2,11 @@ import { CreateDirectorDto, UpdateDirectorDto } from "@/dto/create-director.dto"
 import { CreateDirectorDTO } from "@/entities/CreateDirectorDTO";
 import api from "@/lib/api";
 import { ProjectMapper } from "@/mappers/project.mapper";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { FaExclamationCircle } from "react-icons/fa";
 import styles from "./AddDirectorModal.module.css";
 import { COUNTRIES } from "./countries/countries";
-import CountrySelector from "./countries/selector";
 
 type AddDirectorModalProps = {
   isOpen: boolean;
@@ -64,7 +64,48 @@ const AddDirectorModal2 = ({
       );
     }
   }, [name, lastName, birthYear, nationality]);
+  const validateFields = () => {
+    if (!name) {
+      toast.error('El nombre es obligatorio');
+      return false;
+    }
+    if (!lastName) {
+      toast.error('El apellido es obligatorio');
+      return false;
+    }
+    if (!nationality) {
+      toast.error('La nacionalidad es obligatoria');
+      return false;
+    }
+    if (!birthYear) {
+      toast.error('El año de nacimiento es obligatorio');
+      return false;
+    }
+    if (!directionYear) {
+      toast.error('El año de inicio de experiencia es obligatorio');
+      return false;
+    }
+    if (!typeRepresentative) {
+      toast.error('El tipo de representación es obligatorio');
+      return false;
+    }
+    return true;
+  };
 
+  const handleSave = () => {
+    if (!validateFields()) return;
+
+    onSave({
+      name: name,
+      nationality: nationality,
+      isMexicanResident: residesInMexico,
+      birthDate: birthYear,
+      id: director?.id || undefined,
+      lastname: lastName,
+      startedExperienceYear: directionYear,
+      representation: typeRepresentative,
+    });
+  };
   useEffect(() => {
     if (director) {
       setName(director?.name || "");
@@ -215,10 +256,12 @@ const AddDirectorModal2 = ({
             <label>¿En qué año empezó a dirigir?</label>
             <input
               type="number"
-              value={directionYear}
+              value={directionYear||''}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md appearance-none no-spinner"
               onChange={(e) => setDirectionYear(Number(e.target.value))}
               placeholder="Elige el año"
             />
+            
           </div>
         </div>
         <div className={styles.modalFooter}>
@@ -232,18 +275,7 @@ const AddDirectorModal2 = ({
           )}
           <button
             className={styles.primaryButton}
-            onClick={() => {
-              onSave({
-                name: name,
-                nationality: nationality,
-                isMexicanResident: residesInMexico,
-                birthDate: birthYear,
-                id: director?.id || undefined,
-                lastname: lastName,
-                startedExperienceYear: directionYear,
-                representation: typeRepresentative,
-              });
-            }}
+            onClick={handleSave}
           >
             Aceptar
           </button>

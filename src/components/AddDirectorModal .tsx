@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import api from "@/lib/api";
+import { useEffect, useState } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
 import styles from "./AddDirectorModal.module.css";
 import { COUNTRIES } from "./countries/countries";
-import api from "@/lib/api";
 
 export interface Director {
   id: string | null;
@@ -240,10 +240,10 @@ const AddDirectorModal = ({
               <label>¿En qué año empezó a dirigir?</label>
               <input
                   type="number"
-                  value={directionYear}
+                  value={directionYear || ''}
                   onChange={(e) => setDirectionYear(e.target.value)}
                   placeholder="Elige el año"
-                  className="no-spinner"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md appearance-none no-spinner"
               />
             </div>
           </div>

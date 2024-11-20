@@ -50,18 +50,6 @@ const ActionDirectors: React.FC<ActionRoleProps> = ({id, userRole,onDelete}) => 
 
     const allActions = [
         {
-            id: "1",
-            name: Actions.view,
-            description: "Ver detalles",
-            onClick: (id: string) => router.push(`/ver-director?id=${id}`),
-        },
-        {
-            id: "2",
-            name: Actions.edit,
-            description: "Editar",
-            onClick: (id: string) => handleEdit(id),
-        },
-        {
             id: "3",
             name: Actions.delete,
             description: "Eliminar",

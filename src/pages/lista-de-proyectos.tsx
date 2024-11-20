@@ -26,19 +26,11 @@ const ListaDeProyectos = () => {
     );
 
     async function listarProyecto() {
-        const token = localStorage.getItem('token')?.replace(/"/g, '');
 
         try {
-            const response = await api.get('/project', {
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
-            });
-            setProjects(response.data);
-            console.log('projects', response.data);
-
+            const response = await api.get('/project', );
+            setProjects(response.data||[]);
         } catch (error: any) {
-            console.error("Obtencion de proyectos error error:", error);
             if (error.status === 400)
                 error.response?.data?.message.forEach((value: any) => toast.error(value))
             if (error.status === 409)
@@ -69,6 +61,9 @@ const ListaDeProyectos = () => {
             </div>
 
             <div className="space-y-4">
+                {filteredProjects.length === 0 && (
+                    <div className="text-center text-gray-500">No hay proyectos disponibles.</div>
+                )}
                 {filteredProjects.map((project, index) => (
                     <div
                         key={index}
