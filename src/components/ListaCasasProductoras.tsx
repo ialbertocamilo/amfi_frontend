@@ -86,7 +86,7 @@ const ListaCasasProductoras: React.FC<ListaCasasProductorasProps> = ({ buscar })
                 className="text-red-500 font-semibold"
                 onClick={() => toggleDetalles(index)}
               >
-                {casa.details ? "Ocultar detalle" : "Ver detalle"}
+                {casa.details ? "Ocultar directores" : "Ver directores"}
               </button>
             </div>
             {casa.details && (

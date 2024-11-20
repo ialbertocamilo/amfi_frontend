@@ -1,5 +1,4 @@
 import StepIndicator from "./StepIndicator/StepIndicator";
-import { useEffect } from "react";
 
 interface registroEntity {
     formData: any;
@@ -26,7 +25,7 @@ const ProyectoSteep2 = ({
             <form>
                 <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
                     <div className="tabs flex justify-center space-x-10">
-                        <StepIndicator activeTab={activeTab} setactiveTab={setactiveTab} />
+                        <StepIndicator activeTab={activeTab} setactiveTab={setactiveTab}/>
                     </div>
 
                     <h2 className="text-xl font-bold mb-4">Lineamientos</h2>
@@ -194,18 +193,26 @@ const ProyectoSteep2 = ({
                     <div>
                         <h2 className="text-xl font-bold mb-4">Presupuesto Target</h2>
                         <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
-                            <div>
-                                <label htmlFor="presupuesto" className="block text-sm font-medium text-gray-700">
-                                    Presupuesto
-                                </label>
+                            <div className="relative flex space-x-2">
                                 <input
                                     type="number"
                                     id="presupuesto"
                                     name="presupuesto"
-                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md appearance-none no-spinner"
                                     value={formData?.presupuesto || ''}
                                     onChange={handleChange}
                                 />
+                                <select
+                                    id="moneda"
+                                    name="moneda"
+                                    className="mt-1 block p-2 border border-gray-300 rounded-md bg-white"
+                                    value={formData?.moneda || ''}
+                                    onChange={handleChange}
+                                >
+                                    <option value="">Seleccionar</option>
+                                    <option value="mxn">MXN</option>
+                                    <option value="usd">USD</option>
+                                </select>
                             </div>
                         </div>
                     </div>

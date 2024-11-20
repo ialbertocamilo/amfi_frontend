@@ -1,7 +1,7 @@
 import { createProject, getProjectById, updateProjectById } from '@/api/projectApi';
 import { CompanyType } from '@/constants';
 import { IProject } from '@/interfaces/project.interface';
-import { useEffect, useState } from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import toast from 'react-hot-toast';
 import { CreateProjectDto } from '../dto/create-project.dto';
 import { UpdateProjectDto } from '../dto/update-project.dto';
@@ -21,7 +21,8 @@ const useProject = (projectId: string | null) => {
     }, [error]);
 
 
-    const fetchProject = async () => {
+
+    const fetchProject = useCallback(async () => {
         if (projectId === null) return;
         try {
             setLoading(true);
@@ -31,7 +32,7 @@ const useProject = (projectId: string | null) => {
             }
             const data: IProject = response;
             setProject(data);
-            setProjectJson(data?.extra)
+            setProjectJson(data?.extra);
         } catch (err: any) {
             if (err?.status === 400) err?.response?.data?.message.forEach((value: any) => toast.error(value));
             if (err?.status === 409) toast.error(err?.response?.data?.clientMessage);
@@ -40,7 +41,8 @@ const useProject = (projectId: string | null) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [projectId]);
+
     const saveOrUpdateProject = async (projectData: CreateProjectDto | UpdateProjectDto) => {
         if (projectId) {
             return await updateProject(projectData as UpdateProjectDto);

@@ -1,7 +1,7 @@
 interface BinaryChoiceProps {
   label: string;
   index: number;
-  answer: string;
+  answer: boolean | null;
   handleAnswerChange: (index: number, value: string) => void;
 }
 
@@ -20,7 +20,7 @@ const BinaryChoice = ({
             type="radio"
             name={`question-${index}`}
             value="Si"
-            checked={answer === "Si"}
+            checked={answer === true}
             onChange={() => handleAnswerChange(index, "Si")}
             className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-black checked:ring-2 checked:ring-gray-300 checked:ring-offset-2"
           />
@@ -31,7 +31,7 @@ const BinaryChoice = ({
             type="radio"
             name={`question-${index}`}
             value="No"
-            checked={answer === "No"}
+            checked={answer === false}
             onChange={() => handleAnswerChange(index, "No")}
             className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-black checked:ring-2 checked:ring-gray-300 checked:ring-offset-2"
           />

@@ -33,27 +33,20 @@ const ProyectoSteep4 = ({
         setEntregables(updatedEntregable)
 
     };
-
-
     const router= useRouter()
     const {id}=router.query
-
     const [secondaryUsers, setSecondaryUsers] = useState<IUser[]>()
-
     const [owner, setOwner] = useState('')
     useEffect(() => {
-        if (id) {
             getSecondaryUsers().then((res) => {
                 setSecondaryUsers(res)
             })
 
             getOwnerByCompany().then((res) => {
-                console.log(res)
                 if (res){
                 setOwner(res.name+' '+res.lastname)}
             })
-        }
-    }, [id]);
+    }, []);
     return (
         <div className="space-y-8 p-4">
             <h1 className="text-2xl font-bold mb-6 space-y-4">Nuevo proyecto</h1>

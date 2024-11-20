@@ -94,9 +94,10 @@ export const updateProjectStatus = async (projectId: string, status: string) => 
 export const getInvitationsByProjectId = async (
     projectId: string
   ): Promise<InvitedDirectorsResponse | null> => {
+    console.log('getInvitationsByProjectId')
     try {
       const response = await ApiService.post(
-        `/project-director/get-invited/${projectId}`,{}
+        `/project-director/get-invited/${projectId}`
       );
       return response.data;
     } catch (error: any) {

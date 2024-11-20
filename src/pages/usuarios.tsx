@@ -9,7 +9,6 @@ import {checkMaxUsers} from "@/api/companyApi";
 const Usuarios = () => {
     const headers = [
         {key: "id", label: "ID"},
-        {key: "company", label: "Empresa"},
         {key: "name", label: "Nombre"},
         {key: "registrationDate", label: "Fecha Registro"},
         {key: "type", label: "Tipo"},
