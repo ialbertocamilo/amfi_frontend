@@ -46,7 +46,8 @@ const Proyecto: React.FC = () => {
     useEffect(() => {
         if (id) {
             setReadonly(false);
-            fetchProject();}
+            fetchProject();
+        }
     }, [id]);
 
     useEffect(() => {

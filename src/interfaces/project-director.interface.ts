@@ -1,6 +1,7 @@
 import {ICompany} from "./company.interface";
 import {IDirector} from "./director.interface";
 import {IProject} from "./project.interface";
+
 export interface ProjectDirectorInvited {
     accepted: boolean;
     createdAt: string;
@@ -12,11 +13,14 @@ export interface ProjectDirectorInvited {
     proposalUploaded: boolean
 }
 
-export interface CheckProjectInvitationStatusResponse{
+export interface CheckProjectInvitationStatusResponse {
 
-    message:string;
-    result:IProject;
-    director:IDirector;
-    accepted:boolean;
-    proposalUploaded:boolean;
+    message: string;
+    result: {
+        director: IDirector;
+        accepted: boolean;
+        project: IProject;
+        proposalUploaded: boolean;
+    };
+
 }

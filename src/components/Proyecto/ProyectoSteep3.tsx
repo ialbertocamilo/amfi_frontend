@@ -78,11 +78,11 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                     archivo</label>
                                 <UploaderComponent/></div>
                             <div>
-                                <label htmlFor="link3" className="block text-sm font-medium text-gray-700">Link</label>
+                                <label htmlFor="link1" className="block text-sm font-medium text-gray-700">Link</label>
                                 <input
                                     type="url"
-                                    id="link3"
-                                    name="link3"
+                                    id="link1"
+                                    name="link1"
                                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                                     value={formData?.link1}
                                     onChange={handleChange}
@@ -96,11 +96,11 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                 <UploaderComponent/></div>
 
                             <div>
-                                <label htmlFor="link3" className="block text-sm font-medium text-gray-700">Link</label>
+                                <label htmlFor="link2" className="block text-sm font-medium text-gray-700">Link</label>
                                 <input
                                     type="url"
-                                    id="link3"
-                                    name="link3"
+                                    id="link2"
+                                    name="link2"
                                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                                     value={formData?.link2}
                                     onChange={handleChange}
@@ -126,27 +126,27 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                     onChange={handleChange}
                                 >
                                     <option value="">Seleccionar</option>
-                                    <option value="anunciante">Anunciante</option>
-                                    <option value="agenciaPublicidad">Agencia de publicidad</option>
+                                    <option value="Anunciante">Anunciante</option>
+                                    <option value="Agencia de publicidad">Agencia de publicidad</option>
                                 </select>
                             </div>
 
                             <div>
-                                <label htmlFor="momentoFacturacion" className="block text-sm font-medium text-gray-700">Momento
+                                <label htmlFor="momentoFacturacionAgencia" className="block text-sm font-medium text-gray-700">Momento
                                     de facturación de Agencia</label>
                                 <select
-                                    id="momentoFacturacion"
-                                    name="momentoFacturacion"
+                                    id="momentoFacturacionAgencia"
+                                    name="momentoFacturacionAgencia"
                                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                                    value={formData?.momentoFacturacion}
+                                    value={formData?.momentoFacturacionAgencia}
                                     onChange={handleChange}
                                 >
                                     <option value="">Seleccionar</option>
-                                    <option value="asignacion">Asignación</option>
-                                    <option value="primerDiaProduccion">1er día de prod.</option>
-                                    <option value="ct">CT</option>
-                                    <option value="entrega">Entrega</option>
-                                    <option value="posterior">Posterior</option>
+                                    <option value="Asignación">Asignación</option>
+                                    <option value="1er día de prod.">1er día de prod.</option>
+                                    <option value="CT">CT</option>
+                                    <option value="Entrega">Entrega</option>
+                                    <option value="Posterior">Posterior</option>
                                 </select>
                             </div>
 
@@ -162,14 +162,14 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                 >
                                     <option value="">Seleccionar</option>
 
-                                    <option value="0">0 dias</option>
-                                    <option value="15">15 dias</option>
-                                    <option value="30">30 dias</option>
-                                    <option value="45">45 dias</option>
-                                    <option value="60">60 dias</option>
-                                    <option value="75">75 dias</option>
-                                    <option value="90">90 dias</option>
-                                    <option value="210">210 dias</option>
+                                    <option value="0 dias">0 dias</option>
+                                    <option value="15 dias">15 dias</option>
+                                    <option value="30 dias">30 dias</option>
+                                    <option value="45 dias">45 dias</option>
+                                    <option value="60 dias">60 dias</option>
+                                    <option value="75 dias">75 dias</option>
+                                    <option value="90 dias">90 dias</option>
+                                    <option value="210 dias">210 dias</option>
                                 </select>
                             </div>
 

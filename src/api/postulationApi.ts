@@ -4,11 +4,16 @@ import { IProject } from "@/interfaces/project.interface";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
 import {CheckProjectInvitationStatusResponse} from "@/interfaces/project-director.interface";
+import ApiService from "@/lib/api";
 
 export interface IPostulationData{
     project: IProject;
     director: IDirector;
     productionHouse: ICompany;
+}
+export class CreatePostulationDto {
+    projectId: string;
+    metadata: Record<string, any>;
 }
 
 export const decodeInvitationToken = async (token: string) => {
@@ -41,3 +46,18 @@ export const checkInvitationStatus = async (projectId:string)=>{
         return null
     }
 }
+
+export const submitPostulation = async (postulation: CreatePostulationDto) => {
+  try {
+    const response = await ApiService.post('/postulation/submit', postulation);
+    toast.success('The postulation has been successfully submitted.');
+    return response.data;
+  } catch (error: any) {
+    if (error.response?.status === 400) {
+      toast.error('Bad Request');
+    } else {
+      toast.error('An error occurred while submitting the postulation.');
+    }
+    return null;
+  }
+};

@@ -22,7 +22,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose, onDelete, it
                     </button>
                 </div>
                 <div className={styles.modalBody}>
-                    <p>¿Estás seguro de que deseas eliminar {itemName} con ID: {id}?</p>
+                    <p>¿Estás seguro de que deseas eliminar el {itemName}?</p>
                 </div>
                 <div className={styles.modalFooter}>
                     <button className={styles.secondaryButton} onClick={onClose}>

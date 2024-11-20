@@ -62,9 +62,6 @@ const useProject = (projectId: string | null) => {
                 console.log('Is admin or moderator')
             }
             const response = await createProject(newProject);
-            if (!response) {
-                throw new Error('Error al guardar el proyecto');
-            }
             const data: IProject = response;
             setProject(data);
             setProjectJson(data?.extra);

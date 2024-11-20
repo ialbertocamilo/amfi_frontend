@@ -3,6 +3,7 @@ import { CreateProjectDto } from "../dto/create-project.dto";
 import { UpdateProjectDto } from "../dto/update-project.dto";
 import moment from 'moment';
 import { InvitedDirectorsResponse } from "./interface/api.interface";
+import toast from "react-hot-toast";
 
 export const getProjects = async () => {
     try {
@@ -39,8 +40,9 @@ export const createProject = async (projectData: CreateProjectDto) => {
         const response = await ApiService.post(`/project`, projectData);
         return response.data;
     } catch (error: any) {
-        console.warn('Error creating project:', error);
-        return null;
+        console.warn('Error creating project:', error?.response?.data?.message || 'Error al crear el proyecto');
+
+        throw error
     }
 };
 

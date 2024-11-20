@@ -15,7 +15,7 @@ const ListaDeProyectos = () => {
     const handleRedirect = (projectId: string) => {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         if (user?.company?.type === 'production-studio') {
-            router.push(`/postulacion?id=${projectId}`);
+            router.push(`/postulacion-proceso?projectId=${projectId}`);
         } else {
             router.push(`/proyecto?id=${projectId}`);
         }

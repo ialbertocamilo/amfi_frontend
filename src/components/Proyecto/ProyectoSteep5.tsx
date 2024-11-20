@@ -164,17 +164,17 @@ const ProyectoSteep5 = ({
           </div>
 
           {/* Revisar propuesta creativa */}
-          <div className="mt-4 flex items-center space-x-2">
-            <span className="text-sm font-medium">
-              Revisión de propuesta creativa
-            </span>
-            <input
-                type="checkbox"
-                checked={revisarPropuesta}
-                onChange={() => setRevisarPropuesta(!revisarPropuesta)}
-                className="form-checkbox h-5 w-5 text-red-500"
-            />
-          </div>
+          {/*<div className="mt-4 flex items-center space-x-2">*/}
+          {/*  <span className="text-sm font-medium">*/}
+          {/*    Revisión de propuesta creativa*/}
+          {/*  </span>*/}
+          {/*  <input*/}
+          {/*      type="checkbox"*/}
+          {/*      checked={revisarPropuesta}*/}
+          {/*      onChange={() => setRevisarPropuesta(!revisarPropuesta)}*/}
+          {/*      className="form-checkbox h-5 w-5 text-red-500"*/}
+          {/*  />*/}
+          {/*</div>*/}
           <p className="text-sm text-gray-500">
             De activar esta opción la evaluación de propuesta creativa será
             incluida en este proyecto.

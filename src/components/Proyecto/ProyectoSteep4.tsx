@@ -440,7 +440,7 @@ const ProyectoSteep4 = ({
                     <div className="grid grid-cols-2 gap-8 mb-8">
                         <div>
                             <label
-                                htmlFor="tituloResponsable"
+                                htmlFor="titularResponsable"
                                 className="block text-sm font-medium text-gray-700"
                             >
                                 Títular
@@ -458,21 +458,21 @@ const ProyectoSteep4 = ({
                         </div>
                         <div>
                             <label
-                                htmlFor="nombreResponsable"
+                                htmlFor="secundarioResponsable"
                                 className="block text-sm font-medium text-gray-700"
                             >
                                 Secundario
                             </label>
                             <select
-                                id="nombreResponsable"
-                                name="nombreResponsable"
+                                id="secundarioResponsable"
+                                name="secundarioResponsable"
                                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                                value={formData?.nombreResponsable}
+                                value={formData?.secundarioResponsable}
                                 onChange={handleChange}
                             >
                                 <option value="">Seleccionar</option>
                                 {secondaryUsers?.map((user) => (
-                                    <option key={user.id} value={user.name}>
+                                    <option key={user.id} value={`${user.name} ${user.lastname}`}>
                                         {user.name} {user.lastname}
                                     </option>
                                 ))}
@@ -487,6 +487,7 @@ const ProyectoSteep4 = ({
                             className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded"
                             onClick={() => {
                                 setEntregables(entregables)
+                                console.log(formData?.titularResponsable)
                                 handleSubmit('3')
                             }}
                         >
@@ -497,7 +498,10 @@ const ProyectoSteep4 = ({
                             className="w-1/4 bg-red-500 text-white py-2 rounded"
                             onClick={() => {
                                 setEntregables(entregables)
-                                handleSubmit('5')
+
+                                console.log(formData?.titularResponsable)
+                                setTimeout(( ) => { handleSubmit('5')},2000)
+
                             }}
                         >
                             Siguiente

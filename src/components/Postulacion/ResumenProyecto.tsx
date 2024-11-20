@@ -4,6 +4,7 @@ interface ResumenProyectoProps {
 }
 
 const ResumenProyecto: React.FC<ResumenProyectoProps> = ({ data }) => {
+    console.log(JSON.stringify(data))
   return (
       <div className="">
 
@@ -12,16 +13,15 @@ const ResumenProyecto: React.FC<ResumenProyectoProps> = ({ data }) => {
         <div>
           <h2 className="text-xl font-semibold">Licitación Finanzas</h2>
           <div className="grid grid-cols-2 gap-4 mt-4">
-            <p>Responsable de pago: Nombre</p>
-            <p>Momento de facturación de Agencia: Lorem ipsum</p>
-            <p>Anticipo: $1000.00</p>
-            <p>Contrato de proyecto: Lorem ipsum</p>
-            <p>Política de pago: 30 días</p>
-            <p>Tipo: Acuerdo</p>
-            <p>Momento de facturación: Fin de mes</p>
-            <p>Ronda de cotización: Lorem ipsum</p>
-            <p>Política de alta al proveedor: Giuliano Casas</p>
-            <p>Género: Lorem ipsum</p>
+            <p>Responsable de pago: {data?.responsablePago}</p>
+            <p>Momento de facturación de Agencia: {data?.momentoFacturacionAgencia}</p>
+            <p>Anticipo: {data?.porcentajeTasaAnticipo}%</p>
+            <p>Contrato de proyecto: {data?.contratoProyecto}</p>
+            <p>Política de pago: {data?.politicaPago}</p>
+            <p>Tipo: {data?.tipoProyecto}</p>
+            <p>Momento de facturación: {data?.momentoFacturacion}</p>
+            <p>Ronda de cotización:{data?.rondaCotizacion}</p>
+            <p>Política de alta al proveedor: {data?.politicaAltaProveedor}</p>
           </div>
         </div>
 
@@ -83,29 +83,26 @@ const ResumenProyecto: React.FC<ResumenProyectoProps> = ({ data }) => {
           <div className="grid grid-cols-2 gap-4 mt-4">
             <div>
               <p>Version 1</p>
-              <p>Version 1</p>
-              <p>Version 1</p>
-              <p>Version 1</p>
             </div>
-            <div>
-              <p>Video: 3</p>
-              <p>Foto: 3</p>
-              <p>Total: 6</p>
-              <p>Locutor: 1</p>
-            </div>
+              <div>
+                  <p>Video: {data?.video}</p>
+                  <p>Foto: {data?.foto}</p>
+                  <p>Locutor: {data?.locutor}</p>
+                  <p>Total: {data?.total}</p>
+              </div>
           </div>
         </div>
 
-        <hr className={'my-6'}/>
+          <hr className={'my-6'}/>
 
         {/* Sección Responsables de seguimiento */}
-        <div>
+{/*        <div>
           <h2 className="text-xl font-semibold">Responsables de seguimiento de agencia</h2>
           <div className="grid grid-cols-2 gap-4 mt-4">
-            <p>Titular: Pietro Saliciano</p>
-            <p>Secundario: Lorem ipsum</p>
+            <p>Titular: {data?.titularResponsable}</p>
+            <p>Secundario: {data?.secundarioResponsable}</p>
           </div>
-        </div>
+        </div>*/}
 
       </div>
 

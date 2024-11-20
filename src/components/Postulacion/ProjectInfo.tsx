@@ -105,7 +105,7 @@ const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({data}) => {
                     <div>
                         <p><strong>Brief:</strong> {new Date(project?.entregaBrief).toLocaleDateString()}</p>
                         <p>
-                            <strong>Visualización:</strong> {project?.visualizacion}
+                            <strong>Visualización:</strong> {new Date(project?.visualizacion).toLocaleDateString()}
                         </p>
                     </div>
                     <div>
@@ -136,8 +136,8 @@ const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({data}) => {
             <div className="mb-8">
                 <h2 className="text-lg font-semibold mb-4">Links</h2>
                 <div className="grid grid-cols-2 gap-4">
-                    <p>{project?.link1}</p>
-                    <p>{project?.link2}</p>
+                    <a href={project?.link1} className="text-blue-500 underline">{project?.link1}</a>
+                    <a href={project?.link2} className="text-blue-500 underline">{project?.link2}</a>
                 </div>
             </div>
 
