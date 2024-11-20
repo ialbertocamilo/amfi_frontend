@@ -6,6 +6,11 @@
   --background-start-color: #d6dbdc;
   --background-end-color: #ffffff;
 }
+.appearance-none {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
 .no-spinner::-webkit-outer-spin-button,
 .no-spinner::-webkit-inner-spin-button {
   -webkit-appearance: none;

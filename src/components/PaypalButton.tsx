@@ -14,10 +14,6 @@ const initialOptions={
 }
 
 const PayPalButton: React.FC<PayPalButtonProps> = ({ amount, onPaymentSuccess }) => {
-  const client_id = process.env.NEXT_PUBLIC_PAYPAL_CLIENT ?? "";
-
-  console.log(client_id)
-  console.log(amount)
   return (
     <PayPalScriptProvider options={initialOptions}>
       <PayPalButtons
@@ -35,11 +31,7 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ amount, onPaymentSuccess })
         }}
         onApprove={(data, actions:any) => {
           return actions?.order.capture().then((details:any) => {
-            if (details?.id) verifyPayment(details?.id).then(data => {
-                if (data.status === 'COMPLETED') {
                     onPaymentSuccess(details);
-                }
-            });
           });
         }}
       />

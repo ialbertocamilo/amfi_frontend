@@ -34,8 +34,6 @@ class ApiService {
                     } else if (error?.response?.status === 401) {
                         toast.error('Sesión expirada, por favor inicie sesión nuevamente.');
                         location.href = "/login";
-                    } else if (error?.response?.status === 400) {
-                        toast.error('Solicitud incorrecta, por favor verifique los datos ingresados.');
                     }
                     return Promise.reject(error);
                 },

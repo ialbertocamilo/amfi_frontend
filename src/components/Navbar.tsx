@@ -15,7 +15,6 @@ const Navbar: React.FC = () => {
     useEffect(() => {
         const user = storage('user').get()
         if (user) setUser(user)
-        console.log(user.role)
         const companyType = UserMapper.mapCompanyType(user?.company?.type)
         const role = UserMapper.mapRole(user?.role)
         setType('Rol: '+ role )
