@@ -25,6 +25,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({id}) => {
         message: "",
     });
     const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
+    const [bidId, setBidId] = useState<string>("");
 
     const [formData, setFormData] = useState({
         anunciante: "",
@@ -177,6 +178,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({id}) => {
                     <ListadoInvitaciones
                         invitationData={invitationData}
                         setEvaluation={setEvaluation}
+                        setBidId={setBidId}
                         showComponent={showComponent}
                         formData={formData}
                         handleItemClick={handleItemClick}
@@ -188,7 +190,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({id}) => {
                 )}
                 {showEvaluacion ? (
                     <Evaluacion
-                        evaluation={evaluation}
+                        bidId={bidId}
                         showComponent={showComponent}
                     ></Evaluacion>
                 ) : (
