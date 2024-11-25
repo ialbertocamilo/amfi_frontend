@@ -1,22 +1,20 @@
-import {verifyPayment} from "@/api/paymentApi";
-import {getPlanById} from "@/api/planApi";
-import {createTransaction, TransactionStatus} from "@/api/transactionApi";
+import { verifyPayment } from "@/api/paymentApi";
+import { getPlanById } from "@/api/planApi";
+import { createTransaction, TransactionStatus } from "@/api/transactionApi";
+import SpinnerModal from "@/components/modals/SpinnerModal";
 import PayPalButton from "@/components/PaypalButton";
-import {IPlan} from "@/interfaces/plan.interface";
-import {Button, CardContent, CircularProgress} from "@mui/material";
+import { IPlan } from "@/interfaces/plan.interface";
+import { Button, CardContent, CircularProgress } from "@mui/material";
 import Card from "@mui/material/Card";
-import {useRouter} from "next/router";
-import React, {useEffect, useState} from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import "./globals.css";
-import Modal from "react-modal";
-import {Box} from "@mui/system";
-import SpinnerModal from "@/components/modals/SpinnerModal";
 
 // ?register=true&email=&transactionId=&plan_id=
 const Confirmacion = () => {
     const router = useRouter();
-    const {plan_id, register, email, transactionId} = router.query
+    const { plan_id, register, email, transactionId } = router.query
     const [paymentProcessed, setPaymentProcessed] = useState(false);
     const [paymentDetails, setPaymentDetails] = useState<any>(null);
 
@@ -116,7 +114,7 @@ const Confirmacion = () => {
                     ) : (
                         <div className="flex flex-col items-center">
                             {loading ? (
-                                <CircularProgress/>
+                                <CircularProgress />
                             ) : (
                                 plan && (
                                     <PayPalButton
@@ -129,7 +127,7 @@ const Confirmacion = () => {
                     )}
                 </CardContent>
             </Card>
-            <SpinnerModal isOpen={loading} text={'No cierre esta ventana, se está procesando el pago.'}/>
+            <SpinnerModal isOpen={loading} text={'No cierre esta ventana, se está procesando el pago.'} />
         </div>
     );
 };

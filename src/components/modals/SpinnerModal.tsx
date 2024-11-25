@@ -1,10 +1,12 @@
 // SpinnerModal.tsx
-import React from 'react';
+import { CircularProgress } from '@mui/material';
 import { createPortal } from 'react-dom';
-import { CircularProgress, Box } from '@mui/material';
 import Modal from 'react-modal';
 
 const SpinnerModal = ({ isOpen,text }: { isOpen: boolean,text:string }) => {
+    if (typeof window === 'undefined') {
+        return null;
+      }
     return createPortal(
         <Modal
             isOpen={isOpen}
@@ -36,7 +38,7 @@ const SpinnerModal = ({ isOpen,text }: { isOpen: boolean,text:string }) => {
                     {text}
                 </p>
         </Modal>,
-        document.body
+        document?.body
     );
 };
 
