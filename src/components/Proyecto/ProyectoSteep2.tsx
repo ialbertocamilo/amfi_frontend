@@ -88,7 +88,7 @@ const ProyectoSteep2 = ({
                                 onChange={handleChange}
                             >
                                 <option value="">Seleccionar</option>
-                                <option value="norte">Mexico</option>
+                                <option value="mexico">México</option>
                                 <option value="latam">LATAM</option>
                                 <option value="centroamerica">Centroamérica y/o Caribe</option>
                                 <option value="sudamerica">Sudamérica</option>
@@ -115,7 +115,7 @@ const ProyectoSteep2 = ({
                         </div>
                         <div>
                             <label htmlFor="formaCotizacion" className="block text-sm font-medium text-gray-700">
-                                Forma Cotizacion
+                                Forma Cotización
                             </label>
                             <select
                                 id="formaCotizacion"

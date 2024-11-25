@@ -56,3 +56,17 @@ export const getOwnerByCompany = async () => {
         return null;
     }
 };
+
+export const getUserById = async (id: string) => {
+    try {
+        const response = await api.get(`/user/${id}`);
+        return {
+            ...response.data,
+            registrationDate: moment(response.data.registrationDate).format('DD/MM/YYYY HH:mm'),
+            type: UserMapper.mapRole(response.data.type),
+        };
+    } catch (error: any) {
+        console.error("Error fetching user by id:", error);
+        return null;
+    }
+}

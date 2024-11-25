@@ -16,3 +16,10 @@ export interface ICompany {
     createdAt: string;
     updatedAt: string;
 }
+
+
+export interface ICheckMaxUsersResponse{
+    totalUsers: number;
+    maxUsers: number;
+    canAddUser: boolean;
+}

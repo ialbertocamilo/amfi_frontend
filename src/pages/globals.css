@@ -12,6 +12,10 @@
   -webkit-appearance: none;
   margin: 0;
 }
+.action-list {
+  position: relative;
+  z-index: 1000; /* Adjust the z-index as needed */
+}
 .appearance-none {
   -webkit-appearance: none;
   -moz-appearance: none;

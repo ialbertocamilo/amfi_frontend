@@ -1,5 +1,6 @@
 import ApiService from "@/lib/api";
 import toast from "react-hot-toast";
+import { ICheckMaxUsersResponse} from "@/interfaces/company.interface";
 
 
 const createCompanyUser = async (type: string, data: {
@@ -38,7 +39,27 @@ export const checkMaxUsers = async () => {
 
     try {
         const response = await ApiService.get(`/company/logged/max-users`)
-        return response.data
+        return response.data as ICheckMaxUsersResponse
+    } catch (error) {
+        if (error?.response) {
+            if (error.response.status === 400) {
+                error.response.data.message.forEach((value: any) => toast.error(value));
+            } else if (error.response.status === 409) {
+                toast.error(error.response.data.clientMessage);
+            } else {
+                toast.error('An unexpected error occurred');
+            }
+        } else {
+            toast.error('Network error or server is not responding');
+        }
+        return null;
+    }
+}
+export const getInfoUsers = async () => {
+
+    try {
+        const response = await ApiService.get(`/company/logged/info-users`)
+        return response.data as ICheckMaxUsersResponse
     } catch (error) {
         if (error?.response) {
             if (error.response.status === 400) {

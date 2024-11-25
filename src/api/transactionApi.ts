@@ -1,4 +1,5 @@
 import ApiService from "@/lib/api";
+import {ITransaction} from "@/interfaces/transaction.interface";
 
 
 export class CreateTransactionDto {
@@ -17,11 +18,10 @@ export enum TransactionStatus {
     Failed = 'failed',
 }
 export const createTransaction = async (dto: CreateTransactionDto) => {
-    console.log('create transaction')
     try {
         const response = await ApiService.post(`/transactions/`,dto);
         console.log(response.data)
-        return response.data
+        return response.data as ITransaction
     } catch (error: any) {
         console.warn(error?.response?.data?.message || 'Error creating transaction');
         return null

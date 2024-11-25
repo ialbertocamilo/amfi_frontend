@@ -44,7 +44,6 @@ const ActionProjects: React.FC<ActionRoleProps> = ({ id, userRole }) => {
     const router = useRouter();
 
     const handlePause = useCallback((projectId: string) => {
-        console.log("Pausar proyecto");
         updateProjectStatus(projectId, ProjectStatus.Paused).then(() => {
             location.reload();
         }).catch((err) => {
