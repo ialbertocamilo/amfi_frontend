@@ -36,11 +36,12 @@ const Proyecto: React.FC = () => {
             extra: formData,
             status: page === '6' ? ProjectStatus.InProgress : ProjectStatus.Draft // Cuando termina de crear el proyecto, se cambia el estado a En Progreso
         };
-        const createdProject = await saveOrUpdateProject(data);
-        if (createdProject?.id) {
-            await router.replace(`/proyecto?id=${createdProject.id}`);
-        }
-        setActiveTab(page);
+            const createdProject = await saveOrUpdateProject(data);
+            if (createdProject?.id) {
+                await router.replace(`/proyecto?id=${createdProject.id}`);
+            }
+            if (createdProject)
+                setActiveTab(page);
     };
 
     useEffect(() => {

@@ -41,7 +41,7 @@ const ListaProyectosAdmin = () => {
                 anunciante: proyecto.advertiser?.name ?? '-',
                 fechaRegistro: moment(proyecto.creator?.createdAt).format("DD/MM/YYYY"),
                 estado: ProjectMapper.mapProjectStatus(proyecto.status),
-                creador: proyecto.creator?.name,
+                creador: proyecto.creator?.name + ' ' + (proyecto?.creator?.lastName||''),
                 action: (
                     <ActionProjects
                         id={proyecto.id}

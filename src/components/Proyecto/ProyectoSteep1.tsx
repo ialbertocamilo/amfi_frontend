@@ -1,5 +1,6 @@
 import React from 'react';
 import StepIndicator from "./StepIndicator/StepIndicator";
+import {toast} from "react-hot-toast";
 
 interface registroEntity {
   formData: {
@@ -34,7 +35,28 @@ const ProyectoSteep1 = ({
                           setactiveTab,
                           readonly,
                         }: registroEntity) => {
+  const validateFormData = (formData: Record<string, any>): boolean => {
+    const requiredFields = [
+      'brand', 'product', 'category', 'projectName', 'versionName', 'quantity',
+      'agencyName', 'agencyEmail', 'agencyCreativeDirector', 'contactoFinanzas',
+      'agencyAccountDirector', 'productorAgencia', 'odtNumber', 'buyerContact'
+    ];
 
+    for (const field of requiredFields) {
+      if (!formData[field]) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const handleNext = () => {
+    if (!validateFormData(formData)) {
+      toast.error('Por favor llena todos los campos');
+      return;
+    }
+    handleSubmit("2");
+  };
   return (
       <div className="space-y-8 p-4">
         <h1 className="text-2xl font-bold mb-6 space-y-4">Nuevo proyecto</h1>
@@ -298,7 +320,7 @@ const ProyectoSteep1 = ({
             <button
                 type="submit"
                 className="w-1/4 bg-red-500 text-white py-2 rounded"
-                onClick={() => handleSubmit("2")}
+                onClick={handleNext}
             >
               Siguiente
             </button>

@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 export default function Home() {
   const [stats, setStats] = useState({
     totalProjects: 0,
-    activeProjects: 0,
+    totalDirectors: 0,
     totalUsers: 0,
   });
   useEffect(() => {
@@ -45,8 +45,8 @@ export default function Home() {
               icon="Icon2.png"
             />
             <SummaryWidget
-              title="Proyectos activos"
-              count={stats.activeProjects}
+              title="Total de directores"
+              count={stats.totalDirectors}
               link="#"
               icon="Icon3.png"
             />
