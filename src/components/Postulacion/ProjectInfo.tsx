@@ -94,7 +94,7 @@ const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({data}) => {
                         <p><strong>Marca:</strong> {project?.brand}</p>
                         <p><strong>Producto:</strong> {project?.product}</p>
                         <p><strong>Categoría:</strong> {project?.category}</p>
-                        <p><strong>Campaña:</strong> {project?.campaign}</p>
+                        <p><strong>Campaña:</strong> {project?.projectName}</p>
                     </div>
                     <div>
                         <p><strong>Cantidad:</strong> {project?.quantity}</p>
