@@ -2,7 +2,7 @@ import ApiService from "@/lib/api";
 import { CreateProjectDto } from "../dto/create-project.dto";
 import { UpdateProjectDto } from "../dto/update-project.dto";
 import moment from 'moment';
-import { InvitedDirectorsResponse } from "./interface/api.interface";
+import { Evaluation, InvitedDirectorsResponse } from "./interface/api.interface";
 import toast from "react-hot-toast";
 
 export const getProjects = async () => {
@@ -106,5 +106,36 @@ export const getInvitationsByProjectId = async (
       console.warn("Error updating project status:", error);
       return null;
     }
-  };
+};
 
+export const getBidEvaluation = async (
+    bidId: string
+  ): Promise<{ message: string; result: Evaluation } | null> => {
+    console.log("getBidEvaluation");
+    try {
+      const response = await ApiService.get(
+        `/project-director/get-evaluation/${bidId}`
+      );
+      return response.data;
+    } catch (error: any) {
+      console.warn("Error obtaining project status:", error);
+      return null;
+    }
+  };
+  
+  export const updateBidEvaluation = async (
+    bidId: string,
+    evaluation: Evaluation
+  ): Promise<{ message: string } | null> => {
+    console.log("updateBidEvaluation");
+    try {
+      const response = await ApiService.patch(
+        `/project-director/update-evaluation/${bidId}`,
+        evaluation
+      );
+      return response.data;
+    } catch (error: any) {
+      console.warn("Error updating project status:", error);
+      return null;
+    }
+  };

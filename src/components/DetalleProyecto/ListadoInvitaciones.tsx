@@ -3,6 +3,7 @@ import { Evaluation, InvitedDirectorsResponse } from "@/api/interface/api.interf
 interface ListadoInvitacionesProps {
   invitationData: InvitedDirectorsResponse;
   setEvaluation: React.Dispatch<React.SetStateAction<Evaluation | null>>;
+  setBidId: React.Dispatch<React.SetStateAction<string | null>>;
   showComponent: (componentName: "list" | "evaluation" | "comparison") => void;
   formData: any;
   handleItemClick: () => void;
@@ -13,6 +14,7 @@ interface ListadoInvitacionesProps {
 const ListadoInvitaciones = ({
   invitationData,
   setEvaluation,
+  setBidId,
   showComponent,
   formData,
   handleItemClick,
@@ -68,7 +70,7 @@ const ListadoInvitaciones = ({
                   {getStatusName(casa?.accepted)}
                 </span>
                 <button
-                  onClick={() => {handleItemClick(), setEvaluation(casa.evaluation)}}
+                  onClick={() => {handleItemClick(), setEvaluation(casa.evaluation), setBidId(casa.id)}}
                   className="text-gray-400 hover:text-gray-600"
                 >
                   &gt;

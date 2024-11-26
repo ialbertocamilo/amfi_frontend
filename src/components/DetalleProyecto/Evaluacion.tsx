@@ -5,6 +5,7 @@ import BinaryChoice from "../Commons/BinaryChoice/BinaryChoice";
 import PercentageSelector from "../Commons/PercentageSelector/PercentageSelector";
 import InfoLink from "../Commons/InfoLink/InfoLink";
 import { Evaluation } from "@/api/interface/api.interface";
+import { getBidEvaluation, updateBidEvaluation } from "@/api/projectApi";
 
 interface ProposalItem {
   key: string;
@@ -19,14 +20,35 @@ interface QuestionItem {
 }
 
 interface EvaluacionProps {
-  evaluation: Evaluation | null;
+  bidId: string;
   showComponent: (componentName: "list" | "evaluation" | "comparison") => void;
 }
 
-const Evaluacion: React.FC<EvaluacionProps> = ({
-  evaluation,
-  showComponent,
-}) => {
+const Evaluacion: React.FC<EvaluacionProps> = ({ bidId, showComponent }) => {
+  const [evaluation, setEvaluation] = useState<Evaluation>({
+    uniquenessLevel: 0,
+    productionQuality: 0,
+    originality: 0,
+    messageClarity: 0,
+    relevance: 0,
+    structureType: 0,
+    creativity: 0,
+    visualImpact: 0,
+    innovation: 0,
+    technicalExecution: 0,
+    hasPreviousExperienceWithProductionCompany: null,
+    companyLegallyEstablished: null,
+    companyHasRelevantProjects: null,
+    companyTaxCompliance: null,
+    companyAffiliatedWithAssociation: null,
+    negativeReportsExist: null,
+    companyHasMoreThanXYearsInMarket: null,
+    goodSocialMediaReputation: null,
+    hasPreviousExperienceWithDirector: null,
+    isYoungTalent: null,
+    reelContainsRelevantPieces: null,
+  });
+
   const [creativeProposal, setCreativeProposal] = useState<ProposalItem[]>([
     { key: "uniquenessLevel", label: "Nivel de singularidad", value: 0 },
     { key: "structureType", label: "Tipo de estructura", value: 0 },
@@ -114,10 +136,6 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
 
   const [hideSection, setHideSection] = useState(true);
 
-  const [ratings, setRatings] = useState(
-    Array(creativeProposal.length).fill(0)
-  );
-
   const [porcentajeProduestaCreativa, setPorcentajeProduestaCreativa] =
     useState(40);
   const [answers, setAnswers] = useState(
@@ -136,7 +154,10 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
   };
 
   const onInit = async () => {
+    const evaluation = (await getBidEvaluation(bidId))?.result;
+
     if (evaluation) {
+      setEvaluation(evaluation);
       setCreativeProposal(updateEvaluation(creativeProposal, evaluation));
       setQuestionsEmpresa(updateEvaluation(questionsEmpresa, evaluation));
       setQuestionsRespaldo(updateEvaluation(questionsRespaldo, evaluation));
@@ -146,7 +167,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
 
   useEffect(() => {
     onInit();
-  }, [evaluation]);
+  }, [bidId]);
 
   const handleAnswerChange = (index: number, answer: string) => {
     const newAnswers = [...answers];
@@ -155,15 +176,25 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
   };
 
   const handleRatingChange = (index: number, value: number) => {
-    const newRatings = [...ratings];
-    newRatings[index] = value;
-    setRatings(newRatings);
+    const newCreativeProposal = creativeProposal;
+    newCreativeProposal[index].value = value;
+
+    setCreativeProposal(newCreativeProposal);
+    console.log("creativeProposal", creativeProposal);
   };
 
   const handlePercentageChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     setPorcentajeProduestaCreativa(Number(e.target.value));
+  };
+
+  const updateBidEvaluationData = () => {
+    creativeProposal.forEach((proposal) => {
+      evaluation[proposal.key] = proposal.value;
+    });
+
+    updateBidEvaluation(bidId, evaluation);
   };
 
   return (
@@ -191,7 +222,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
               <div key={index}>
                 <StarRating
                   label={question.label}
-                  value={question.value}
+                  initialValue={question.value}
                   max={5}
                   onChange={(value: number) => handleRatingChange(index, value)}
                 />
@@ -315,7 +346,9 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
         <div className="flex justify-center space-x-4">
           <button
             type="submit"
-            onClick={() => showComponent("list")}
+            onClick={() => {
+              showComponent("list"), updateBidEvaluationData();
+            }}
             className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded"
           >
             Atras
@@ -323,7 +356,9 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
           <button
             type="submit"
             className="w-1/4 bg-red-500 text-white py-2 rounded"
-            onClick={() => showComponent("comparison")}
+            onClick={() => {
+              showComponent("comparison"), updateBidEvaluationData();
+            }}
           >
             Comparativo
           </button>

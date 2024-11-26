@@ -96,17 +96,17 @@ export interface Evaluation {
     innovation: number;
     technicalExecution: number;
     // Company (Boolean)
-    hasPreviousExperienceWithProductionCompany: boolean;
-    companyLegallyEstablished: boolean;
-    companyHasRelevantProjects: boolean;
-    companyTaxCompliance: boolean;
+    hasPreviousExperienceWithProductionCompany: boolean | null;
+    companyLegallyEstablished: boolean | null;
+    companyHasRelevantProjects: boolean | null;
+    companyTaxCompliance: boolean | null;
     // Support (Boolean)
-    companyAffiliatedWithAssociation: boolean;
-    negativeReportsExist: boolean;
-    companyHasMoreThanXYearsInMarket: boolean;
-    goodSocialMediaReputation: boolean;
+    companyAffiliatedWithAssociation: boolean | null;
+    negativeReportsExist: boolean | null;
+    companyHasMoreThanXYearsInMarket: boolean | null;
+    goodSocialMediaReputation: boolean | null;
     // Director (Boolean)
-    hasPreviousExperienceWithDirector: boolean;
-    isYoungTalent: boolean;
-    reelContainsRelevantPieces: boolean;
+    hasPreviousExperienceWithDirector: boolean | null;
+    isYoungTalent: boolean | null;
+    reelContainsRelevantPieces: boolean | null;
   }
