@@ -25,11 +25,7 @@ const Postulacion: React.FC = () => {
     });
     const router = useRouter();
     const {token} = router.query;
-
-
     const [postulationData, setPostulationData] = useState<IPostulationData>();
-
-
     const [message, setMessage] = useState<string | null>(null);
     useEffect(() => {
         if (token) {
@@ -44,8 +40,6 @@ const Postulacion: React.FC = () => {
 
     return (
         <div>
-
-
             {message && <p>{message}</p>}
             {!postulationData ? (
                 <div className="flex items-center justify-center h-full">

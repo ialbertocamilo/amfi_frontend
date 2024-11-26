@@ -1,5 +1,5 @@
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   eslint: {
     dirs: ['pages', 'components', 'lib'],},
   typescript: {

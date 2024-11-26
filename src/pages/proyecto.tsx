@@ -12,15 +12,82 @@ import { CreateProjectDto } from "@/dto/create-project.dto";
 import { UpdateProjectDto } from "@/dto/update-project.dto";
 import ProyectCreated from "@/components/Proyecto/ProjectCreated";
 import { ProjectStatus } from "@/mappers/project.mapper";
+import {toast} from "react-hot-toast";
+import {validateFormData} from "@/lib/utils";
 
+export const inputProjectNames = [
+    'brand',
+    'product',
+    'category',
+    'projectName',
+    'versionName',
+    'quantity',
+    'agencyName',
+    'agencyEmail',
+    'agencyCreativeDirector',
+    'contactoFinanzas',
+    'agencyAccountDirector',
+    'productorAgencia',
+    'odtNumber',
+    'buyerContact',
+    'medios',
+    'temporalidad',
+    'desglose',
+    'territorio',
+    'derechos',
+    'formaCotizacion',
+    'entregaBrief',
+    'entregaPresupuesto',
+    'visualizacion',
+    'entregaProyecto',
+    'presupuesto',
+    'moneda',
+    'objetivoComunicacion',
+    'target',
+    'lineamientosMarca',
+    'link1',
+    'link2',
+    'responsablePago',
+    'momentoFacturacionAgencia',
+    'politicaPago',
+    'contratoProyecto',
+    'tipoProyecto',
+    'momentoFacturacion',
+    'rondaCotizacion',
+    'visualizacion',
+    'politicaAltaProveedor',
+    'porcentajeTasaAnticipo',
+    'porcentajeTasaFiniquito',
+    'porcentajeTasaTotal',
+    'informacionAdicional',
+    'talento',
+    'vestuario',
+    'locacion',
+    'casting',
+    'compensacion',
+    'maquillajepeinado',
+    'online',
+    'musica',
+    'locucion',
+    'animacion',
+    'audio',
+    'entrega',
+    'cantidadAsistentes',
+    'puestoAsistentes',
+    'comentarioEntregables',
+    'comentarios',
+    'titularResponsable'
+];
 const Proyecto: React.FC = () => {
     const [formData, setFormData] = useState<Record<string, any>>({});
     const router = useRouter();
     const { id } = router.query;
 
+
     const [readonly, setReadonly] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        console.log(e.target.name, e.target.value);
         setFormData({
             ...formData, [e.target.name]: e.target.value,
         });
@@ -28,6 +95,12 @@ const Proyecto: React.FC = () => {
 
     const { projectJson, loading, fetchProject, saveOrUpdateProject } = useProject(id as string);
     const handleSubmit = async (page: string) => {
+        if (page==='6') {
+            if (!validateFormData(formData, inputProjectNames)) {
+                toast.error("Por favor, llena todos los campos para crear el proyecto");
+                return;
+            }
+        }
         const data: CreateProjectDto | UpdateProjectDto = {
             id: id as string ?? undefined,
             brand: formData?.brand,

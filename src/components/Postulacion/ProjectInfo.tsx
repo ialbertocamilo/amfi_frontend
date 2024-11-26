@@ -105,7 +105,7 @@ const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({data}) => {
                     <div>
                         <p><strong>Brief:</strong> {new Date(project?.entregaBrief).toLocaleDateString()}</p>
                         <p>
-                            <strong>Visualización:</strong> {new Date(project?.visualizacion).toLocaleDateString()}
+                            <strong>Visualización:</strong> {project?.visualizacion}
                         </p>
                     </div>
                     <div>

@@ -33,19 +33,23 @@ const ProyectoSteep4 = ({
         setEntregables(updatedEntregable)
 
     };
-    const router= useRouter()
-    const {id}=router.query
+    const router = useRouter()
+    const {id} = router.query
     const [secondaryUsers, setSecondaryUsers] = useState<IUser[]>()
     const [owner, setOwner] = useState('')
     useEffect(() => {
-            getSecondaryUsers().then((res) => {
-                setSecondaryUsers(res)
-            })
+        getSecondaryUsers().then((res) => {
+            setSecondaryUsers(res)
+        })
 
-            getOwnerByCompany().then((res) => {
-                if (res){
-                setOwner(res.name+' '+res.lastname)}
-            })
+        getOwnerByCompany().then((res) => {
+            if (res) {
+                setOwner(res.name + ' ' + res.lastname)
+                if (formData) {
+                    formData.titularResponsable = res.name + ' ' + res.lastname;
+                }
+            }
+        })
     }, []);
     return (
         <div className="space-y-8 p-4">
@@ -354,14 +358,14 @@ const ProyectoSteep4 = ({
                     <h2 className="text-xl font-bold mb-4">Entregables</h2>
                     <div className="grid grid-cols-2 gap-8 mb-8">
                         <div className="text-left">
-                                {entregables.length > 0 ? (
-                                    <EntregableList entregablesIni={entregables}/>
-                                ) : (
-                                    <div className="bg-[#DFF9FF] rounded p-4 flex items-center">
-                                        <FaExclamationCircle className="mr-2" style={{color: '#4B9AA5'}}/>
-                                        Aqui puedes agregar tus entregable.
-                                    </div>
-                                )}
+                            {entregables.length > 0 ? (
+                                <EntregableList entregablesIni={entregables}/>
+                            ) : (
+                                <div className="bg-[#DFF9FF] rounded p-4 flex items-center">
+                                    <FaExclamationCircle className="mr-2" style={{color: '#4B9AA5'}}/>
+                                    Aqui puedes agregar tus entregable.
+                                </div>
+                            )}
 
                             <button
                                 type="button"
@@ -451,8 +455,8 @@ const ProyectoSteep4 = ({
                                 readOnly={true}
                                 name="titularResponsable"
                                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                                placeholder="Títular "
-                                value={formData?.titularResponsable || owner}
+                                placeholder="Títular"
+                                value={formData?.titularResponsable}
                                 onChange={handleChange}
                             />
                         </div>
@@ -498,10 +502,7 @@ const ProyectoSteep4 = ({
                             className="w-1/4 bg-red-500 text-white py-2 rounded"
                             onClick={() => {
                                 setEntregables(entregables)
-
-                                console.log(formData?.titularResponsable)
-                                setTimeout(( ) => { handleSubmit('5')},2000)
-
+                                handleSubmit('5')
                             }}
                         >
                             Siguiente

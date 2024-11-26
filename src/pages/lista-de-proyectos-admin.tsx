@@ -9,6 +9,7 @@ import Layout from "@/components/Layout";
 import useUser from "@/hooks/user.hook";
 import ActionProjects from "@/components/ActionProjects";
 import {ProjectMapper} from "@/mappers/project.mapper";
+import {formatToLocalTime} from "@/lib/utils";
 
 const ListaProyectosAdmin = () => {
     const headers = [
@@ -39,7 +40,7 @@ const ListaProyectosAdmin = () => {
                 proyecto: proyecto.name,
                 agencia: proyecto.agency?.name,
                 anunciante: proyecto.advertiser?.name ?? '-',
-                fechaRegistro: moment(proyecto.creator?.createdAt).format("DD/MM/YYYY"),
+                fechaRegistro:  formatToLocalTime(proyecto.createdAt),
                 estado: ProjectMapper.mapProjectStatus(proyecto.status),
                 creador: proyecto.creator?.name + ' ' + (proyecto?.creator?.lastName||''),
                 action: (
