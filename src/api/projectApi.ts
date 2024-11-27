@@ -2,7 +2,7 @@ import ApiService from "@/lib/api";
 import { CreateProjectDto } from "../dto/create-project.dto";
 import { UpdateProjectDto } from "../dto/update-project.dto";
 import moment from 'moment';
-import { Evaluation, InvitedDirectorsResponse } from "./interface/api.interface";
+import { Budget, Evaluation, InvitedDirectorsResponse } from "./interface/api.interface";
 import toast from "react-hot-toast";
 import {IProjectInvitation} from "@/interfaces/project-director.interface";
 
@@ -111,7 +111,7 @@ export const getInvitationsByProjectId = async (
 
 export const getBidEvaluation = async (
     bidId: string
-  ): Promise<{ message: string; result: Evaluation } | null> => {
+  ): Promise<{ message: string; result: {evaluation: Evaluation, budget: Budget} } | null> => {
     console.log("getBidEvaluation");
     try {
       const response = await ApiService.get(
