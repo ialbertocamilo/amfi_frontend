@@ -4,6 +4,7 @@ import { UpdateProjectDto } from "../dto/update-project.dto";
 import moment from 'moment';
 import { Evaluation, InvitedDirectorsResponse } from "./interface/api.interface";
 import toast from "react-hot-toast";
+import {IProjectInvitation} from "@/interfaces/project-director.interface";
 
 export const getProjects = async () => {
     try {
@@ -139,3 +140,9 @@ export const getBidEvaluation = async (
       return null;
     }
   };
+
+
+  export const getProductionHouseProjects = async ()=>{
+        const response = await ApiService.get(`/project`);
+        return response?.data as IProjectInvitation[];
+  }

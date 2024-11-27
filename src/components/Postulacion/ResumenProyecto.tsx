@@ -4,7 +4,6 @@ interface ResumenProyectoProps {
 }
 
 const ResumenProyecto: React.FC<ResumenProyectoProps> = ({ data }) => {
-    console.log(JSON.stringify(data))
   return (
       <div className="">
 

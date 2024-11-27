@@ -1,15 +1,15 @@
 import {getInvitedDirectors} from '@/api/directorApi';
 import {IPostulationData} from '@/api/postulationApi';
 import {confirmInvitation} from '@/api/projectApi';
-import {ProjectDirectorInvited} from '@/interfaces/project-director.interface';
+import {IProjectInvitation} from '@/interfaces/project-director.interface';
 import {ProjectMapper, ProjectStatus} from '@/mappers/project.mapper';
 import {useRouter} from 'next/router';
 import React, {useEffect, useState} from 'react';
 import toast from 'react-hot-toast';
-import ConfirmacionParticipacion from './ConfirmacionParticipacion';
+import ConfirmacionParticipacionModal from './ConfirmacionParticipacionModal';
 import ResumenProyecto from './ResumenProyecto';
 
-const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({data}) => {
+const ProjectInfo: React.FC<{ data?: IPostulationData, onConfirm?: () => void  }> = ({data, onConfirm}) => {
 
     const router = useRouter();
 
@@ -21,9 +21,14 @@ const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({data}) => {
 
     const handleConfirm = () => {
         // Lógica para confirmar la acción
-        const invitation = confirmInvitation(token as string)
-        if (!invitation) toast.error('Error al confirmar la invitación')
-        else toast.success('Invitación confirmada correctamente')
+        if (token) {
+            const invitation = confirmInvitation(token as string)
+            if (!invitation) toast.error('Error al confirmar la invitación')
+            else toast.success('Invitación confirmada correctamente')
+        } else {
+            if(onConfirm)
+            onConfirm()
+        }
         setIsModalOpen(false);
         setPostulacion(true);
     };
@@ -34,7 +39,7 @@ const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({data}) => {
     };
 
 
-    const [invitedDirectors, setInvitedDirectors] = useState<ProjectDirectorInvited[]>([]);
+    const [invitedDirectors, setInvitedDirectors] = useState<IProjectInvitation[]>([]);
     const [project, setProject] = useState<any>()
     useEffect(() => {
         if (data) {
@@ -85,7 +90,6 @@ const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({data}) => {
                     </div>
                 </div>
             </div>
-
             {/* Información de proyecto */}
             <div className="mb-8">
                 <h2 className="text-lg font-semibold mb-4">Información de proyecto</h2>
@@ -116,7 +120,6 @@ const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({data}) => {
                     </div>
                 </div>
             </div>
-
             {/* Documentos de proyecto */}
             <div className="mb-8">
                 <h2 className="text-lg font-semibold mb-4">Documentos de proyecto</h2>
@@ -131,7 +134,6 @@ const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({data}) => {
                     </div>
                 </div>
             </div>
-
             {/* Links */}
             <div className="mb-8">
                 <h2 className="text-lg font-semibold mb-4">Links</h2>
@@ -140,7 +142,6 @@ const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({data}) => {
                     <a href={project?.link2} className="text-blue-500 underline">{project?.link2}</a>
                 </div>
             </div>
-
             {/* Casas productoras Licitantes */}
             <div className="">
                 <h2 className="text-lg font-semibold mb-4">Casas productoras Licitantes</h2>
@@ -148,7 +149,6 @@ const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({data}) => {
                     <ProductionHouses/>
                 </div>
             </div>
-
             <br/>
             {
                 postulacion && (
@@ -182,7 +182,7 @@ const ProjectInfo: React.FC<{ data?: IPostulationData }> = ({data}) => {
 
             {
                 isModalOpen && (
-                    <ConfirmacionParticipacion onConfirm={handleConfirm} onCancel={handleCancel}/>
+                    <ConfirmacionParticipacionModal onConfirm={handleConfirm} onCancel={handleCancel}/>
                 )
             }
 

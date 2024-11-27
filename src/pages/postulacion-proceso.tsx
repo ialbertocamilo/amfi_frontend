@@ -7,7 +7,10 @@ import PostulacionSteep3 from "@/components/Postulacion/PostulacionSteep3";
 import PostulacionSteep4 from "@/components/Postulacion/PostulacionSteep4";
 import PostulacionConfirmacionFinal from "@/components/Postulacion/PostulacionConfirmacionFinal";
 import Layout from "@/components/Layout";
-import {checkInvitationStatus, submitPostulation} from "@/api/postulationApi";
+import {checkInvitationStatus, getInvitationById, submitPostulation} from "@/api/postulationApi";
+import {manageLogicError} from "@/lib/utils";
+import Loader from "@/components/Loader";
+import {IProject} from "@/interfaces/project.interface";
 
 const PostulacionProceso: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -112,19 +115,35 @@ const PostulacionProceso: React.FC = () => {
         }
     });
     const router = useRouter();
-    const {projectId} = router.query;
+    const {projectInvitationId} = router.query;
 
+    const [loading, setLoading] = useState(false)
     const [projectName, setProjectName] = useState('')
+
+    const [project, setProject] = useState<IProject>()
+    const processCheckInvitation = async () => {
+        setLoading(true)
+        const data = await getInvitationById(projectInvitationId as string)
+        const projectId=data?.result.project?.id as string
+        setProject(data?.result.project)
+        checkInvitationStatus(projectId).then((response) => {
+            if (response) {
+                setProjectName(response?.result?.project?.name)
+            }
+        }).catch((error) => {
+            // Si la invitacion no fue aceptada
+            if (error?.response?.data?.serverCodeError === 20) {
+                router.push('/postulacion-directa?projectId=' + projectId)
+            }
+            manageLogicError(error);
+        }).finally(() => {
+            setLoading(false)
+        })
+    }
     useEffect(() => {
-        if (projectId)
-            checkInvitationStatus(projectId as string).then((response) => {
-                if (!response) {
-                    router.push('/404');
-                } else {
-                    setProjectName(response?.result?.project?.name)
-                }
-            })
-    }, [projectId]);
+        if (projectInvitationId)
+            processCheckInvitation()
+    }, [projectInvitationId]);
     const [activeTab, setActiveTab] = useState<string>('1');
 
 
@@ -140,12 +159,10 @@ const PostulacionProceso: React.FC = () => {
         }));
     };
     const handleSubmit = async (page: string) => {
-        //e.preventDefault();
         setActiveTab(page)
 
         if (page == '5') {
-            // enviar propuesta
-            submitPostulation({projectId: projectId as string, metadata: formData}).then((response) => {
+            submitPostulation({projectId: project?.id  as string, metadata: formData}).then((response) => {
                 console.log(response)
             })
         }
@@ -154,7 +171,7 @@ const PostulacionProceso: React.FC = () => {
 
     return (
         <Layout>
-            <div className="">
+            <Loader loading={loading}>
                 <h1 className="text-2xl font-bold mb-6 ">Proyecto</h1>
                 <div className="text-sm text-gray-500 mb-8">
                     <span>Lista de Proyectos</span> {">"} <span>{projectName}</span> {">"} <span>Postular</span>
@@ -183,7 +200,7 @@ const PostulacionProceso: React.FC = () => {
                 )}
 
 
-            </div>
+            </Loader>
         </Layout>
     )
 };

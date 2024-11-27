@@ -5,6 +5,7 @@ import api from "@/lib/api";
 import toast from "react-hot-toast";
 import {CheckProjectInvitationStatusResponse} from "@/interfaces/project-director.interface";
 import ApiService from "@/lib/api";
+import {manageLogicError} from "@/lib/utils";
 
 export interface IPostulationData{
     project: IProject;
@@ -35,16 +36,23 @@ export const decodeInvitationToken = async (token: string) => {
     }
 };
 
-
-
-export const checkInvitationStatus = async (projectId:string)=>{
+export const getInvitationById = async (projectInvitationId: string) => {
     try {
-        const response = await api.get(`/project-director/check-invitation-status/${projectId}`);
+        const response = await api.get(`/project-director/invitation/${projectInvitationId}`);
         return response.data as CheckProjectInvitationStatusResponse;
     } catch (error: any) {
-        toast.error('Error al obtener el estado de la invitación');
-        return null
+        manageLogicError(error);
+        return null;
     }
+}
+
+export const checkInvitationStatus = async (projectId:string)=>{
+        const response = await api.get(`/project-director/check-invitation-status/${projectId}`);
+        return response.data as CheckProjectInvitationStatusResponse;
+}
+export const checkInvitationStatusDirect = async (projectId:string)=>{
+        const response = await api.get(`/project-director/check-invitation-status-direct/${projectId}`);
+        return response.data as CheckProjectInvitationStatusResponse;
 }
 
 export const submitPostulation = async (postulation: CreatePostulationDto) => {

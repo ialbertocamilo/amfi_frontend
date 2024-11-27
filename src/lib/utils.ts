@@ -1,5 +1,6 @@
 import {type ClassValue, clsx} from "clsx"
 import {twMerge} from "tailwind-merge"
+import toast from "react-hot-toast";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -29,3 +30,9 @@ export const formatToLocalTime = (isoDate: string): string => {
         year: 'numeric'
     });
 };
+
+
+export const manageLogicError = (err: any) => {
+    if (err?.status === 400) err?.response?.data?.message.forEach((value: any) => toast.error(value));
+    if (err?.status === 409) toast.error(err?.response?.data?.clientMessage);
+}

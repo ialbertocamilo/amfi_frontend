@@ -1,5 +1,5 @@
 import {CreateDirectorDto} from "@/dto/create-director.dto";
-import { ProjectDirectorInvited } from "@/interfaces/project-director.interface";
+import { IProjectInvitation } from "@/interfaces/project-director.interface";
 import api from "@/lib/api";
 
 
@@ -42,11 +42,9 @@ export const deleteDirector = async (id: string) => {
 };
 
 export const getInvitedDirectors = async (projectId: string) => {
-    console.log('GetInvitedDirectors')
     try {
         const response = await api.post(`/project-director/get-invited/${projectId}`);
-        console.log(response.data)
-        return response.data?.result as ProjectDirectorInvited[];
+        return response.data?.result as IProjectInvitation[];
     } catch (error: any) {
         console.warn(error?.response?.data?.message || 'Error fetching invited directors');
         return [];

@@ -84,7 +84,6 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({id}) => {
     };
 
     const sendReminder = () => {
-        console.log("sending reminder");
         sendReminderToProductionHouses(id as string)
             .then((data) => {
                 toast.success("Recordatorio enviado");
