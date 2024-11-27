@@ -33,6 +33,6 @@ export const formatToLocalTime = (isoDate: string): string => {
 
 
 export const manageLogicError = (err: any) => {
-    if (err?.status === 400) err?.response?.data?.message.forEach((value: any) => toast.error(value));
+    if (err?.status === 400) err?.response?.data?.message?.forEach((value: any) => toast.error(value));
     if (err?.status === 409) toast.error(err?.response?.data?.clientMessage);
 }

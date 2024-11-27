@@ -1,43 +1,25 @@
-import {checkInvitationStatusDirect, IPostulationData} from "@/api/postulationApi";
-import {useRouter} from "next/router";
-import {useEffect, useState} from "react";
-import "./globals.css";
-import ProjectInfo from "@/components/Postulacion/ProjectInfo";
+import { acceptDirectInvitation, checkInvitationStatusDirect, IPostulationData } from "@/api/postulationApi";
 import Layout from "@/components/Layout";
 import Loader from "@/components/Loader";
-import {toast} from "react-hot-toast";
-import {CheckProjectInvitationStatusResponse} from "@/interfaces/project-director.interface";
+import ProjectInfo from "@/components/Postulacion/ProjectInfo";
+import { manageLogicError } from "@/lib/utils";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import "./globals.css";
 
 const PostulacionDirecta: React.FC = () => {
-    const [formData, setFormData] = useState({
-        anunciante: "",
-        marca: "",
-        producto: "",
-        categoria: "",
-        nombreProyecto: "",
-        versiones: "",
-        cantidad: 1,
-        cantidadSeleccionar: "",
-        agencia: "",
-        correoResponsable: "",
-        directorCreativo: "",
-        contactoFinanzas: "",
-        directorCuentas: "",
-        productorAgencia: "",
-        numeroODT: "",
-        contactoCompras: ""
-    });
+
     const router = useRouter();
-    const {projectId} = router.query;
+    const { projectInvitationId } = router.query;
     const [postulationData, setPostulationData] = useState<IPostulationData>();
-    const [message, setMessage] = useState<string | null>(null);
 
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        if (projectId) {
+        if (projectInvitationId) {
             setLoading(true)
-            checkInvitationStatusDirect(projectId as string).then((res) => {
+            checkInvitationStatusDirect(projectInvitationId as string).then((res) => {
                 if (res?.result)
                     setPostulationData(res.result);
             }).catch((err) => {
@@ -47,14 +29,24 @@ const PostulacionDirecta: React.FC = () => {
                 setLoading(false)
             })
         }
-    }, [projectId]);
+    }, [projectInvitationId]);
 
-    const onConfirm=()=>{
+    const onConfirm = async () => {
+        // postulacion directa
+        try {
+            await acceptDirectInvitation(projectInvitationId as string)
+        } catch (e) {
+            manageLogicError(e)
+        }
         console.log("on confirm")
+    }
+
+    const startPostulation = async () => {
+        router.push(`/postulacion-proceso?projectInvitationId=${projectInvitationId}`);
     }
     return (<Layout>
         <Loader loading={loading}>
-            <ProjectInfo data={postulationData} onConfirm={onConfirm}/>
+            <ProjectInfo data={postulationData} onConfirm={onConfirm} startPostulation={startPostulation} />
         </Loader>
     </Layout>)
 };

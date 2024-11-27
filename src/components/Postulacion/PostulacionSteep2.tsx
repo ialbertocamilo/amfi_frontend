@@ -64,25 +64,25 @@ const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, se
                         <h2 className="text-xl font-bold mb-4">Talento</h2>
                         <div className="grid grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label htmlFor="formData.talento.principal" className="block text-sm font-medium text-gray-700">{getLabelText('principal')}</label>
+                                <label htmlFor="talento.principalNumero" className="block text-sm font-medium text-gray-700">{getLabelText('principal')}</label>
                                 <input
                                     type="number"
-                                    id="formData.talento.principal"
-                                    name="talento.principal"
+                                    id="talento.principalNumero"
+                                    name="talento.principalNumero"
                                     placeholder="Número"
                                     className="border p-2 w-full"
-                                    value={formData.talento.principal}
+                                    value={formData.talento.principalNumero}
                                     onChange={handleChange}
                                 />
                             </div>
                             <div>
                                 <textarea
                                     placeholder="Texto"
-                                    id="formData.talento.principal.texto"
-                                    name="talento.principal.texto"
+                                    id="talento.principalTexto"
+                                    name="talento.principalTexto"
                                     className="border p-2 w-full"
                                     maxLength={300}
-                                    value={formData.talento.principal.texto}
+                                    value={formData.talento.principalTexto}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -90,25 +90,25 @@ const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, se
 
                         <div className="grid grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label htmlFor="formData.talento.secundario" className="block text-sm font-medium text-gray-700">{getLabelText('secundario')}</label>
+                                <label htmlFor="talento.secundarioNumero" className="block text-sm font-medium text-gray-700">{getLabelText('secundario')}</label>
                                 <input
                                     type="number"
-                                    id="formData.talento.secundario"
-                                    name="talento.secundario"
+                                    id="talento.secundarioNumero"
+                                    name="talento.secundarioNumero"
                                     placeholder="Número"
                                     className="border p-2 w-full"
-                                    value={formData.talento.secundario}
+                                    value={formData.talento.secundarioNumero}
                                     onChange={handleChange}
                                 />
                             </div>
                             <div>
                                 <textarea
                                     placeholder="Texto"
-                                    id="formData.talento.secundario.texto"
-                                    name="talento.secundario.texto"
+                                    id="talento.secundarioTexto"
+                                    name="talento.secundarioTexto"
                                     className="border p-2 w-full"
                                     maxLength={300}
-                                    value={formData.talento.secundario.texto}
+                                    value={formData.talento.secundarioTexto}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -116,25 +116,25 @@ const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, se
 
                         <div className="grid grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label htmlFor="formData.talento.adicional" className="block text-sm font-medium text-gray-700">{getLabelText('adicional')}</label>
+                                <label htmlFor="talento.adicionalNumero" className="block text-sm font-medium text-gray-700">{getLabelText('adicional')}</label>
                                 <input
                                     type="number"
-                                    id="formData.talento.adicional"
-                                    name="talento.adicional"
+                                    id="talento.adicionalNumero"
+                                    name="talento.adicionalNumero"
                                     placeholder="Número"
                                     className="border p-2 w-full"
-                                    value={formData.talento.adicional}
+                                    value={formData.talento.adicionalNumero}
                                     onChange={handleChange}
                                 />
                             </div>
                             <div>
                                 <textarea
                                     placeholder="Texto"
-                                    id="formData.talento.adicional.texto"
-                                    name="talento.adicional.texto"
+                                    id="talento.adicionalTexto"
+                                    name="talento.adicionalTexto"
                                     className="border p-2 w-full"
                                     maxLength={300}
-                                    value={formData.talento.adicional.texto}
+                                    value={formData.talento.adicionalTexto}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -142,25 +142,25 @@ const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, se
 
                         <div className="grid grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label htmlFor="formData.talento.extras" className="block text-sm font-medium text-gray-700">{getLabelText('extras')}</label>
+                                <label htmlFor="talento.extrasNumero" className="block text-sm font-medium text-gray-700">{getLabelText('extras')}</label>
                                 <input
                                     type="number"
-                                    id="formData.talento.extras"
-                                    name="talento.extras"
+                                    id="talento.extrasNumero"
+                                    name="talento.extrasNumero"
                                     placeholder="Número"
                                     className="border p-2 w-full"
-                                    value={formData.talento.extras}
+                                    value={formData.talento.extrasNumero}
                                     onChange={handleChange}
                                 />
                             </div>
                             <div>
                                 <textarea
                                     placeholder="Texto"
-                                    id="formData.talento.extras.texto"
-                                    name="talento.extras.texto"
+                                    id="talento.extrasTexto"
+                                    name="talento.extrasTexto"
                                     className="border p-2 w-full"
                                     maxLength={300}
-                                    value={formData.talento.extras.texto}
+                                    value={formData.talento.extrasTexto}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -168,25 +168,25 @@ const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, se
 
                         <div className="grid grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label htmlFor="formData.talento.total" className="block text-sm font-medium text-gray-700">{getLabelText('total')}</label>
+                                <label htmlFor="talento.totalNumero" className="block text-sm font-medium text-gray-700">{getLabelText('total')}</label>
                                 <input
                                     type="number"
-                                    id="formData.talento.total"
-                                    name="talento.total"
+                                    id="talento.totalNumero"
+                                    name="talento.totalNumero"
                                     placeholder="Número"
                                     className="border p-2 w-full"
-                                    value={formData.talento.total}
+                                    value={formData.talento.totalNumero}
                                     onChange={handleChange}
                                 />
                             </div>
                             <div>
                                 <textarea
                                     placeholder="Texto"
-                                    id="formData.talento.total.texto"
-                                    name="talento.total.texto"
+                                    id="talento.totalTexto"
+                                    name="talento.totalTexto"
                                     className="border p-2 w-full"
                                     maxLength={300}
-                                    value={formData.talento.total.texto}
+                                    value={formData.talento.totalTexto}
                                     onChange={handleChange}
                                 />
                             </div>

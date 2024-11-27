@@ -1,7 +1,4 @@
-import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
-import api from "@/lib/api";
-import toast from "react-hot-toast";
 
 interface registroEntity {
   formData: any,
@@ -259,9 +256,6 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
             </button>
           </div>
         </div>
-
-
-
 
 
       </div>

@@ -1,40 +1,40 @@
-import React, {useEffect, useState} from 'react';
-import "./globals.css";
-import toast from "react-hot-toast";
-import {useRouter} from 'next/router';
-import Layout from "@/components/Layout";
-import {ProjectMapper} from "@/mappers/project.mapper";
-import {getProductionHouseProjects} from "@/api/projectApi";
-import {IProjectInvitation} from "@/interfaces/project-director.interface";
-import moment from "moment";
+import { getProductionHouseProjects } from "@/api/projectApi";
 import DownloadIcon from "@/components/icons/DownloadIcon";
 import NextIcon from "@/components/icons/NextIcon";
-import {CompanyType} from "@/constants";
-import {ProjectInvitationMapper} from "@/mappers/project-invitation.mapper";
+import Layout from "@/components/Layout";
 import Loader from '@/components/Loader';
+import { CompanyType } from "@/constants";
+import { IProjectInvitation } from "@/interfaces/project-director.interface";
+import { ProjectInvitationMapper } from "@/mappers/project-invitation.mapper";
+import { ProjectMapper } from "@/mappers/project.mapper";
+import moment from "moment";
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import toast from "react-hot-toast";
+import "./globals.css";
 
 
-const ProjectStatus = ({status}: { status: string }) => {
+const ProjectStatus = ({ status }: { status: string }) => {
     if (!status) return <span className="bg-red-100 text-red-500 text-sm px-4 py-2 rounded-full">Pendiente</span>
     return <span className="bg-green-100 text-green-500 text-sm px-4 py-2 rounded">
-              {ProjectMapper.mapProjectStatus(status)}
-           </span>
+        {ProjectMapper.mapProjectStatus(status)}
+    </span>
 }
-const InvitationStatus = ({status}: { status: boolean }) => {
+const InvitationStatus = ({ status }: { status: boolean }) => {
     if (!status) return <span className="bg-red-100 text-red-500 text-sm px-4 py-2 rounded-full">Pendiente</span>
     return <span className="bg-green-100 text-green-500 text-sm px-4 py-2 rounded">
-              {ProjectInvitationMapper.mapStatus(status)}
-           </span>
+        {ProjectInvitationMapper.mapStatus(status)}
+    </span>
 }
-const NewBadge = ({createdAt}: { createdAt: Date }) => {
+const NewBadge = ({ createdAt }: { createdAt: Date }) => {
     return (moment().isSame(createdAt, 'day') && (
         <span className="text-sm text-red-500 bg-red-100 px-2 py-1 rounded-full">Nuevo</span>));
 };
-const ProposalUploaded = ({isUploaded, onClick}: { isUploaded: boolean, onClick?: (e) => void }) => {
+const ProposalUploaded = ({ isUploaded, onClick }: { isUploaded: boolean, onClick?: (e) => void }) => {
     if (isUploaded) return <span className="text-sm text-red-500 text-bold flex items-center cursor-pointer"
-                                 onClick={onClick}>
-        <DownloadIcon/>
-        <b className="ml-2">Descargar propuesta enviada</b>
+        onClick={onClick}>
+        <DownloadIcon />
+        <b className="ml-2">Abrir propuesta enviada</b>
     </span>
 }
 const ListaDeProyectos = () => {
@@ -44,12 +44,12 @@ const ListaDeProyectos = () => {
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
-    const handleRedirect = (projectInvitation:IProjectInvitation) => {
+    const handleRedirect = (projectInvitation: IProjectInvitation) => {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         if (user?.company?.type === CompanyType.ProductionStudio) {
             router.push(`/postulacion-proceso?projectInvitationId=${projectInvitation.id}`);
         } else {
-            router.push(`/proyecto?id=${projectInvitation.project?.id   }`);
+            router.push(`/proyecto?id=${projectInvitation.project?.id}`);
         }
     };
 
@@ -102,19 +102,19 @@ const ListaDeProyectos = () => {
                     >
                         <div className="flex items-center space-x-4">
                             <span className="text-lg font-medium">{projectInvitation.project.name}</span>
-                            <NewBadge createdAt={projectInvitation.createdAt}/>
+                            <NewBadge createdAt={projectInvitation.createdAt} />
                         </div>
                         <div className="flex items-center space-x-4">
                             <ProposalUploaded
                                 isUploaded={projectInvitation.proposalUploaded}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    router.push(`/otra-ruta?projectId=${projectInvitation.project?.id}`);
+                                    router.push(`/propuesta?postulationId=${projectInvitation.id}`);
                                 }}
                             />
-                            <InvitationStatus status={projectInvitation.accepted}/>
-                            <ProjectStatus status={projectInvitation.project.status}/>
-                            <NextIcon/>
+                            <InvitationStatus status={projectInvitation.accepted} />
+                            <ProjectStatus status={projectInvitation.project.status} />
+                            <NextIcon />
                         </div>
                     </div>))}
                 </div>

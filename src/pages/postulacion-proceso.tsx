@@ -1,25 +1,27 @@
-import {useEffect, useState} from "react";
-import "./globals.css";
-import {useRouter} from "next/router";
+import { checkInvitationStatus, getInvitationById, submitPostulation } from "@/api/postulationApi";
+import Layout from "@/components/Layout";
+import Loader from "@/components/Loader";
+import PostulacionConfirmacionFinal from "@/components/Postulacion/PostulacionConfirmacionFinal";
 import PostulacionSteep1 from "@/components/Postulacion/PostulacionSteep1";
 import PostulacionSteep2 from "@/components/Postulacion/PostulacionSteep2";
 import PostulacionSteep3 from "@/components/Postulacion/PostulacionSteep3";
 import PostulacionSteep4 from "@/components/Postulacion/PostulacionSteep4";
-import PostulacionConfirmacionFinal from "@/components/Postulacion/PostulacionConfirmacionFinal";
-import Layout from "@/components/Layout";
-import {checkInvitationStatus, getInvitationById, submitPostulation} from "@/api/postulationApi";
-import {manageLogicError} from "@/lib/utils";
-import Loader from "@/components/Loader";
-import {IProject} from "@/interfaces/project.interface";
+import { IProject } from "@/interfaces/project.interface";
+import { manageLogicError } from "@/lib/utils";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import "./globals.css";
 
+//?projectInvitationId=
 const PostulacionProceso: React.FC = () => {
     const [formData, setFormData] = useState({
         "talento": {
-            "principal": {"numero": "", "texto": ""},
-            "secundario": {"numero": "", "texto": ""},
-            "adicional": {"numero": "", "texto": ""},
-            "extras": {"numero": "", "texto": ""},
-            "total": {"numero": "", "texto": ""}
+            "principalNumero": "", "principalTexto": "",
+            "secundarioNumero": "", "secundarioTexto": "",
+            "adicionalNumero": "", "adicionalTexto": "",
+            "extrasNumero": "", "extrasTexto": "",
+            "totalNumero": "", "totalTexto": ""
         },
         "vestuario": {
             "descripcion": ""
@@ -43,10 +45,10 @@ const PostulacionProceso: React.FC = () => {
             "descripcion": ""
         },
         "postProduccion": {
-            "edicion": {"numero": "", "cc": ""},
-            "audio": {"numero": "", "cc": ""},
-            "online": {"numero": "", "cc": ""},
-            "masterizacion": {"numero": "", "cc": ""}
+            "edicion": { "numero": "", "cc": "" },
+            "audio": { "numero": "", "cc": "" },
+            "online": { "numero": "", "cc": "" },
+            "masterizacion": { "numero": "", "cc": "" }
         },
         "animacion": {
             "twoD": "",
@@ -79,6 +81,7 @@ const PostulacionProceso: React.FC = () => {
         },
         "presupuesto": {
             "total": "",
+            "moneda": "",
             "personal": "",
             "preYPro": "",
             "talento": "",
@@ -115,16 +118,44 @@ const PostulacionProceso: React.FC = () => {
         }
     });
     const router = useRouter();
-    const {projectInvitationId} = router.query;
+    const { projectInvitationId } = router.query;
 
     const [loading, setLoading] = useState(false)
     const [projectName, setProjectName] = useState('')
 
     const [project, setProject] = useState<IProject>()
+
+    interface FormData {
+        [key: string]: any;
+    }
+
+    const validateFormData = (formData: FormData): boolean => {
+        const validateFields = (data: any, parentKey: string = ''): boolean => {
+          for (const key in data) {
+            if (data.hasOwnProperty(key)) {
+              const value = data[key];
+              const fieldKey = parentKey ? `${parentKey}.${key}` : key;
+      
+              if (typeof value === 'object' && value !== null) {
+                if (!validateFields(value, fieldKey)) {
+                  return false;
+                }
+              } else if (!value) {
+                toast.error(`El campo ${fieldKey} es obligatorio`);
+                return false;
+              }
+            }
+          }
+          return true;
+        };
+      
+        return validateFields(formData);
+      };
+
     const processCheckInvitation = async () => {
         setLoading(true)
         const data = await getInvitationById(projectInvitationId as string)
-        const projectId=data?.result.project?.id as string
+        const projectId = data?.result.project?.id as string
         setProject(data?.result.project)
         checkInvitationStatus(projectId).then((response) => {
             if (response) {
@@ -133,7 +164,7 @@ const PostulacionProceso: React.FC = () => {
         }).catch((error) => {
             // Si la invitacion no fue aceptada
             if (error?.response?.data?.serverCodeError === 20) {
-                router.push('/postulacion-directa?projectId=' + projectId)
+                router.push('/postulacion-directa?projectInvitationId=' + data?.result?.id)
             }
             manageLogicError(error);
         }).finally(() => {
@@ -148,7 +179,7 @@ const PostulacionProceso: React.FC = () => {
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         const [section, field] = name.split('.');
         setFormData((prevData) => ({
             ...prevData,
@@ -159,13 +190,14 @@ const PostulacionProceso: React.FC = () => {
         }));
     };
     const handleSubmit = async (page: string) => {
-        setActiveTab(page)
 
         if (page == '5') {
-            submitPostulation({projectId: project?.id  as string, metadata: formData}).then((response) => {
+            if (!validateFormData(formData)) return;
+            submitPostulation({ projectId: project?.id as string, metadata: formData }).then((response) => {
                 console.log(response)
             })
         }
+        setActiveTab(page)
 
     };
 
@@ -180,23 +212,23 @@ const PostulacionProceso: React.FC = () => {
 
                 {activeTab === '1' && (
                     <PostulacionSteep1 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit}
-                                       activeTab={activeTab} setactiveTab={setActiveTab}/>
+                        activeTab={activeTab} setactiveTab={setActiveTab} />
                 )}
                 {activeTab === '2' && (
                     <PostulacionSteep2 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit}
-                                       activeTab={activeTab} setactiveTab={setActiveTab}/>
+                        activeTab={activeTab} setactiveTab={setActiveTab} />
                 )}
                 {activeTab === '3' && (
                     <PostulacionSteep3 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit}
-                                       activeTab={activeTab} setactiveTab={setActiveTab}/>
+                        activeTab={activeTab} setactiveTab={setActiveTab} />
                 )}
                 {activeTab === '4' && (
                     <PostulacionSteep4 formData={formData} handleChange={handleChange} handleSubmit={handleSubmit}
-                                       activeTab={activeTab} setactiveTab={setActiveTab}/>
+                        activeTab={activeTab} setactiveTab={setActiveTab} />
                 )}
 
                 {activeTab === '5' && (
-                    <PostulacionConfirmacionFinal/>
+                    <PostulacionConfirmacionFinal />
                 )}
 
 

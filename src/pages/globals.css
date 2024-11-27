@@ -3,7 +3,7 @@
 @import 'tailwindcss/utilities';
 
 :root {
-  --foreground-color: #000000;
+  --foreground-color: #d6dbdc;
   --background-start-color: #d6dbdc;
   --background-end-color: #ffffff;
 }
@@ -27,8 +27,8 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-color: #ffffff;
-    --background-start-color: #000000;
-    --background-end-color: #000000;
+    --background-start-color: #ffffff;
+    --background-end-color: #d6dbdc;
   }
 }
 

@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import ConfirmacionParticipacionModal from './ConfirmacionParticipacionModal';
 import ResumenProyecto from './ResumenProyecto';
 
-const ProjectInfo: React.FC<{ data?: IPostulationData, onConfirm?: () => void  }> = ({data, onConfirm}) => {
+const ProjectInfo: React.FC<{ data?: IPostulationData, onConfirm?: () => void ,startPostulation?: () => void  }> = ({data, onConfirm,startPostulation}) => {
 
     const router = useRouter();
 
@@ -58,7 +58,7 @@ const ProjectInfo: React.FC<{ data?: IPostulationData, onConfirm?: () => void  }
 
 
     const iniciarPostulacion = () => {
-        router.push('/postulacion-proceso');
+        router.push(`/postulacion-proceso`);
     };
 
     const ProductionHouses = () => {
@@ -155,7 +155,7 @@ const ProjectInfo: React.FC<{ data?: IPostulationData, onConfirm?: () => void  }
                     <><ResumenProyecto data={project}/>
                         <div className="flex justify-center pt-8">
                             <button className="bg-red-500 text-white py-2 px-4 rounded"
-                                    onClick={() => iniciarPostulacion()}>
+                                    onClick={startPostulation}>
                                 Iniciar postulación
                             </button>
                         </div>
