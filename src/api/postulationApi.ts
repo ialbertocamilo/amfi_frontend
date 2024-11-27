@@ -57,18 +57,8 @@ export const checkInvitationStatusDirect = async (projectInvitationId: string) =
 }
 
 export const submitPostulation = async (postulation: CreatePostulationDto) => {
-    try {
         const response = await ApiService.post('/postulation/submit', postulation);
-        toast.success('The postulation has been successfully submitted.');
         return response.data;
-    } catch (error: any) {
-        if (error.response?.status === 400) {
-            toast.error('Bad Request');
-        } else {
-            toast.error('An error occurred while submitting the postulation.');
-        }
-        return null;
-    }
 };
 
 

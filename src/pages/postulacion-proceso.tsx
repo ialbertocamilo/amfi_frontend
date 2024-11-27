@@ -131,30 +131,33 @@ const PostulacionProceso: React.FC = () => {
 
     const validateFormData = (formData: FormData): boolean => {
         const validateFields = (data: any, parentKey: string = ''): boolean => {
-          for (const key in data) {
-            if (data.hasOwnProperty(key)) {
-              const value = data[key];
-              const fieldKey = parentKey ? `${parentKey}.${key}` : key;
-      
-              if (typeof value === 'object' && value !== null) {
-                if (!validateFields(value, fieldKey)) {
-                  return false;
+            for (const key in data) {
+                if (data.hasOwnProperty(key)) {
+                    const value = data[key];
+                    const fieldKey = parentKey ? `${parentKey}.${key}` : key;
+
+                    if (typeof value === 'object' && value !== null) {
+                        if (!validateFields(value, fieldKey)) {
+                            return false;
+                        }
+                    } else if (!value) {
+                        toast.error(`El campo ${fieldKey} es obligatorio`);
+                        return false;
+                    }
                 }
-              } else if (!value) {
-                toast.error(`El campo ${fieldKey} es obligatorio`);
-                return false;
-              }
             }
-          }
-          return true;
+            return true;
         };
-      
+
         return validateFields(formData);
-      };
+    };
 
     const processCheckInvitation = async () => {
+        // Si la propuesta ha sido subida redirigir al ultimo step
         setLoading(true)
         const data = await getInvitationById(projectInvitationId as string)
+        if (data?.result?.proposalUploaded)
+            setActiveTab('5')
         const projectId = data?.result.project?.id as string
         setProject(data?.result.project)
         checkInvitationStatus(projectId).then((response) => {
@@ -193,8 +196,17 @@ const PostulacionProceso: React.FC = () => {
 
         if (page == '5') {
             if (!validateFormData(formData)) return;
-            submitPostulation({ projectId: project?.id as string, metadata: formData }).then((response) => {
-                console.log(response)
+            setLoading(true)
+            submitPostulation({ projectId: project?.id as string, metadata: formData }).then((data) => {
+                toast.success('The postulation has been successfully submitted.');
+            }).catch((error) => {
+                if (error.response?.status === 400) {
+                    toast.error('Bad Request');
+                } else {
+                    toast.error('An error occurred while submitting the postulation.');
+                }
+            }).finally(() => {
+                setLoading(false)
             })
         }
         setActiveTab(page)

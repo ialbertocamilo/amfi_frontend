@@ -11,18 +11,18 @@ import moment from "moment";
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import toast from "react-hot-toast";
+import { Tooltip } from 'react-tooltip';
 import "./globals.css";
 
-
 const ProjectStatus = ({ status }: { status: string }) => {
-    if (!status) return <span className="bg-red-100 text-red-500 text-sm px-4 py-2 rounded-full">Pendiente</span>
-    return <span className="bg-green-100 text-green-500 text-sm px-4 py-2 rounded">
+    if (!status) return <span className="project-status bg-red-100 text-red-500 text-sm px-4 py-2 rounded-full">Pendiente</span>
+    return <span className="project-status bg-green-100 text-green-500 text-sm px-4 py-2 rounded">
         {ProjectMapper.mapProjectStatus(status)}
     </span>
 }
 const InvitationStatus = ({ status }: { status: boolean }) => {
-    if (!status) return <span className="bg-red-100 text-red-500 text-sm px-4 py-2 rounded-full">Pendiente</span>
-    return <span className="bg-green-100 text-green-500 text-sm px-4 py-2 rounded">
+    if (!status) return <span className="invitation-status bg-red-100 text-red-500 text-sm px-4 py-2 rounded-full">Pendiente</span>
+    return <span className="invitation-status bg-green-100 text-green-500 text-sm px-4 py-2 rounded">
         {ProjectInvitationMapper.mapStatus(status)}
     </span>
 }
@@ -30,12 +30,13 @@ const NewBadge = ({ createdAt }: { createdAt: Date }) => {
     return (moment().isSame(createdAt, 'day') && (
         <span className="text-sm text-red-500 bg-red-100 px-2 py-1 rounded-full">Nuevo</span>));
 };
-const ProposalUploaded = ({ isUploaded, onClick }: { isUploaded: boolean, onClick?: (e) => void }) => {
-    if (isUploaded) return <span className="text-sm text-red-500 text-bold flex items-center cursor-pointer"
-        onClick={onClick}>
+const ProposalUploaded = ({ isUploaded, onClick, className }: { isUploaded: boolean, onClick?: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void, className?: string }) => {
+    if (isUploaded) 
+    return <span className={`proposal-uploaded text-sm text-red-500 text-bold flex items-center cursor-pointer ${className}`} onClick={onClick}>
         <DownloadIcon />
         <b className="ml-2">Abrir propuesta enviada</b>
     </span>
+    return null;
 }
 const ListaDeProyectos = () => {
     const [projects, setProjects] = useState<IProjectInvitation[]>([]);
@@ -106,6 +107,7 @@ const ListaDeProyectos = () => {
                         </div>
                         <div className="flex items-center space-x-4">
                             <ProposalUploaded
+                                className="proposal-uploaded"
                                 isUploaded={projectInvitation.proposalUploaded}
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -120,6 +122,9 @@ const ListaDeProyectos = () => {
                 </div>
 
             </Loader>
+            <Tooltip anchorSelect=".proposal-uploaded" place={"bottom"}>Propuesta técnica está disponible.</Tooltip>
+            <Tooltip anchorSelect=".invitation-status" place={"bottom"}>Estado de la invitación al proyecto.</Tooltip>
+            <Tooltip anchorSelect=".project-status" place={"bottom"}>Estado del proyecto.</Tooltip>
         </Layout>
     );
 };

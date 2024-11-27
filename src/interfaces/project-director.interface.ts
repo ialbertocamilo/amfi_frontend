@@ -18,6 +18,6 @@ export interface IProjectInvitation {
 export interface CheckProjectInvitationStatusResponse {
 
     message: string;
-    result: IPostulationData
+    result: IProjectInvitation
 
 }

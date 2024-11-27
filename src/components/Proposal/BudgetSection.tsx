@@ -22,7 +22,7 @@ interface BudgetItemProps {
               <span className="text-lg font-medium">Total</span>
               <div className="flex items-center gap-2">
                 <span className="text-2xl font-bold text-red-500">${data?.presupuesto?.total}</span>
-                <span className="text-gray-500">{data.presupuesto?.moneda}</span>
+                <span className="text-gray-500">{data?.presupuesto?.moneda}</span>
               </div>
             </div>
           </div>

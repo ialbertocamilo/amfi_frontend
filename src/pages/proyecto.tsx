@@ -24,6 +24,7 @@ export const inputProjectNames = [
     'quantity',
     'agencyName',
     'agencyEmail',
+    'agencyProductor',
     'agencyCreativeDirector',
     'contactoFinanzas',
     'agencyAccountDirector',

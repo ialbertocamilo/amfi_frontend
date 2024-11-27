@@ -1,12 +1,12 @@
-import React from 'react';
+import { toast } from "react-hot-toast";
 import StepIndicator from "./StepIndicator/StepIndicator";
-import {toast} from "react-hot-toast";
 
 interface registroEntity {
   formData: {
     brand?: string;
     product?: string;
     category?: string;
+    agencyProductor?: string;
     projectName?: string;
     versionName?: string;
     quantity?: number;
@@ -197,6 +197,23 @@ const ProyectoSteep1 = ({
               </div>
               <div>
                 <label
+                    htmlFor="agencyAccountDirector"
+                    className="block text-sm font-medium text-gray-700"
+                >
+                  Nombre del Director de Cuentas
+                </label>
+                <input
+                    type="text"
+                    id="agencyAccountDirector"
+                    name="agencyAccountDirector"
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                    value={formData?.agencyAccountDirector || ''}
+                    onChange={handleChange}
+                    disabled={readonly}
+                />
+              </div>
+              <div>
+                <label
                     htmlFor="agencyEmail"
                     className="block text-sm font-medium text-gray-700"
                 >
@@ -208,6 +225,23 @@ const ProyectoSteep1 = ({
                     name="agencyEmail"
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                     value={formData?.agencyEmail || ''}
+                    onChange={handleChange}
+                    disabled={readonly}
+                />
+              </div>
+              <div>
+                <label
+                    htmlFor="agencyProductor"
+                    className="block text-sm font-medium text-gray-700"
+                >
+                  Productor de la agencia
+                </label>
+                <input
+                    type="text"
+                    id="agencyProductor"
+                    name="agencyProductor"
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                    value={formData?.agencyProductor || ''}
                     onChange={handleChange}
                     disabled={readonly}
                 />
@@ -231,57 +265,6 @@ const ProyectoSteep1 = ({
               </div>
               <div>
                 <label
-                    htmlFor="contactoFinanzas"
-                    className="block text-sm font-medium text-gray-700"
-                >
-                  Contacto Finanzas
-                </label>
-                <input
-                    type="text"
-                    id="contactoFinanzas"
-                    name="contactoFinanzas"
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                    value={formData?.contactoFinanzas || ''}
-                    onChange={handleChange}
-                    disabled={readonly}
-                />
-              </div>
-              <div>
-                <label
-                    htmlFor="agencyAccountDirector"
-                    className="block text-sm font-medium text-gray-700"
-                >
-                  Nombre del Director de Cuentas
-                </label>
-                <input
-                    type="text"
-                    id="agencyAccountDirector"
-                    name="agencyAccountDirector"
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                    value={formData?.agencyAccountDirector || ''}
-                    onChange={handleChange}
-                    disabled={readonly}
-                />
-              </div>
-              <div>
-                <label
-                    htmlFor="productorAgencia"
-                    className="block text-sm font-medium text-gray-700"
-                >
-                  Productor de la agencia
-                </label>
-                <input
-                    type="text"
-                    id="productorAgencia"
-                    name="productorAgencia"
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                    value={formData?.productorAgencia || ''}
-                    onChange={handleChange}
-                    disabled={readonly}
-                />
-              </div>
-              <div>
-                <label
                     htmlFor="odtNumber"
                     className="block text-sm font-medium text-gray-700"
                 >
@@ -299,6 +282,25 @@ const ProyectoSteep1 = ({
               </div>
               <div>
                 <label
+                    htmlFor="contactoFinanzas"
+                    className="block text-sm font-medium text-gray-700"
+                >
+                  Contacto Finanzas
+                </label>
+                <input
+                    type="text"
+                    id="contactoFinanzas"
+                    name="contactoFinanzas"
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                    value={formData?.contactoFinanzas || ''}
+                    onChange={handleChange}
+                    disabled={readonly}
+                />
+              </div>
+
+
+              <div>
+                <label
                     htmlFor="buyerContact"
                     className="block text-sm font-medium text-gray-700"
                 >
@@ -314,6 +316,7 @@ const ProyectoSteep1 = ({
                     disabled={readonly}
                 />
               </div>
+           
             </div>
           </div>
           <div className="flex justify-center space-x-4">
