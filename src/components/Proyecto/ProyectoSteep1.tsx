@@ -15,7 +15,7 @@ interface registroEntity {
     agencyCreativeDirector?: string;
     contactoFinanzas?: string;
     agencyAccountDirector?: string;
-    productorAgencia?: string;
+    // productorAgencia?: string;
     odtNumber?: string;
     buyerContact?: string;
   };
@@ -39,11 +39,12 @@ const ProyectoSteep1 = ({
     const requiredFields = [
       'brand', 'product', 'category', 'projectName', 'versionName', 'quantity',
       'agencyName', 'agencyEmail', 'agencyCreativeDirector', 'contactoFinanzas',
-      'agencyAccountDirector', 'productorAgencia', 'odtNumber', 'buyerContact'
+      'agencyAccountDirector', 'odtNumber', 'buyerContact'
     ];
 
     for (const field of requiredFields) {
       if (!formData[field]) {
+        console.log('field', field);
         return false;
       }
     }

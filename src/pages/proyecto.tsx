@@ -88,7 +88,6 @@ const Proyecto: React.FC = () => {
     const [readonly, setReadonly] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        console.log(e.target.name, e.target.value);
         setFormData({
             ...formData, [e.target.name]: e.target.value,
         });
@@ -97,6 +96,7 @@ const Proyecto: React.FC = () => {
     const { projectJson, loading, fetchProject, saveOrUpdateProject } = useProject(id as string);
     const handleSubmit = async (page: string) => {
         if (page==='6') {
+            console.log("ga")
             if (!validateFormData(formData, inputProjectNames)) {
                 toast.error("Por favor, llena todos los campos para crear el proyecto");
                 return;
