@@ -28,7 +28,6 @@ export const inputProjectNames = [
     'agencyCreativeDirector',
     'contactoFinanzas',
     'agencyAccountDirector',
-    'productorAgencia',
     'odtNumber',
     'buyerContact',
     'medios',
@@ -96,7 +95,6 @@ const Proyecto: React.FC = () => {
     const { projectJson, loading, fetchProject, saveOrUpdateProject } = useProject(id as string);
     const handleSubmit = async (page: string) => {
         if (page==='6') {
-            console.log("ga")
             if (!validateFormData(formData, inputProjectNames)) {
                 toast.error("Por favor, llena todos los campos para crear el proyecto");
                 return;
