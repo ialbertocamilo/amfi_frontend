@@ -1,7 +1,7 @@
 import {ICompany} from "./company.interface";
 import {IDirector} from "./director.interface";
 import {IProject} from "./project.interface";
-import {IPostulationData} from "@/api/postulationApi";
+import {IPostulation} from "@/interfaces/postulation.interface";
 
 export interface IProjectInvitation {
     accepted: boolean;
@@ -12,7 +12,8 @@ export interface IProjectInvitation {
     project: IProject;
     updatedAt: string;
     proposalUploaded: boolean
-    evaluation:object
+    evaluation: object
+    postulation?: IPostulation
 }
 
 export interface CheckProjectInvitationStatusResponse {

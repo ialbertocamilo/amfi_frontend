@@ -111,7 +111,7 @@ const ListaDeProyectos = () => {
                                 isUploaded={projectInvitation.proposalUploaded}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    router.push(`/propuesta?postulationId=${projectInvitation.id}`);
+                                    router.push(`/propuesta?postulationId=${projectInvitation?.postulation?.id}`);
                                 }}
                             />
                             <InvitationStatus status={projectInvitation.accepted} />

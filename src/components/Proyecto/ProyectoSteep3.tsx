@@ -1,6 +1,7 @@
 import UploaderComponent from "../UploaderComponent";
 import StepIndicator from "./StepIndicator/StepIndicator";
 import {toast} from "react-hot-toast";
+import {useRouter} from "next/router";
 
 interface registroEntity {
     formData: any,
@@ -28,6 +29,8 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
         return true;
     };
 
+    const router=useRouter()
+    const projectId=router.query.id as string
     const handleNext = () => {
         if (!validateFormData(formData)) {
             toast.error('Por favor llena todos los campos');
@@ -91,7 +94,7 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                         <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
                             <div>
                                 <label htmlFor="line1" className="block text-sm font-medium text-gray-700">Subir archivo</label>
-                                <UploaderComponent/>
+                                <UploaderComponent identifier={'first_file'} projectId={projectId}/>
                             </div>
                             <div>
                                 <label htmlFor="link1" className="block text-sm font-medium text-gray-700">Link</label>
@@ -107,7 +110,7 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                             </div>
                             <div>
                                 <label htmlFor="line1" className="block text-sm font-medium text-gray-700">Referencias</label>
-                                <UploaderComponent/>
+                                <UploaderComponent identifier={'second_file'} projectId={projectId}/>
                             </div>
                             <div>
                                 <label htmlFor="link2" className="block text-sm font-medium text-gray-700">Link</label>
