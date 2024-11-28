@@ -83,8 +83,8 @@ export interface ProductionHouse {
     maxUsers: number;
 }
 
-export interface Evaluation {
-    // Creative Proposal (Scale 1-5)
+
+export interface CreativeProposal {
     uniquenessLevel: number;
     productionQuality: number;
     originality: number;
@@ -95,18 +95,43 @@ export interface Evaluation {
     visualImpact: number;
     innovation: number;
     technicalExecution: number;
-    // Company (Boolean)
-    hasPreviousExperienceWithProductionCompany: boolean | null;
-    companyLegallyEstablished: boolean | null;
-    companyHasRelevantProjects: boolean | null;
-    companyTaxCompliance: boolean | null;
-    // Support (Boolean)
-    companyAffiliatedWithAssociation: boolean | null;
-    negativeReportsExist: boolean | null;
-    companyHasMoreThanXYearsInMarket: boolean | null;
-    goodSocialMediaReputation: boolean | null;
-    // Director (Boolean)
-    hasPreviousExperienceWithDirector: boolean | null;
-    isYoungTalent: boolean | null;
-    reelContainsRelevantPieces: boolean | null;
+  }
+
+export interface Evaluation {
+    // Creative Proposal (Scale 1-5)
+    creativeProposal: CreativeProposal;
+    experience: {
+      company: {
+        hasPreviousExperienceWithProductionCompany: boolean | null;
+        companyLegallyEstablished: boolean | null;
+        companyHasRelevantProjects: boolean | null;
+        companyTaxCompliance: boolean | null;
+      };
+      support: {
+        companyAffiliatedWithAssociation: boolean | null;
+        negativeReportsExist: boolean | null;
+        companyHasMoreThanXYearsInMarket: boolean | null;
+        goodSocialMediaReputation: boolean | null;
+      };
+      director: {
+        hasPreviousExperienceWithDirector: boolean | null;
+        isYoungTalent: boolean | null;
+        reelContainsRelevantPieces: boolean | null;
+      };
+    }
+  }
+
+  export interface Budget {
+    crew: number;
+    preAndPro: number;
+    talent: number;
+    equipment: number;
+    location: number;
+    travel: number;
+    stillPhotography: number;
+    postProduction: number;
+    financing: number;
+    insurance: number;
+    overhead: number;
+    markUp: number;
   }

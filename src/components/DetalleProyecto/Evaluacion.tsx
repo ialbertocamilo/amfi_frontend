@@ -4,8 +4,9 @@ import StarRating from "../Commons/StarRating/StarRating";
 import BinaryChoice from "../Commons/BinaryChoice/BinaryChoice";
 import PercentageSelector from "../Commons/PercentageSelector/PercentageSelector";
 import InfoLink from "../Commons/InfoLink/InfoLink";
-import { Evaluation } from "@/api/interface/api.interface";
+import { Budget, CreativeProposal, Evaluation } from "@/api/interface/api.interface";
 import { getBidEvaluation, updateBidEvaluation } from "@/api/projectApi";
+import BudgetBarChart from "./BudgetBarChart";
 
 interface ProposalItem {
   key: string;
@@ -26,27 +27,51 @@ interface EvaluacionProps {
 
 const Evaluacion: React.FC<EvaluacionProps> = ({ bidId, showComponent }) => {
   const [evaluation, setEvaluation] = useState<Evaluation>({
-    uniquenessLevel: 0,
-    productionQuality: 0,
-    originality: 0,
-    messageClarity: 0,
-    relevance: 0,
-    structureType: 0,
-    creativity: 0,
-    visualImpact: 0,
-    innovation: 0,
-    technicalExecution: 0,
-    hasPreviousExperienceWithProductionCompany: null,
-    companyLegallyEstablished: null,
-    companyHasRelevantProjects: null,
-    companyTaxCompliance: null,
-    companyAffiliatedWithAssociation: null,
-    negativeReportsExist: null,
-    companyHasMoreThanXYearsInMarket: null,
-    goodSocialMediaReputation: null,
-    hasPreviousExperienceWithDirector: null,
-    isYoungTalent: null,
-    reelContainsRelevantPieces: null,
+    creativeProposal: {
+      uniquenessLevel: 0,
+      productionQuality: 0,
+      originality: 0,
+      messageClarity: 0,
+      relevance: 0,
+      structureType: 0,
+      creativity: 0,
+      visualImpact: 0,
+      innovation: 0,
+      technicalExecution: 0,
+    },
+    experience: {
+      company: {
+        hasPreviousExperienceWithProductionCompany: null,
+        companyLegallyEstablished: null,
+        companyHasRelevantProjects: null,
+        companyTaxCompliance: null,
+      },
+      support: {
+        companyAffiliatedWithAssociation: null,
+        negativeReportsExist: null,
+        companyHasMoreThanXYearsInMarket: null,
+        goodSocialMediaReputation: null,
+      },
+      director: {
+        hasPreviousExperienceWithDirector: null,
+        isYoungTalent: null,
+        reelContainsRelevantPieces: null,
+      },
+    },
+  });
+  const [budget, setBudget] = useState<Budget>({
+    crew: 0,
+    preAndPro: 0,
+    talent: 0,
+    equipment: 0,
+    location: 0,
+    travel: 0,
+    stillPhotography: 0,
+    postProduction: 0,
+    financing: 0,
+    insurance: 0,
+    overhead: 0,
+    markUp: 0,
   });
 
   const [creativeProposal, setCreativeProposal] = useState<ProposalItem[]>([
@@ -144,7 +169,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({ bidId, showComponent }) => {
 
   const updateEvaluation = (
     proposal: ProposalItem[] | QuestionItem[],
-    evaluation: Evaluation
+    evaluation: Object
   ) => {
     return proposal.map((item) => ({
       ...item,
@@ -154,14 +179,27 @@ const Evaluacion: React.FC<EvaluacionProps> = ({ bidId, showComponent }) => {
   };
 
   const onInit = async () => {
-    const evaluation = (await getBidEvaluation(bidId))?.result;
-
+    const result = (await getBidEvaluation(bidId))?.result;
+    const evaluation = result?.evaluation;
+    const budget = result?.budget;
     if (evaluation) {
       setEvaluation(evaluation);
-      setCreativeProposal(updateEvaluation(creativeProposal, evaluation));
-      setQuestionsEmpresa(updateEvaluation(questionsEmpresa, evaluation));
-      setQuestionsRespaldo(updateEvaluation(questionsRespaldo, evaluation));
-      setQuestionsDirector(updateEvaluation(questionsDirector, evaluation));
+
+      setCreativeProposal(
+        updateEvaluation(creativeProposal, evaluation.creativeProposal)
+      );
+      setQuestionsEmpresa(
+        updateEvaluation(questionsEmpresa, evaluation.experience.company)
+      );
+      setQuestionsRespaldo(
+        updateEvaluation(questionsRespaldo, evaluation.experience.support)
+      );
+      setQuestionsDirector(
+        updateEvaluation(questionsDirector, evaluation.experience.director)
+      );
+    }
+    if (budget) {
+      setBudget(budget);
     }
   };
 
@@ -190,9 +228,12 @@ const Evaluacion: React.FC<EvaluacionProps> = ({ bidId, showComponent }) => {
   };
 
   const updateBidEvaluationData = () => {
-    creativeProposal.forEach((proposal) => {
-      evaluation[proposal.key] = proposal.value;
-    });
+    const newCreativeProposal = {} as CreativeProposal
+    creativeProposal.map(
+      (item) => (newCreativeProposal[item.key] = item.value)
+    );
+
+    evaluation.creativeProposal = newCreativeProposal;
 
     updateBidEvaluation(bidId, evaluation);
   };
@@ -317,22 +358,29 @@ const Evaluacion: React.FC<EvaluacionProps> = ({ bidId, showComponent }) => {
             </div>
             <InfoLink label="Ver puntaje de sección"></InfoLink>
           </div>
-          <div className="mt-4">
-            <div className="flex justify-center">
-              <img
-                src="presupuestoBloqueado.png"
-                alt="Presupuesto"
-                className="max-w-full h-auto"
-              />
+          {hideSection ? (
+            <div className="mt-4">
+              <div className="flex justify-center">
+                <img
+                  src="presupuestoBloqueado.png"
+                  alt="Presupuesto"
+                  className="max-w-full h-auto"
+                />
+              </div>
+              <p className="mt-4 text-center">
+                Una vez que todas las casas productoras hayan subido su
+                presupuesto,
+                <br />
+                podrás desbloquear esta sección.
+              </p>
             </div>
-            <p className="mt-4 text-center">
-              Una vez que todas las casas productoras hayan subido su
-              presupuesto,
-              <br />
-              podrás desbloquear esta sección.
-            </p>
-          </div>
+          ) : (
+            <div className="mt-4">
+              <BudgetBarChart budget={budget}></BudgetBarChart>
+            </div>
+          )}
         </div>
+        <div></div>
       </section>
 
       {/* Puntaje final */}

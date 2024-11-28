@@ -184,6 +184,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({id}) => {
                         closeProject={closeProject}
                         sendReminder={sendReminder}
                     ></ListadoInvitaciones>
+                    
                 ) : (
                     <></>
                 )}
