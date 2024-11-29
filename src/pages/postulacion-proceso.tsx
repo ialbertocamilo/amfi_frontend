@@ -197,14 +197,11 @@ const PostulacionProceso: React.FC = () => {
         if (page == '5') {
             if (!validateFormData(formData)) return;
             setLoading(true)
-            submitPostulation({ projectId: project?.id as string, metadata: formData }).then((data) => {
-                toast.success('The postulation has been successfully submitted.');
+            submitPostulation({ projectId: project?.id as string, metadata: formData }).then(() => {
+                toast.success('La postulación ha sido enviada correctamente');
             }).catch((error) => {
-                if (error.response?.status === 400) {
-                    toast.error('Bad Request');
-                } else {
-                    toast.error('An error occurred while submitting the postulation.');
-                }
+                console.warn(error)
+                toast.error('Ocurrió un error al enviar la postulación');
             }).finally(() => {
                 setLoading(false)
             })

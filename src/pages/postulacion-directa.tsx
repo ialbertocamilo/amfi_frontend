@@ -1,8 +1,7 @@
-import { acceptDirectInvitation, checkInvitationStatusDirect, IPostulationData } from "@/api/postulationApi";
+import { checkInvitationStatusDirect, IPostulationData } from "@/api/postulationApi";
 import Layout from "@/components/Layout";
 import Loader from "@/components/Loader";
-import ProjectInfo from "@/components/Postulacion/ProjectInfo";
-import { manageLogicError } from "@/lib/utils";
+import ProjectPostulationInvitationDetails from "@/components/Postulacion/ProjectPostulationInvitationDetails";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -12,16 +11,16 @@ const PostulacionDirecta: React.FC = () => {
 
     const router = useRouter();
     const { projectInvitationId } = router.query;
-    const [postulationData, setPostulationData] = useState<IPostulationData>();
 
     const [loading, setLoading] = useState(false)
-
+    const [data, setData] = useState<IPostulationData>();
     useEffect(() => {
         if (projectInvitationId) {
             setLoading(true)
             checkInvitationStatusDirect(projectInvitationId as string).then((res) => {
-                if (res?.result)
-                    setPostulationData(res.result);
+                if (res?.result) {
+                    setData(res.result);
+                }
             }).catch((err) => {
                 toast.error('Error al cargar la información del proyecto')
             }).finally(() => {
@@ -31,24 +30,13 @@ const PostulacionDirecta: React.FC = () => {
         }
     }, [projectInvitationId]);
 
-    const onConfirm = async () => {
-        // postulacion directa
-        try {
-            await acceptDirectInvitation(projectInvitationId as string)
-        } catch (e) {
-            manageLogicError(e)
-        }
-        console.log("on confirm")
-    }
+    return (
+        <Layout>
 
-    const startPostulation = async () => {
-        router.push(`/postulacion-proceso?projectInvitationId=${projectInvitationId}`);
-    }
-    return (<Layout>
-        <Loader loading={loading}>
-            <ProjectInfo data={postulationData} onConfirm={onConfirm} startPostulation={startPostulation} />
-        </Loader>
-    </Layout>)
+            <Loader loading={loading}>
+                {data && <ProjectPostulationInvitationDetails data={data} projectInvitationId={projectInvitationId as string} />}
+            </Loader>
+        </Layout>)
 };
 
 export default PostulacionDirecta;

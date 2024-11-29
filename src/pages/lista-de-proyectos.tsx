@@ -6,7 +6,7 @@ import Loader from '@/components/Loader';
 import { CompanyType } from "@/constants";
 import { IProjectInvitation } from "@/interfaces/project-director.interface";
 import { ProjectInvitationMapper } from "@/mappers/project-invitation.mapper";
-import { ProjectMapper } from "@/mappers/project.mapper";
+import { EstadoProyecto, ProjectMapper } from "@/mappers/project.mapper";
 import moment from "moment";
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -15,13 +15,45 @@ import { Tooltip } from 'react-tooltip';
 import "./globals.css";
 
 const ProjectStatus = ({ status }: { status: string }) => {
-    if (!status) return <span className="project-status bg-red-100 text-red-500 text-sm px-4 py-2 rounded-full">Pendiente</span>
-    return <span className="project-status bg-green-100 text-green-500 text-sm px-4 py-2 rounded">
-        {ProjectMapper.mapProjectStatus(status)}
-    </span>
-}
+    if (!status) {
+        return <span className="project-status bg-red-100 text-red-500 text-sm px-4 py-2 rounded">No disponible</span>;
+    }
+
+    const mappedStatus = ProjectMapper.mapProjectStatus(status);
+    let bgColor = "";
+    let textColor = "";
+
+    switch (mappedStatus) {
+        case EstadoProyecto.EnProgreso:
+            bgColor = "bg-blue-100";
+            textColor = "text-blue-500";
+            break;
+        case EstadoProyecto.Terminado:
+            bgColor = "bg-green-100";
+            textColor = "text-green-500";
+            break;
+        case EstadoProyecto.Pausado:
+            bgColor = "bg-red-100";
+            textColor = "text-red-500";
+            break;
+        case EstadoProyecto.Cerrado:
+            bgColor = "bg-gray-100";
+            textColor = "text-gray-500";
+            break;
+        default:
+            bgColor = "bg-yellow-100";
+            textColor = "text-yellow-500";
+            break;
+    }
+
+    return (
+        <span className={`project-status ${bgColor} ${textColor} text-sm px-4 py-2 rounded `}>
+            {mappedStatus}
+        </span>
+    );
+};
 const InvitationStatus = ({ status }: { status: boolean }) => {
-    if (!status) return <span className="invitation-status bg-red-100 text-red-500 text-sm px-4 py-2 rounded-full">Pendiente</span>
+    if (!status) return <span className="invitation-status bg-red-100 text-red-500 text-sm px-4 py-2 rounded">Invitación pendiente</span>
     return <span className="invitation-status bg-green-100 text-green-500 text-sm px-4 py-2 rounded">
         {ProjectInvitationMapper.mapStatus(status)}
     </span>
@@ -88,7 +120,6 @@ const ListaDeProyectos = () => {
                         value={filterText}
                         onChange={(e) => setFilterText(e.target.value)}
                     />
-                    <button className="ml-2 bg-red-500 text-white py-2 px-4 rounded">Ver</button>
                 </div>
 
                 <div className="space-y-4">

@@ -6,12 +6,14 @@ import toast from "react-hot-toast";
 import { CheckProjectInvitationStatusResponse } from "@/interfaces/project-director.interface";
 import ApiService from "@/lib/api";
 import { manageLogicError } from "@/lib/utils";
+import { IInvitationResponse } from "@/interfaces/invitation.interface";
 
 export interface IPostulationData {
     id?:string;
     project: IProject;
     director: IDirector;
     productionHouse: ICompany;
+    accepted?:boolean
 }
 export class CreatePostulationDto {
     projectId: string;
@@ -64,9 +66,20 @@ export const submitPostulation = async (postulation: CreatePostulationDto) => {
 
 export const acceptDirectInvitation = async (projectInvitationId: string) => {
         const response = await api.post(`/project-director/accept-invitation-direct`, { projectInvitationId });
-        return response.data;
+        return response.data  as IInvitationResponse
 }
 
+
+
+export const acceptInvitation = async (token: string) => {
+    try {
+        const response = await ApiService.post(`/project-director/accept-invitation`, { token });
+        return response.data as IInvitationResponse
+    } catch (error: any) {
+        console.warn('Error confirming invitation:', error);
+        return null;
+    }
+};
 export const getPostulationById = async (postulationId: string) => {
     const response = await api.get(`/postulation/${postulationId}`);
     return response.data as { metadata: Record<string, any>, project:IProject,status:string };

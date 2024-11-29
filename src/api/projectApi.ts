@@ -1,10 +1,10 @@
+import { IProjectInvitation } from "@/interfaces/project-director.interface";
 import ApiService from "@/lib/api";
+import moment from 'moment';
 import { CreateProjectDto } from "../dto/create-project.dto";
 import { UpdateProjectDto } from "../dto/update-project.dto";
-import moment from 'moment';
 import { Budget, Evaluation, InvitedDirectorsResponse } from "./interface/api.interface";
-import toast from "react-hot-toast";
-import {IProjectInvitation} from "@/interfaces/project-director.interface";
+import { IInvitationResponse } from "@/interfaces/invitation.interface";
 
 export const getProjects = async () => {
     try {
@@ -71,17 +71,6 @@ export const addDirectorsToProject = async (data: { projectId: string, directorI
         return [true, error.response?.data.message || 'Error adding directors to project']
     }
 }
-
-
-export const confirmInvitation = async (token: string) => {
-    try {
-        const response = await ApiService.post(`/project-director/accept-invitation`, { token });
-        return response.data;
-    } catch (error: any) {
-        console.warn('Error confirming invitation:', error);
-        return null;
-    }
-};
 
 
 export const updateProjectStatus = async (projectId: string, status: string) => {

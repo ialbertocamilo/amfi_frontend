@@ -1,8 +1,8 @@
 
 export class ProjectInvitationMapper {
     static mapStatus(status: boolean | null): string {
-        if (status === true) return 'Aceptado';
-        if (status === null) return 'Pendiente';
-        return 'Rechazado';
+        if (status === true) return 'Invitación aceptada';
+        if (status === null) return 'Invitación pendiente';
+        return 'Invitación rechazada';
     }
 }
