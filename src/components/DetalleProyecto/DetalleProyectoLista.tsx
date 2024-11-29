@@ -9,6 +9,8 @@ import Evaluacion from "./Evaluacion";
 import ListadoInvitaciones from "./ListadoInvitaciones";
 import Comparacion from "./Comparacion";
 import {Evaluation, InvitedDirectorsResponse} from "@/api/interface/api.interface";
+import Loader from "@/components/Loader";
+import useLoader from "@/hooks/loader.hook";
 
 interface ProjectDetailsProps {
     id: string;
@@ -49,6 +51,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({id}) => {
     });
 
     const onInit = async () => {
+        setLoading(true)
         const projectData = await getProjectById(id);
         const invitationData = await getInvitationsByProjectId(id);
 
@@ -81,6 +84,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({id}) => {
             console.log("invitationDataResult", invitationData);
             setInvitationData(invitationData);
         }
+        setLoading(false)
     };
 
     const sendReminder = () => {
@@ -139,7 +143,9 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({id}) => {
         }
     };
 
+    const {loading,setLoading}=useLoader(false)
     return (
+        <Loader loading={loading}>
         <div className="mt-6 px-4 w-full max-w-screen-xxl mx-auto bg-white rounded-xl space-y-6 lg:px-8">
             <div className="flex flex-col border-b">
                 <h1 className="text-xl font-semibold pb-4">
@@ -203,6 +209,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({id}) => {
                 )}
             </div>
         </div>
+        </Loader>
     );
 };
 

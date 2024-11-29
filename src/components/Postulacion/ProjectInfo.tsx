@@ -8,8 +8,12 @@ import React, {useEffect, useState} from 'react';
 import toast from 'react-hot-toast';
 import ConfirmacionParticipacionModal from './ConfirmacionParticipacionModal';
 import ResumenProyecto from './ResumenProyecto';
+import UploaderComponent from "@/components/UploaderComponent";
 
-const ProjectInfo: React.FC<{ data?: IPostulationData, onConfirm?: () => void ,startPostulation?: () => void  }> = ({data, onConfirm,startPostulation}) => {
+const ProjectInfo: React.FC<{
+    data?: IPostulationData,
+    onConfirm?: () => void
+}> = ({data, onConfirm}) => {
 
     const router = useRouter();
 
@@ -26,8 +30,8 @@ const ProjectInfo: React.FC<{ data?: IPostulationData, onConfirm?: () => void ,s
             if (!invitation) toast.error('Error al confirmar la invitación')
             else toast.success('Invitación confirmada correctamente')
         } else {
-            if(onConfirm)
-            onConfirm()
+            if (onConfirm)
+                onConfirm()
         }
         setIsModalOpen(false);
         setPostulacion(true);
@@ -57,8 +61,8 @@ const ProjectInfo: React.FC<{ data?: IPostulationData, onConfirm?: () => void ,s
     }, [data])
 
 
-    const iniciarPostulacion = () => {
-        router.push(`/postulacion-proceso`);
+    const startPostulation = () => {
+        router.push(`/postulacion-proceso?projectInvitationId=${data?.project?.id}`);
     };
 
     const ProductionHouses = () => {
@@ -124,22 +128,18 @@ const ProjectInfo: React.FC<{ data?: IPostulationData, onConfirm?: () => void ,s
             <div className="mb-8">
                 <h2 className="text-lg font-semibold mb-4">Documentos de proyecto</h2>
                 <div className="grid grid-cols-2 gap-4">
-                    <div className="border p-4 rounded-lg bg-gray-100">
-                        <p className="text-sm">Document1.pdf</p>
-                        <button className="text-red-500">Descargar</button>
-                    </div>
-                    <div className="border p-4 rounded-lg bg-gray-100">
-                        <p className="text-sm">Document2.pdf</p>
-                        <button className="text-red-500">Descargar</button>
-                    </div>
+                    <UploaderComponent projectId={data?.project?.id as string} identifier={'first_file'} blockUpload></UploaderComponent>
+
+                    <UploaderComponent projectId={data?.project?.id as string} identifier={'second_file'} blockUpload></UploaderComponent>
+
                 </div>
             </div>
             {/* Links */}
             <div className="mb-8">
                 <h2 className="text-lg font-semibold mb-4">Links</h2>
                 <div className="grid grid-cols-2 gap-4">
-                    <a href={project?.link1} className="text-blue-500 underline">{project?.link1}</a>
-                    <a href={project?.link2} className="text-blue-500 underline">{project?.link2}</a>
+                    <a  target="_blank" href={project?.link1} className="text-blue-500 underline">{project?.link1}</a>
+                    <a  target="_blank" href={project?.link2} className="text-blue-500 underline">{project?.link2}</a>
                 </div>
             </div>
             {/* Casas productoras Licitantes */}

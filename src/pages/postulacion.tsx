@@ -37,7 +37,6 @@ const Postulacion: React.FC = () => {
         }
     }, [token]);
 
-
     return (
         <div>
             {message && <p>{message}</p>}
@@ -51,7 +50,7 @@ const Postulacion: React.FC = () => {
                 </div>
 
             ) : (
-                <ProjectInfo data={postulationData}/>
+                <ProjectInfo data={postulationData} />
             )}
 
 

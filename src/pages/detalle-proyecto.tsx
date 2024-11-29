@@ -8,6 +8,7 @@ const DetalleProyecto = () => {
   const router = useRouter();
   const { id } = router.query;
 
+
   return (
     <Layout>
       <div className="flex-1 flex flex-col">

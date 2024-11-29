@@ -2,6 +2,7 @@ import UploaderComponent from "../UploaderComponent";
 import StepIndicator from "./StepIndicator/StepIndicator";
 import {toast} from "react-hot-toast";
 import {useRouter} from "next/router";
+import useDownloadFiles from "@/hooks/files.hook";
 
 interface registroEntity {
     formData: any,
@@ -13,6 +14,8 @@ interface registroEntity {
 
 const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setactiveTab}: registroEntity) => {
 
+    const router = useRouter()
+    const projectId = router.query.id as string
     const validateFormData = (formData: Record<string, any>): boolean => {
         for (const key in formData) {
             if (formData.hasOwnProperty(key)) {
@@ -28,9 +31,6 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
         }
         return true;
     };
-
-    const router=useRouter()
-    const projectId=router.query.id as string
     const handleNext = () => {
         if (!validateFormData(formData)) {
             toast.error('Por favor llena todos los campos');
@@ -55,7 +55,8 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                     <h2 className="text-xl font-bold mb-4">Objetivos de marca</h2>
                     <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
                         <div>
-                            <label htmlFor="objetivoComunicacion" className="block text-sm font-medium text-gray-700">Objetivos de comunicación</label>
+                            <label htmlFor="objetivoComunicacion" className="block text-sm font-medium text-gray-700">Objetivos
+                                de comunicación</label>
                             <textarea
                                 id="objetivoComunicacion"
                                 name="objetivoComunicacion"
@@ -77,7 +78,8 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                             />
                         </div>
                         <div>
-                            <label htmlFor="lineamientosMarca" className="block text-sm font-medium text-gray-700">Lineamientos de marca</label>
+                            <label htmlFor="lineamientosMarca" className="block text-sm font-medium text-gray-700">Lineamientos
+                                de marca</label>
                             <textarea
                                 id="lineamientosMarca"
                                 name="lineamientosMarca"
@@ -93,8 +95,9 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                         <h2 className="text-xl font-bold mb-4">Documentos</h2>
                         <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
                             <div>
-                                <label htmlFor="line1" className="block text-sm font-medium text-gray-700">Subir archivo</label>
-                                <UploaderComponent identifier={'first_file'} projectId={projectId}/>
+                                <label htmlFor="line1" className="block text-sm font-medium text-gray-700">Subir
+                                    archivo</label>
+                                <UploaderComponent identifier={'first_file'} projectId={projectId} />
                             </div>
                             <div>
                                 <label htmlFor="link1" className="block text-sm font-medium text-gray-700">Link</label>
@@ -109,7 +112,8 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                 />
                             </div>
                             <div>
-                                <label htmlFor="line1" className="block text-sm font-medium text-gray-700">Referencias</label>
+                                <label htmlFor="line1"
+                                       className="block text-sm font-medium text-gray-700">Referencias</label>
                                 <UploaderComponent identifier={'second_file'} projectId={projectId}/>
                             </div>
                             <div>
@@ -131,7 +135,8 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                         <h2 className="text-xl font-bold mb-4">Licitación Finanzas</h2>
                         <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
                             <div>
-                                <label htmlFor="responsablePago" className="block text-sm font-medium text-gray-700">Responsable de pago</label>
+                                <label htmlFor="responsablePago" className="block text-sm font-medium text-gray-700">Responsable
+                                    de pago</label>
                                 <select
                                     id="responsablePago"
                                     name="responsablePago"
@@ -145,7 +150,9 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                 </select>
                             </div>
                             <div>
-                                <label htmlFor="momentoFacturacionAgencia" className="block text-sm font-medium text-gray-700">Momento de facturación de Agencia</label>
+                                <label htmlFor="momentoFacturacionAgencia"
+                                       className="block text-sm font-medium text-gray-700">Momento de facturación de
+                                    Agencia</label>
                                 <select
                                     id="momentoFacturacionAgencia"
                                     name="momentoFacturacionAgencia"
@@ -162,7 +169,8 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                 </select>
                             </div>
                             <div>
-                                <label htmlFor="politicaPago" className="block text-sm font-medium text-gray-700">Política de pago</label>
+                                <label htmlFor="politicaPago" className="block text-sm font-medium text-gray-700">Política
+                                    de pago</label>
                                 <select
                                     id="politicaPago"
                                     name="politicaPago"
@@ -182,7 +190,8 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                 </select>
                             </div>
                             <div>
-                                <label htmlFor="contratoProyecto" className="block text-sm font-medium text-gray-700">Contrato de proyecto</label>
+                                <label htmlFor="contratoProyecto" className="block text-sm font-medium text-gray-700">Contrato
+                                    de proyecto</label>
                                 <select
                                     id="contratoProyecto"
                                     name="contratoProyecto"
@@ -196,7 +205,8 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                 </select>
                             </div>
                             <div>
-                                <label htmlFor="tipoProyecto" className="block text-sm font-medium text-gray-700">Tipo de proyecto</label>
+                                <label htmlFor="tipoProyecto" className="block text-sm font-medium text-gray-700">Tipo
+                                    de proyecto</label>
                                 <select
                                     id="tipoProyecto"
                                     name="tipoProyecto"
@@ -211,7 +221,8 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                 </select>
                             </div>
                             <div>
-                                <label htmlFor="momentoFacturacion" className="block text-sm font-medium text-gray-700">Momento de facturación</label>
+                                <label htmlFor="momentoFacturacion" className="block text-sm font-medium text-gray-700">Momento
+                                    de facturación</label>
                                 <select
                                     id="momentoFacturacion"
                                     name="momentoFacturacion"
@@ -228,7 +239,8 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                 </select>
                             </div>
                             <div>
-                                <label htmlFor="rondaCotizacion" className="block text-sm font-medium text-gray-700">Ronda de cotización</label>
+                                <label htmlFor="rondaCotizacion" className="block text-sm font-medium text-gray-700">Ronda
+                                    de cotización</label>
                                 <select
                                     id="rondaCotizacion"
                                     name="rondaCotizacion"
@@ -237,7 +249,7 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                     onChange={handleChange}
                                 >
                                     <option value="">Seleccionar</option>
-                                    <option value="1">1ª </option>
+                                    <option value="1">1ª</option>
                                     <option value="2">2ª</option>
                                     <option value="3">3ª</option>
                                 </select>
@@ -266,7 +278,9 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                 </div>
                             </div>
                             <div>
-                                <label htmlFor="politicaAltaProveedor" className="block text-sm font-medium text-gray-700">Política de alta al proveedor</label>
+                                <label htmlFor="politicaAltaProveedor"
+                                       className="block text-sm font-medium text-gray-700">Política de alta al
+                                    proveedor</label>
                                 <textarea
                                     id="politicaAltaProveedor"
                                     name="politicaAltaProveedor"
@@ -283,7 +297,9 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                         <h2 className="text-xl font-bold mb-4">Financiamiento</h2>
                         <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
                             <div>
-                                <label htmlFor="porcentajeTasaAnticipo" className="block text-sm font-medium text-gray-700">Porcentaje de tasa sobre el anticipo</label>
+                                <label htmlFor="porcentajeTasaAnticipo"
+                                       className="block text-sm font-medium text-gray-700">Porcentaje de tasa sobre el
+                                    anticipo</label>
                                 <input
                                     type="number"
                                     id="porcentajeTasaAnticipo"
@@ -295,7 +311,9 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                 />
                             </div>
                             <div>
-                                <label htmlFor="porcentajeTasaFiniquito" className="block text-sm font-medium text-gray-700">Porcentaje de tasa sobre el finiquito</label>
+                                <label htmlFor="porcentajeTasaFiniquito"
+                                       className="block text-sm font-medium text-gray-700">Porcentaje de tasa sobre el
+                                    finiquito</label>
                                 <input
                                     type="number"
                                     id="porcentajeTasaFiniquito"
@@ -307,7 +325,9 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                 />
                             </div>
                             <div>
-                                <label htmlFor="porcentajeTasaTotal" className="block text-sm font-medium text-gray-700">Porcentade de tasa total</label>
+                                <label htmlFor="porcentajeTasaTotal"
+                                       className="block text-sm font-medium text-gray-700">Porcentade de tasa
+                                    total</label>
                                 <input
                                     type="number"
                                     id="porcentajeTasaTotal"
@@ -319,7 +339,8 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                                 />
                             </div>
                             <div>
-                                <label htmlFor="informacionAdicional" className="block text-sm font-medium text-gray-700">Información adicional</label>
+                                <label htmlFor="informacionAdicional"
+                                       className="block text-sm font-medium text-gray-700">Información adicional</label>
                                 <textarea
                                     id="informacionAdicional"
                                     name="informacionAdicional"
@@ -333,8 +354,12 @@ const ProyectoSteep3 = ({formData, handleChange, handleSubmit, activeTab, setact
                     </div>
 
                     <div className="flex justify-center space-x-4">
-                        <button type="button" className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded" onClick={() => handleSubmit('2')}>Atras</button>
-                        <button type="button" className="w-1/4 bg-red-500 text-white py-2 rounded" onClick={handleNext}>Siguiente</button>
+                        <button type="button" className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded"
+                                onClick={() => handleSubmit('2')}>Atras
+                        </button>
+                        <button type="button" className="w-1/4 bg-red-500 text-white py-2 rounded"
+                                onClick={handleNext}>Siguiente
+                        </button>
                     </div>
                 </div>
             </form>

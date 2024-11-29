@@ -158,8 +158,8 @@ const PostulacionProceso: React.FC = () => {
         const data = await getInvitationById(projectInvitationId as string)
         if (data?.result?.proposalUploaded)
             setActiveTab('5')
-        const projectId = data?.result.project?.id as string
-        setProject(data?.result.project)
+        const projectId = data?.result?.project?.id as string
+        setProject(data?.result?.project)
         checkInvitationStatus(projectId).then((response) => {
             if (response) {
                 setProjectName(response?.result?.project?.name)
