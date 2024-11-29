@@ -1,11 +1,12 @@
 import { getInvitedDirectors } from '@/api/directorApi';
-import { acceptDirectInvitation, acceptInvitation, IPostulationData } from '@/api/postulationApi';
+import { acceptDirectInvitation, acceptInvitation, declineInvitation, IPostulationData } from '@/api/postulationApi';
 import { IProjectInvitation } from '@/interfaces/project-director.interface';
 import { manageLogicError } from '@/lib/utils';
 import { ProjectMapper, ProjectStatus } from '@/mappers/project.mapper';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import CustomModal from '../CustomModal';
 import UploaderComponent from '../UploaderComponent';
 import ConfirmacionParticipacionModal from './ConfirmacionParticipacionModal';
 import ResumenProyecto from './ResumenProyecto';
@@ -24,8 +25,6 @@ const ProjectPostulationInvitationDetails: React.FC<ProjectDetailsProps> = ({
 
   const router = useRouter();
   const startPostulation = () => {
-    console.log('starting postulation')
-    console.log(invitationId)
     router.push(`/postulacion-proceso?projectInvitationId=${invitationId}`);
   };
 
@@ -55,15 +54,13 @@ const ProjectPostulationInvitationDetails: React.FC<ProjectDetailsProps> = ({
     try {
       if (token) { // si hay token
         const invitation = await acceptInvitation(token as string)
-        console.log('accepting invitation with token', invitation)
         if (!invitation) toast.error('Error al confirmar la invitación')
         setInvitationId(invitation?.result?.invitationId as string)
       } else { // si hay projectInvitationId
-        const invitation=await acceptDirectInvitation(projectInvitationId as string)
+        const invitation = await acceptDirectInvitation(projectInvitationId as string)
         if (!invitation) toast.error('Error al confirmar la invitación')
-          console.log('accepting invitation ', invitation)
         setInvitationId(invitation?.result?.invitationId as string)
-        
+
       }
     } catch (e) {
       manageLogicError(e)
@@ -76,8 +73,10 @@ const ProjectPostulationInvitationDetails: React.FC<ProjectDetailsProps> = ({
   };
 
 
+  const [modalDecline, setModalDecline] = useState(false);
   const handleCancel = () => {
     setIsModalOpen(false);
+    setModalDecline(false)
   };
 
   useEffect(() => {
@@ -92,7 +91,17 @@ const ProjectPostulationInvitationDetails: React.FC<ProjectDetailsProps> = ({
     })
   }, [data])
 
-  const decline = () => {}
+  const decline = () => {
+    setModalDecline(true)
+  }
+
+  const handleDecline = () => {
+
+    declineInvitation(token as string || projectInvitationId as string).then((data) => {
+      toast.success('Invitación rechazada')
+      router.push('/lista-de-proyectos')
+    })
+  }
   return (
 
     <div className="container mt-4 mx-auto p-6 bg-white shadow-lg rounded-md">
@@ -183,6 +192,14 @@ const ProjectPostulationInvitationDetails: React.FC<ProjectDetailsProps> = ({
       {isModalOpen && (
         <ConfirmacionParticipacionModal onConfirm={handleConfirm} onCancel={handleCancel} />
       )}
+
+      <CustomModal
+        title="Rechazar invitación"
+        message="¿Estás seguro que rechazar la invitación a postular?"
+        confirmText="Sí, rechazar"
+        cancelText="No, volver"
+        onConfirm={handleDecline}
+        onCancel={handleCancel} isOpen={modalDecline}/>
     </div>
   );
 };

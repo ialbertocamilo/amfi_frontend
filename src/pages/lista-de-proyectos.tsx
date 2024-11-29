@@ -53,10 +53,31 @@ const ProjectStatus = ({ status }: { status: string }) => {
     );
 };
 const InvitationStatus = ({ status }: { status: boolean }) => {
-    if (!status) return <span className="invitation-status bg-red-100 text-red-500 text-sm px-4 py-2 rounded">Invitación pendiente</span>
-    return <span className="invitation-status bg-green-100 text-green-500 text-sm px-4 py-2 rounded">
-        {ProjectInvitationMapper.mapStatus(status)}
-    </span>
+
+    const mappedStatus = ProjectInvitationMapper.mapStatus(status);
+    let bgColor = "";
+    let textColor = "";
+
+    switch (status) {
+        case true:
+            bgColor = "bg-green-100";
+            textColor = "text-green-500";
+            break;
+        case false:
+            bgColor = "bg-red-100";
+            textColor = "text-red-500";
+            break;
+        default:
+            bgColor = "bg-gray-100";
+            textColor = "text-gray-500";
+            break;
+    }
+
+    return (
+        <span className={`invitation-status ${bgColor} ${textColor} text-sm px-4 py-2 rounded`}>
+            {mappedStatus}
+        </span>
+    );
 }
 const NewBadge = ({ createdAt }: { createdAt: Date }) => {
     return (moment().isSame(createdAt, 'day') && (

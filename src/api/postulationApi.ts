@@ -84,3 +84,16 @@ export const getPostulationById = async (postulationId: string) => {
     const response = await api.get(`/postulation/${postulationId}`);
     return response.data as { metadata: Record<string, any>, project:IProject,status:string };
 }
+
+export const declineInvitation = async (tokenOrInvitationId: string) => {
+    try {
+        const response = await ApiService.post(`/project-director/decline-invitation`, { tokenOrInvitationId });
+        return {
+            message: 'Invitation declined successfully',
+            result: response.data,
+        };
+    } catch (error: any) {
+        console.warn('Error declining invitation:', error);
+        return null;
+    }
+};
