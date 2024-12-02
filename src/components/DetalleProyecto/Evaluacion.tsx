@@ -4,9 +4,14 @@ import StarRating from "../Commons/StarRating/StarRating";
 import BinaryChoice from "../Commons/BinaryChoice/BinaryChoice";
 import PercentageSelector from "../Commons/PercentageSelector/PercentageSelector";
 import InfoLink from "../Commons/InfoLink/InfoLink";
-import { Budget, CreativeProposal, Evaluation } from "@/api/interface/api.interface";
+import {
+  Budget,
+  CreativeProposal,
+  Evaluation,
+} from "@/api/interface/api.interface";
 import { getBidEvaluation, updateBidEvaluation } from "@/api/projectApi";
 import BudgetBarChart from "./BudgetBarChart";
+import { calculateBudgetScore, calculateEvaluationScore } from "@/lib/utils";
 
 interface ProposalItem {
   key: string;
@@ -23,9 +28,16 @@ interface QuestionItem {
 interface EvaluacionProps {
   bidId: string;
   showComponent: (componentName: "list" | "evaluation" | "comparison") => void;
+  creativeProposalPercentage: number;
+  setCreativeProposalPercentage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Evaluacion: React.FC<EvaluacionProps> = ({ bidId, showComponent }) => {
+const Evaluacion: React.FC<EvaluacionProps> = ({
+  bidId,
+  showComponent,
+  creativeProposalPercentage,
+  setCreativeProposalPercentage,
+}) => {
   const [evaluation, setEvaluation] = useState<Evaluation>({
     creativeProposal: {
       uniquenessLevel: 0,
@@ -159,10 +171,18 @@ const Evaluacion: React.FC<EvaluacionProps> = ({ bidId, showComponent }) => {
     questionsEmpresa.length +
     questionsRespaldo.length;
 
+  const [evaluationScore, setEvaluationScore] = useState<{
+    creativeProposal: number;
+    experience: number;
+    budget: number;
+  }>({
+    creativeProposal: 0,
+    experience: 0,
+    budget: 0,
+  });
+
   const [hideSection, setHideSection] = useState(true);
 
-  const [porcentajeProduestaCreativa, setPorcentajeProduestaCreativa] =
-    useState(40);
   const [answers, setAnswers] = useState(
     Array(creativeProposal.length).fill("")
   );
@@ -182,6 +202,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({ bidId, showComponent }) => {
     const result = (await getBidEvaluation(bidId))?.result;
     const evaluation = result?.evaluation;
     const budget = result?.budget;
+
     if (evaluation) {
       setEvaluation(evaluation);
 
@@ -197,9 +218,29 @@ const Evaluacion: React.FC<EvaluacionProps> = ({ bidId, showComponent }) => {
       setQuestionsDirector(
         updateEvaluation(questionsDirector, evaluation.experience.director)
       );
+      setEvaluationScore({
+        ...evaluationScore,
+        ...calculateEvaluationScore(
+          evaluation,
+          creativeProposalPercentage / 100
+        ),
+      });
     }
+
     if (budget) {
       setBudget(budget);
+      const totalBudget = Object.values(budget).reduce(
+        (acc, value) => acc + value,
+        0
+      );
+      setEvaluationScore({
+        ...evaluationScore,
+        ...calculateBudgetScore(
+          totalBudget,
+          120000,
+          creativeProposalPercentage / 100
+        ),
+      });
     }
   };
 
@@ -224,11 +265,11 @@ const Evaluacion: React.FC<EvaluacionProps> = ({ bidId, showComponent }) => {
   const handlePercentageChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    setPorcentajeProduestaCreativa(Number(e.target.value));
+    setCreativeProposalPercentage(Number(e.target.value));
   };
 
   const updateBidEvaluationData = () => {
-    const newCreativeProposal = {} as CreativeProposal
+    const newCreativeProposal = {} as CreativeProposal;
     creativeProposal.map(
       (item) => (newCreativeProposal[item.key] = item.value)
     );
@@ -251,7 +292,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({ bidId, showComponent }) => {
           <div className="border-b flex justify-between items-center pb-3">
             <PercentageSelector
               label="Propuesta creativa"
-              value={porcentajeProduestaCreativa}
+              value={creativeProposalPercentage}
               startRange={30}
               onChange={handlePercentageChange}
             ></PercentageSelector>
@@ -343,7 +384,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({ bidId, showComponent }) => {
                 label="Presupuesto"
                 blocked={true}
                 hide={hideSection}
-                value={80 - porcentajeProduestaCreativa}
+                value={80 - creativeProposalPercentage}
                 onChange={handlePercentageChange}
               ></PercentageSelector>
               <div className="pl-5  flex justify-between items-center">
@@ -388,7 +429,11 @@ const Evaluacion: React.FC<EvaluacionProps> = ({ bidId, showComponent }) => {
         <div className="mt-6 flex justify-end">
           <div className="text-6xl font-text-black font-extrabold bg-blue-50 p-2 rounded-md shadow-md">
             <p className="font-bold text-lg">Puntaje Final</p>
-            <div className="text-4xl font-text-black font-extrabold">85.70</div>
+            <div className="flex justify-center text-4xl font-text-black font-extrabold">
+              {evaluationScore.creativeProposal +
+                evaluationScore.experience +
+                evaluationScore.budget}
+            </div>
           </div>
         </div>
         <div className="flex justify-center space-x-4">

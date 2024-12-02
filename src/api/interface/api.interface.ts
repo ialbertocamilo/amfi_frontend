@@ -13,6 +13,7 @@ export interface InvitedDirector {
     director: Director;
     productionHouse: ProductionHouse;
     evaluation: Evaluation | null;
+    budget: Budget | null;
 }
 
 export interface ProjectInvitation {

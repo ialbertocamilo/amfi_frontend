@@ -1,69 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import StackedBarChar from "./StackedBarChar";
 
-// Define the type for the comparison data
-type GroupData = {
+export interface EvaluationScore {
   name: string;
-  creativeProposal: number;
-  experience: number;
-  budget: number;
-  finalScore: number;
-  status: 'Evaluado' | 'Completado' | 'Rechazado';
-  action: string;
-  highlighted?: boolean;
-};
+  evaluationScore: {
+    creativeProposal: number;
+    experience: number;
+    budget: number;
+  };
+  status: "Evaluado" | "Completado" | "Rechazado";
+}
 
-const groups: GroupData[] = [
-  {
-    name: 'Grupo Triaxende',
-    creativeProposal: 88.59,
-    experience: 68.33,
-    budget: 66.35,
-    finalScore: 66.24,
-    status: 'Evaluado',
-    action: 'Ver Bid letter',
-    highlighted: true,
-  },
-  {
-    name: 'Ikarus',
-    creativeProposal: 50.23,
-    experience: 45.55,
-    budget: 87.32,
-    finalScore: 66.66,
-    status: 'Completado',
-    action: 'Ver Bid letter',
-  },
-  {
-    name: 'Filmmaking',
-    creativeProposal: 23.24,
-    experience: 34.63,
-    budget: 84.22,
-    finalScore: 45.56,
-    status: 'Rechazado',
-    action: 'Ver Bid letter',
-  },
-  {
-    name: 'Dr. Comunication',
-    creativeProposal: 45.65,
-    experience: 34.45,
-    budget: 56.25,
-    finalScore: 45.24,
-    status: 'Completado',
-    action: 'Ver Bid letter',
-  },
-  {
-    name: 'Grupo de León',
-    creativeProposal: 35.67,
-    experience: 34.65,
-    budget: 76.23,
-    finalScore: 56.33,
-    status: 'Evaluado',
-    action: 'Ver Bid letter',
-    highlighted: true,
-  },
-];
+interface ComparisonProps {
+  data: EvaluationScore[];
+  showComponent: (componentName: "list" | "evaluation" | "comparison") => void;
+}
 
-const Comparacion: React.FC<{ showComponent: (componentName: "list" | "evaluation" | "comparison") => void; }> = ({ showComponent }) => {
+const Comparacion: React.FC<ComparisonProps> = ({ data, showComponent }) => {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+
+  const StackedBarCharData = data.map((group) => ({
+    name: group.name,
+    score: {
+      creativeProposal: group.evaluationScore.creativeProposal,
+      experience: group.evaluationScore.experience,
+      budget: group.evaluationScore.budget,
+    },
+  }));
+
+  const headers = [
+    "",
+    "Grupo",
+    "Propuesta creativa",
+    "Experiencia",
+    "Presupuesto",
+    "Puntaje final",
+    "Acción",
+    "Estado",
+  ];
+
+  const action = "Ver Bid letter";
 
   const handleCheckboxChange = (name: string) => {
     setSelectedGroup(name);
@@ -72,77 +48,129 @@ const Comparacion: React.FC<{ showComponent: (componentName: "list" | "evaluatio
   return (
     <div className="mt-6 p-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl shadow-md space-y-6 px-4 lg:px-8">
       <div className="max-w-6xl mx-auto p-4">
-        <h2 className="text-2xl font-bold mb-6">Comparativo</h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border rounded-lg">
-            <thead>
-              <tr className="border-b">
-                <th className="text-left p-4">Grupo</th>
-                <th className="text-center p-4">Propuesta creativa</th>
-                <th className="text-center p-4">Experiencia</th>
-                <th className="text-center p-4">Presupuesto</th>
-                <th className="text-center p-4">Puntaje final</th>
-                <th className="text-center p-4">Estado</th>
-                <th className="text-center p-4">Acción</th>
-                <th className="text-center p-4">Seleccionar</th>
-              </tr>
-            </thead>
-            <tbody>
-              {groups.map((group, index) => (
-                                <tr
-                  key={index}
-                  className={`border-b ${group.highlighted
-                    ? 'bg-[#D7F4F0]'
-                    : index % 2 === 0
-                      ? 'bg-gray-50'
-                      : ''
-                    }`}
+        <h2 className="text-2xl font-bold mb-2 text-gray-700">Comparativo</h2>
+        <div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: `1fr repeat(${
+                headers.length - 1
+              }, minmax(0, 1.5fr)) 1fr`,
+            }}
+            className="text-sm font-semibold text-gray-700"
+          >
+            {headers.map((header, index) => (
+              <span
+                className="h-20 flex items-center justify-center"
+                key={index}
+              >
+                {header}
+              </span>
+            ))}
+            <span className="h-20 flex items-center justify-center">
+              <div className="h-4 w-4 bg-green-200 border rounded-sm mr-1"></div>
+              <span className="text-xs font-semibold text-green-400">
+                Evaluado
+              </span>
+            </span>
+          </div>
+          {data.map((group, index) => (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: `1fr repeat(${
+                  headers.length - 1
+                }, minmax(0, 1.5fr)) 1fr`,
+              }}
+              className="h-20  border rounded-lg border-gray-300 mb-4"
+            >
+              <span className="flex items-center justify-center">
+                <input
+                  type="checkbox"
+                  checked={selectedGroup === group.name}
+                  onChange={() => handleCheckboxChange(group.name)}
+                  className="w-6 h-6 rounded-full border-2 border-blue-600 text-blue-600 focus:ring-blue-500 appearance-none checked:bg-blue-600 checked:border-transparent"
+                />
+              </span>
+              <span
+                className="flex flex-wrap items-center text-base font-semibold text-gray-700"
+                key={index}
+              >
+                {group.name}
+              </span>
+
+              <span
+                className="flex items-center justify-center font-semibold text-gray-700"
+                key={index}
+              >
+                {group.evaluationScore.creativeProposal}
+              </span>
+              <span
+                className="flex items-center justify-center font-semibold text-gray-700"
+                key={index}
+              >
+                {group.evaluationScore.experience}
+              </span>
+              <span
+                className="flex items-center justify-center font-semibold text-gray-700 p"
+                key={index}
+              >
+                {group.evaluationScore.budget}
+              </span>
+
+              <span
+                className="flex items-center justify-center font-bold text-blue-700"
+                key={index}
+              >
+                {group.evaluationScore.creativeProposal +
+                  group.evaluationScore.experience +
+                  group.evaluationScore.budget}
+              </span>
+
+              <span
+                className="flex items-center justify-center text-xs font-bold text-red-500"
+                key={index}
+              >
+                {action}
+              </span>
+
+              <div className="flex items-center justify-center " key={index}>
+                <span
+                  className={`h-7 w-24 flex items-center justify-center text-xs font-bold border  rounded-md ${
+                    group.status === "Completado"
+                      ? "bg-green-100 text-green-500"
+                      : group.status === "Rechazado"
+                      ? "bg-red-100 text-red-500"
+                      : "bg-blue-100 text-blue-500"
+                  }`}
                 >
-                  <td className="p-4 text-left font-semibold">{group.name}</td>
-                  <td className="p-4 text-center">{group.creativeProposal.toFixed(2)}</td>
-                  <td className="p-4 text-center">{group.experience.toFixed(2)}</td>
-                  <td className="p-4 text-center">{group.budget.toFixed(2)}</td>
-                  <td className={`p-4 text-center font-bold ${group.finalScore >= 60 ? 'text-blue-600' : 'text-red-600'}`}>
-                    {group.finalScore.toFixed(2)}
-                  </td>
-                  <td className="p-4 text-center">
-                    <span
-                      className={`py-1 px-2 rounded-full text-xs font-semibold ${group.status === 'Completado'
-                          ? 'bg-green-100 text-green-600'
-                          : group.status === 'Rechazado'
-                            ? 'bg-red-100 text-red-600'
-                            : 'bg-blue-100 text-blue-600'
-                        }`}
-                    >
-                      {group.status}
-                    </span>
-                  </td>
-                  <td className="p-4 text-center text-blue-500 hover:underline cursor-pointer">
-                    {group.action}
-                  </td>
-                  <td className="p-4 text-center">
-                                       <input
-                      type="checkbox"
-                      checked={selectedGroup === group.name}
-                      onChange={() => handleCheckboxChange(group.name)}
-                      className="w-6 h-6 rounded-full border-2 border-blue-600 text-blue-600 focus:ring-blue-500 appearance-none checked:bg-blue-600 checked:border-transparent"
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  {group.status}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
         <div className="mt-4 p-4 bg-blue-50 text-blue-700 rounded-md">
           <p>
-            Si has completado la evaluación de todos tus candidatos, puedes elegir la Casa productora a la que deseas asignar el proyecto.
+            Si has completado la evaluación de todos tus candidatos, puedes
+            elegir la Casa productora a la que deseas asignar el proyecto.
           </p>
         </div>
-
+        <StackedBarChar data={StackedBarCharData}></StackedBarChar>
         <div className="flex justify-center space-x-4">
-          <button type="submit" className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded " onClick={() => showComponent("evaluation")}>Atras</button>
-          <button type="submit" className="w-1/4 bg-red-500 text-white py-2 rounded" >Asignar proyecto</button>
-
+          <button
+            type="submit"
+            className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded "
+            onClick={() => showComponent("evaluation")}
+          >
+            Atras
+          </button>
+          <button
+            type="submit"
+            className="w-1/4 bg-red-500 text-white py-2 rounded"
+          >
+            Asignar proyecto
+          </button>
         </div>
       </div>
     </div>
