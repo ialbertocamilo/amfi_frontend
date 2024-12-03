@@ -12,6 +12,7 @@ import {
 import { getBidEvaluation, updateBidEvaluation } from "@/api/projectApi";
 import BudgetBarChart from "./BudgetBarChart";
 import { calculateBudgetScore, calculateEvaluationScore } from "@/lib/utils";
+import ScoreModal from "../Commons/ScoreModal/ScoreModal";
 
 interface ProposalItem {
   key: string;
@@ -203,6 +204,12 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
     const evaluation = result?.evaluation;
     const budget = result?.budget;
 
+    const calculatedEvaluationScore = {
+      creativeProposal: 0,
+      experience: 0,
+      budget: 0,
+    };
+
     if (evaluation) {
       setEvaluation(evaluation);
 
@@ -218,13 +225,12 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
       setQuestionsDirector(
         updateEvaluation(questionsDirector, evaluation.experience.director)
       );
-      setEvaluationScore({
-        ...evaluationScore,
-        ...calculateEvaluationScore(
-          evaluation,
-          creativeProposalPercentage / 100
-        ),
-      });
+
+      const { creativeProposal: creativeScore, experience } =
+        calculateEvaluationScore(evaluation, creativeProposalPercentage / 100);
+
+      calculatedEvaluationScore.creativeProposal = creativeScore;
+      calculatedEvaluationScore.experience = experience;
     }
 
     if (budget) {
@@ -233,15 +239,15 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
         (acc, value) => acc + value,
         0
       );
-      setEvaluationScore({
-        ...evaluationScore,
-        ...calculateBudgetScore(
-          totalBudget,
-          120000,
-          creativeProposalPercentage / 100
-        ),
-      });
+
+      calculatedEvaluationScore.budget = calculateBudgetScore(
+        totalBudget,
+        120000,
+        creativeProposalPercentage / 100
+      ).budget;
     }
+
+    setEvaluationScore(calculatedEvaluationScore);
   };
 
   useEffect(() => {
@@ -257,9 +263,16 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
   const handleRatingChange = (index: number, value: number) => {
     const newCreativeProposal = creativeProposal;
     newCreativeProposal[index].value = value;
-
     setCreativeProposal(newCreativeProposal);
-    console.log("creativeProposal", creativeProposal);
+
+    setEvaluation(updateBidEvaluationData())
+
+    setEvaluationScore({
+      ...evaluationScore,
+      ...calculateEvaluationScore(evaluation, creativeProposalPercentage / 100),
+    });
+
+
   };
 
   const handlePercentageChange = (
@@ -268,15 +281,19 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
     setCreativeProposalPercentage(Number(e.target.value));
   };
 
-  const updateBidEvaluationData = () => {
+  const updateBidEvaluationData = (): Evaluation => {
+    console.log("updateBidEvaluationData", evaluation);
     const newCreativeProposal = {} as CreativeProposal;
     creativeProposal.map(
       (item) => (newCreativeProposal[item.key] = item.value)
     );
 
     evaluation.creativeProposal = newCreativeProposal;
+    return evaluation;
+  };
 
-    updateBidEvaluation(bidId, evaluation);
+  const synchronizeBidEvaluationData = () => {
+    updateBidEvaluation(bidId, updateBidEvaluationData());
   };
 
   return (
@@ -296,7 +313,9 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
               startRange={30}
               onChange={handlePercentageChange}
             ></PercentageSelector>
-            <InfoLink label="Ver puntaje de sección"></InfoLink>
+            <ScoreModal score={evaluationScore.creativeProposal}>
+              <InfoLink label="Ver puntaje de sección"></InfoLink>
+            </ScoreModal>
           </div>
 
           <div className="grid grid-cols-2 gap-6 mt-4">
@@ -322,7 +341,9 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
               value={20}
               onChange={handlePercentageChange}
             ></PercentageSelector>
-            <InfoLink label="Ver puntaje de sección"></InfoLink>
+            <ScoreModal score={evaluationScore.experience}>
+              <InfoLink label="Ver puntaje de sección"></InfoLink>
+            </ScoreModal>
           </div>
           {/* Preguntas empresa */}
           <div className="pt-4">
@@ -397,7 +418,9 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
                 </div>
               </div>
             </div>
-            <InfoLink label="Ver puntaje de sección"></InfoLink>
+            <ScoreModal score={evaluationScore.budget}>
+              <InfoLink label="Ver puntaje de sección"></InfoLink>
+            </ScoreModal>
           </div>
           {hideSection ? (
             <div className="mt-4">
@@ -440,7 +463,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
           <button
             type="submit"
             onClick={() => {
-              showComponent("list"), updateBidEvaluationData();
+              showComponent("list"), synchronizeBidEvaluationData();
             }}
             className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded"
           >
@@ -450,7 +473,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
             type="submit"
             className="w-1/4 bg-red-500 text-white py-2 rounded"
             onClick={() => {
-              showComponent("comparison"), updateBidEvaluationData();
+              showComponent("comparison"), synchronizeBidEvaluationData();
             }}
           >
             Comparativo
