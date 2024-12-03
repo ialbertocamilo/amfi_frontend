@@ -14,6 +14,7 @@ import ProyectCreated from "@/components/Proyecto/ProjectCreated";
 import { ProjectStatus } from "@/mappers/project.mapper";
 import {toast} from "react-hot-toast";
 import {validateFormData} from "@/lib/utils";
+import Loader from '@/components/Loader';
 
 export const inputProjectNames = [
     'brand',
@@ -33,12 +34,12 @@ export const inputProjectNames = [
     'medios',
     'temporalidad',
     'desglose',
-    'territorio',
+    'territorio1',
+    'territorio2',
+    'territorio3',
     'derechos',
-    'formaCotizacion',
     'entregaBrief',
     'entregaPresupuesto',
-    'visualizacion',
     'entregaProyecto',
     'presupuesto',
     'moneda',
@@ -51,7 +52,9 @@ export const inputProjectNames = [
     'momentoFacturacionAgencia',
     'politicaPago',
     'contratoProyecto',
-    'tipoProyecto',
+    'tipoProduccion1',
+    'tipoProduccion2',
+    'tipoProduccion3',
     'momentoFacturacion',
     'rondaCotizacion',
     'visualizacion',
@@ -76,7 +79,19 @@ export const inputProjectNames = [
     'puestoAsistentes',
     'comentarioEntregables',
     'comentarios',
-    'titularResponsable'
+    'titularResponsable',
+    'cantidadDiasProduccion',
+    'presupuestoAsignado',
+    'anticipo',
+    'antesDeFilmar',
+    'politicaPagoAnticipo',
+    'talentoExclusividad',
+    'talentoTipoCasting',
+    'talentoACargoDe',
+    'competencia',
+    'animales',
+    'menoresDeEdad',
+    'creatividadAprobada'
 ];
 const Proyecto: React.FC = () => {
     const [formData, setFormData] = useState<Record<string, any>>({});
@@ -116,10 +131,14 @@ const Proyecto: React.FC = () => {
                 setActiveTab(page);
     };
 
+    const [loader, setLoading] = useState(false);
     useEffect(() => {
         if (id) {
+            setLoading(true)
             setReadonly(false);
-            fetchProject();
+            fetchProject().finally(() => {
+                setLoading(false);
+            });
         }
     }, [id]);
 
@@ -150,6 +169,7 @@ const Proyecto: React.FC = () => {
 
     return (
         <Layout>
+            <Loader loading={loader}  >
             <ReadonlyBadge readonly={readonly} />
             <div>
                 {activeTab === "1" && (
@@ -202,7 +222,7 @@ const Proyecto: React.FC = () => {
                     />
                 )}
                 {activeTab === "6" && <ProyectCreated />}
-            </div>
+            </div></Loader>
         </Layout>
     );
 };

@@ -38,7 +38,7 @@ const ResumenProyecto: React.FC<ResumenProyectoProps> = ({ data }) => {
         <hr className={'my-6'}/>
         {/* Sección Desglose creativo */}
         <div>
-          <h2 className="text-xl font-semibold">Desglose creativo</h2>
+          <h2 className="text-xl font-semibold">Notas</h2>
           <div className="grid grid-cols-2 gap-4 mt-4">
             <p>Cinematografía: {data?.cinematografia}</p>
             <p>Locación: {data?.locacion}</p>

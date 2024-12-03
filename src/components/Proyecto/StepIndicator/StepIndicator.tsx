@@ -11,7 +11,8 @@ const StepIndicator = ({ activeTab, setactiveTab }: StepIndicatorProps) => {
   const router = useRouter();
   const { id } = router.query;
 
-  const handleClick = (item: string) => {
+  const handleClick = (e,item: string) => {
+    e.preventDefault()
     if (item !== activeTab) {
       setactiveTab(item);
     }
@@ -22,8 +23,8 @@ const StepIndicator = ({ activeTab, setactiveTab }: StepIndicatorProps) => {
         {id && indicator.map((item, index) => (
             <button
                 key={index}
-                onClick={() => handleClick(item)}
-                className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                onClick={(e) => handleClick(e,item)}
+                className={`w-10 h-10 rounded-full mb-5 flex items-center justify-center ${
                     Number(activeTab) >= Number(item)
                         ? "bg-red-500 text-white"
                         : "bg-gray-200 text-black"
