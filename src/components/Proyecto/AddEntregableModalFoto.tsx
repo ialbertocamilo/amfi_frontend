@@ -85,7 +85,7 @@ const AddEntregableModalFoto = ({ isOpen, onClose, onAdd, entregable, onUpdate }
         }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setState(prevState => ({
             ...prevState,
