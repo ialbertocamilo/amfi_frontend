@@ -199,11 +199,10 @@ const AddEntregableModalFoto = ({ isOpen, onClose, onAdd, entregable, onUpdate }
                             Espacio de color
                             <select className="border p-2 rounded" name="espacioColor" value={state.espacioColor} onChange={handleChange}>
                                 <option value="">Seleccionar</option>
-                                <option value="PSD(capas)">PSD (capas)</option>
-                                <option value="TIF">TIF</option>
-                                <option value="PNG">PNG</option>
-                                <option value="JPG">JPG</option>
-                                <option value="sRGB">sRGB</option>
+                                <option value="rec2020">Rec.2020</option>
+                                <option value="dci">DCI-P3</option>
+                                <option value="rec709">Rec.709</option>
+                                <option value="srgb">sRGB</option>
                             </select>
                         </label>
                     </div>
