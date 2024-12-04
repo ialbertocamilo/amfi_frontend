@@ -8,15 +8,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: auto; /* Permite el desplazamiento si el contenido es demasiado grande */
 }
 
 .modalContent {
   background-color: white;
   border-radius: 8px;
-  width: 400px;
-  max-width: 90%;
+  width: 90%;
+  max-width: 600px; /* Ajusta el tamaño máximo del modal */
+  max-height: 90vh; /* Ajusta la altura máxima del modal */
   padding: 20px;
   position: relative;
+  overflow-y: auto; /* Permite el desplazamiento vertical dentro del modal */
 }
 
 .modalHeader {

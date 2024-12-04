@@ -41,17 +41,9 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
 
   return (
     <div className="space-y-8 p-4">
-      <h1 className="text-2xl font-bold mb-6 space-y-4">Nuevo proyecto</h1>
-      <div className="text-sm text-gray-500 mb-8">
-        <span>Proyectos</span> {'>'} <span>Nuevo proyecto</span>
-      </div>
 
       <form>
         <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
-          <div className="tabs flex justify-center space-x-10">
-            <StepIndicator activeTab={activeTab} setactiveTab={setactiveTab} />
-          </div>
-
           <h2 className="text-xl font-bold mb-4">Objetivos de marca</h2>
           <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
             <div>
@@ -202,6 +194,22 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setac
                   <option value="">Seleccionar</option>
                   <option value="si">Si</option>
                   <option value="no">No</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="tipoContratoProyecto" className="block text-sm font-medium text-gray-700">Tipo de contrato
+                  de proyecto</label>
+                <select
+                  id="tipoContratoProyecto"
+                  name="tipoContratoProyecto"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  value={formData?.tipoContratoProyecto}
+                  onChange={handleChange}
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="colaboracionRemunerada">Colaboración remunerada</option>
+                  <option value="contratoPublicitario">Contrato publicitario</option>
+                  <option value="sinDefinir">Sin definir</option>
                 </select>
               </div>
               <div>

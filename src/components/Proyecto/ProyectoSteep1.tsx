@@ -66,16 +66,8 @@ const ProyectoSteep1 = ({
   };
   return (
     <div className="space-y-8 p-4">
-      <h1 className="text-2xl font-bold mb-6 space-y-4">Nuevo proyecto</h1>
-      <div className="text-sm text-gray-500 mb-8">
-        <span>Proyectos</span> {'>'} <span>Nuevo proyecto</span>
-      </div>
 
       <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
-        <div className="tabs flex justify-center space-x-10">
-          <StepIndicator activeTab={activeTab} setactiveTab={setactiveTab} />
-        </div>
-
         <h2 className="text-xl font-bold mb-4">Datos del proyecto</h2>
         <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
           <div className="col-span-2">

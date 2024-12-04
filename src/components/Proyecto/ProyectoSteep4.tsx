@@ -1,11 +1,8 @@
-import { useEffect, useState } from 'react';
-import { FaExclamationCircle } from 'react-icons/fa';
-import EntregableList from './EntregableList';
-import AddEntregableModal from './AddEntregableModal ';
-import StepIndicator from './StepIndicator/StepIndicator';
 import { getOwnerByCompany, getSecondaryUsers } from '@/api/userApi';
-import { useRouter } from 'next/router';
+import Entregables from '@/components/Entregables';
 import { IUser } from '@/interfaces/user.interface';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 interface registroEntity {
   formData: any;
@@ -21,22 +18,11 @@ const ProyectoSteep4 = ({
                           formData,
                           handleChange,
                           handleSubmit,
-                          activeTab,
-                          setactiveTab,
-
                         }: registroEntity) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [entregables, setEntregables] = useState<any[]>([]);
-
-  const handleAddEntregable = (entregable: any) => {
-    const updatedEntregable = [...entregables, entregable];
-    setEntregables(updatedEntregable);
-
-  };
-  const router = useRouter();
-  const { id } = router.query;
   const [secondaryUsers, setSecondaryUsers] = useState<IUser[]>();
   const [owner, setOwner] = useState('');
+  const router = useRouter();
+  const { id } = router.query;
   useEffect(() => {
     getSecondaryUsers().then((res) => {
       setSecondaryUsers(res);
@@ -51,60 +37,36 @@ const ProyectoSteep4 = ({
       }
     });
   }, []);
+
+  const [videos, setVideos] = useState(0);
+  const [photos, setPhotos] = useState(0);
+
+  useEffect(() => {
+    handleChange({ target: { name: 'video', value: videos } });
+    handleChange({ target: { name: 'foto', value: photos } });
+  }, [videos, photos]);
+
+
+  const handleVideoCountChange = (count: number) => {
+    setVideos(count);
+  };
+
+  const handlePhotoCountChange = (count: number) => {
+    setPhotos(count);
+  };
+
+  useEffect(() => {
+    const total = videos + photos + (Number(formData.locutor) || 0);
+    handleChange({ target: { name: 'total', value: total } });
+  }, [videos, photos,formData.locutor]);
   return (
     <div className="space-y-8 p-4">
-      <h1 className="text-2xl font-bold mb-6 space-y-4">Nuevo proyecto</h1>
-      <div className="text-sm text-gray-500 mb-8">
-        <span>Proyectos</span> {'>'} <span>Nuevo proyecto</span>
-      </div>
-
       <form>
         <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
-          {/* Navegación de pestañas */}
-          <div className="tabs flex justify-center space-x-10">
-            <StepIndicator activeTab={activeTab} setactiveTab={setactiveTab} />
-          </div>
-
           {/* Sección: Desglose Creativo */}
           <h2 className="text-xl font-bold mb-4">Notas</h2>
 
           <div className={'grid grid-cols-2 gap-8 mb-8'}>
-            <div>
-              <label
-                htmlFor="cinematografía"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Cinematografía
-              </label>
-              <input
-                type="text"
-                id="cinematografía"
-                name="cinematografia"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Descripción aquí"
-                value={formData.cinematografia}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="arte/props"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Arte/ Props
-              </label>
-              <input
-                type="text"
-                id="arte/props"
-                name="arteprops"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Descripción aquí"
-                value={formData.arteprops}
-                onChange={handleChange}
-              />
-            </div>
-            <hr />
-            <hr />
             <div>
               <label
                 htmlFor="talento"
@@ -240,6 +202,45 @@ const ProyectoSteep4 = ({
             </div>
             <div>
               <label
+                htmlFor="especieProtegida"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Especie protegida
+              </label>
+              <select
+                id="especieProtegida"
+                name="especieProtegida"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                value={formData.especieProtegida}
+                onChange={handleChange}
+              >
+                <option value="">Seleccionar</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+            <div>
+              <label
+                htmlFor="locación"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Locación
+              </label>
+              <select
+                id="locación"
+                name="locacion"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                value={formData.locacion}
+                onChange={handleChange}
+              >
+                <option value="">Seleccionar</option>
+                <option value="foroconstruccion">Foro/Construcción</option>
+                <option value="inmuebleinexistente">Inmueble Inexistente</option>
+                <option value="viapublica">Vía Pública (Parques/Calles/etc)</option>
+              </select>
+            </div>
+            <div>
+              <label
                 htmlFor="vestuario"
                 className="block text-sm font-medium text-gray-700"
               >
@@ -257,52 +258,18 @@ const ProyectoSteep4 = ({
             </div>
             <div>
               <label
-                htmlFor="locación"
+                htmlFor="efectos"
                 className="block text-sm font-medium text-gray-700"
               >
-                Locación
+                Efectos
               </label>
               <input
                 type="text"
-                id="locación"
-                name="locacion"
+                id="efectos"
+                name="efectos"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
-                value={formData.locacion}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="casting"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Casting
-              </label>
-              <input
-                type="text"
-                id="casting"
-                name="casting"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Descripción aquí"
-                value={formData.casting}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="compensación"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Compensación
-              </label>
-              <input
-                type="text"
-                id="compensanción"
-                name="compensacion"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Descripción aquí"
-                value={formData.compensacion}
+                value={formData.efectos || ''}
                 onChange={handleChange}
               />
             </div>
@@ -322,6 +289,127 @@ const ProyectoSteep4 = ({
                 value={formData.maquillajepeinado}
                 onChange={handleChange}
               />
+            </div>
+            <div>
+              <label
+                htmlFor="cinematografía"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Cinematografía
+              </label>
+              <input
+                type="text"
+                id="cinematografía"
+                name="cinematografia"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Descripción aquí"
+                value={formData.cinematografia}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="arte/props"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Arte/ Props
+              </label>
+              <input
+                type="text"
+                id="arte/props"
+                name="arteprops"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Descripción aquí"
+                value={formData.arteprops}
+                onChange={handleChange}
+              />
+            </div>
+
+          </div>
+          {/* Sección: Locucion */}
+          <h2 className="text-xl font-bold mb-4"> Locución </h2>
+          <div className="grid grid-cols-2 gap-8 mb-8">
+            <div>
+              <label
+                htmlFor="locucionInstitucional"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Institucional
+              </label>
+              <select
+                id="locucionInstitucional"
+                name="locucionInstitucional"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                value={formData.locucionInstitucional}
+                onChange={handleChange}
+              >
+                <option value="">Seleccionar</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+            <div>
+              <label
+                htmlFor="locucionAgencia"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Agencia
+              </label>
+              <input
+                type="text"
+                id="locucionAgencia"
+                name="locucionAgencia"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                placeholder="Descripción aquí"
+                value={formData.locucionAgencia}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <h2 className="text-xl font-bold mb-4"> Sonido </h2>
+
+          <div className="grid grid-cols-2 gap-8 mb-8">
+            <div>
+              <label
+                htmlFor="musica"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Música
+              </label>
+              <select
+                id="musica"
+                name="musica"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                value={formData.musica}
+                onChange={handleChange}
+              >
+                <option value="">Seleccionar</option>
+                <option value="Libreria">Librería</option>
+                <option value="Licencia">Licencia</option>
+                <option value="Reinterpretacion">Reinterpretación</option>
+                <option value="Original">Original</option>
+              </select>
+            </div>
+            <div>
+              <label
+                htmlFor="aCargoDe"
+                className="block text-sm font-medium text-gray-700"
+              >
+                A cargo de
+              </label>
+              <select
+                id="aCargoDe"
+                name="aCargoDe"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                value={formData.aCargoDe}
+                onChange={handleChange}
+              >
+                <option value="">Seleccionar</option>
+                <option value="Casa productora">Casa productora</option>
+                <option value="Anunciante">Anunciante</option>
+                <option value="Agencia">Agencia</option>
+              </select>
             </div>
 
           </div>
@@ -347,44 +435,10 @@ const ProyectoSteep4 = ({
             </div>
             <div>
               <label
-                htmlFor="musica"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Música
-              </label>
-              <input
-                type="text"
-                id="musica"
-                name="musica"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Descripción aquí"
-                value={formData.musica}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="locucion"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Locución
-              </label>
-              <input
-                type="text"
-                id="locucion"
-                name="locucion"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Descripción aquí"
-                value={formData.locucion}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label
                 htmlFor="animacion"
                 className="block text-sm font-medium text-gray-700"
               >
-                Animación
+                Animación (Tipo de animación que se solicita: 2D, 3D, Motion graphics, stop motion y/o técnicas.)
               </label>
               <input
                 type="text"
@@ -397,36 +451,20 @@ const ProyectoSteep4 = ({
               />
             </div>
             <div>
+
               <label
-                htmlFor="audio"
+                htmlFor="vfx"
                 className="block text-sm font-medium text-gray-700"
               >
-                Audio
+                VFX
               </label>
               <input
                 type="text"
-                id="audio"
-                name="audio"
+                id="vfx"
+                name="vfx"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
-                value={formData.audio}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="entrega"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Entrega
-              </label>
-              <input
-                type="text"
-                id="entrega"
-                name="entrega"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Descripción aquí"
-                value={formData.entrega}
+                value={formData.vfx}
                 onChange={handleChange}
               />
             </div>
@@ -476,37 +514,17 @@ const ProyectoSteep4 = ({
           <h2 className="text-xl font-bold mb-4">Entregables</h2>
           <div className="grid grid-cols-2 gap-8 mb-8">
             <div className="text-left">
-              {entregables.length > 0 ? (
-                <EntregableList entregablesIni={entregables} />
-              ) : (
-                <div className="bg-[#DFF9FF] rounded p-4 flex items-center">
-                  <FaExclamationCircle className="mr-2" style={{ color: '#4B9AA5' }} />
-                  Aqui puedes agregar tus entregable.
-                </div>
-              )}
-
-              <button
-                type="button"
-                className="bg-red-500 text-white px-4 py-2 mt-4 rounded"
-                onClick={() => setIsModalOpen(true)}
-              >
-                Agregar Entregable
-              </button>
-              <AddEntregableModal
-                entregable={null}
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onAdd={handleAddEntregable}
-                onUpdate={null}
-              />
+            <Entregables
+            projectId={id as string}
+            videos={videos}
+            photos={photos}
+            onVideoCountChange={handleVideoCountChange}
+            onPhotoCountChange={handlePhotoCountChange}
+          />
             </div>
-
-
             <div className="">
-
               <label htmlFor="comentarioEntregables"
                      className="block text-sm font-medium text-gray-700">Comentarios</label>
-
               <textarea
                 id="comentarioEntregables"
                 name="comentarioEntregables"
@@ -515,31 +533,78 @@ const ProyectoSteep4 = ({
                 onChange={handleChange}
                 maxLength={300}
               />
-
-
             </div>
             <div>
-              {['Video', 'Foto', 'Locutor', 'Total'].map(
-                (field, index) => (
-                  <div key={index} className="flex items-center mb-4">
-                    <label
-                      htmlFor={field.toLowerCase()}
-                      className="block text-sm font-medium text-gray-700 w-1/4"
-                    >
-                      {field}
-                    </label>
-                    <input
-                      type="number"
-                      id={field.toLowerCase()}
-                      name={field.toLowerCase()}
-                      className="mt-1 block w-3/4 p-2 border border-gray-300 rounded-md"
-                      placeholder="Descripción aquí"
-                      value={formData[field.toLowerCase()]}
-                      onChange={handleChange}
-                    />
-                  </div>
-                ),
-              )}
+              <div className="flex items-center mb-4">
+                <label
+                  htmlFor="video"
+                  className="block text-sm font-medium text-gray-700 w-1/4"
+                >
+                  Video
+                </label>
+                <input
+                  type="number"
+                  id="video"
+                  name="video"
+                  readOnly
+                  className="mt-1 block w-3/4 p-2 border border-gray-300 rounded-md bg-gray-200"
+                  placeholder="Descripción aquí"
+                  value={videos}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="flex items-center mb-4">
+                <label
+                  htmlFor="foto"
+                  className="block text-sm font-medium text-gray-700 w-1/4"
+                >
+                  Foto
+                </label>
+                <input
+                  type="number"
+                  id="foto"
+                  name="foto"
+                  readOnly
+                  className="mt-1 block w-3/4 p-2 border border-gray-300 rounded-md bg-gray-200"
+                  placeholder="Descripción aquí"
+                  value={photos} 
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="flex items-center mb-4">
+                <label
+                  htmlFor="locutor"
+                  className="block text-sm font-medium text-gray-700 w-1/4"
+                >
+                  Locutor
+                </label>
+                <input
+                  type="number"
+                  id="locutor"
+                  name="locutor"
+                  className="mt-1 block w-3/4 p-2 border border-gray-300 rounded-md"
+                  placeholder="Descripción aquí"
+                  value={formData.locutor}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="flex items-center mb-4">
+                <label
+                  htmlFor="total"
+                  className="block text-sm font-medium text-gray-700 w-1/4"
+                >
+                  Total
+                </label>
+                <input
+                  type="number"
+                  id="total"
+                  name="total"
+                  readOnly
+                  className="mt-1 block w-3/4 p-2 border border-gray-300 rounded-md bg-gray-200"
+                  placeholder="Total"
+                  value={formData.total}
+                />
+              </div>
             </div>
 
           </div>
@@ -608,8 +673,6 @@ const ProyectoSteep4 = ({
               type="button"
               className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded"
               onClick={() => {
-                setEntregables(entregables);
-                console.log(formData?.titularResponsable);
                 handleSubmit('3');
               }}
             >
@@ -619,7 +682,6 @@ const ProyectoSteep4 = ({
               type="button"
               className="w-1/4 bg-red-500 text-white py-2 rounded"
               onClick={() => {
-                setEntregables(entregables);
                 handleSubmit('5');
               }}
             >

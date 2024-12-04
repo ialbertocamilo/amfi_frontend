@@ -15,6 +15,7 @@ import { ProjectStatus } from "@/mappers/project.mapper";
 import {toast} from "react-hot-toast";
 import {validateFormData} from "@/lib/utils";
 import Loader from '@/components/Loader';
+import StepIndicator from '@/components/Proyecto/StepIndicator/StepIndicator';
 
 export const inputProjectNames = [
     'brand',
@@ -66,15 +67,11 @@ export const inputProjectNames = [
     'talento',
     'vestuario',
     'locacion',
-    'casting',
-    'compensacion',
     'maquillajepeinado',
     'online',
     'musica',
-    'locucion',
     'animacion',
-    'audio',
-    'entrega',
+    'vfx',
     'cantidadAsistentes',
     'puestoAsistentes',
     'comentarioEntregables',
@@ -91,7 +88,14 @@ export const inputProjectNames = [
     'competencia',
     'animales',
     'menoresDeEdad',
-    'creatividadAprobada'
+    'efectos',
+    'especieProtegida',
+    'locucionInstitucional',
+    'locucionAgencia',
+    'arteprops',
+    'aCargoDe',
+    'creatividadAprobada',
+    'tipoContratoProyecto'
 ];
 const Proyecto: React.FC = () => {
     const [formData, setFormData] = useState<Record<string, any>>({});
@@ -131,6 +135,7 @@ const Proyecto: React.FC = () => {
                 setActiveTab(page);
     };
 
+
     const [loader, setLoading] = useState(false);
     useEffect(() => {
         if (id) {
@@ -153,6 +158,11 @@ const Proyecto: React.FC = () => {
     const [activeTab, setActiveTab] = useState<string>("1");
     const [entregables, setEntregables] = useState<any[]>([]);
 
+    // useEffect(() => {
+    //     if (activeTab!== "1") {
+    //         handleSubmit(activeTab);
+    //     }
+    // }, [activeTab]);
     const ReadonlyBadge = ({ readonly }: { readonly: boolean }) => {
         return (
             <div className="relative sm:container">
@@ -169,11 +179,18 @@ const Proyecto: React.FC = () => {
 
     return (
         <Layout>
-            <Loader loading={loader}  >
-            <ReadonlyBadge readonly={readonly} />
-            <div>
-                {activeTab === "1" && (
-                    <ProyectoSteep1
+            <Loader loading={loader}>
+                <ReadonlyBadge readonly={readonly} />
+                <div>
+                    <h1 className="text-2xl font-bold mb-6 space-y-4">Nuevo proyecto</h1>
+                    <div className="text-sm text-gray-500 mb-8">
+                        <span>Proyectos</span> {'>'} <span>Nuevo proyecto</span>
+                    </div>
+                    <div className="tabs flex justify-center space-x-10">
+                        <StepIndicator activeTab={activeTab} setactiveTab={setActiveTab} />
+                    </div>
+                    {activeTab === "1" && (
+                      <ProyectoSteep1
                         formData={formData}
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
@@ -181,28 +198,28 @@ const Proyecto: React.FC = () => {
                         setactiveTab={setActiveTab}
                         isEditing={readonly}
                         readonly={readonly}
-                    />
-                )}
-                {activeTab === "2" && (
-                    <ProyectoSteep2
+                      />
+                    )}
+                    {activeTab === "2" && (
+                      <ProyectoSteep2
                         formData={formData}
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
                         activeTab={activeTab}
                         setactiveTab={setActiveTab}
-                    />
-                )}
-                {activeTab === "3" && (
-                    <ProyectoSteep3
+                      />
+                    )}
+                    {activeTab === "3" && (
+                      <ProyectoSteep3
                         formData={formData}
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
                         activeTab={activeTab}
                         setactiveTab={setActiveTab}
-                    />
-                )}
-                {activeTab === "4" && (
-                    <ProyectoSteep4
+                      />
+                    )}
+                    {activeTab === "4" && (
+                      <ProyectoSteep4
                         formData={formData}
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
@@ -210,19 +227,20 @@ const Proyecto: React.FC = () => {
                         setactiveTab={setActiveTab}
                         entregables={entregables}
                         setEntregables={setEntregables}
-                    />
-                )}
-                {activeTab === "5" && (
-                    <ProyectoSteep5
+                      />
+                    )}
+                    {activeTab === "5" && (
+                      <ProyectoSteep5
                         formData={formData}
                         handleChange={handleChange}
                         handleSubmit={handleSubmit}
                         activeTab={activeTab}
                         setactiveTab={setActiveTab}
-                    />
-                )}
-                {activeTab === "6" && <ProyectCreated />}
-            </div></Loader>
+                      />
+                    )}
+                    {activeTab === "6" && <ProyectCreated />}
+                </div>
+            </Loader>
         </Layout>
     );
 };

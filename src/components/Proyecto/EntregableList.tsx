@@ -1,5 +1,5 @@
+import AddEntregableModal from "@/components/Proyecto/AddEntregableModal";
 import React, { useEffect, useState } from 'react';
-import AddEntregableModal from "@/components/Proyecto/AddEntregableModal ";
 
 interface inputEntity {
     entregablesIni: any[];
@@ -16,6 +16,7 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesIni }) => {
     }, [entregablesIni]);
 
     const handleEdit = (entregable: any, index: number) => {
+        console.log(entregable);
         setCurrentEntregable({ ...entregable, id: index });
         setIndexId(index.toString());
         setIsModalOpen(true);
@@ -27,6 +28,8 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesIni }) => {
     };
 
     const handleAddEntregable = (newEntregable: any) => {
+        console.log("newEntregable");
+        console.log(newEntregable);
         setEntregables(prevEntregables => [...prevEntregables, newEntregable]);
         setIsModalOpen(false);
     };
@@ -46,7 +49,10 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesIni }) => {
                     <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                         <span>{entregable.version}</span>
                         <div>
-                            <button onClick={() => handleEdit(entregable, index)} style={{ marginRight: '10px' }}>
+                            <button onClick={(e) => {
+                                e.preventDefault()
+                                handleEdit(entregable, index);
+                            }} style={{ marginRight: '10px' }}>
                                 ✏️
                             </button>
                             <button onClick={() => handleDelete(index)}>
@@ -56,7 +62,7 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesIni }) => {
                     </li>
                 ))}
             </ul>
-            {isModalOpen && (
+
                 <AddEntregableModal
                     onAdd={handleAddEntregable}
                     entregable={currentEntregable}
@@ -64,7 +70,6 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesIni }) => {
                     onClose={() => setIsModalOpen(false)}
                     onUpdate={handleUpdateEntregable}
                 />
-            )}
         </div>
     );
 };
