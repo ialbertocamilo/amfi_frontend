@@ -59,6 +59,7 @@ const ProyectoSteep4 = ({
     const total = videos + photos + (Number(formData.locutor) || 0);
     handleChange({ target: { name: 'total', value: total } });
   }, [videos, photos,formData.locutor]);
+
   return (
     <div className="space-y-8 p-4">
       <form>
@@ -639,7 +640,7 @@ const ProyectoSteep4 = ({
                 name="titularResponsable"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Títular"
-                value={formData?.titularResponsable}
+                value={formData?.titularResponsable || owner}
                 onChange={handleChange}
               />
             </div>
