@@ -30,10 +30,12 @@ const ProyectoSteep4 = ({
 
     getOwnerByCompany().then((res) => {
       if (res) {
-        setOwner(res.name + ' ' + res.lastname);
+        const fullname=res.name + ' ' + res.lastname
+        setOwner(fullname);
         if (formData) {
-          formData.titularResponsable = res.name + ' ' + res.lastname;
+          handleChange({ target: { name: 'titularResponsable', value: fullname } });
         }
+        console.log(formData.titularResponsable);
       }
     });
   }, []);
@@ -640,7 +642,7 @@ const ProyectoSteep4 = ({
                 name="titularResponsable"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Títular"
-                value={formData?.titularResponsable || owner}
+                value={formData?.titularResponsable}
                 onChange={handleChange}
               />
             </div>

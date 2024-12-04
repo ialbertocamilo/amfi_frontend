@@ -39,7 +39,6 @@ const Entregables = ({ projectId, videos, photos, onVideoCountChange, onPhotoCou
   };
 
   useEffect(() => {
-    console.log("Entregables");
     console.log(entregables);
   }, [entregables]);
 
