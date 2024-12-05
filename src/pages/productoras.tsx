@@ -1,27 +1,28 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import "./globals.css";
 import toast from "react-hot-toast";
 import PaginatedComponent from "@/components/PaginationComponent";
-import {getProductoras} from "@/api/productoraApi";
+import { getProductoras } from "@/api/productoraApi";
 import moment from "moment";
 import Layout from "@/components/Layout";
 import useUser from "@/hooks/user.hook";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 
 const Productoras = () => {
     const [productoras, setProductoras] = useState<any[]>([]);
 
     const headers = [
-        {label: "Correlativo", key: "correlativo"},
-        {label: "Nombre", key: "name"},
-        {label: "Nombre Legal", key: "legalName"},
-        {label: "RFC", key: "nationalIdentifierOrRFC"},
-        {label: "Año de Fundación", key: "foundingYear"},
-        {label: "Fecha de Creación", key: "createdAt"},
+        { label: "Correlativo", key: "correlativo" },
+        { label: "Nombre", key: "name" },
+        { label: "Nombre Legal", key: "legalName" },
+        { label: "RFC", key: "nationalIdentifierOrRFC" },
+        { label: "Año de Fundación", key: "foundingYear" },
+        { label: "Fecha de Creación", key: "createdAt" },
     ];
 
-    const {user} = useUser();
+    const { user, fetchUser } = useUser();
 
+    useEffect(() => { fetchUser() }, [])
     const fetchProductoras = async () => {
         try {
             const response = await getProductoras();

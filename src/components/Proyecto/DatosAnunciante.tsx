@@ -1,12 +1,22 @@
-import React from 'react';
+import { IUser } from '@/interfaces/user.interface';
+import React, { useEffect } from 'react';
+import FastSearch from '../modals/FastSearch';
+import AddAnunciante from './AddAnunciante';
 
 interface DatosAnuncianteProps {
   formData: Record<string, any>;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   readonly?: boolean;
+  user:IUser
 }
 
-const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ formData, handleChange, readonly }) => {
+const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ user,formData, handleChange, readonly }) => {
+
+
+  useEffect(()=>{
+
+    console.log(user)
+  },[user])
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">Datos del anunciante</h2>
@@ -25,6 +35,8 @@ const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ formData, handleChang
             disabled={readonly}
           />
         </div>
+        {/* TODO: agregar anunciante */}
+        {/* <AddAnunciante/> */}
         <div>
           <label htmlFor="brand" className="block text-sm font-medium text-gray-700">
             Marca

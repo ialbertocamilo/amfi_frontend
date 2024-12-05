@@ -30,7 +30,8 @@ const Directores = () => {
     { key: "action", label: "Acción" },
   ];
 
-  const { user } = useUser();
+  const { user, fetchUser } = useUser();
+  useEffect(() => { fetchUser() }, [])
   const handleDelete = async () => {
     try {
       fetchDirectors();
@@ -85,7 +86,7 @@ const Directores = () => {
     setIsModalOpen(false);
   };
 
-  const router=useRouter();
+  const router = useRouter();
   return (
     <Layout>
       <div className="flex justify-between items-center mb-4">

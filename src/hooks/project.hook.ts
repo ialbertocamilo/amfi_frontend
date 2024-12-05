@@ -1,26 +1,32 @@
 import { createProject, getProjectById, updateProjectById } from '@/api/projectApi';
 import { CompanyType } from '@/constants';
 import { IProject } from '@/interfaces/project.interface';
-import {useCallback, useEffect, useState} from 'react';
+import { useUserContext } from '@/providers/user.context';
+import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { CreateProjectDto } from '../dto/create-project.dto';
 import { UpdateProjectDto } from '../dto/update-project.dto';
-import useUser from './user.hook';
 
 const useProject = (projectId: string | null) => {
     const [project, setProject] = useState<IProject | null>(null);
     const [projectJson, setProjectJson] = useState<Record<string, any> | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-
-    const {user} = useUser()
+    const userContext = useUserContext();
+    const user = userContext?.user;
     useEffect(() => {
         if (error) {
             toast.error(error);
         }
     }, [error]);
 
+    const [status, setStatus] = useState<string | null>(null);
 
+    useEffect(() => {
+        if (project) {
+            setStatus(project.status);
+        }
+    }, [project]);
 
     const fetchProject = useCallback(async () => {
         if (projectId === null) return;
@@ -31,6 +37,7 @@ const useProject = (projectId: string | null) => {
                 throw new Error('Error al obtener el proyecto');
             }
             const data: IProject = response;
+            setStatus(data.status);
             setProject(data);
             setProjectJson(data?.extra);
         } catch (err: any) {
@@ -100,7 +107,7 @@ const useProject = (projectId: string | null) => {
     };
 
 
-    return {project, loading, error, fetchProject, projectJson, saveOrUpdateProject};
+    return { project, loading, error, fetchProject, projectJson, saveOrUpdateProject, status };
 };
 
 export default useProject;

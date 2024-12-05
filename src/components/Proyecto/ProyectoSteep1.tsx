@@ -1,9 +1,10 @@
 import { toast } from 'react-hot-toast';
-import StepIndicator from './StepIndicator/StepIndicator';
-import DatosAnunciante from './DatosAnunciante';
-import React from 'react';
-import { DatosAgenciaPublicidad } from './DatosAgenciaPublicidad';
 import NextButton from '../buttons/NextButton';
+import { DatosAgenciaPublicidad } from './DatosAgenciaPublicidad';
+import DatosAnunciante from './DatosAnunciante';
+import useProject from '@/hooks/project.hook';
+import useUser from '@/hooks/user.hook';
+import { useUserContext } from '@/providers/user.context';
 
 interface registroEntity {
   formData: {
@@ -37,10 +38,10 @@ const ProyectoSteep1 = ({
                           formData,
                           handleChange,
                           handleSubmit,
-                          activeTab,
-                          setactiveTab,
                           readonly,
                         }: registroEntity) => {
+                          const userContext = useUserContext();
+                          const user = userContext?.user;
   const validateFormData = (formData: Record<string, any>): boolean => {
     const requiredFields = [
       'brand', 'product', 'category', 'projectName', 'versionName', 'quantity',
@@ -64,6 +65,8 @@ const ProyectoSteep1 = ({
     }
     handleSubmit('2');
   };
+
+
   return (
     <div className="space-y-8 p-4">
 
@@ -139,8 +142,8 @@ const ProyectoSteep1 = ({
             />
           </div>
         </div>
-        <DatosAnunciante formData={formData} handleChange={handleChange} readonly={readonly} />
-        <DatosAgenciaPublicidad formData={formData} handleChange={handleChange} readonly={readonly} />
+        {user && <DatosAnunciante user={user} formData={formData} handleChange={handleChange} readonly={readonly} />}
+        {user && <DatosAgenciaPublicidad user={user} formData={formData} handleChange={handleChange} readonly={readonly} />}
         <div className="flex justify-center space-x-4">
           <NextButton onClick={handleNext} />
         </div>

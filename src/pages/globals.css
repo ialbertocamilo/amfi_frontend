@@ -1,7 +1,9 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-
+body {
+  font-family: 'Open Sans', sans-serif;
+}
 :root {
   --foreground-color: #d6dbdc;
   --background-start-color: #d6dbdc;

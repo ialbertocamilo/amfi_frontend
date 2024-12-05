@@ -11,9 +11,9 @@ import useProject from "@/hooks/project.hook";
 import { CreateProjectDto } from "@/dto/create-project.dto";
 import { UpdateProjectDto } from "@/dto/update-project.dto";
 import ProyectCreated from "@/components/Proyecto/ProjectCreated";
-import { ProjectStatus } from "@/mappers/project.mapper";
-import {toast} from "react-hot-toast";
-import {validateFormData} from "@/lib/utils";
+import { ProjectMapper, ProjectStatus } from "@/mappers/project.mapper";
+import { toast } from "react-hot-toast";
+import { validateFormData } from "@/lib/utils";
 import Loader from '@/components/Loader';
 import StepIndicator from '@/components/Proyecto/StepIndicator/StepIndicator';
 
@@ -111,9 +111,9 @@ const Proyecto: React.FC = () => {
         });
     };
 
-    const { projectJson, loading, fetchProject, saveOrUpdateProject } = useProject(id as string);
+    const { projectJson, fetchProject, saveOrUpdateProject, status, project } = useProject(id as string);
     const handleSubmit = async (page: string) => {
-        if (page==='6') {
+        if (page === '6') {
             if (!validateFormData(formData, inputProjectNames)) {
                 toast.error("Por favor, llena todos los campos para crear el proyecto");
                 return;
@@ -127,12 +127,12 @@ const Proyecto: React.FC = () => {
             extra: formData,
             status: page === '6' ? ProjectStatus.InProgress : ProjectStatus.Draft // Cuando termina de crear el proyecto, se cambia el estado a En Progreso
         };
-            const createdProject = await saveOrUpdateProject(data);
-            if (createdProject?.id) {
-                await router.replace(`/proyecto?id=${createdProject.id}`);
-            }
-            if (createdProject)
-                setActiveTab(page);
+        const createdProject = await saveOrUpdateProject(data);
+        if (createdProject?.id) {
+            await router.replace(`/proyecto?id=${createdProject.id}`);
+        }
+        if (createdProject)
+            setActiveTab(page);
     };
 
 
@@ -158,11 +158,6 @@ const Proyecto: React.FC = () => {
     const [activeTab, setActiveTab] = useState<string>("1");
     const [entregables, setEntregables] = useState<any[]>([]);
 
-    // useEffect(() => {
-    //     if (activeTab!== "1") {
-    //         handleSubmit(activeTab);
-    //     }
-    // }, [activeTab]);
     const ReadonlyBadge = ({ readonly }: { readonly: boolean }) => {
         return (
             <div className="relative sm:container">
@@ -177,66 +172,82 @@ const Proyecto: React.FC = () => {
         );
     };
 
+    const ProjectHeader = () => {
+        if (status)
+            return (
+                <>
+                    <h1 className="text-2xl font-bold mb-6 space-y-4">
+                        Estado del proyecto: <span className="text-blue-500">{ProjectMapper.mapProjectStatus(status)}</span>
+                    </h1>
+                    <hr />
+                    <br />
+                    <div className="text-sm text-gray-500 mb-8">
+                        <span>Proyectos</span> {'>'} <span>{project?.name}</span>
+                    </div>
+                </>
+            );
+        return <>      <h1 className="text-2xl font-bold mb-6 space-y-4">Nuevo proyecto</h1>
+            <div className="text-sm text-gray-500 mb-8">
+                <span>Proyectos</span> {'>'} <span>Nuevo proyecto</span>
+            </div></>
+    }
     return (
         <Layout>
             <Loader loading={loader}>
                 <ReadonlyBadge readonly={readonly} />
                 <div>
-                    <h1 className="text-2xl font-bold mb-6 space-y-4">Nuevo proyecto</h1>
-                    <div className="text-sm text-gray-500 mb-8">
-                        <span>Proyectos</span> {'>'} <span>Nuevo proyecto</span>
-                    </div>
+                    <ProjectHeader/>
                     <div className="tabs flex justify-center space-x-10">
                         <StepIndicator activeTab={activeTab} setactiveTab={setActiveTab} />
                     </div>
                     {activeTab === "1" && (
-                      <ProyectoSteep1
-                        formData={formData}
-                        handleChange={handleChange}
-                        handleSubmit={handleSubmit}
-                        activeTab={activeTab}
-                        setactiveTab={setActiveTab}
-                        isEditing={readonly}
-                        readonly={readonly}
-                      />
+                        <ProyectoSteep1
+                            formData={formData}
+                            handleChange={handleChange}
+                            handleSubmit={handleSubmit}
+                            activeTab={activeTab}
+                            setactiveTab={setActiveTab}
+                            isEditing={readonly}
+                            readonly={readonly}
+                        />
                     )}
                     {activeTab === "2" && (
-                      <ProyectoSteep2
-                        formData={formData}
-                        handleChange={handleChange}
-                        handleSubmit={handleSubmit}
-                        activeTab={activeTab}
-                        setactiveTab={setActiveTab}
-                      />
+                        <ProyectoSteep2
+                            formData={formData}
+                            handleChange={handleChange}
+                            handleSubmit={handleSubmit}
+                            activeTab={activeTab}
+                            setactiveTab={setActiveTab}
+                        />
                     )}
                     {activeTab === "3" && (
-                      <ProyectoSteep3
-                        formData={formData}
-                        handleChange={handleChange}
-                        handleSubmit={handleSubmit}
-                        activeTab={activeTab}
-                        setactiveTab={setActiveTab}
-                      />
+                        <ProyectoSteep3
+                            formData={formData}
+                            handleChange={handleChange}
+                            handleSubmit={handleSubmit}
+                            activeTab={activeTab}
+                            setactiveTab={setActiveTab}
+                        />
                     )}
                     {activeTab === "4" && (
-                      <ProyectoSteep4
-                        formData={formData}
-                        handleChange={handleChange}
-                        handleSubmit={handleSubmit}
-                        activeTab={activeTab}
-                        setactiveTab={setActiveTab}
-                        entregables={entregables}
-                        setEntregables={setEntregables}
-                      />
+                        <ProyectoSteep4
+                            formData={formData}
+                            handleChange={handleChange}
+                            handleSubmit={handleSubmit}
+                            activeTab={activeTab}
+                            setactiveTab={setActiveTab}
+                            entregables={entregables}
+                            setEntregables={setEntregables}
+                        />
                     )}
                     {activeTab === "5" && (
-                      <ProyectoSteep5
-                        formData={formData}
-                        handleChange={handleChange}
-                        handleSubmit={handleSubmit}
-                        activeTab={activeTab}
-                        setactiveTab={setActiveTab}
-                      />
+                        <ProyectoSteep5
+                            formData={formData}
+                            handleChange={handleChange}
+                            handleSubmit={handleSubmit}
+                            activeTab={activeTab}
+                            setactiveTab={setActiveTab}
+                        />
                     )}
                     {activeTab === "6" && <ProyectCreated />}
                 </div>

@@ -1,3 +1,7 @@
+import { ICompany } from "./company.interface";
+
+
+
 export interface IUser {
     birthDate: string; // ISO 8601 date string
     createdAt: string; // ISO 8601 date string
@@ -14,21 +18,6 @@ export interface IUser {
     nationality: string | null;
     role: string;
     updatedAt: string;
-    company?: {
-      id: string;
-      slug: string;
-      name: string;
-      legalName: string;
-      nationalIdentifierOrRFC: string | null;
-      foundingYear: string | null;
-      additionalInfo: string | null;
-      type: string;
-      instagram_url: string | null;
-      facebook_url: string | null;
-      linkedin_url: string | null;
-      web_url: string | null;
-      amfiId: string | null;
-      certificationId: string | null;
-      createdAt: string;
-    };
+    companies?: ICompany[];
+    company?: ICompany;
   }

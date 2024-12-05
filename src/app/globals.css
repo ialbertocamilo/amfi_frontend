@@ -174,3 +174,23 @@ code {
 .border-red-500 {
   border-color: #f56565;
 }
+
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+  width: 6px; /* Ancho más delgado del scrollbar */
+  height: 6px; /* Ancho más delgado para el scrollbar horizontal */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #003366; /* Color azul marino del thumb */
+  border-radius: 10px; /* Bordes redondeados */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Color de la pista */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #002244; /* Azul marino más oscuro al pasar el mouse */
+}

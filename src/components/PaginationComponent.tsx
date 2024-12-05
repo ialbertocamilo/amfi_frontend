@@ -62,7 +62,7 @@ const PaginatedComponent: React.FC<PaginatedComponentProps> = ({
                         </TableHead>
                         <TableBody>
                             {currentItems.map((item, index) => (
-                                    <TableRow className="cursor-pointer hover:bg-gray-100">
+                                    <TableRow className="cursor-pointer hover:bg-gray-100" key={index}>
                                         {headers.map((header, headerIndex) => (
                                             <TableCell
                                                 key={headerIndex}

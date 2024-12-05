@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useState } from "react";
-import "./globals.css";
-import { useRouter } from "next/router";
-import toast from "react-hot-toast";
-import PaginatedComponent from "@/components/PaginationComponent";
 import { getProjects } from "@/api/projectApi";
-import Layout from "@/components/Layout";
-import useUser from "@/hooks/user.hook";
 import ActionProjects from "@/components/ActionProjects";
-import { ProjectMapper } from "@/mappers/project.mapper";
-import { formatToLocalTime } from "@/lib/utils";
+import Layout from "@/components/Layout";
 import Loader from "@/components/Loader";
+import PaginatedComponent from "@/components/PaginationComponent";
+import { formatToLocalTime } from "@/lib/utils";
+import { ProjectMapper } from "@/mappers/project.mapper";
+import { useUserContext } from "@/providers/user.context";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import "./globals.css";
 
 const ListaProyectosAdmin = () => {
     const headers = [
@@ -26,11 +26,14 @@ const ListaProyectosAdmin = () => {
     const [projects, setProjects] = useState<any[]>([]);
     const [filterText, setFilterText] = useState("");
     const router = useRouter();
-    const { user, loading } = useUser();
-
+    const userContext = useUserContext();
+    const user = userContext?.user;
+    const loading = userContext?.loading;
     const crearProyecto = () => {
         router.push("/proyecto");
     };
+
+
 
     const fetchProjects = useCallback(async () => {
         try {

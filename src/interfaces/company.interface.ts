@@ -3,16 +3,16 @@ export interface ICompany {
     slug: string;
     name: string;
     legalName: string;
-    nationalIdentifierOrRFC: string;
-    foundingYear: number;
-    additionalInfo: any;
+    nationalIdentifierOrRFC: string | null;
+    foundingYear: string | null;
+    additionalInfo: string | null;
     type: string;
-    instagram_url: string;
-    facebook_url: string;
-    linkedin_url: string;
-    web_url: string;
-    amfiId: any;
-    certificationId: string;
+    instagram_url: string | null;
+    facebook_url: string | null;
+    linkedin_url: string | null;
+    web_url: string | null;
+    amfiId: string | null;
+    certificationId: string | null;
     createdAt: string;
     updatedAt: string;
 }

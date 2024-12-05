@@ -1,11 +1,26 @@
-
+import { CompanyType } from "@/constants";
+import { IUser } from "@/interfaces/user.interface";
+import { useEffect, useState } from "react";
 interface AgenciaPublicidadProps {
   formData: Record<string, any>;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   readonly?: boolean;
+  user: IUser
 }
 
-export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({ formData, handleChange, readonly }) => {
+export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({ user, formData, handleChange, readonly }) => {
+
+  
+  const [name,setName]=useState('')
+  const [email,setEmail]=useState('')
+  const [blocked, setBlocked] = useState(false);
+  useEffect(() => {
+    if (user.company?.type ===  CompanyType.Agency) {
+      setName(user.company?.legalName)
+      setEmail(user.email)
+      setBlocked(true);
+    }
+  }, [user]);
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">Datos de la agencia de publicidad</h2>
@@ -19,9 +34,9 @@ export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({ formD
             id="agencyName"
             name="agencyName"
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            value={formData?.agencyName || ''}
+            value={formData?.agencyName || name}
             onChange={handleChange}
-            disabled={readonly}
+            disabled={readonly || blocked}
           />
         </div>
         <div>
@@ -33,9 +48,9 @@ export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({ formD
             id="agencyEmail"
             name="agencyEmail"
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            value={formData?.agencyEmail || ''}
-            onChange={handleChange}
-            disabled={readonly}
+            value={formData?.agencyEmail || email}
+            onChange={handleChange }
+            disabled={readonly|| blocked}
           />
         </div>
         <div>
