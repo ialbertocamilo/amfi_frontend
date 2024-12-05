@@ -52,29 +52,32 @@ const ListadoInvitaciones = ({
           {invitationData.result?.map((casa, index) => (
             <div
               key={index}
-              className={`h-24 flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-300 mt-4 ${
-                casa.proposalUploaded ? "cursor-pointer" : ""
+              className={`h-24 flex justify-between items-center p-4  rounded-lg border  mt-4 transition-transform duration-300 ease-in-out transform hover:scale-105 ${
+              casa.proposalUploaded ? "cursor-pointer" : ""
               }`}
               onClick={casa.proposalUploaded ? handleItemClick : undefined}
             >
               <span className="text-gray-800 font-medium">
-                {" "}
-                {casa.productionHouse?.name}
+              {casa.productionHouse?.name}
               </span>
               <div className="flex items-center space-x-20">
-                <span
-                  className={`pl-5text-sm font-semibold px-3 py-1 rounded-md ${getStatusColor(
-                    casa?.accepted
-                  )}`}
-                >
-                  {getStatusName(casa?.accepted)}
-                </span>
-                <button
-                  onClick={() => {handleItemClick(), setEvaluation(casa.evaluation), setBidId(casa.id)}}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  &gt;
-                </button>
+              <span
+                className={`pl-5 text-sm font-semibold px-3 py-1 rounded-md ${getStatusColor(
+                casa?.accepted
+                )}`}
+              >
+                {getStatusName(casa?.accepted)}
+              </span>
+              <button
+                onClick={() => {
+                handleItemClick();
+                setEvaluation(casa.evaluation);
+                setBidId(casa.id);
+                }}
+                className="text-gray-400 hover:text-gray-600 transition-colors duration-300 ease-in-out"
+              >
+                &gt;
+              </button>
               </div>
             </div>
           ))}

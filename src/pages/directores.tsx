@@ -24,7 +24,7 @@ const Directores = () => {
     { key: "correlativo", label: "Correlativo" },
     { key: "name", label: "Nombre director" },
     { key: "nationality", label: "Nacionalidad" },
-    { key: "isMexicanResident", label: "Residente" },
+    { key: "isMexicanResident", label: "Residente en México" },
     { key: "birthDate", label: "Fecha de nacimiento" },
     { key: "representation", label: "Representación" },
     { key: "action", label: "Acción" },

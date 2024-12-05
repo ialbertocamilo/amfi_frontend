@@ -149,7 +149,7 @@ const ListaDeProyectos = () => {
 
                     {filteredProjects.map((projectInvitation, index) => (<div
                         key={index}
-                        className=" flex justify-between items-center p-4 bg-white shadow-md rounded-lg space-y-4 hover:bg-gray-100 transition duration-200 ease-in-out transform hover:scale-105
+                        className=" flex justify-between items-center p-4 bg-white shadow-md rounded-lg space-y-4 hover:bg-gray-100 ttransition-transform duration-300 ease-in-out transform hover:scale-105
                     cursor-pointer"
                         onClick={() => handleRedirect(projectInvitation)}
                     >

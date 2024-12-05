@@ -11,9 +11,7 @@ const DetalleProyecto = () => {
 
   return (
     <Layout>
-      <div className="flex-1 flex flex-col">
         <DetalleProyectoLista id={id as string} />
-      </div>
     </Layout>
   );
 };

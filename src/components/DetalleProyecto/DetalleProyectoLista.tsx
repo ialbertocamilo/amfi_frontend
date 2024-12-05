@@ -1,25 +1,24 @@
 import {
+  Evaluation,
+  InvitedDirectorsResponse,
+} from "@/api/interface/api.interface";
+import { sendReminderToProductionHouses } from "@/api/productoraApi";
+import {
   getInvitationsByProjectId,
   getProjectById,
   updateProjectStatus,
 } from "@/api/projectApi";
-import { ProjectMapper, ProjectStatus } from "@/mappers/project.mapper";
-import React, { useEffect, useState } from "react";
-import { sendReminderToProductionHouses } from "@/api/productoraApi";
-import moment from "moment";
-import { useRouter } from "next/router";
-import toast from "react-hot-toast";
-import Evaluacion from "./Evaluacion";
-import ListadoInvitaciones from "./ListadoInvitaciones";
-import Comparacion, { EvaluationScore } from "./Comparacion";
-import {
-  Evaluation,
-  InvitedDirectorsResponse,
-} from "@/api/interface/api.interface";
 import Loader from "@/components/Loader";
 import useLoader from "@/hooks/loader.hook";
 import { calculateBudgetScore, calculateEvaluationScore } from "@/lib/utils";
-import { totalmem } from "os";
+import { ProjectMapper, ProjectStatus } from "@/mappers/project.mapper";
+import moment from "moment";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import Comparacion, { EvaluationScore } from "./Comparacion";
+import Evaluacion from "./Evaluacion";
+import ListadoInvitaciones from "./ListadoInvitaciones";
 
 interface ProjectDetailsProps {
   id: string;
@@ -84,8 +83,9 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
         directorCreativo: projectData?.creator?.jobPosition || "",
         contactoFinanzas: projectData?.isFinancialInfoUnlocked ? "Sí" : "No",
         directorCuentas:
-          `${projectData?.creator?.name} ${projectData?.creator?.lastname}` ||
-          "",
+          projectData?.creator?.name && projectData?.creator?.lastname
+            ? `${projectData.creator.name} ${projectData.creator.lastname}`
+            : "",
         productorAgencia: projectData?.creator?.name || "",
         numeroODT: projectData?.id || "",
         contactoCompras: projectData?.creator?.nationalIdentifierOrRFC || "",
@@ -208,7 +208,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
   const { loading, setLoading } = useLoader(false);
   return (
     <Loader loading={loading}>
-      <div className="mt-6 px-4 w-full max-w-screen-xxl mx-auto bg-white rounded-xl space-y-6 lg:px-8">
+      <div className="mt-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl space-y-6 ">
         <div className="flex flex-col border-b">
           <h1 className="text-xl font-semibold pb-4">
             {formData?.nombreProyecto}
