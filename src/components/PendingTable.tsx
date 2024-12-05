@@ -46,11 +46,12 @@ const PendingTable: React.FC = () => {
 };
 
 const getStatusClass = (status: string) => {
+  console.log(status.toLowerCase());
   switch (status.toLowerCase()) {
     case "draft":
       return (
         <span
-          className={`py-1 px-3 rounded-md  font-bold flex items-center justify-center bg-[#FFF0CC] text-[#D49500]`}
+          className={`py-1 px-3 rounded-md  font-bold flex items-center justify-center  bg-[#D3D3D3] text-[#FFFFFF]`}
         >
           En borrador
         </span>
@@ -86,6 +87,14 @@ const getStatusClass = (status: string) => {
         >
           Cerrado
         </span>
+      );
+    case "paused":
+      return (
+        <span
+          className={`py-1 px-3 rounded-md font-bold flex items-center justify-center bg-[#FFA500] text-[#FFFFFF]`}
+        >
+      Pausado
+    </span>
       );
     default:
       return "";

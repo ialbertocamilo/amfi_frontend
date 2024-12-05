@@ -1,19 +1,8 @@
+import { IProjectInvitation } from "@/interfaces/project-director.interface";
+
 export interface InvitedDirectorsResponse {
     message: string;
-    result: InvitedDirector[];
-}
-
-export interface InvitedDirector {
-    id: string;
-    accepted: boolean | null;
-    proposalUploaded: boolean;
-    createdAt: string;
-    updatedAt: string;
-    project: ProductionHouse;
-    director: Director;
-    productionHouse: ProductionHouse;
-    evaluation: Evaluation | null;
-    budget: Budget | null;
+    result: IProjectInvitation[];
 }
 
 export interface ProjectInvitation {

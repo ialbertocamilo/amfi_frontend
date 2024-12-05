@@ -10,14 +10,16 @@ interface AgenciaPublicidadProps {
 
 export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({ user, formData, handleChange, readonly }) => {
 
-  
-  const [name,setName]=useState('')
-  const [email,setEmail]=useState('')
+
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
   const [blocked, setBlocked] = useState(false);
   useEffect(() => {
-    if (user.company?.type ===  CompanyType.Agency) {
+    if (user.company?.type === CompanyType.Agency) {
       setName(user.company?.legalName)
       setEmail(user.email)
+      handleChange({ target: { name: 'agencyEmail', value: email } } as unknown as React.ChangeEvent<HTMLInputElement>)
+      handleChange({ target: { name: 'agencyName', value: name } } as unknown as React.ChangeEvent<HTMLInputElement>)
       setBlocked(true);
     }
   }, [user]);
@@ -49,8 +51,8 @@ export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({ user,
             name="agencyEmail"
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             value={formData?.agencyEmail || email}
-            onChange={handleChange }
-            disabled={readonly|| blocked}
+            onChange={handleChange}
+            disabled={readonly || blocked}
           />
         </div>
         <div>

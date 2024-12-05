@@ -15,7 +15,7 @@ const InfoLink = ({ label }: InfoLinkProps) => {
           cy="12"
           r="10"
           stroke="#E63946"
-          stroke-width="2"
+          strokeWidth="2"
           fill="none"
         />
         <circle cx="12" cy="8" r="1" fill="#E63946" />
@@ -25,7 +25,7 @@ const InfoLink = ({ label }: InfoLinkProps) => {
           x2="12"
           y2="16"
           stroke="#E63946"
-          stroke-width="2"
+          strokeWidth="2"
         />
       </svg>
       <p className="text-sm font-bold text-orange-600">{label}</p>

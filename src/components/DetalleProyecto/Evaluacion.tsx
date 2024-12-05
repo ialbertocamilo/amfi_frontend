@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { FiEye, FiEyeOff } from "react-icons/fi";
-import StarRating from "../Commons/StarRating/StarRating";
-import BinaryChoice from "../Commons/BinaryChoice/BinaryChoice";
-import PercentageSelector from "../Commons/PercentageSelector/PercentageSelector";
-import InfoLink from "../Commons/InfoLink/InfoLink";
 import {
   Budget,
   CreativeProposal,
   Evaluation,
 } from "@/api/interface/api.interface";
 import { getBidEvaluation, updateBidEvaluation } from "@/api/projectApi";
-import BudgetBarChart from "./BudgetBarChart";
 import { calculateBudgetScore, calculateEvaluationScore } from "@/lib/utils";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import BinaryChoice from "../Commons/BinaryChoice/BinaryChoice";
+import InfoLink from "../Commons/InfoLink/InfoLink";
+import PercentageSelector from "../Commons/PercentageSelector/PercentageSelector";
 import ScoreModal from "../Commons/ScoreModal/ScoreModal";
+import StarRating from "../Commons/StarRating/StarRating";
+import BudgetBarChart from "./BudgetBarChart";
 
 interface ProposalItem {
   key: string;
@@ -27,15 +28,13 @@ interface QuestionItem {
 }
 
 interface EvaluacionProps {
-  bidId: string;
-  showComponent: (componentName: "list" | "evaluation" | "comparison") => void;
+  projectInvitationId: string;
   creativeProposalPercentage: number;
   setCreativeProposalPercentage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const Evaluacion: React.FC<EvaluacionProps> = ({
-  bidId,
-  showComponent,
+  projectInvitationId,
   creativeProposalPercentage,
   setCreativeProposalPercentage,
 }) => {
@@ -190,7 +189,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
 
   const updateEvaluation = (
     proposal: ProposalItem[] | QuestionItem[],
-    evaluation: Object
+    evaluation: object
   ) => {
     return proposal.map((item) => ({
       ...item,
@@ -200,7 +199,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
   };
 
   const onInit = async () => {
-    const result = (await getBidEvaluation(bidId))?.result;
+    const result = (await getBidEvaluation(projectInvitationId))?.result;
     const evaluation = result?.evaluation;
     const budget = result?.budget;
 
@@ -251,8 +250,9 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
   };
 
   useEffect(() => {
+    if (projectInvitationId)
     onInit();
-  }, [bidId]);
+  }, [projectInvitationId]);
 
   const handleAnswerChange = (index: number, answer: string) => {
     const newAnswers = [...answers];
@@ -282,7 +282,6 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
   };
 
   const updateBidEvaluationData = (): Evaluation => {
-    console.log("updateBidEvaluationData", evaluation);
     const newCreativeProposal = {} as CreativeProposal;
     creativeProposal.map(
       (item) => (newCreativeProposal[item.key] = item.value)
@@ -293,8 +292,14 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
   };
 
   const synchronizeBidEvaluationData = () => {
-    updateBidEvaluation(bidId, updateBidEvaluationData());
+    updateBidEvaluation(projectInvitationId, updateBidEvaluationData());
   };
+
+  const router=useRouter()
+  const goToComparative=()=>{
+    synchronizeBidEvaluationData();
+    router.push(`/comparativo?projectInvitationId=${projectInvitationId}`)
+  }
 
   return (
     <div className="mt-6 p-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl shadow-md space-y-6 px-4 lg:px-8">
@@ -463,7 +468,8 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
           <button
             type="submit"
             onClick={() => {
-              showComponent("list"), synchronizeBidEvaluationData();
+               synchronizeBidEvaluationData();
+               window.history.back();
             }}
             className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded"
           >
@@ -472,9 +478,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
           <button
             type="submit"
             className="w-1/4 bg-red-500 text-white py-2 rounded"
-            onClick={() => {
-              showComponent("comparison"), synchronizeBidEvaluationData();
-            }}
+            onClick={goToComparative}
           >
             Comparativo
           </button>

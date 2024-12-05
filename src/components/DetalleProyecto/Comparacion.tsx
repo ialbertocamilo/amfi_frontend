@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import StackedBarChar from "./StackedBarChar";
+import { useRouter } from "next/router";
 
 export interface EvaluationScore {
   name: string;
@@ -13,10 +14,9 @@ export interface EvaluationScore {
 
 interface ComparisonProps {
   data: EvaluationScore[];
-  showComponent: (componentName: "list" | "evaluation" | "comparison") => void;
 }
 
-const Comparacion: React.FC<ComparisonProps> = ({ data, showComponent }) => {
+const Comparacion: React.FC<ComparisonProps> = ({ data }) => {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
 
   const StackedBarCharData = data.map((group) => ({
@@ -45,6 +45,11 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, showComponent }) => {
     setSelectedGroup(name);
   };
 
+  const router=useRouter()
+
+  const backToList = () => {
+    router.back()
+  };
   return (
     <div className="mt-6 p-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl shadow-md space-y-6 px-4 lg:px-8">
       <div className="max-w-6xl mx-auto p-4">
@@ -161,7 +166,7 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, showComponent }) => {
           <button
             type="submit"
             className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded "
-            onClick={() => showComponent("evaluation")}
+            onClick={backToList}
           >
             Atras
           </button>

@@ -16,22 +16,17 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import Comparacion, { EvaluationScore } from "./Comparacion";
-import Evaluacion from "./Evaluacion";
 import ListadoInvitaciones from "./ListadoInvitaciones";
+import { EvaluationScore } from "./Comparacion";
 
 interface ProjectDetailsProps {
   id: string;
 }
 
 const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
-  const [showListadoInvitaciones, setShowListadoInvitaciones] = useState(true);
-  const [showEvaluacion, setShowEvaluacion] = useState(false);
-  const [showComparacion, setShowComparacion] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
-  const [creativeProposalPercentage, setCreativeProposalPercentage] =
-    useState(40);
+  const [creativeProposalPercentage, setCreativeProposalPercentage] =useState(40);
   const [evaluationScore, setEvaluationScore] = useState<EvaluationScore[]>([]);
 
   const [invitationData, setInvitationData] =
@@ -39,7 +34,6 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
       result: [],
       message: "",
     });
-  const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
   const [bidId, setBidId] = useState<string>("");
 
   const [formData, setFormData] = useState({
@@ -177,33 +171,9 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
   }, [creativeProposalPercentage]);
 
   const handleItemClick = () => {
-    setShowListadoInvitaciones(false);
-    setShowEvaluacion(true);
+    router.push(`/evaluacion?projectInvitationId=${bidId}`);
   };
 
-  const showComponent = (
-    componentName: "list" | "evaluation" | "comparison"
-  ) => {
-    switch (componentName) {
-      case "list":
-        setShowListadoInvitaciones(true);
-        setShowEvaluacion(false);
-        setShowComparacion(false);
-        break;
-      case "evaluation":
-        setShowListadoInvitaciones(false);
-        setShowEvaluacion(true);
-        setShowComparacion(false);
-        break;
-      case "comparison":
-        setShowListadoInvitaciones(false);
-        setShowEvaluacion(false);
-        setShowComparacion(true);
-        break;
-      default:
-        setShowListadoInvitaciones(true);
-    }
-  };
 
   const { loading, setLoading } = useLoader(false);
   return (
@@ -241,38 +211,16 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
           </div>
         </div>
         <div className={isVisible ? "" : "hidden"}>
-          {showListadoInvitaciones ? (
+      
             <ListadoInvitaciones
               invitationData={invitationData}
-              setEvaluation={setEvaluation}
               setBidId={setBidId}
-              showComponent={showComponent}
               formData={formData}
               handleItemClick={handleItemClick}
               closeProject={closeProject}
               sendReminder={sendReminder}
             ></ListadoInvitaciones>
-          ) : (
-            <></>
-          )}
-          {showEvaluacion ? (
-            <Evaluacion
-              bidId={bidId}
-              showComponent={showComponent}
-              creativeProposalPercentage={creativeProposalPercentage}
-              setCreativeProposalPercentage={setCreativeProposalPercentage}
-            ></Evaluacion>
-          ) : (
-            <></>
-          )}
-          {showComparacion ? (
-            <Comparacion
-              data={evaluationScore}
-              showComponent={showComponent}
-            ></Comparacion>
-          ) : (
-            <></>
-          )}
+
         </div>
       </div>
     </Loader>

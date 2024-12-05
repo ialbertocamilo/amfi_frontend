@@ -1,46 +1,75 @@
-import { Evaluation, InvitedDirectorsResponse } from "@/api/interface/api.interface";
+import { InvitedDirectorsResponse } from "@/api/interface/api.interface";
+import { IProjectInvitation } from "@/interfaces/project-director.interface";
+import { ProjectInvitationMapper } from "@/mappers/project-invitation.mapper";
+import { useRouter } from "next/router";
+import toast from "react-hot-toast";
+import { Tooltip } from "react-tooltip";
+import DownloadIcon from "../icons/DownloadIcon";
+import NextIcon from "../icons/NextIcon";
 
 interface ListadoInvitacionesProps {
   invitationData: InvitedDirectorsResponse;
-  setEvaluation: React.Dispatch<React.SetStateAction<Evaluation | null>>;
   setBidId: React.Dispatch<React.SetStateAction<string | null>>;
-  showComponent: (componentName: "list" | "evaluation" | "comparison") => void;
   formData: any;
-  handleItemClick: () => void;
+  handleItemClick: (e) => void;
   sendReminder: () => void;
   closeProject: () => void;
 }
 
 const ListadoInvitaciones = ({
-  invitationData,
-  setEvaluation,
-  setBidId,
-  showComponent,
+  invitationData: invitation,
   formData,
-  handleItemClick,
   sendReminder,
   closeProject,
 }: ListadoInvitacionesProps) => {
-  const getStatusColor = (status: boolean | null) => {
+
+  const InvitationStatus = ({ status }: { status: boolean }) => {
+
+    const mappedStatus = ProjectInvitationMapper.mapStatus(status);
+    let bgColor = "";
+    let textColor = "";
+
     switch (status) {
-      case false:
-        return "bg-red-200 text-red-800";
       case true:
-        return "bg-green-200 text-green-800";
-      default:
-        return "bg-teal-200 text-teal-800";
-    }
-  };
-  const getStatusName = (status: boolean | null) => {
-    switch (status) {
+        bgColor = "bg-green-100";
+        textColor = "text-green-500";
+        break;
       case false:
-        return "Rechazado";
-      case true:
-        return "Aceptado";
+        bgColor = "bg-red-100";
+        textColor = "text-red-500";
+        break;
       default:
-        return "Pendiente";
+        bgColor = "bg-gray-100";
+        textColor = "text-gray-500";
+        break;
     }
-  };
+
+    return (
+      <span className={`invitation-status ${bgColor} ${textColor} text-sm px-4 py-2 rounded`}>
+        {mappedStatus}
+      </span>
+    );
+  }
+
+  const ProposalUploaded = ({ isUploaded, onClick, className }: { isUploaded: boolean, onClick?: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void, className?: string }) => {
+    if (isUploaded)
+      return <span className={`proposal-uploaded text-sm text-red-500 text-bold flex items-center cursor-pointer ${className}`} onClick={onClick}>
+        <DownloadIcon />
+        <b className="ml-2">Abrir propuesta enviada</b>
+      </span>
+    return null;
+  }
+
+  const router=useRouter();
+  const doClick = (e: React.MouseEvent<HTMLDivElement>, invitation: IProjectInvitation) => {
+
+    if (invitation.proposalUploaded) {
+      router.push(`/evaluacion?projectInvitationId=${invitation.id}`);
+    } else {
+      e.preventDefault();
+      toast.error("La propuesta aún no ha sido subida");
+    }
+  }
 
   return (
     <>
@@ -49,35 +78,26 @@ const ListadoInvitaciones = ({
           Casas Productoras invitadas
         </h2>
         <ul>
-          {invitationData.result?.map((casa, index) => (
+          {invitation.result?.map((invitation, index) => (
             <div
               key={index}
-              className={`h-24 flex justify-between items-center p-4  rounded-lg border  mt-4 transition-transform duration-300 ease-in-out transform hover:scale-105 ${
-              casa.proposalUploaded ? "cursor-pointer" : ""
-              }`}
-              onClick={casa.proposalUploaded ? handleItemClick : undefined}
+              className={`flex justify-between items-center p-4 bg-white shadow-md rounded-lg space-y-4 hover:bg-gray-100 ttransition-transform duration-300 ease-in-out transform hover:scale-105
+                    cursor-pointer ${invitation.proposalUploaded ? "cursor-pointer" : ""
+                }`}
+              onClick={(e) => doClick(e, invitation)}
             >
               <span className="text-gray-800 font-medium">
-              {casa.productionHouse?.name}
+                {invitation.productionHouse?.name}
               </span>
               <div className="flex items-center space-x-20">
-              <span
-                className={`pl-5 text-sm font-semibold px-3 py-1 rounded-md ${getStatusColor(
-                casa?.accepted
-                )}`}
-              >
-                {getStatusName(casa?.accepted)}
-              </span>
-              <button
-                onClick={() => {
-                handleItemClick();
-                setEvaluation(casa.evaluation);
-                setBidId(casa.id);
-                }}
-                className="text-gray-400 hover:text-gray-600 transition-colors duration-300 ease-in-out"
-              >
-                &gt;
-              </button>
+                <ProposalUploaded
+                  className="proposal-uploaded"
+                  isUploaded={invitation.proposalUploaded}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }} />
+                <InvitationStatus status={invitation?.accepted ?? false} />
+                <NextIcon />
               </div>
             </div>
           ))}
@@ -99,6 +119,7 @@ const ListadoInvitaciones = ({
         </button>
       </div>
 
+      <Tooltip anchorSelect=".invitation-status" place={"bottom"}>Estado de la invitación al proyecto.</Tooltip>
       {/* Close Call Section */}
       <div className="flex justify-start pt-4">
         {formData?.estado !== "Cerrado" && (
