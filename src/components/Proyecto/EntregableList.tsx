@@ -30,8 +30,6 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesIni, setEntregables}
     };
 
     const handleAddEntregable = (newEntregable: any) => {
-        console.log("newEntregable");
-        console.log(newEntregable);
         setEntregablesIn(prevEntregables => [...prevEntregables, newEntregable]);
         setIsModalOpen(false);
     };
