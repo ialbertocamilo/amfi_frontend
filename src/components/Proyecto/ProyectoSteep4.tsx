@@ -8,8 +8,6 @@ interface registroEntity {
   formData: any;
   handleChange: any;
   handleSubmit: any;
-  activeTab: string;
-  setactiveTab: any;
   setEntregables: any;
   entregables: any[];
 }
@@ -35,7 +33,7 @@ const ProyectoSteep4 = ({
         if (formData) {
           handleChange({ target: { name: 'titularResponsable', value: fullname } });
         }
-        console.log(formData?.titularResponsable);
+        console.log(formData.titularResponsable);
       }
     });
   }, []);
@@ -58,9 +56,9 @@ const ProyectoSteep4 = ({
   };
 
   useEffect(() => {
-    const total = videos + photos + (Number(formData?.locutor) || 0);
+    const total = videos + photos + (Number(formData.locutor) || 0);
     handleChange({ target: { name: 'total', value: total } });
-  }, [videos, photos,formData?.locutor]);
+  }, [videos, photos,formData.locutor]);
 
   return (
     <div className="space-y-8 p-4">
@@ -83,7 +81,7 @@ const ProyectoSteep4 = ({
                 name="talento"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
-                value={formData?.talento}
+                value={formData.talento}
                 onChange={handleChange}
               />
             </div>
@@ -98,7 +96,7 @@ const ProyectoSteep4 = ({
                 id="talentoExclusividad"
                 name="talentoExclusividad"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.talentoExclusividad}
+                value={formData.talentoExclusividad}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -117,7 +115,7 @@ const ProyectoSteep4 = ({
                 id="talentoTipoCasting"
                 name="talentoTipoCasting"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.talentoTipoCasting}
+                value={formData.talentoTipoCasting}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -137,7 +135,7 @@ const ProyectoSteep4 = ({
                 id="talentoACargoDe"
                 name="talentoACargoDe"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.talentoACargoDe}
+                value={formData.talentoACargoDe}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -161,7 +159,7 @@ const ProyectoSteep4 = ({
                 name="competencia"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
-                value={formData?.competencia || ''}
+                value={formData.competencia || ''}
                 onChange={handleChange}
               />
             </div>
@@ -176,7 +174,7 @@ const ProyectoSteep4 = ({
                 id="menoresDeEdad"
                 name="menoresDeEdad"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.menoresDeEdad}
+                value={formData.menoresDeEdad}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -195,7 +193,7 @@ const ProyectoSteep4 = ({
                 id="animales"
                 name="animales"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.animales}
+                value={formData.animales}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -214,7 +212,7 @@ const ProyectoSteep4 = ({
                 id="especieProtegida"
                 name="especieProtegida"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.especieProtegida}
+                value={formData.especieProtegida}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -233,7 +231,7 @@ const ProyectoSteep4 = ({
                 id="locación"
                 name="locacion"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.locacion}
+                value={formData.locacion}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -255,7 +253,7 @@ const ProyectoSteep4 = ({
                 name="vestuario"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
-                value={formData?.vestuario}
+                value={formData.vestuario}
                 onChange={handleChange}
               />
             </div>
@@ -384,7 +382,7 @@ const ProyectoSteep4 = ({
                 id="musica"
                 name="musica"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.musica}
+                value={formData.musica}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -405,7 +403,7 @@ const ProyectoSteep4 = ({
                 id="aCargoDe"
                 name="aCargoDe"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.aCargoDe}
+                value={formData.aCargoDe}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -432,7 +430,7 @@ const ProyectoSteep4 = ({
                 name="online"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
-                value={formData?.online}
+                value={formData.online}
                 onChange={handleChange}
               />
             </div>
@@ -449,7 +447,7 @@ const ProyectoSteep4 = ({
                 name="animacion"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
-                value={formData?.animacion}
+                value={formData.animacion}
                 onChange={handleChange}
               />
             </div>
@@ -467,7 +465,7 @@ const ProyectoSteep4 = ({
                 name="vfx"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
-                value={formData?.vfx}
+                value={formData.vfx}
                 onChange={handleChange}
               />
             </div>
@@ -587,7 +585,7 @@ const ProyectoSteep4 = ({
                   name="locutor"
                   className="mt-1 block w-3/4 p-2 border border-gray-300 rounded-md"
                   placeholder="Descripción aquí"
-                  value={formData?.locutor}
+                  value={formData.locutor}
                   onChange={handleChange}
                 />
               </div>
@@ -605,7 +603,7 @@ const ProyectoSteep4 = ({
                   readOnly
                   className="mt-1 block w-3/4 p-2 border border-gray-300 rounded-md bg-gray-200"
                   placeholder="Total"
-                  value={formData?.total}
+                  value={formData.total}
                 />
               </div>
             </div>

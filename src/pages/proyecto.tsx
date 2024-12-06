@@ -16,91 +16,93 @@ import { toast } from "react-hot-toast";
 import { formatToUtcBackend, validateFormData } from "@/lib/utils";
 import Loader from '@/components/Loader';
 import StepIndicator from '@/components/Proyecto/StepIndicator/StepIndicator';
-import moment from "moment";
+import { CompanyType } from "@/constants";
+import { useUserContext } from "@/providers/user.context";
 
-export const inputProjectNames = [
-    'brand',
-    'product',
-    'category',
-    'projectName',
-    'versionName',
-    'quantity',
-    'agencyName',
-    'agencyEmail',
-    'agencyProductor',
-    'agencyCreativeDirector',
-    'contactoFinanzas',
-    'agencyAccountDirector',
-    'odtNumber',
-    'buyerContact',
-    'medios',
-    'temporalidad',
-    'desglose',
-    'territorio1',
-    'territorio2',
-    'territorio3',
-    'derechos',
-    'entregaBrief',
-    'entregaPresupuesto',
-    'entregaProyecto',
-    'presupuesto',
-    'moneda',
-    'objetivoComunicacion',
-    'target',
-    'lineamientosMarca',
-    'link1',
-    'link2',
-    'responsablePago',
-    'momentoFacturacionAgencia',
-    'politicaPago',
-    'contratoProyecto',
-    'tipoProduccion1',
-    'tipoProduccion2',
-    'tipoProduccion3',
-    'momentoFacturacion',
-    'rondaCotizacion',
-    'visualizacion',
-    'politicaAltaProveedor',
-    'porcentajeTasaAnticipo',
-    'porcentajeTasaFiniquito',
-    'porcentajeTasaTotal',
-    'informacionAdicional',
-    'talento',
-    'vestuario',
-    'locacion',
-    'maquillajepeinado',
-    'online',
-    'musica',
-    'animacion',
-    'vfx',
-    'cantidadAsistentes',
-    'puestoAsistentes',
-    'comentarioEntregables',
-    'comentarios',
-    'titularResponsable',
-    'cantidadDiasProduccion',
-    'presupuestoAsignado',
-    'anticipo',
-    'antesDeFilmar',
-    'politicaPagoAnticipo',
-    'talentoExclusividad',
-    'talentoTipoCasting',
-    'talentoACargoDe',
-    'competencia',
-    'animales',
-    'menoresDeEdad',
-    'efectos',
-    'especieProtegida',
-    'locucionInstitucional',
-    'locucionAgencia',
-    'arteprops',
-    'aCargoDe',
-    'creatividadAprobada',
-    'tipoContratoProyecto',
-    'entregaBidLetter'
-];
+
+
 const Proyecto: React.FC = () => {
-    const [formData, setFormData] = useState<Record<string, any>>({});
+    const [formData, setFormData] = useState({
+        brand: '',
+        product: '',
+        category: '',
+        projectName: '',
+        versionName: '',
+        quantity: '',
+        agencyName: '',
+        agencyEmail: '',
+        agencyProductor: '',
+        agencyCreativeDirector: '',
+        contactoFinanzas: '',
+        agencyAccountDirector: '',
+        odtNumber: '',
+        buyerContact: '',
+        medios: '',
+        temporalidad: '',
+        desglose: '',
+        territorio1: '',
+        territorio2: '',
+        territorio3: '',
+        derechos: '',
+        entregaBrief: '',
+        entregaPresupuesto: '',
+        entregaProyecto: '',
+        presupuesto: '',
+        moneda: '',
+        objetivoComunicacion: '',
+        target: '',
+        lineamientosMarca: '',
+        link1: '',
+        link2: '',
+        responsablePago: '',
+        momentoFacturacionAgencia: '',
+        politicaPago: '',
+        contratoProyecto: '',
+        tipoProduccion1: '',
+        tipoProduccion2: '',
+        tipoProduccion3: '',
+        momentoFacturacion: '',
+        rondaCotizacion: '',
+        visualizacion: '',
+        politicaAltaProveedor: '',
+        porcentajeTasaAnticipo: '',
+        porcentajeTasaFiniquito: '',
+        porcentajeTasaTotal: '',
+        informacionAdicional: '',
+        talento: '',
+        vestuario: '',
+        locacion: '',
+        maquillajepeinado: '',
+        online: '',
+        musica: '',
+        animacion: '',
+        vfx: '',
+        cantidadAsistentes: '',
+        puestoAsistentes: '',
+        comentarioEntregables: '',
+        comentarios: '',
+        titularResponsable: '',
+        cantidadDiasProduccion: '',
+        presupuestoAsignado: '',
+        anticipo: '',
+        antesDeFilmar: '',
+        politicaPagoAnticipo: '',
+        talentoExclusividad: '',
+        talentoTipoCasting: '',
+        talentoACargoDe: '',
+        competencia: '',
+        animales: '',
+        menoresDeEdad: '',
+        efectos: '',
+        especieProtegida: '',
+        locucionInstitucional: '',
+        locucionAgencia: '',
+        arteprops: '',
+        aCargoDe: '',
+        creatividadAprobada: '',
+        tipoContratoProyecto: '',
+        entregaBidLetter: ''
+    });
     const router = useRouter();
     const { id } = router.query;
 
@@ -116,7 +118,7 @@ const Proyecto: React.FC = () => {
     const { projectJson, fetchProject, saveOrUpdateProject, status, project } = useProject(id as string);
     const handleSubmit = async (page: string) => {
         if (page === '6') {
-            if (!validateFormData(formData, inputProjectNames)) {
+            if (!validateFormData(formData)) {
                 toast.error("Por favor, llena todos los campos para crear el proyecto");
                 return;
             }
@@ -126,7 +128,7 @@ const Proyecto: React.FC = () => {
             brand: formData?.brand,
             product: formData?.product,
             projectName: formData?.projectName,
-            budget: formData?.presupuesto,
+            budget: Number(formData?.presupuesto),
             bidDeadline: formData?.entregaBidLetter ? formatToUtcBackend(formData.entregaBidLetter) : undefined,
             extra: formData,
             status: page === '6' ? ProjectStatus.InProgress : ProjectStatus.Draft // Cuando termina de crear el proyecto, se cambia el estado a En proceso
@@ -141,6 +143,24 @@ const Proyecto: React.FC = () => {
 
 
     const [loader, setLoading] = useState(false);
+    const userContext = useUserContext();
+    const user = userContext?.user;
+
+    useEffect(() => {
+        let agencyEmail = ''
+        let agencyName = ''
+        // Sirve para el step1
+        if (!id){
+            if (user && user.company?.type === CompanyType.Agency && formData.agencyName === '' && formData.agencyEmail === '') {
+                agencyEmail = user?.email;
+                agencyName = user?.company?.legalName;
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    agencyEmail,
+                    agencyName
+                }));
+            }}
+    }, [user])
     useEffect(() => {
         if (id) {
             setLoading(true)
@@ -154,10 +174,11 @@ const Proyecto: React.FC = () => {
     useEffect(() => {
         if (projectJson) {
             setFormData((prevFormData) => ({
-                ...prevFormData, ...projectJson
+                ...prevFormData,
+                ...projectJson
             }));
         }
-    }, [projectJson]);
+    }, [projectJson, user]);
 
     const [activeTab, setActiveTab] = useState<string>("1");
     const [entregables, setEntregables] = useState<any[]>([]);
@@ -200,17 +221,15 @@ const Proyecto: React.FC = () => {
             <Loader loading={loader}>
                 <ReadonlyBadge readonly={readonly} />
                 <div>
-                    <ProjectHeader/>
+                    <ProjectHeader />
                     <div className="tabs flex justify-center space-x-10">
                         <StepIndicator activeTab={activeTab} setactiveTab={setActiveTab} />
                     </div>
                     {activeTab === "1" && (
                         <ProyectoSteep1
-                            formData={formData}
+                            formData={formData as any}
                             handleChange={handleChange}
                             handleSubmit={handleSubmit}
-                            activeTab={activeTab}
-                            setactiveTab={setActiveTab}
                             isEditing={readonly}
                             readonly={readonly}
                         />
@@ -220,8 +239,6 @@ const Proyecto: React.FC = () => {
                             formData={formData}
                             handleChange={handleChange}
                             handleSubmit={handleSubmit}
-                            activeTab={activeTab}
-                            setactiveTab={setActiveTab}
                         />
                     )}
                     {activeTab === "3" && (
@@ -229,8 +246,6 @@ const Proyecto: React.FC = () => {
                             formData={formData}
                             handleChange={handleChange}
                             handleSubmit={handleSubmit}
-                            activeTab={activeTab}
-                            setactiveTab={setActiveTab}
                         />
                     )}
                     {activeTab === "4" && (
@@ -238,8 +253,6 @@ const Proyecto: React.FC = () => {
                             formData={formData}
                             handleChange={handleChange}
                             handleSubmit={handleSubmit}
-                            activeTab={activeTab}
-                            setactiveTab={setActiveTab}
                             entregables={entregables}
                             setEntregables={setEntregables}
                         />
@@ -249,8 +262,6 @@ const Proyecto: React.FC = () => {
                             formData={formData}
                             handleChange={handleChange}
                             handleSubmit={handleSubmit}
-                            activeTab={activeTab}
-                            setactiveTab={setActiveTab}
                         />
                     )}
                     {activeTab === "6" && <ProyectCreated />}

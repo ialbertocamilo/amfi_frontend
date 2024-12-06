@@ -1,11 +1,8 @@
-import StepIndicator from './StepIndicator/StepIndicator';
 
 interface registroEntity {
   formData: any;
   handleChange: any;
   handleSubmit: any;
-  activeTab: string;
-  setactiveTab: any;
 }
 
 interface TerritorioSelectProps {
@@ -43,8 +40,6 @@ const ProyectoSteep2 = ({
                           formData,
                           handleChange,
                           handleSubmit,
-                          activeTab,
-                          setactiveTab,
                         }: registroEntity) => {
   return (
     <div className="space-y-8 p-4">

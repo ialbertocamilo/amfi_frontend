@@ -6,30 +6,24 @@ import toast from "react-hot-toast";
 import {useRecoilState, useRecoilValue} from "recoil";
 import ListaCasasProductoras from "../ListaCasasProductoras";
 import CasasProductorasModal from "./CasasProductorasModal";
-import StepIndicator from "./StepIndicator/StepIndicator";
 import {validateFormData} from "@/lib/utils";
-import {inputProjectNames} from "@/pages/proyecto";
 
 interface registroEntity {
     formData: any;
     handleChange: any;
     handleSubmit: any;
-    activeTab: string;
-    setactiveTab: any;
 }
 
 const ProyectoSteep5 = ({
                             formData,
-                            handleChange,
                             handleSubmit,
-                            activeTab,
                             setactiveTab,
                         }: registroEntity) => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         console.log('On steep 5')
-        if (!validateFormData(formData, inputProjectNames)) {
+        if (!validateFormData(formData)) {
             toast.error("Por favor, llena todos los campos para llegar a la siguiente etapa");
             setactiveTab("1");
         }

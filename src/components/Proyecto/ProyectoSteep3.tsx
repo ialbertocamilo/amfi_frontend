@@ -1,41 +1,18 @@
 import UploaderComponent from '../UploaderComponent';
-import StepIndicator from './StepIndicator/StepIndicator';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/router';
-import useDownloadFiles from '@/hooks/files.hook';
 
 interface registroEntity {
   formData: any,
   handleChange: any;
   handleSubmit: any;
-  activeTab: string;
-  setactiveTab: any;
 }
 
-const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setactiveTab }: registroEntity) => {
+const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEntity) => {
 
   const router = useRouter();
   const projectId = router.query.id as string;
-  const validateFormData = (formData: Record<string, any>): boolean => {
-    for (const key in formData) {
-      if (formData.hasOwnProperty(key)) {
-        const value = formData[key];
-        if (typeof value === 'object' && value !== null) {
-          if (!validateFormData(value)) {
-            return false;
-          }
-        } else if (!value) {
-          return false;
-        }
-      }
-    }
-    return true;
-  };
   const handleNext = () => {
-    if (!validateFormData(formData)) {
-      toast.error('Por favor llena todos los campos');
-      return;
-    }
     handleSubmit('4');
   };
 

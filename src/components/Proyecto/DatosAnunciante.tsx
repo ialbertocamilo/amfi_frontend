@@ -1,20 +1,14 @@
-import { IUser } from '@/interfaces/user.interface';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 interface DatosAnuncianteProps {
   formData: Record<string, any>;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   readonly?: boolean;
-  user:IUser
 }
 
-const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ user,formData, handleChange, readonly }) => {
+const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ formData, handleChange, readonly }) => {
 
 
-  useEffect(()=>{
-
-    console.log(user)
-  },[user])
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">Datos del anunciante</h2>

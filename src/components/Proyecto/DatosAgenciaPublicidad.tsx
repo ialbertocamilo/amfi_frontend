@@ -1,28 +1,27 @@
 import { CompanyType } from "@/constants";
-import { IUser } from "@/interfaces/user.interface";
+import { useUserContext } from "@/providers/user.context";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 interface AgenciaPublicidadProps {
   formData: Record<string, any>;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   readonly?: boolean;
-  user: IUser
 }
 
-export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({ user, formData, handleChange, readonly }) => {
+export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({  formData, handleChange, readonly }) => {
 
-
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
   const [blocked, setBlocked] = useState(false);
-  useEffect(() => {
-    if (user.company?.type === CompanyType.Agency) {
-      setName(user.company?.legalName)
-      setEmail(user.email)
-      handleChange({ target: { name: 'agencyEmail', value: email } } as unknown as React.ChangeEvent<HTMLInputElement>)
-      handleChange({ target: { name: 'agencyName', value: name } } as unknown as React.ChangeEvent<HTMLInputElement>)
-      setBlocked(true);
-    }
-  }, [user]);
+
+  const userContext = useUserContext();
+  const user = userContext?.user;
+  const router = useRouter();
+  const { id } = router.query;
+  // Bloquear los campos Nombre de agencia y Correo del responsable 
+  useEffect(()=>{
+      if (user && user.company?.type === CompanyType.Agency && formData.agencyName === '' && formData.agencyEmail === ''){
+          setBlocked(true)
+      }
+  },[user])
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">Datos de la agencia de publicidad</h2>
@@ -36,7 +35,7 @@ export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({ user,
             id="agencyName"
             name="agencyName"
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            value={formData?.agencyName || name}
+            value={formData?.agencyName }
             onChange={handleChange}
             disabled={readonly || blocked}
           />
@@ -50,7 +49,7 @@ export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({ user,
             id="agencyEmail"
             name="agencyEmail"
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            value={formData?.agencyEmail || email}
+            value={formData?.agencyEmail }
             onChange={handleChange}
             disabled={readonly || blocked}
           />

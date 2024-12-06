@@ -9,17 +9,34 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const validateFormData = (
-  formData: Record<string, any>,
-  inputNames: string[]
+  obj: Record<string, any>,
 ): boolean => {
-  for (const name of inputNames) {
-    if (!formData[name]) {
-      console.warn(`Missing field: ${name}`);
-      return false;
+  console.log('validating')
+for (const [key, value] of Object.entries(obj)) {
+  if (value === '') {
+    console.warn(`Field ${key} is empty`);
+    return false;
+  }
+}
+return true;
+};
+export const validateFormData2 = (formData: Record<string, any>): boolean => {
+  for (const key in formData) {
+    if (formData.hasOwnProperty(key)) {
+      console.warn('Field is empty ', key);
+      const value = formData[key];
+      if (typeof value === 'object' && value !== null) {
+        if (!validateFormData(value)) {
+          return false;
+        }
+      } else if (!value) {
+        return false;
+      }
     }
   }
   return true;
 };
+
 
 export const formatToLocalTime = (isoDate: string): string => {
   if (!isoDate) return "";
