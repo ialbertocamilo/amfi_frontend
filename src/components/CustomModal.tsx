@@ -1,6 +1,6 @@
 // components/CustomModal.tsx
 import React from 'react';
-import Modal from 'react-modal';
+import ReactModal from 'react-modal';
 
 interface CustomModalProps {
   isOpen: boolean;
@@ -13,16 +13,17 @@ interface CustomModalProps {
 }
 
 const CustomModal: React.FC<CustomModalProps> = ({
-  isOpen,
-  title,
-  message,
-  confirmText,
-  cancelText,
-  onConfirm,
-  onCancel,
-}) => {
-  return (
-    <Modal
+                                                   isOpen,
+                                                   title,
+                                                   message,
+                                                   confirmText,
+                                                   cancelText,
+                                                   onConfirm,
+                                                   onCancel,
+                                                 }) => {
+
+  return ( // @ts-ignore
+    <ReactModal
       isOpen={isOpen}
       onRequestClose={onCancel}
       contentLabel={title}
@@ -75,7 +76,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
           {confirmText}
         </button>
       </div>
-    </Modal>
+    </ReactModal>
   );
 };
 
