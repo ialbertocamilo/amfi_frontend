@@ -12,6 +12,7 @@ interface registroEntity {
     formData: any;
     handleChange: any;
     handleSubmit: any;
+    setactiveTab: any
 }
 
 const ProyectoSteep5 = ({

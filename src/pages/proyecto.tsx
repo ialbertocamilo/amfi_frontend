@@ -262,6 +262,7 @@ const Proyecto: React.FC = () => {
                             formData={formData}
                             handleChange={handleChange}
                             handleSubmit={handleSubmit}
+                            setactiveTab={setActiveTab}
                         />
                     )}
                     {activeTab === "6" && <ProyectCreated />}
