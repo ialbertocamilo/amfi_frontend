@@ -1,3 +1,4 @@
+import { ICompany } from '@/interfaces/company.interface';
 
 export interface IProject {
     id: string;
@@ -16,6 +17,8 @@ export interface IProject {
     bidDeadline: string;
     status: string;
     step: number;
+    agency?: ICompany;
+    advertiser?:ICompany
     createdAt: string;
     creator: {
       id: string;

@@ -1,7 +1,8 @@
+import { Evaluation } from "@/api/interface/api.interface";
 import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import moment from "moment";
 import toast from "react-hot-toast";
-import { Budget, Evaluation } from "@/api/interface/api.interface";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -101,7 +102,7 @@ export const calculateBudgetScore = (
 
   const budgetVariation = budget / baselineBudget - 1;
   console.log("budgetVariation", budgetVariation);
-  if (budgetPercentage> budgetVariation && budgetVariation> 0) {
+  if (budgetPercentage > budgetVariation && budgetVariation > 0) {
     budgetScore = budgetPercentage - budgetVariation;
   }
 
@@ -115,3 +116,21 @@ export const manageLogicError = (err: any) => {
     err?.response?.data?.message?.forEach((value: any) => toast.error(value));
   if (err?.status === 409) toast.error(err?.response?.data?.clientMessage);
 };
+
+
+export const formatUtcToLocalDate = (isoDate: string): string => {
+  // Funcion usada para recibir del backend
+  moment.locale('es');
+  if (!moment(isoDate, moment.ISO_8601, true).isValid()) {
+    console.warn(`Invalid ISO date: ${isoDate}`);
+    return "-";
+  }
+  
+  return moment.utc(isoDate).local().format('DD/MM/YYYY');
+}
+
+export const formatToUtcBackend = (isoDate: string): Date => {
+  // Funcion usada para enviar al backend
+  moment.locale('es');
+  return new Date(moment(isoDate).format('YYYY-MM-DDTHH:mm:ss'))
+}

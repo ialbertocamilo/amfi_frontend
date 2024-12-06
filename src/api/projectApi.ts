@@ -6,6 +6,7 @@ import { UpdateProjectDto } from "../dto/update-project.dto";
 import { Budget, Evaluation, InvitedDirectorsResponse } from "./interface/api.interface";
 import { IInvitationResponse } from "@/interfaces/invitation.interface";
 import { EvaluationScore } from "@/components/DetalleProyecto/Comparacion";
+import { IProject } from '@/interfaces/project.interface';
 
 export const getProjects = async () => {
   try {
@@ -20,7 +21,7 @@ export const getProjects = async () => {
 export const getProjectById = async (id: string) => {
   try {
     const response = await ApiService.get(`/project/${id}`);
-    return response.data;
+    return response.data as IProject;
   } catch (error: any) {
     console.warn('Error fetching project by id:', error);
     return null;

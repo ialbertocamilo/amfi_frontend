@@ -1,7 +1,5 @@
 import { IUser } from '@/interfaces/user.interface';
 import React, { useEffect } from 'react';
-import FastSearch from '../modals/FastSearch';
-import AddAnunciante from './AddAnunciante';
 
 interface DatosAnuncianteProps {
   formData: Record<string, any>;

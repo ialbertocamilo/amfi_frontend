@@ -245,6 +245,19 @@ const ProyectoSteep2 = ({
                 />
               </div>
               <div>
+                <label htmlFor="entregaBidLetter" className="block text-sm font-medium text-gray-700">
+                  Limite de entrega de ofertas
+                </label>
+                <input
+                  type="date"
+                  id="entregaBidLetter"
+                  name="entregaBidLetter"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  value={formData?.entregaBidLetter || ''}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
                 <label htmlFor="entregaProyecto" className="block text-sm font-medium text-gray-700">
                   Entrega proyecto
                 </label>
@@ -281,7 +294,7 @@ const ProyectoSteep2 = ({
               </div>
               <div>
                 <label htmlFor="presupuesto" className="block text-sm font-medium text-gray-700">
-                  Presupuesto asignado
+                  Monto
                 </label>
                 <div className="relative flex space-x-2">
                   <input

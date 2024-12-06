@@ -13,9 +13,10 @@ import { UpdateProjectDto } from "@/dto/update-project.dto";
 import ProyectCreated from "@/components/Proyecto/ProjectCreated";
 import { ProjectMapper, ProjectStatus } from "@/mappers/project.mapper";
 import { toast } from "react-hot-toast";
-import { validateFormData } from "@/lib/utils";
+import { formatToUtcBackend, validateFormData } from "@/lib/utils";
 import Loader from '@/components/Loader';
 import StepIndicator from '@/components/Proyecto/StepIndicator/StepIndicator';
+import moment from "moment";
 
 export const inputProjectNames = [
     'brand',
@@ -95,7 +96,8 @@ export const inputProjectNames = [
     'arteprops',
     'aCargoDe',
     'creatividadAprobada',
-    'tipoContratoProyecto'
+    'tipoContratoProyecto',
+    'entregaBidLetter'
 ];
 const Proyecto: React.FC = () => {
     const [formData, setFormData] = useState<Record<string, any>>({});
@@ -124,8 +126,10 @@ const Proyecto: React.FC = () => {
             brand: formData?.brand,
             product: formData?.product,
             projectName: formData?.projectName,
+            budget: formData?.presupuesto,
+            bidDeadline: formData?.entregaBidLetter ? formatToUtcBackend(formData.entregaBidLetter) : undefined,
             extra: formData,
-            status: page === '6' ? ProjectStatus.InProgress : ProjectStatus.Draft // Cuando termina de crear el proyecto, se cambia el estado a En Progreso
+            status: page === '6' ? ProjectStatus.InProgress : ProjectStatus.Draft // Cuando termina de crear el proyecto, se cambia el estado a En proceso
         };
         const createdProject = await saveOrUpdateProject(data);
         if (createdProject?.id) {

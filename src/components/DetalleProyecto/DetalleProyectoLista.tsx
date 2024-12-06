@@ -1,6 +1,5 @@
 import {
-  Evaluation,
-  InvitedDirectorsResponse,
+  InvitedDirectorsResponse
 } from "@/api/interface/api.interface";
 import { sendReminderToProductionHouses } from "@/api/productoraApi";
 import {
@@ -10,14 +9,15 @@ import {
 } from "@/api/projectApi";
 import Loader from "@/components/Loader";
 import useLoader from "@/hooks/loader.hook";
-import { calculateBudgetScore, calculateEvaluationScore } from "@/lib/utils";
+import { calculateBudgetScore, calculateEvaluationScore, formatToLocalTime, formatUtcToLocalDate } from '@/lib/utils';
 import { ProjectMapper, ProjectStatus } from "@/mappers/project.mapper";
-import moment from "moment";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import ListadoInvitaciones from "./ListadoInvitaciones";
 import { EvaluationScore } from "./Comparacion";
+import ListadoInvitaciones from "./ListadoInvitaciones";
+import { Tooltip } from "react-tooltip";
+import moment from "moment";
 
 interface ProjectDetailsProps {
   id: string;
@@ -40,11 +40,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
     anunciante: "",
     marca: "",
     producto: "",
-    categoria: "",
     nombreProyecto: "",
     versiones: "",
-    cantidad: 1,
-    cantidadSeleccionar: "",
     agencia: "",
     correoResponsable: "",
     directorCreativo: "",
@@ -55,8 +52,15 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
     contactoCompras: "",
     creado: "",
     estado: "",
+    entregaBidLetter:""
   });
+  const calculateRemainingDays = (deadline: string) => {
+    const now = moment();
+    const end = moment(deadline);
+    return end.diff(now, 'days');
+  };
 
+  const [remainingDays,setRemainingDays]=useState(0)
   const onInit = async () => {
     setLoading(true);
     const projectData = await getProjectById(id);
@@ -67,12 +71,9 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
         anunciante: projectData?.brand || "",
         marca: projectData?.brand || "",
         producto: projectData?.product || "",
-        categoria: projectData?.category || "",
         nombreProyecto: projectData?.name || "",
         versiones: projectData?.versions?.name || "",
-        cantidad: projectData?.budget || 1,
-        cantidadSeleccionar: projectData?.maxProducers || "",
-        agencia: projectData?.agencyName || "-",
+        agencia: projectData?.agency?.name || "-",
         correoResponsable: projectData?.creator?.email || "",
         directorCreativo: projectData?.creator?.jobPosition || "",
         contactoFinanzas: projectData?.isFinancialInfoUnlocked ? "Sí" : "No",
@@ -83,11 +84,12 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
         productorAgencia: projectData?.creator?.name || "",
         numeroODT: projectData?.id || "",
         contactoCompras: projectData?.creator?.nationalIdentifierOrRFC || "",
-        creado: moment(projectData?.createdAt).format("DD/MM/YYYY") || "",
+        creado: formatUtcToLocalDate(projectData?.createdAt)  || "",
         estado: ProjectMapper.mapProjectStatus(projectData?.status) || "",
+        entregaBidLetter: formatUtcToLocalDate(projectData?.bidDeadline) || "",
       });
     }
-
+    setRemainingDays(calculateRemainingDays(projectData?.bidDeadline as string)); 
     if (invitationData) {
       setInvitationData(invitationData);
       updateScoreEvaluation(invitationData);
@@ -153,7 +155,6 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
   const router = useRouter();
   const closeProject = () => {
     console.log("closing project");
-
     updateProjectStatus(id as string, ProjectStatus.Closed).then((data) => {
       toast.success("Convocatoria cerrada");
       router.push("/lista-de-proyectos-admin");
@@ -176,8 +177,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
 
 
   const { loading, setLoading } = useLoader(false);
-  return (
-    <Loader loading={loading}>
+  return <Loader loading={loading}>
       <div className="mt-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl space-y-6 ">
         <div className="flex flex-col border-b">
           <h1 className="text-xl font-semibold pb-4">
@@ -200,6 +200,15 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
                 Estado: {formData?.estado}
               </p>
             </div>
+            <div>
+              <p className=" text-sm font-medium text-gray-600 pb-2">
+                Fecha limite de entrega de ofertas: {formData?.entregaBidLetter}
+                
+              <span className="invitation-bid-deadline text-sm font-medium text-red-600 pb-2 cursor-pointer">
+                ℹ️
+              </span>
+              </p>
+            </div>
             <div className="flex items-end min-w-[10%]">
               <p
                 onClick={() => setIsVisible(!isVisible)}
@@ -210,6 +219,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
             </div>
           </div>
         </div>
+        <Tooltip anchorSelect=".invitation-bid-deadline" place={"bottom"}>Restan {remainingDays} dias para finalizar con la entrega.</Tooltip>
         <div className={isVisible ? "" : "hidden"}>
       
             <ListadoInvitaciones
@@ -224,7 +234,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
         </div>
       </div>
     </Loader>
-  );
+  ;
 };
 
 export default ProjectDetails;
