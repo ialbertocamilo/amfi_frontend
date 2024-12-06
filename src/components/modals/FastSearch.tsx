@@ -38,7 +38,7 @@ const FullScreenSearch: React.FC<FullScreenSearchProps> = ({ label }) => {
         onClick={openModal}
         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
       />
-
+      {/*@ts-ignore*/}
       <Modal
         isOpen={isOpen}
         onRequestClose={closeModal}

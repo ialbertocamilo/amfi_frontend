@@ -7,7 +7,8 @@ const SpinnerModal = ({ isOpen,text }: { isOpen: boolean,text:string }) => {
     if (typeof window === 'undefined') {
         return null;
       }
-    return createPortal(
+
+  return createPortal(  // @ts-ignore
         <Modal
             isOpen={isOpen}
             contentLabel={'title'}

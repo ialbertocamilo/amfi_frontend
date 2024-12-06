@@ -37,6 +37,7 @@ const AddAnunciante: React.FC = () => {
         <div>
                 <FastSearch label="Buscar Anunciante" />
             <PrimaryButton onClick={openInviteModal} label="Invitar" className="mt-4" outlined />
+            {/*@ts-ignore*/}
             <Modal
                 isOpen={isInviteModalOpen}
                 onRequestClose={closeInviteModal}
