@@ -8,11 +8,9 @@ interface registroEntity {
     client?: string;
     brand?: string;
     product?: string;
-    category?: string;
     agencyProductor?: string;
     projectName?: string;
     versionName?: string;
-    quantity?: number;
     agencyName?: string;
     agencyEmail?: string;
     agencyCreativeDirector?: string;
@@ -30,14 +28,14 @@ interface registroEntity {
 }
 
 const ProyectoSteep1 = ({
-  formData,
-  handleChange,
-  handleSubmit,
-  readonly,
-}: registroEntity) => {
+                          formData,
+                          handleChange,
+                          handleSubmit,
+                          readonly,
+                        }: registroEntity) => {
   const validateFormData = (formData: Record<string, any>): boolean => {
     const requiredFields = [
-      'brand', 'product', 'category', 'projectName', 'versionName', 'quantity',
+      'brand', 'product',  'projectName', 'versionName',
       'agencyName', 'agencyEmail', 'agencyCreativeDirector', 'contactoFinanzas',
       'agencyAccountDirector', 'odtNumber', 'buyerContact',
     ];
@@ -85,54 +83,25 @@ const ProyectoSteep1 = ({
           </div>
           <div>
             <label
-              htmlFor="category"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Categoría
-            </label>
-            <input
-              type="text"
-              id="category"
-              name="category"
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              value={formData?.category || ''}
-              onChange={handleChange}
-              disabled={readonly}
-            />
-          </div>
-          <div>
-            <label
               htmlFor="versionName"
               className="block text-sm font-medium text-gray-700"
             >
-              Versiones
+              Cantidad Versiones
             </label>
-            <input
-              type="text"
+            <select
               id="versionName"
               name="versionName"
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               value={formData?.versionName || ''}
               onChange={handleChange}
               disabled={readonly}
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="quantity"
-              className="block text-sm font-medium text-gray-700"
             >
-              Cantidad
-            </label>
-            <input
-              type="number"
-              id="quantity"
-              name="quantity"
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-              value={formData?.quantity || ''}
-              onChange={handleChange}
-              disabled={readonly}
-            />
+              {[...Array(20).keys()].map((num) => (
+                <option key={num + 1} value={num + 1}>
+                  {num + 1}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <DatosAnunciante formData={formData} handleChange={handleChange} readonly={readonly} />

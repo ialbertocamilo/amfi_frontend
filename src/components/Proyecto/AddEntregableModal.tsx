@@ -35,7 +35,10 @@ interface Entregable {
   youtube: boolean;
   otro: boolean;
   aspectRatio: string;
+  formatoMedidas: string;
+  notas: string;
 }
+
 const renderSwitch = (label: string, checked: boolean, onChange: (value: boolean) => void) => (
   <div className="flex items-center mb-4 w-1/2">
     <label className="block text-sm font-medium text-gray-700 w-1/4">{label}</label>
@@ -56,12 +59,12 @@ const renderSwitch = (label: string, checked: boolean, onChange: (value: boolean
     </div>
   </div>);
 const AddEntregableModal = ({ isOpen, onClose, onAdd, entregable, onUpdate }: AddEntregableModalProps) => {
-  const [state, setState] = useState<Entregable>({
+  const entregableInitialState ={
     version: '',
     fechaEntrega: '',
     duracion: '',
     cantidad: 1,
-    locutor: false,
+    locutor: true,
     descripcionEntregable: '',
     tipo: '',
     fullMedia: false,
@@ -76,8 +79,14 @@ const AddEntregableModal = ({ isOpen, onClose, onAdd, entregable, onUpdate }: Ad
     tiktok: false,
     youtube: false,
     otro: false,
-    aspectRatio: ''
-  });
+    aspectRatio: '',
+    formatoMedidas: '',
+    notas: '',
+  }
+
+  const [state, setState] = useState<Entregable>(
+    entregableInitialState
+  );
 
   useEffect(() => {
     if (entregable) {
@@ -88,7 +97,7 @@ const AddEntregableModal = ({ isOpen, onClose, onAdd, entregable, onUpdate }: Ad
 
   const handleAdd = (saveAndClose: boolean) => {
     const { version, fechaEntrega, duracion, descripcionEntregable, aspectRatio } = state;
-    if (!version || !fechaEntrega || !duracion || !descripcionEntregable  || !aspectRatio) {
+    if (!version || !fechaEntrega || !duracion || !descripcionEntregable || !aspectRatio) {
       toast.error('Por favor, complete todos los campos antes de agregar.');
       return;
     }
@@ -103,28 +112,7 @@ const AddEntregableModal = ({ isOpen, onClose, onAdd, entregable, onUpdate }: Ad
   };
 
   const handleClear = () => {
-    setState({
-      version: '',
-      fechaEntrega: '',
-      duracion: '',
-      cantidad: 1,
-      locutor: false,
-      descripcionEntregable: '',
-      tipo: '',
-      fullMedia: false,
-      television: false,
-      cine: false,
-      web: false,
-      pantallas: false,
-      rrss: false,
-      facebook: false,
-      instagram: false,
-      linkedin: false,
-      tiktok: false,
-      youtube: false,
-      otro: false,
-      aspectRatio: ''
-    });
+    setState(entregableInitialState);
   };
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -139,7 +127,7 @@ const AddEntregableModal = ({ isOpen, onClose, onAdd, entregable, onUpdate }: Ad
     const { name, value, type, checked } = e.target;
     setState(prevState => ({
       ...prevState,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
@@ -165,43 +153,47 @@ const AddEntregableModal = ({ isOpen, onClose, onAdd, entregable, onUpdate }: Ad
             />
           </div>
 
-            <div className="flex space-x-4">
-            <div className={styles.formGroup + ' w-1/2'}>
+          <div className="">
+            <div className={styles.formGroup + ''}>
               <label>Fecha de entrega</label>
               <input
-              type="date"
-              name="fechaEntrega"
-              value={state.fechaEntrega}
-              onChange={(e) => handleChange(e)}
+                type="date"
+                name="fechaEntrega"
+                value={state.fechaEntrega}
+                onChange={(e) => handleChange(e)}
               />
             </div>
 
-            <div className={styles.formGroup + ' w-1/2'}>
+            <div className={styles.formGroup + ' '}>
               <label>Duración </label>
               <select
-              name="duracion"
-              value={state.duracion}
-              onChange={(e) => handleChange(e)}
+                name="duracion"
+                value={state.duracion}
+                onChange={(e) => handleChange(e)}
               >
-              <option value="">Seleccionar</option>
-              <option value="5">5&#34;</option>
-              <option value="6">6&#34;</option>
-              <option value="7">7&#34;</option>
-              <option value="8">8&#34;</option>
-              <option value="9">9&#34;</option>
-              <option value="10">10&#34;</option>
-              <option value="15">15&#34;</option>
-              <option value="20">20&#34;</option>
-              <option value="30">30&#34;</option>
-              <option value="40">40&#34;</option>
-              <option value="60">60&#34;</option>
-              <option value="90">90&#34;</option>
-              <option value="120">120&#34;</option>
-              <option value="+120">+120&#34;</option>
-              {/* Agregar más opciones según sea necesario */}
+                <option value="">Seleccionar</option>
+                <option value="5">5&#34;</option>
+                <option value="6">6&#34;</option>
+                <option value="7">7&#34;</option>
+                <option value="8">8&#34;</option>
+                <option value="9">9&#34;</option>
+                <option value="10">10&#34;</option>
+                <option value="15">15&#34;</option>
+                <option value="20">20&#34;</option>
+                <option value="30">30&#34;</option>
+                <option value="40">40&#34;</option>
+                <option value="60">60&#34;</option>
+                <option value="90">90&#34;</option>
+                <option value="120">120&#34;</option>
+                <option value="+120">+120&#34;</option>
+                {/* Agregar más opciones según sea necesario */}
               </select>
             </div>
-            <div className={styles.formGroup + ' w-1/2'}>
+
+          </div>
+
+          <div className={''}>
+            <div className={styles.formGroup + ' '}>
               <label>Aspect Ratio</label>
               <select
                 name="aspectRatio"
@@ -216,9 +208,17 @@ const AddEntregableModal = ({ isOpen, onClose, onAdd, entregable, onUpdate }: Ad
                 <option value="9:16">9:16</option>
               </select>
             </div>
+            <div className={styles.formGroup + ' '}>
+              <label>Formato/Medidas</label>
+              <input
+                type="text"
+                name="formatoMedidas"
+                value={state.formatoMedidas}
+                onChange={(e) => handleChange(e)}
+              />
             </div>
-
-            <div className="flex flex-wrap">
+          </div>
+          <div className="flex flex-wrap">
             {renderSwitch('Full media', state.fullMedia, (value) => setState({ ...state, fullMedia: value }))}
             {renderSwitch('Television', state.television, (value) => setState({ ...state, television: value }))}
             {renderSwitch('Cine', state.cine, (value) => setState({ ...state, cine: value }))}
@@ -231,17 +231,17 @@ const AddEntregableModal = ({ isOpen, onClose, onAdd, entregable, onUpdate }: Ad
             {renderSwitch('TikTok', state.tiktok, (value) => setState({ ...state, tiktok: value }))}
             {renderSwitch('Youtube', state.youtube, (value) => setState({ ...state, youtube: value }))}
             {renderSwitch('Otro', state.otro, (value) => setState({ ...state, otro: value }))}
-            </div>
+          </div>
 
-              <Divider/>
-              <div className={styles.inlineGroup}>
+          <Divider />
+          <div className={styles.inlineGroup}>
             <label>Locutor</label>
             <div className="mt-2">
               <Switch
-              name="locutor"
-              checked={state.locutor}
-              onChange={(value) => setState({ ...state, locutor: value })}
-              className={`${state.locutor ? 'bg-red-500' : 'bg-gray-200'}
+                name="locutor"
+                checked={state.locutor}
+                onChange={(value) => setState({ ...state, locutor: value })}
+                className={`${state.locutor ? 'bg-red-500' : 'bg-gray-200'}
                     relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none`}
               >
               <span
@@ -250,38 +250,40 @@ const AddEntregableModal = ({ isOpen, onClose, onAdd, entregable, onUpdate }: Ad
               />
               </Switch>
             </div>
-            </div>
+          </div>
+          {state.locutor && (
             <div className="flex ">
-            <div className={styles.formGroup + ' w-1/2'}>
-              <label>Cantidad</label>
-              <select
-              name="cantidad"
-              value={state.cantidad}
-              onChange={(e) => handleChange(e)}
-              >
-              {Array.from({ length: 50 }, (_, i) => (
-                <option key={i + 1} value={i + 1}>
-                {i + 1}
-                </option>
-              ))}
-              </select>
-            </div>
+              <div className={styles.formGroup + ' w-1/2'}>
+                <label>Cantidad</label>
+                <select
+                  name="cantidad"
+                  value={state.cantidad}
+                  onChange={(e) => handleChange(e)}
+                >
+                  {Array.from({ length: 50 }, (_, i) => (
+                    <option key={i + 1} value={i + 1}>
+                      {i + 1}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            <div className={styles.formGroup + ' w-1/2'}>
-              <label>Tipo</label>
-              <select
-              name="tipo"
-              value={state.tipo}
-              onChange={(e) => handleChange(e)}
-              >
-              <option value="Nueva">Nueva</option>
-              <option value="Lift">Lift</option>
-              <option value="Adaptación">Adaptación</option>
-              </select>
+              <div className={styles.formGroup + ' w-1/2'}>
+                <label>Tipo</label>
+                <select
+                  name="tipo"
+                  value={state.tipo}
+                  onChange={(e) => handleChange(e)}
+                >
+                  <option value="Nueva">Nueva</option>
+                  <option value="Lift">Lift</option>
+                  <option value="Adaptación">Adaptación</option>
+                </select>
+              </div>
             </div>
-            </div>
-            <div className={styles.formGroup}>
-            <label>Descripcion</label>
+          )}
+          <div className={styles.formGroup}>
+            <label>Especificaciones</label>
             <textarea
               name="descripcionEntregable"
               value={state.descripcionEntregable}
@@ -289,32 +291,43 @@ const AddEntregableModal = ({ isOpen, onClose, onAdd, entregable, onUpdate }: Ad
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               rows={2}
             />
-            </div>
-
           </div>
-          <div className={styles.modalFooter}>
-            {onAdd && (<button className={styles.secondaryButton} onClick={(e) => {
+
+          <div className={styles.formGroup}>
+            <label>Notas</label>
+            <textarea
+              name="notas"
+              value={state.notas}
+              onChange={(e) => handleChange(e)}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              rows={2}
+            />
+          </div>
+
+        </div>
+        <div className={styles.modalFooter}>
+          {onAdd && (<button className={styles.secondaryButton} onClick={(e) => {
             e.preventDefault();
             handleAdd(false);
-            }}>
+          }}>
             Aceptar y agregar otro
-            </button>)}
-            <button
+          </button>)}
+          <button
             className={styles.primaryButton}
             onClick={(e) => {
               e.preventDefault();
               if (onUpdate) {
-              onUpdate(state);
+                onUpdate(state);
               } else {
-              handleAdd(true);
+                handleAdd(true);
               }
             }}
-            >
+          >
             Aceptar
-            </button>
-          </div>
+          </button>
+        </div>
       </div>
-    </div>), document.body)
+    </div>), document.body);
 };
 
 export default AddEntregableModal;

@@ -162,15 +162,15 @@ const ProyectoSteep2 = ({
               </select>
             </div>
             <div>
-              <label htmlFor="derechos" className="block text-sm font-medium text-gray-700">
-                Derechos
+              <label htmlFor="productodummie" className="block text-sm font-medium text-gray-700">
+                Producto/Dummie
               </label>
               <input
                 type="text"
-                id="derechos"
-                name="derechos"
+                id="productodummie"
+                name="productodummie"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.derechos || ''}
+                value={formData?.productodummie || ''}
                 onChange={handleChange}
               />
             </div>

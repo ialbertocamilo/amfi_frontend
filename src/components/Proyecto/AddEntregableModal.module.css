@@ -8,20 +8,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: auto; /* Permite el desplazamiento si el contenido es demasiado grande */
+  overflow: auto;
 }
 
 .modalContent {
   background-color: white;
   border-radius: 8px;
   width: 90%;
-  max-width: 600px; /* Ajusta el tamaño máximo del modal */
-  max-height: 90vh; /* Ajusta la altura máxima del modal */
+  max-width: 600px;
+  max-height: 90vh;
   padding: 20px;
   position: relative;
-  overflow-y: auto; /* Permite el desplazamiento vertical dentro del modal */
+  overflow-y: auto;
 }
-
 .modalHeader {
   color: black;
   display: flex;
@@ -38,8 +37,9 @@
 }
 
 .modalBody p {
-  margin: 0 0 10px 0;
-  font-weight: bold;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
 .formGroup {

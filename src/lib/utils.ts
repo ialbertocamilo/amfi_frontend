@@ -10,15 +10,15 @@ export function cn(...inputs: ClassValue[]) {
 
 export const validateFormData = (
   obj: Record<string, any>,
+  excludeFields: string[] = []
 ): boolean => {
-  console.log('validating')
-for (const [key, value] of Object.entries(obj)) {
-  if (value === '') {
-    console.warn(`Field ${key} is empty`);
-    return false;
+  for (const [key, value] of Object.entries(obj)) {
+    if (value === '' && !excludeFields.includes(key)) {
+      console.warn(`Field ${key} is empty`);
+      return false;
+    }
   }
-}
-return true;
+  return true;
 };
 export const validateFormData2 = (formData: Record<string, any>): boolean => {
   for (const key in formData) {

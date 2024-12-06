@@ -25,10 +25,8 @@ const Proyecto: React.FC = () => {
     const [formData, setFormData] = useState({
         brand: '',
         product: '',
-        category: '',
         projectName: '',
         versionName: '',
-        quantity: '',
         agencyName: '',
         agencyEmail: '',
         agencyProductor: '',
@@ -43,25 +41,21 @@ const Proyecto: React.FC = () => {
         territorio1: '',
         territorio2: '',
         territorio3: '',
-        derechos: '',
         entregaBrief: '',
+        productodummie: '',
         entregaPresupuesto: '',
         entregaProyecto: '',
         presupuesto: '',
         moneda: '',
-        objetivoComunicacion: '',
-        target: '',
-        lineamientosMarca: '',
         link1: '',
         link2: '',
         responsablePago: '',
-        momentoFacturacionAgencia: '',
+        procesoFacturacion: '',
         politicaPago: '',
         contratoProyecto: '',
         tipoProduccion1: '',
         tipoProduccion2: '',
         tipoProduccion3: '',
-        momentoFacturacion: '',
         rondaCotizacion: '',
         visualizacion: '',
         politicaAltaProveedor: '',
@@ -73,7 +67,6 @@ const Proyecto: React.FC = () => {
         vestuario: '',
         locacion: '',
         maquillajepeinado: '',
-        online: '',
         musica: '',
         animacion: '',
         vfx: '',
@@ -86,7 +79,6 @@ const Proyecto: React.FC = () => {
         presupuestoAsignado: '',
         anticipo: '',
         antesDeFilmar: '',
-        politicaPagoAnticipo: '',
         talentoExclusividad: '',
         talentoTipoCasting: '',
         talentoACargoDe: '',
@@ -101,7 +93,8 @@ const Proyecto: React.FC = () => {
         aCargoDe: '',
         creatividadAprobada: '',
         tipoContratoProyecto: '',
-        entregaBidLetter: ''
+        entregaBidLetter: '',
+        entregables: [],
     });
     const router = useRouter();
     const { id } = router.query;
@@ -118,7 +111,7 @@ const Proyecto: React.FC = () => {
     const { projectJson, fetchProject, saveOrUpdateProject, status, project } = useProject(id as string);
     const handleSubmit = async (page: string) => {
         if (page === '6') {
-            if (!validateFormData(formData)) {
+            if (!validateFormData(formData,['videos','photos','locutor'])) {
                 toast.error("Por favor, llena todos los campos para crear el proyecto");
                 return;
             }
@@ -177,6 +170,7 @@ const Proyecto: React.FC = () => {
                 ...prevFormData,
                 ...projectJson
             }));
+            setEntregables(projectJson?.entregables||[]);
         }
     }, [projectJson, user]);
 
@@ -216,6 +210,14 @@ const Proyecto: React.FC = () => {
                 <span>Proyectos</span> {'>'} <span>Nuevo proyecto</span>
             </div></>
     }
+
+    useEffect(() => {
+        if (entregables)
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            entregables: entregables as never[]
+        }));
+    }, [entregables]);
     return (
         <Layout>
             <Loader loading={loader}>

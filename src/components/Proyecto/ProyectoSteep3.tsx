@@ -21,44 +21,45 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEnti
 
       <form>
         <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
-          <h2 className="text-xl font-bold mb-4">Objetivos de marca</h2>
-          <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
-            <div>
-              <label htmlFor="objetivoComunicacion" className="block text-sm font-medium text-gray-700">Objetivos
-                de comunicación</label>
-              <textarea
-                id="objetivoComunicacion"
-                name="objetivoComunicacion"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.objetivoComunicacion}
-                onChange={handleChange}
-                maxLength={300}
-              />
-            </div>
-            <div>
-              <label htmlFor="target" className="block text-sm font-medium text-gray-700">Target</label>
-              <textarea
-                id="target"
-                name="target"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.target}
-                onChange={handleChange}
-                maxLength={300}
-              />
-            </div>
-            <div>
-              <label htmlFor="lineamientosMarca" className="block text-sm font-medium text-gray-700">Lineamientos
-                de marca</label>
-              <textarea
-                id="lineamientosMarca"
-                name="lineamientosMarca"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.lineamientosMarca}
-                onChange={handleChange}
-                maxLength={300}
-              />
-            </div>
-          </div>
+          {/*TODO: estos datos estan por ver porque fueron aceptados en un principio*/}
+          {/*<h2 className="text-xl font-bold mb-4">Objetivos de marca</h2>*/}
+          {/*<div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">*/}
+          {/*  <div>*/}
+          {/*    <label htmlFor="objetivoComunicacion" className="block text-sm font-medium text-gray-700">Objetivos*/}
+          {/*      de comunicación</label>*/}
+          {/*    <textarea*/}
+          {/*      id="objetivoComunicacion"*/}
+          {/*      name="objetivoComunicacion"*/}
+          {/*      className="mt-1 block w-full p-2 border border-gray-300 rounded-md"*/}
+          {/*      value={formData?.objetivoComunicacion}*/}
+          {/*      onChange={handleChange}*/}
+          {/*      maxLength={300}*/}
+          {/*    />*/}
+          {/*  </div>*/}
+          {/*  <div>*/}
+          {/*    <label htmlFor="target" className="block text-sm font-medium text-gray-700">Target</label>*/}
+          {/*    <textarea*/}
+          {/*      id="target"*/}
+          {/*      name="target"*/}
+          {/*      className="mt-1 block w-full p-2 border border-gray-300 rounded-md"*/}
+          {/*      value={formData?.target}*/}
+          {/*      onChange={handleChange}*/}
+          {/*      maxLength={300}*/}
+          {/*    />*/}
+          {/*  </div>*/}
+          {/*  <div>*/}
+          {/*    <label htmlFor="lineamientosMarca" className="block text-sm font-medium text-gray-700">Lineamientos*/}
+          {/*      de marca</label>*/}
+          {/*    <textarea*/}
+          {/*      id="lineamientosMarca"*/}
+          {/*      name="lineamientosMarca"*/}
+          {/*      className="mt-1 block w-full p-2 border border-gray-300 rounded-md"*/}
+          {/*      value={formData?.lineamientosMarca}*/}
+          {/*      onChange={handleChange}*/}
+          {/*      maxLength={300}*/}
+          {/*    />*/}
+          {/*  </div>*/}
+          {/*</div>*/}
 
           <div>
             <h2 className="text-xl font-bold mb-4">Documentos</h2>
@@ -119,14 +120,13 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEnti
                 </select>
               </div>
               <div>
-                <label htmlFor="momentoFacturacionAgencia"
-                       className="block text-sm font-medium text-gray-700">Momento de facturación de
-                  Agencia</label>
+                <label htmlFor="procesoFacturacion"
+                       className="block text-sm font-medium text-gray-700">Proceso de facturación </label>
                 <select
-                  id="momentoFacturacionAgencia"
-                  name="momentoFacturacionAgencia"
+                  id="procesoFacturacion"
+                  name="procesoFacturacion"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData?.momentoFacturacionAgencia}
+                  value={formData?.procesoFacturacion}
                   onChange={handleChange}
                 >
                   <option value="">Seleccionar</option>
@@ -187,24 +187,6 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEnti
                   <option value="colaboracionRemunerada">Colaboración remunerada</option>
                   <option value="contratoPublicitario">Contrato publicitario</option>
                   <option value="sinDefinir">Sin definir</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="momentoFacturacion" className="block text-sm font-medium text-gray-700">Momento
-                  de facturación</label>
-                <select
-                  id="momentoFacturacion"
-                  name="momentoFacturacion"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData?.momentoFacturacion}
-                  onChange={handleChange}
-                >
-                  <option value="">Seleccionar</option>
-                  <option value="asignacion">Asignación</option>
-                  <option value="primerDiaProduccion">1er día de prod.</option>
-                  <option value="ct">CT</option>
-                  <option value="entrega">Entrega</option>
-                  <option value="posterior">Posterior</option>
                 </select>
               </div>
               <div>
@@ -293,23 +275,6 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEnti
                   <option value="">Seleccionar</option>
                   <option value="si">Si</option>
                   <option value="no">No</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="politicaPagoAnticipo" className="block text-sm font-medium text-gray-700">Política de
-                  pago anticipo</label>
-                <select
-                  id="politicaPagoAnticipo"
-                  name="politicaPagoAnticipo"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData?.politicaPagoAnticipo}
-                  onChange={handleChange}
-                >
-                  <option value="">Seleccionar</option>
-                  <option value="5">5 dias</option>
-                  <option value="10">10 dias</option>
-                  <option value="15">15 dias</option>
-                  <option value="20">20 dias</option>
                 </select>
               </div>
               <div>

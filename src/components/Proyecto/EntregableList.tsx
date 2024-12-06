@@ -3,16 +3,17 @@ import React, { useEffect, useState } from 'react';
 
 interface inputEntity {
     entregablesIni: any[];
+    setEntregables:any
 }
 
-const EntregableList: React.FC<inputEntity> = ({ entregablesIni }) => {
+const EntregableList: React.FC<inputEntity> = ({ entregablesIni, setEntregables}) => {
     const [indexId, setIndexId] = useState('');
-    const [entregables, setEntregables] = useState<any[]>([]);
+    const [entregables, setEntregablesIn] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentEntregable, setCurrentEntregable] = useState<any | null>(null);
 
     useEffect(() => {
-        setEntregables(entregablesIni);
+        setEntregablesIn(entregablesIni);
     }, [entregablesIni]);
 
     const handleEdit = (entregable: any, index: number) => {
@@ -24,13 +25,14 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesIni }) => {
 
     const handleDelete = (index: number) => {
         const updatedEntregables = entregables.filter((_, i) => i !== index);
+        setEntregablesIn(updatedEntregables);
         setEntregables(updatedEntregables);
     };
 
     const handleAddEntregable = (newEntregable: any) => {
         console.log("newEntregable");
         console.log(newEntregable);
-        setEntregables(prevEntregables => [...prevEntregables, newEntregable]);
+        setEntregablesIn(prevEntregables => [...prevEntregables, newEntregable]);
         setIsModalOpen(false);
     };
 
@@ -38,7 +40,7 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesIni }) => {
         const updatedEntregables = entregables.map((entregable, index) =>
             index.toString() === indexId ? updatedEntregable : entregable
         );
-        setEntregables(updatedEntregables);
+        setEntregablesIn(updatedEntregables);
         setIsModalOpen(false);
     };
 
@@ -55,7 +57,10 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesIni }) => {
                             }} style={{ marginRight: '10px' }}>
                                 ✏️
                             </button>
-                            <button onClick={() => handleDelete(index)}>
+                            <button onClick={(e) => {
+                                e.preventDefault();
+                                handleDelete(index);
+                            }}>
                                 🗑️
                             </button>
                         </div>
