@@ -41,7 +41,7 @@ export const getObjectLength = (obj: Record<string, any>): number => {
 
 export const calculateEvaluationScore = (
   evaluation: Evaluation,
-  creativeProposalPercentage: number /*entre 0.3 - 0.5*/,
+  creativeProposalPercentage: number /*entre 0.3 - 0.5*/
 ): {
   creativeProposal: number;
   experience: number;
@@ -91,9 +91,16 @@ export const calculateEvaluationScore = (
 
 export const calculateBudgetScore = (
   budget: number,
-  baselineBudget: number,
+  baselineBudget: number | null,
   creativeProposalPercentage: number
 ): { budget: number } => {
+  console.log("budget", budget);
+  if (!baselineBudget) {
+    return {
+      budget: 0,
+    };
+  }
+
   let budgetScore = 0;
   const experiencePercentage = 0.2;
 
@@ -117,20 +124,19 @@ export const manageLogicError = (err: any) => {
   if (err?.status === 409) toast.error(err?.response?.data?.clientMessage);
 };
 
-
 export const formatUtcToLocalDate = (isoDate: string): string => {
   // Funcion usada para recibir del backend
-  moment.locale('es');
+  moment.locale("es");
   if (!moment(isoDate, moment.ISO_8601, true).isValid()) {
     console.warn(`Invalid ISO date: ${isoDate}`);
     return "-";
   }
-  
-  return moment.utc(isoDate).local().format('DD/MM/YYYY');
-}
+
+  return moment.utc(isoDate).local().format("DD/MM/YYYY");
+};
 
 export const formatToUtcBackend = (isoDate: string): Date => {
   // Funcion usada para enviar al backend
-  moment.locale('es');
-  return new Date(moment(isoDate).format('YYYY-MM-DDTHH:mm:ss'))
-}
+  moment.locale("es");
+  return new Date(moment(isoDate).format("YYYY-MM-DDTHH:mm:ss"));
+};

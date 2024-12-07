@@ -2,34 +2,86 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Layout from "@/components/Layout";
 import Loader from "@/components/Loader";
-import Comparacion, { EvaluationScore } from "@/components/DetalleProyecto/Comparacion";
-import { getEvaluationScore } from "@/api/projectApi";
+import Comparacion, {
+  EvaluationScore,
+} from "@/components/DetalleProyecto/Comparacion";
+import { getEvaluationComparison } from "@/api/projectApi";
+import { calculateEvaluationScore, calculateBudgetScore } from "@/lib/utils";
 
 const ComparativoPage: React.FC = () => {
-    const [loading, setLoading] = useState(false);
-    const [evaluationScore, setEvaluationScore] = useState<EvaluationScore[] | null>(null);
-    const router = useRouter();
-    const { projectInvitationId } = router.query;
+  const [loading, setLoading] = useState(false);
+  const [evaluationScore, setEvaluationScore] = useState<
+    EvaluationScore[] | null
+  >(null);
+  const router = useRouter();
+  const { projectInvitationId } = router.query;
 
-    useEffect(() => {
-        if (projectInvitationId) {
-            setLoading(true);
-            getEvaluationScore(projectInvitationId as string).then(data=>setEvaluationScore(data)).finally(() => {setLoading(false)});
-        }
-    }, [projectInvitationId]);
+  useEffect(() => {
+    if (projectInvitationId) {
+      setLoading(true);
+      getEvaluationComparison(projectInvitationId as string)
+        .then((data) =>
+          setEvaluationScore(
+            data!.map((item) => {
+              let creativeProposal = 0;
+              let experience = 0;
+              let budget = 0;
 
+              if (item.evaluation) {
+                const evaluationScore = calculateEvaluationScore(
+                  item.evaluation,
+                  item.project.creativeProposalWeight
+                );
+                creativeProposal = evaluationScore.creativeProposal;
+                experience = evaluationScore.experience;
+              }
+              if (item.budget) {
+                const totalBudget = Object.values(item.budget).reduce(
+                  (acc, value) => acc + value,
+                  0
+                );
 
-    return (
-        <Layout>
-            <Loader loading={loading}>
-                {evaluationScore && (
-                    <Comparacion
-                        data={evaluationScore}
-                    />
-                )}
-            </Loader>
-        </Layout>
-    );
+                const budgetScore = calculateBudgetScore(
+                  totalBudget,
+                  item.project.budget,
+                  item.project.creativeProposalWeight
+                );
+                console.log("budgetScore", budgetScore);
+                budget = budgetScore.budget;
+              }
+
+              const status =
+                item.accepted === false
+                  ? "Rechazado"
+                  : item.proposalUploaded === true
+                  ? "Completado"
+                  : "Pendiente";
+
+              return {
+                name: item.productionHouse.name,
+                evaluationScore: {
+                  creativeProposal,
+                  experience,
+                  budget,
+                },
+                status,
+              };
+            })
+          )
+        )
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [projectInvitationId]);
+
+  return (
+    <Layout>
+      <Loader loading={loading}>
+        {evaluationScore && <Comparacion data={evaluationScore} />}
+      </Loader>
+    </Layout>
+  );
 };
 
 export default ComparativoPage;
