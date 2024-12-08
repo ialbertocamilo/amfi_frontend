@@ -102,7 +102,15 @@ export const getInvitationsByProjectId = async (
 
 export const getBidEvaluation = async (
   projectInvitationId: string
-): Promise<{ message: string; result: { evaluation: Evaluation, budget: Budget } } | null> => {
+): Promise<{
+  message: string;
+  result: {
+    evaluation: Evaluation;
+    budget: Budget;
+    creativeProposalWeight: number;
+    baselineBudget: number;
+  };
+} | null> => {
   console.log("getBidEvaluation");
   try {
     const response = await ApiService.get(
@@ -117,7 +125,9 @@ export const getBidEvaluation = async (
 
 export const updateBidEvaluation = async (
   bidId: string,
-  evaluation: Evaluation
+  evaluation: Evaluation & {
+    creativeProposalWeight?: number;
+  }
 ): Promise<{ message: string } | null> => {
   console.log("updateBidEvaluation");
   try {
@@ -140,6 +150,14 @@ export const getProductionHouseProjects = async () => {
 
 
 export const getEvaluationScore = async (projectInvitationId: string) => {
-  const response = await ApiService.get(`/evaluation/${projectInvitationId}`);
+  console.log('getEvaluationScore',projectInvitationId)
+  const response = await ApiService.get(`/get-evaluation/${projectInvitationId}`);
   return response.data as EvaluationScore[]
 };
+
+export const getEvaluationComparison = async (projectInvitationId: string) => {
+  console.log('getEvaluationComparison',projectInvitationId)
+  const response = await ApiService.get(`/project-director/get-comparison/${projectInvitationId}`);
+
+  return response.data.result as IProjectInvitation[];
+}

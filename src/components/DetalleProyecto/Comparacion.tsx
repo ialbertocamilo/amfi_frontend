@@ -9,7 +9,7 @@ export interface EvaluationScore {
     experience: number;
     budget: number;
   };
-  status: "Evaluado" | "Completado" | "Rechazado";
+  status: "Pendiente" | "Completado" | "Rechazado";
 }
 
 interface ComparisonProps {
@@ -18,7 +18,7 @@ interface ComparisonProps {
 
 const Comparacion: React.FC<ComparisonProps> = ({ data }) => {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
-
+console.log(data)
   const StackedBarCharData = data.map((group) => ({
     name: group.name,
     score: {
@@ -73,10 +73,10 @@ const Comparacion: React.FC<ComparisonProps> = ({ data }) => {
               </span>
             ))}
             <span className="h-20 flex items-center justify-center">
-              <div className="h-4 w-4 bg-green-200 border rounded-sm mr-1"></div>
+              {/* <div className="h-4 w-4 bg-green-200 border rounded-sm mr-1"></div>
               <span className="text-xs font-semibold text-green-400">
-                Evaluado
-              </span>
+                Pendiente
+              </span> */}
             </span>
           </div>
           {data.map((group, index) => (

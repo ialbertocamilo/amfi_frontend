@@ -1,8 +1,4 @@
-import {
-  Budget,
-  CreativeProposal,
-  Evaluation,
-} from "@/api/interface/api.interface";
+import { Budget, Evaluation } from "@/api/interface/api.interface";
 import { getBidEvaluation, updateBidEvaluation } from "@/api/projectApi";
 import { calculateBudgetScore, calculateEvaluationScore } from "@/lib/utils";
 import { useRouter } from "next/router";
@@ -38,7 +34,9 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
   creativeProposalPercentage,
   setCreativeProposalPercentage,
 }) => {
-  const [evaluation, setEvaluation] = useState<Evaluation>({
+  const [evaluation, setEvaluation] = useState<
+    Evaluation & { creativeProposalWeight?: number }
+  >({
     creativeProposal: {
       uniquenessLevel: 0,
       productionQuality: 0,
@@ -70,6 +68,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
         reelContainsRelevantPieces: null,
       },
     },
+    creativeProposalWeight: 0.4,
   });
   const [budget, setBudget] = useState<Budget>({
     crew: 0,
@@ -85,6 +84,8 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
     overhead: 0,
     markUp: 0,
   });
+
+  const [budgetBaseline, setBudgetBaseline] = useState<number>(0);
 
   const [creativeProposal, setCreativeProposal] = useState<ProposalItem[]>([
     { key: "uniquenessLevel", label: "Nivel de singularidad", value: 0 },
@@ -163,14 +164,6 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
     },
   ]);
 
-  const questionsEmpresaStartIndex = creativeProposal.length;
-  const questionsRespaldoStartIndex =
-    creativeProposal.length + questionsEmpresa.length;
-  const questionsDirectorStartIndex =
-    creativeProposal.length +
-    questionsEmpresa.length +
-    questionsRespaldo.length;
-
   const [evaluationScore, setEvaluationScore] = useState<{
     creativeProposal: number;
     experience: number;
@@ -182,10 +175,6 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
   });
 
   const [hideSection, setHideSection] = useState(true);
-
-  const [answers, setAnswers] = useState(
-    Array(creativeProposal.length).fill("")
-  );
 
   const updateEvaluation = (
     proposal: ProposalItem[] | QuestionItem[],
@@ -202,7 +191,8 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
     const result = (await getBidEvaluation(projectInvitationId))?.result;
     const evaluation = result?.evaluation;
     const budget = result?.budget;
-
+    setCreativeProposalPercentage(result!.creativeProposalWeight * 100);
+    setBudgetBaseline(result!.baselineBudget);
     const calculatedEvaluationScore = {
       creativeProposal: 0,
       experience: 0,
@@ -225,9 +215,11 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
         updateEvaluation(questionsDirector, evaluation.experience.director)
       );
 
-      const { creativeProposal: creativeScore, experience } =
-        calculateEvaluationScore(evaluation, creativeProposalPercentage / 100);
+      console.log("creativeProposalPercentage", creativeProposalPercentage);
 
+      const { creativeProposal: creativeScore, experience } =
+        calculateEvaluationScore(evaluation, result!.creativeProposalWeight);
+      console.log("creativeScore", creativeScore);
       calculatedEvaluationScore.creativeProposal = creativeScore;
       calculatedEvaluationScore.experience = experience;
     }
@@ -241,8 +233,8 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
 
       calculatedEvaluationScore.budget = calculateBudgetScore(
         totalBudget,
-        120000,
-        creativeProposalPercentage / 100
+        result!.baselineBudget,
+        result!.creativeProposalWeight,
       ).budget;
     }
 
@@ -250,14 +242,41 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
   };
 
   useEffect(() => {
-    if (projectInvitationId)
-    onInit();
+    if (projectInvitationId) onInit();
   }, [projectInvitationId]);
 
-  const handleAnswerChange = (index: number, answer: string) => {
-    const newAnswers = [...answers];
-    newAnswers[index] = answer;
-    setAnswers(newAnswers);
+  const handleAnswerChange = (key: string, answer: boolean) => {
+    console.log("handleAnswerChange", key);
+
+    const newQuestionEmpresa = questionsEmpresa.map((item) => {
+      if (item.key === key) {
+        item.value = answer;
+      }
+      return item;
+    });
+    const newQuestionRespaldo = questionsRespaldo.map((item) => {
+      if (item.key === key) {
+        item.value = answer;
+      }
+      return item;
+    });
+    const newQuestionDirector = questionsDirector.map((item) => {
+      if (item.key === key) {
+        item.value = answer;
+      }
+      return item;
+    });
+
+    setQuestionsEmpresa(newQuestionEmpresa);
+    setQuestionsRespaldo(newQuestionRespaldo);
+    setQuestionsDirector(newQuestionDirector);
+
+    setEvaluation(updateBidEvaluationData());
+
+    setEvaluationScore({
+      ...evaluationScore,
+      ...calculateEvaluationScore(evaluation, creativeProposalPercentage / 100),
+    });
   };
 
   const handleRatingChange = (index: number, value: number) => {
@@ -265,14 +284,12 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
     newCreativeProposal[index].value = value;
     setCreativeProposal(newCreativeProposal);
 
-    setEvaluation(updateBidEvaluationData())
+    setEvaluation(updateBidEvaluationData());
 
     setEvaluationScore({
       ...evaluationScore,
       ...calculateEvaluationScore(evaluation, creativeProposalPercentage / 100),
     });
-
-
   };
 
   const handlePercentageChange = (
@@ -281,25 +298,70 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
     setCreativeProposalPercentage(Number(e.target.value));
   };
 
-  const updateBidEvaluationData = (): Evaluation => {
-    const newCreativeProposal = {} as CreativeProposal;
+  const updateBidEvaluationData = (): Evaluation & {
+    creativeProposalWeight: number;
+  } => {
+    const newEvaluation = {
+      creativeProposal: {
+        uniquenessLevel: 0,
+        productionQuality: 0,
+        originality: 0,
+        messageClarity: 0,
+        relevance: 0,
+        structureType: 0,
+        creativity: 0,
+        visualImpact: 0,
+        innovation: 0,
+        technicalExecution: 0,
+      },
+      experience: {
+        company: {
+          hasPreviousExperienceWithProductionCompany: null,
+          companyLegallyEstablished: null,
+          companyHasRelevantProjects: null,
+          companyTaxCompliance: null,
+        },
+        support: {
+          companyAffiliatedWithAssociation: null,
+          negativeReportsExist: null,
+          companyHasMoreThanXYearsInMarket: null,
+          goodSocialMediaReputation: null,
+        },
+        director: {
+          hasPreviousExperienceWithDirector: null,
+          isYoungTalent: null,
+          reelContainsRelevantPieces: null,
+        },
+      },
+      creativeProposalWeight: creativeProposalPercentage / 100,
+    };
+
     creativeProposal.map(
-      (item) => (newCreativeProposal[item.key] = item.value)
+      (item) => (newEvaluation.creativeProposal[item.key] = item.value)
     );
 
-    evaluation.creativeProposal = newCreativeProposal;
-    return evaluation;
+    questionsEmpresa.map(
+      (item) => (newEvaluation.experience.company[item.key] = item.value)
+    );
+    questionsRespaldo.map(
+      (item) => (newEvaluation.experience.support[item.key] = item.value)
+    );
+    questionsDirector.map(
+      (item) => (newEvaluation.experience.director[item.key] = item.value)
+    );
+
+    return newEvaluation;
   };
 
   const synchronizeBidEvaluationData = () => {
     updateBidEvaluation(projectInvitationId, updateBidEvaluationData());
   };
 
-  const router=useRouter()
-  const goToComparative=()=>{
+  const router = useRouter();
+  const goToComparative = () => {
     synchronizeBidEvaluationData();
-    router.push(`/comparativo?projectInvitationId=${projectInvitationId}`)
-  }
+    router.push(`/comparativo?projectInvitationId=${projectInvitationId}`);
+  };
 
   return (
     <div className="mt-6 p-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl shadow-md space-y-6 px-4 lg:px-8">
@@ -354,15 +416,17 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
           <div className="pt-4">
             <h3 className="text-xl font">Empresa</h3>
             <div className="grid grid-cols-2 gap-6 mt-4">
-              {questionsEmpresa.map((question, index) => (
-                <div key={index + questionsEmpresaStartIndex}>
-                  <BinaryChoice
-                    label={question.label}
-                    index={index + questionsEmpresaStartIndex}
-                    answer={question.value}
-                    handleAnswerChange={handleAnswerChange}
-                  ></BinaryChoice>
-                </div>
+              {questionsEmpresa.map((question, _) => (
+                <>
+                  <div key={question.key}>
+                    <BinaryChoice
+                      label={question.label}
+                      keyName={question.key}
+                      answer={question.value}
+                      handleAnswerChange={handleAnswerChange}
+                    ></BinaryChoice>
+                  </div>
+                </>
               ))}
             </div>
           </div>
@@ -371,11 +435,11 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
           <div>
             <h3 className="text-xl font">Respaldo</h3>
             <div className="grid grid-cols-2 gap-6 mt-4">
-              {questionsRespaldo.map((question, index) => (
-                <div key={index + questionsRespaldoStartIndex}>
+              {questionsRespaldo.map((question, _) => (
+                <div key={question.key}>
                   <BinaryChoice
                     label={question.label}
-                    index={index + questionsRespaldoStartIndex}
+                    keyName={question.key}
                     answer={question.value}
                     handleAnswerChange={handleAnswerChange}
                   ></BinaryChoice>
@@ -389,11 +453,11 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
           <div>
             <h3 className="text-xl font">Director</h3>
             <div className="grid grid-cols-2 gap-6 mt-4">
-              {questionsDirector.map((question, index) => (
-                <div key={index + questionsDirectorStartIndex}>
+              {questionsDirector.map((question, _) => (
+                <div key={question.key}>
                   <BinaryChoice
                     label={question.label}
-                    index={index + questionsDirectorStartIndex}
+                    keyName={question.key}
                     answer={question.value}
                     handleAnswerChange={handleAnswerChange}
                   ></BinaryChoice>
@@ -468,8 +532,8 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
           <button
             type="submit"
             onClick={() => {
-               synchronizeBidEvaluationData();
-               window.history.back();
+              synchronizeBidEvaluationData();
+              window.history.back();
             }}
             className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded"
           >

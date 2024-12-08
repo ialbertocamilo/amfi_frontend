@@ -1,13 +1,13 @@
 interface BinaryChoiceProps {
   label: string;
-  index: number;
+  keyName: string;
   answer: boolean | null;
-  handleAnswerChange: (index: number, value: string) => void;
+  handleAnswerChange: (key: string, value: boolean) => void;
 }
 
 const BinaryChoice = ({
   label,
-  index,
+  keyName,
   answer,
   handleAnswerChange,
 }: BinaryChoiceProps) => {
@@ -18,21 +18,22 @@ const BinaryChoice = ({
         <label className="flex items-center space-x-2">
           <input
             type="radio"
-            name={`question-${index}`}
+            name={keyName}
             value="Si"
             checked={answer === true}
-            onChange={() => handleAnswerChange(index, "Si")}
+            onChange={() => handleAnswerChange(keyName, true)}
             className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-black checked:ring-2 checked:ring-gray-300 checked:ring-offset-2"
           />
           <span>Si</span>
         </label>
+        <div>{answer}</div>
         <label className="flex items-center space-x-2">
           <input
             type="radio"
-            name={`question-${index}`}
+            name={keyName}
             value="No"
             checked={answer === false}
-            onChange={() => handleAnswerChange(index, "No")}
+            onChange={() => handleAnswerChange(keyName, false)}
             className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-black checked:ring-2 checked:ring-gray-300 checked:ring-offset-2"
           />
           <span>No</span>
