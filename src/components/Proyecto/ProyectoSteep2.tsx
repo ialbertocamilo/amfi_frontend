@@ -1,3 +1,5 @@
+import toast from 'react-hot-toast';
+import StepIndicator from './StepIndicator/StepIndicator';
 
 interface registroEntity {
   formData: any;
@@ -249,7 +251,15 @@ const ProyectoSteep2 = ({
                   name="entregaBidLetter"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.entregaBidLetter || ''}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const selectedDate = new Date(e.target.value);
+                    const currentDate = new Date();
+                    if (selectedDate <= currentDate) {
+                      toast.error('La fecha de entrega debe ser mayor a la fecha actual.');
+                      return;
+                    }
+                    handleChange(e);
+                  }}
                 />
               </div>
               <div>

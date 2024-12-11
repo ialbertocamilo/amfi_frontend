@@ -7,6 +7,7 @@ import moment from "moment";
 import Layout from "@/components/Layout";
 import useUser from "@/hooks/user.hook";
 import { useRouter } from "next/router";
+import Loader from '@/components/Loader';
 
 const Productoras = () => {
     const [productoras, setProductoras] = useState<any[]>([]);
@@ -44,9 +45,13 @@ const Productoras = () => {
         }
     };
 
+    const router = useRouter()
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
-        if (user)
-            fetchProductoras();
+        if (user) {
+            setLoading(true)
+            fetchProductoras().finally(() => setLoading(false));
+        }
     }, [user]);
 
     const [filter, setFilter] = useState("");
@@ -67,9 +72,9 @@ const Productoras = () => {
         );
     }, [filter, productoras]);
 
-    const router = useRouter()
     return (
         <Layout>
+            <Loader loading={loading}>
             <h1 className="text-2xl font-semibold">Lista de productoras</h1>
             <div className="flex justify-between items-center mb-4"></div>
 
@@ -91,6 +96,7 @@ const Productoras = () => {
                     itemsPerPage={10}
                 />
             </div>
+            </Loader>
         </Layout>
     );
 };

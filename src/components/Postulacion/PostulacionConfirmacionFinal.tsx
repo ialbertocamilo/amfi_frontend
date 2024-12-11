@@ -14,7 +14,7 @@ const PostulacionConfirmacionFinal: React.FC = () => {
         <div className="flex flex-col items-center justify-center h-screen bg-white">
             <img src="/IconSuccess.png" alt="Success" className="w-16 h-16 " />
             <h1 className="text-4xl font-bold text-black mb-4 text-center">
-            Propuesta enviada existosamente
+            Propuesta enviada exitosamente
             </h1>
 
             <div className="flex justify-center">

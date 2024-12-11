@@ -39,14 +39,13 @@ const PendingTable: React.FC = () => {
     });
   }, []);
   return (
-    <div className="overflow-x-auto">
+    <div className="">
       <PaginatedComponent items={data as any[]} itemsPerPage={5} headers={headers} />
     </div>
   );
 };
 
 const getStatusClass = (status: string) => {
-  console.log(status.toLowerCase());
   switch (status.toLowerCase()) {
     case "draft":
       return (

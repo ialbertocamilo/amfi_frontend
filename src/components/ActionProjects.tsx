@@ -61,9 +61,7 @@ const ActionProjects: React.FC<ActionRoleProps> = ({ id, userRole }) => {
     }, [id, userRole, handlePause, router]);
 
     return (
-        <div>
             <ActionList actions={availableActions} resourceId={id} />
-        </div>
     );
 };
 
