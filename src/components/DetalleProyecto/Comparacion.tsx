@@ -1,6 +1,9 @@
-import React, { useState } from "react";
-import StackedBarChar from "./StackedBarChar";
+import { assignProductionHouse } from "@/api/projectApi";
 import { useRouter } from "next/router";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
+import DefaultButton from "../buttons/DefaultButton";
+import StackedBarChar from "./StackedBarChar";
 
 export interface EvaluationScore {
   name: string;
@@ -9,6 +12,8 @@ export interface EvaluationScore {
     experience: number;
     budget: number;
   };
+  id: string;
+  projectId: string;
   status: "Pendiente" | "Completado" | "Rechazado";
 }
 
@@ -18,7 +23,6 @@ interface ComparisonProps {
 
 const Comparacion: React.FC<ComparisonProps> = ({ data }) => {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
-console.log(data)
   const StackedBarCharData = data.map((group) => ({
     name: group.name,
     score: {
@@ -41,14 +45,36 @@ console.log(data)
 
   const action = "Ver Bid letter";
 
-  const handleCheckboxChange = (name: string) => {
-    setSelectedGroup(name);
+  const handleCheckboxChange = (id: string) => {
+    setSelectedGroup(id);
   };
-
-  const router=useRouter()
+  const [projectAssigned, setProjectAssigned] = useState(false);
+  
+  const router = useRouter()
 
   const backToList = () => {
     router.back()
+  };
+
+
+  const { projectInvitationId } = router.query;
+  const assignProject = () => {
+    const e = window.event;
+    e?.preventDefault();
+    if (selectedGroup) {
+      assignProductionHouse(projectInvitationId as string, selectedGroup)
+        .then((response) => {
+          console.log("Project assigned successfully:", response);
+          toast.success('Se ha enviado un correo a la Casa productora informándole que ha sido asignada al proyecto. Además avisaremos a los demás postulantes que no fueron elegidos.');
+          setProjectAssigned(true);
+          // router.push("/lista-de-proyectos-admin");
+        })
+        .catch((error) => {
+          console.error("Error assigning project:", error);
+        });
+    } else {
+      console.warn("No group selected");
+    }
   };
   return (
     <div className="mt-6 p-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl shadow-md space-y-6 px-4 lg:px-8">
@@ -58,9 +84,7 @@ console.log(data)
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: `1fr repeat(${
-                headers.length - 1
-              }, minmax(0, 1.5fr)) 1fr`,
+              gridTemplateColumns: `1fr repeat(${headers.length - 1}, minmax(0, 1.5fr)) 1fr`,
             }}
             className="text-sm font-semibold text-gray-700"
           >
@@ -72,76 +96,54 @@ console.log(data)
                 {header}
               </span>
             ))}
-            <span className="h-20 flex items-center justify-center">
-              {/* <div className="h-4 w-4 bg-green-200 border rounded-sm mr-1"></div>
-              <span className="text-xs font-semibold text-green-400">
-                Pendiente
-              </span> */}
-            </span>
           </div>
           {data.map((group, index) => (
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: `1fr repeat(${
-                  headers.length - 1
-                }, minmax(0, 1.5fr)) 1fr`,
+                gridTemplateColumns: `1fr repeat(${headers.length - 1}, minmax(0, 1.5fr)) 1fr`,
               }}
-              className="h-20  border rounded-lg border-gray-300 mb-4"
+              className="h-20 border rounded-lg border-gray-300 mb-4 transition-transform duration-300 ease-in-out transform hover:scale-105 cursor-pointer"
+              key={`group-${index}`}
+              onClick={() => handleCheckboxChange(group.id)}
             >
               <span className="flex items-center justify-center">
-                <input
-                  type="checkbox"
-                  checked={selectedGroup === group.name}
-                  onChange={() => handleCheckboxChange(group.name)}
-                  className="w-6 h-6 rounded-full border-2 border-blue-600 text-blue-600 focus:ring-blue-500 appearance-none checked:bg-blue-600 checked:border-transparent"
-                />
+                {projectAssigned && selectedGroup === group.id ? (
+                  <span role="img" aria-label="assigned">
+                    ✅
+                  </span>
+                ) : (
+                  <input
+                    type="checkbox"
+                    checked={selectedGroup === group.id}
+                    onChange={() => handleCheckboxChange(group.id)}
+                    className="w-6 h-6 rounded-full border-2 border-blue-600 text-blue-600 focus:ring-blue-500 appearance-none checked:bg-blue-600 checked:border-transparent"
+                  />
+                )}
               </span>
-              <span
-                className="flex flex-wrap items-center text-base font-semibold text-gray-700"
-                key={index}
-              >
+              <span className="flex flex-wrap items-center text-base font-semibold text-gray-700">
                 {group.name}
               </span>
-
-              <span
-                className="flex items-center justify-center font-semibold text-gray-700"
-                key={index}
-              >
+              <span className="flex items-center justify-center font-semibold text-gray-700">
                 {group.evaluationScore.creativeProposal}
               </span>
-              <span
-                className="flex items-center justify-center font-semibold text-gray-700"
-                key={index}
-              >
+              <span className="flex items-center justify-center font-semibold text-gray-700">
                 {group.evaluationScore.experience}
               </span>
-              <span
-                className="flex items-center justify-center font-semibold text-gray-700 p"
-                key={index}
-              >
+              <span className="flex items-center justify-center font-semibold text-gray-700">
                 {group.evaluationScore.budget}
               </span>
-
-              <span
-                className="flex items-center justify-center font-bold text-blue-700"
-                key={index}
-              >
+              <span className="flex items-center justify-center font-bold text-blue-700">
                 {group.evaluationScore.creativeProposal +
                   group.evaluationScore.experience +
                   group.evaluationScore.budget}
               </span>
-
-              <span
-                className="flex items-center justify-center text-xs font-bold text-red-500"
-                key={index}
-              >
+              <span className="flex items-center justify-center text-xs font-bold text-red-500">
                 {action}
               </span>
-
-              <div className="flex items-center justify-center " key={index}>
+              <div className="flex items-center justify-center">
                 <span
-                  className={`h-7 w-24 flex items-center justify-center text-xs font-bold border  rounded-md ${
+                  className={`h-7 w-24 flex items-center justify-center text-xs font-bold border rounded-md ${
                     group.status === "Completado"
                       ? "bg-green-100 text-green-500"
                       : group.status === "Rechazado"
@@ -163,19 +165,14 @@ console.log(data)
         </div>
         <StackedBarChar data={StackedBarCharData}></StackedBarChar>
         <div className="flex justify-center space-x-4">
-          <button
-            type="submit"
-            className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded "
-            onClick={backToList}
-          >
-            Atras
-          </button>
-          <button
-            type="submit"
-            className="w-1/4 bg-red-500 text-white py-2 rounded"
-          >
-            Asignar proyecto
-          </button>
+          {projectAssigned ? (
+            <DefaultButton onClick={() => router.push("/lista-de-proyectos-admin")} label={"Ir a proyectos"} />
+          ) : (
+            <>
+              <DefaultButton onClick={backToList} outlined label={"Atras"} />
+              <DefaultButton onClick={assignProject} label={"Asignar proyecto"} disabled={!selectedGroup} />
+            </>
+          )}
         </div>
       </div>
     </div>

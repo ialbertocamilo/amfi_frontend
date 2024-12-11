@@ -1,10 +1,6 @@
-import { useState } from "react";
-import { FaCheck } from "react-icons/fa";
-import api from "@/lib/api";
-import toast from "react-hot-toast";
-import { useRouter } from "next/router";
 import Input from "@/components/inputs/Input";
-
+import { useRouter } from "next/router";
+import { FaCheck } from "react-icons/fa";
 interface registroEntity {
   formData: any;
   handleChange: any;
@@ -25,6 +21,7 @@ const PostulacionSteep1 = ({
   const redirect = () => {
     router.push("/lista-de-proyectos");
   };
+
 
   return (
     <div className="space-y-8 p-4">
@@ -57,105 +54,98 @@ const PostulacionSteep1 = ({
             {Number(activeTab) >= 4 ? <FaCheck /> : "4"}
           </button>
         </div>
-
+<br />
         {/* Sección Presupuesto */}
         <div>
-          <h2 className="text-2xl font-semibold mb-4">Presupuesto</h2>
-          <div className="grid grid-cols-4 gap-4">
-            <div className="col-span-4">
-              <div className="relative flex space-x-2">
-                <input
-                  type="number"
-                  id="presupuesto.total"
-                  name="presupuesto.total"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md appearance-none no-spinner"
-                  value={formData?.presupuesto?.total}
-                  onChange={handleChange}
-                />
-                <select
-                  id="presupuesto.moneda"
-                  name="presupuesto.moneda"
-                  className="mt-1 block p-2 border border-gray-300 rounded-md bg-white"
-                  value={formData?.presupuesto?.moneda}
-                  onChange={handleChange}
-                >
-                  <option value="">Seleccionar</option>
-                  <option value="mxn">MXN</option>
-                  <option value="usd">USD</option>
-                </select>
-              </div>
+          <h2 className="text-2xl flex font-semibold mb-4">Presupuesto</h2>
+          <Input
+            label={"Total"}
+            type={"number"}
+            name={"presupuesto.total"}
+            value={formData.presupuesto.total}
+            onChange={handleChange}
+          />
+          <br />
+          <div>
+            <h2 className="text-1xl font-semibold mb-4">Rubros</h2>
+
+            <div className="grid grid-cols-4 gap-4">
+              <Input
+                label={"Personal"}
+                type={"number"}
+                name={"presupuesto.personal"}
+                value={formData.presupuesto.personal}
+                onChange={handleChange}
+              />
+
+              <Input
+                label={"Pre y pro"}
+                type={"number"}
+                name={"presupuesto.preYPro"}
+                value={formData.presupuesto.preYPro}
+                onChange={handleChange}
+              />
+              <Input
+                label={"Talento"}
+                type={"number"}
+                name={"presupuesto.talento"}
+                value={formData.presupuesto.talento}
+                onChange={handleChange}
+              />
+              <Input
+                label={"Equipo"}
+                type={"number"}
+                name={"presupuesto.equipo"}
+                value={formData.presupuesto.equipo}
+                onChange={handleChange}
+              />
+              <Input
+                label={"Set-locación"}
+                type={"number"}
+                name={"presupuesto.setLocacion"}
+                value={formData.presupuesto.setLocacion}
+                onChange={handleChange}
+              />
+              <Input
+                label={"Viajes"}
+                type={"number"}
+                name={"presupuesto.viajes"}
+                value={formData.presupuesto.viajes}
+                onChange={handleChange}
+              />
+              <Input
+                label={"Digital"}
+                type={'number'}
+                name={"presupuesto.digital"}
+                value={formData.presupuesto.digital}
+                onChange={handleChange}
+              />
+              <Input
+                label={"Foto fija"}
+                type={"number"}
+                name={"presupuesto.fotoFija"}
+                value={formData.presupuesto.fotoFija}
+                onChange={handleChange}
+              />
+              <Input
+                label={"Post producción"}
+                type={"number"}
+                name={"presupuesto.postProduccion"}
+                value={formData.presupuesto.postProduccion}
+                onChange={handleChange}
+              />
+              <Input
+                label={"Mark up %"}
+                type={"number"}
+                name={"presupuesto.markUp"}
+                value={formData.presupuesto.markUp}
+                onChange={handleChange}
+              />
             </div>
-            <Input
-              label={"Personal"}
-              type={"text"}
-              name={"presupuesto.personal"}
-              value={formData.presupuesto.personal}
-              onChange={handleChange}
-            />
-            <Input
-              label={"Pre y pro"}
-              type={"text"}
-              name={"presupuesto.preYPro"}
-              value={formData.presupuesto.preYPro}
-              onChange={handleChange}
-            />
-            <Input
-              label={"Talento"}
-              type={"text"}
-              name={"presupuesto.talento"}
-              value={formData.presupuesto.talento}
-              onChange={handleChange}
-            />
-            <Input
-              label={"Equipo"}
-              type={"text"}
-              name={"presupuesto.equipo"}
-              value={formData.presupuesto.equipo}
-              onChange={handleChange}
-            />
-            <Input
-              label={"Set locación"}
-              type={"text"}
-              name={"presupuesto.setLocacion"}
-              value={formData.presupuesto.setLocacion}
-              onChange={handleChange}
-            />
-            <Input
-              label={"Viajes"}
-              type={"text"}
-              name={"presupuesto.viajes"}
-              value={formData.presupuesto.viajes}
-              onChange={handleChange}
-            />
-            <Input
-              label={"Digital"}
-              name={"presupuesto.digital"}
-              value={formData.presupuesto.digital}
-              onChange={handleChange}
-            />
-            <Input
-              label={"Foto fija"}
-              type={"text"}
-              name={"presupuesto.fotoFija"}
-              value={formData.presupuesto.fotoFija}
-              onChange={handleChange}
-            />
-            <Input
-              label={"Post producción"}
-              type={"text"}
-              name={"presupuesto.postProduccion"}
-              value={formData.presupuesto.postProduccion}
-              onChange={handleChange}
-            />
-            <Input
-              label={"Mark up %"}
-              type={"number"}
-              name={"presupuesto.markUp"}
-              value={formData.presupuesto.markUp}
-              onChange={handleChange}
-            />
+
           </div>
         </div>
+        <br />
 
         {/* Sección Bid Letter */}
         <div>

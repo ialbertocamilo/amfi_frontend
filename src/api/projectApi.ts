@@ -161,3 +161,14 @@ export const getEvaluationComparison = async (projectInvitationId: string) => {
 
   return response.data.result as IProjectInvitation[];
 }
+export const assignProductionHouse = async (projectInvitationId: string, productionHouseId: string) => {
+  try {
+    const response = await ApiService.post(`/project/${projectInvitationId}/assign-production-house`, {
+      productionHouseId,
+    });
+    return response.data;
+  } catch (error: any) {
+    console.warn('Error assigning production house:', error);
+    return null;
+  }
+};

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import Layout from "@/components/Layout";
-import Loader from "@/components/Loader";
+import { getEvaluationComparison } from "@/api/projectApi";
 import Comparacion, {
   EvaluationScore,
 } from "@/components/DetalleProyecto/Comparacion";
-import { getEvaluationComparison } from "@/api/projectApi";
-import { calculateEvaluationScore, calculateBudgetScore } from "@/lib/utils";
+import Layout from "@/components/Layout";
+import Loader from "@/components/Loader";
+import { calculateBudgetScore, calculateEvaluationScore } from "@/lib/utils";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 
 const ComparativoPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -54,16 +54,18 @@ const ComparativoPage: React.FC = () => {
                 item.accepted === false
                   ? "Rechazado"
                   : item.proposalUploaded === true
-                  ? "Completado"
-                  : "Pendiente";
+                    ? "Completado"
+                    : "Pendiente";
 
               return {
+                id: item.productionHouse.id,
                 name: item.productionHouse.name,
                 evaluationScore: {
                   creativeProposal,
                   experience,
                   budget,
                 },
+                projectId: item.project.id,
                 status,
               };
             })

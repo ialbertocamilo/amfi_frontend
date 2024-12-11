@@ -7,13 +7,14 @@ import { CheckProjectInvitationStatusResponse } from "@/interfaces/project-direc
 import ApiService from "@/lib/api";
 import { manageLogicError } from "@/lib/utils";
 import { IInvitationResponse } from "@/interfaces/invitation.interface";
+import { Budget, Evaluation } from "./interface/api.interface";
 
 export interface IPostulationData {
-    id?:string;
+    id?: string;
     project: IProject;
     director: IDirector;
     productionHouse: ICompany;
-    accepted?:boolean
+    accepted?: boolean
 }
 export class CreatePostulationDto {
     projectId: string;
@@ -59,14 +60,14 @@ export const checkInvitationStatusDirect = async (projectInvitationId: string) =
 }
 
 export const submitPostulation = async (postulation: CreatePostulationDto) => {
-        const response = await ApiService.post('/postulation/submit', postulation);
-        return response.data;
+    const response = await ApiService.post('/postulation/submit', postulation);
+    return response.data;
 };
 
 
 export const acceptDirectInvitation = async (projectInvitationId: string) => {
-        const response = await api.post(`/project-director/accept-invitation-direct`, { projectInvitationId });
-        return response.data  as IInvitationResponse
+    const response = await api.post(`/project-director/accept-invitation-direct`, { projectInvitationId });
+    return response.data as IInvitationResponse
 }
 
 
@@ -82,7 +83,7 @@ export const acceptInvitation = async (token: string) => {
 };
 export const getPostulationById = async (postulationId: string) => {
     const response = await api.get(`/postulation/${postulationId}`);
-    return response.data as { metadata: Record<string, any>, project:IProject,status:string };
+    return response.data as { metadata: Record<string, any>, project: IProject, status: string };
 }
 
 export const declineInvitation = async (tokenOrInvitationId: string) => {
@@ -97,3 +98,13 @@ export const declineInvitation = async (tokenOrInvitationId: string) => {
         return null;
     }
 };
+export const updateProjectInvitation = async (id: string, dto: { budget?: Budget, evaluation?: Evaluation }) => {
+    try {
+        const response = await ApiService.patch(`/project-director/update-project-invitation/${id}`, dto);
+        return response.data
+    } catch (error: any) {
+        console.warn('Error updating project invitation:', error);
+        return null;
+    }
+};
+

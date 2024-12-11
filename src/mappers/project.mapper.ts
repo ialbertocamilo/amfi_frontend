@@ -2,7 +2,7 @@ export enum EstadoProyecto {
     Borrador = 'Borrador',
     EnProgreso = 'En proceso',
     EnRevision = 'En revisión',
-    Terminado = 'Terminado',
+    Terminado = 'Finalizado',
     Cerrado = 'Cerrado',
     Pausado = 'Pausado',
 }

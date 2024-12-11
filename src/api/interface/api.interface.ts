@@ -111,6 +111,7 @@ export interface Evaluation {
     }
   }
 
+
   export interface Budget {
     crew: number;
     preAndPro: number;
@@ -125,3 +126,4 @@ export interface Evaluation {
     overhead: number;
     markUp: number;
   }
+  

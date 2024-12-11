@@ -8,15 +8,7 @@ interface BidLetterProps {
 }
 
 export function BidLetterSection({ data }: { data: any }) {
-  const bidInfo: BidLetterProps = {
-    cliente: "Cliente Example",
-    proyecto: "Proyecto Comercial 2024",
-    version: "V1.0",
-    fecha: "2024-03-15",
-    duracion: "3 semanas",
-    produccion:
-      "Campaña publicitaria multiplataforma incluyendo contenido para redes sociales y TV",
-  };
+
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
