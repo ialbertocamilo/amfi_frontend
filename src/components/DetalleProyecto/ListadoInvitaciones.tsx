@@ -96,7 +96,7 @@ const ListadoInvitaciones = ({
                   onClick={(e) => {
                     e.stopPropagation();
                   }} />
-                <InvitationStatus status={invitation?.accepted ?? false} />
+                <InvitationStatus status={invitation?.accepted} />
                 <NextIcon />
               </div>
             </div>

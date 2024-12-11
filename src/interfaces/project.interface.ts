@@ -11,7 +11,7 @@ export interface IProject {
     };
     guidelines: Record<string, any>;
     extra: Record<string, any>;
-    budget: string;
+    budget: number | null;
     isFinancialInfoUnlocked: boolean;
     maxProducers: number;
     bidDeadline: string;
@@ -37,4 +37,5 @@ export interface IProject {
       createdAt: string;
       updatedAt: string;
     };
+    creativeProposalWeight: number
   }
