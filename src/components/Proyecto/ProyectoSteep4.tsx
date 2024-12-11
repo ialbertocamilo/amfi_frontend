@@ -45,8 +45,6 @@ const ProyectoSteep4 = ({
         <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
           {/* Sección: Desglose Creativo */}
           <h2 className="text-xl font-bold mb-4">Notas</h2>
-<hr/>
-          <br/>
           <h2 className="text-md font-medium mb-4">Talento</h2>
           <div className={'grid grid-cols-2 gap-8 mb-8'}>
             <div>

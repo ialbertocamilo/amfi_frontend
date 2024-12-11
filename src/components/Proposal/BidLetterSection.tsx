@@ -14,7 +14,8 @@ export function BidLetterSection({ data }: { data: any }) {
     version: "V1.0",
     fecha: "2024-03-15",
     duracion: "3 semanas",
-    descripcion: "Campaña publicitaria multiplataforma incluyendo contenido para redes sociales y TV"
+    produccion:
+      "Campaña publicitaria multiplataforma incluyendo contenido para redes sociales y TV",
   };
 
   return (

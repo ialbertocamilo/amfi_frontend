@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { FaCheck, FaInfoCircle } from "react-icons/fa";
 
-const ProyectCreated = () => {
+const CreatedProject = () => {
   const router = useRouter();
 
   const handleClick = async (e: React.FormEvent) => {
@@ -10,11 +10,6 @@ const ProyectCreated = () => {
 
   return (
     <div className="space-y-8 p-4">
-      <h1 className="text-2xl font-bold mb-6 space-y-4">Nuevo proyecto</h1>
-      <div className="text-sm text-gray-500 mb-8">
-        <span>Proyectos</span> {">"} <span>Nuevo proyecto</span>
-      </div>
-
       <div className="mb-8 bg-white rounded m-4 p-6">
         <div className="rounded-lg p-8 text-center max-w w-full">
           <div className="bg-green-500 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
@@ -42,4 +37,4 @@ const ProyectCreated = () => {
   );
 };
 
-export default ProyectCreated;
+export default CreatedProject;
