@@ -66,84 +66,84 @@ const PostulacionSteep1 = ({
             onChange={handleChange}
           />
           <br />
-          <div>
+            <div>
             <h2 className="text-1xl font-semibold mb-4">Rubros</h2>
 
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <Input
-                label={"Personal"}
-                type={"number"}
-                name={"presupuesto.personal"}
-                value={formData.presupuesto.personal}
-                onChange={handleChange}
+              label={"Personal"}
+              type={"number"}
+              name={"presupuesto.personal"}
+              value={formData.presupuesto.personal}
+              onChange={handleChange}
               />
 
               <Input
-                label={"Pre y pro"}
-                type={"number"}
-                name={"presupuesto.preYPro"}
-                value={formData.presupuesto.preYPro}
-                onChange={handleChange}
+              label={"Pre y pro"}
+              type={"number"}
+              name={"presupuesto.preYPro"}
+              value={formData.presupuesto.preYPro}
+              onChange={handleChange}
               />
               <Input
-                label={"Talento"}
-                type={"number"}
-                name={"presupuesto.talento"}
-                value={formData.presupuesto.talento}
-                onChange={handleChange}
+              label={"Talento"}
+              type={"number"}
+              name={"presupuesto.talento"}
+              value={formData.presupuesto.talento}
+              onChange={handleChange}
               />
               <Input
-                label={"Equipo"}
-                type={"number"}
-                name={"presupuesto.equipo"}
-                value={formData.presupuesto.equipo}
-                onChange={handleChange}
+              label={"Equipo"}
+              type={"number"}
+              name={"presupuesto.equipo"}
+              value={formData.presupuesto.equipo}
+              onChange={handleChange}
               />
               <Input
-                label={"Set-locación"}
-                type={"number"}
-                name={"presupuesto.setLocacion"}
-                value={formData.presupuesto.setLocacion}
-                onChange={handleChange}
+              label={"Set-locación"}
+              type={"number"}
+              name={"presupuesto.setLocacion"}
+              value={formData.presupuesto.setLocacion}
+              onChange={handleChange}
               />
               <Input
-                label={"Viajes"}
-                type={"number"}
-                name={"presupuesto.viajes"}
-                value={formData.presupuesto.viajes}
-                onChange={handleChange}
+              label={"Viajes"}
+              type={"number"}
+              name={"presupuesto.viajes"}
+              value={formData.presupuesto.viajes}
+              onChange={handleChange}
               />
               <Input
-                label={"Digital"}
-                type={'number'}
-                name={"presupuesto.digital"}
-                value={formData.presupuesto.digital}
-                onChange={handleChange}
+              label={"Digital"}
+              type={'number'}
+              name={"presupuesto.digital"}
+              value={formData.presupuesto.digital}
+              onChange={handleChange}
               />
               <Input
-                label={"Foto fija"}
-                type={"number"}
-                name={"presupuesto.fotoFija"}
-                value={formData.presupuesto.fotoFija}
-                onChange={handleChange}
+              label={"Foto fija"}
+              type={"number"}
+              name={"presupuesto.fotoFija"}
+              value={formData.presupuesto.fotoFija}
+              onChange={handleChange}
               />
               <Input
-                label={"Post producción"}
-                type={"number"}
-                name={"presupuesto.postProduccion"}
-                value={formData.presupuesto.postProduccion}
-                onChange={handleChange}
+              label={"Post producción"}
+              type={"number"}
+              name={"presupuesto.postProduccion"}
+              value={formData.presupuesto.postProduccion}
+              onChange={handleChange}
               />
               <Input
-                label={"Mark up %"}
-                type={"number"}
-                name={"presupuesto.markUp"}
-                value={formData.presupuesto.markUp}
-                onChange={handleChange}
+              label={"Mark up %"}
+              type={"number"}
+              name={"presupuesto.markUp"}
+              value={formData.presupuesto.markUp}
+              onChange={handleChange}
               />
             </div>
 
-          </div>
+            </div>
         </div>
         <br />
 
@@ -151,7 +151,7 @@ const PostulacionSteep1 = ({
         <div>
           <h2 className="text-2xl font-semibold mb-4">Bid Letter</h2>
           <h2 className="text-1xl font-semibold mb-4">Dias</h2>
-          <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 gap-4">
             <Input
               label={"Producción"}
               type={"text"}
@@ -199,61 +199,61 @@ const PostulacionSteep1 = ({
               value={formData.bidLetter.descripcion}
               onChange={handleChange}
             />
-          </div>
+            </div>
         </div>
 
         {/* Sección Crew */}
         <div>
           <h2 className="text-2xl font-semibold mb-4">Crew</h2>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <label>Dirección</label>
               <input
-                type="text"
-                className="border p-2 w-full rounded-lg"
-                name="crew.direccion"
-                value={formData.crew.direccion}
-                onChange={handleChange}
+          type="text"
+          className="border p-2 w-full rounded-lg"
+          name="crew.direccion"
+          value={formData.crew.direccion}
+          onChange={handleChange}
               />
             </div>
             <div>
               <label>Dirección de fotografía</label>
               <input
-                type="text"
-                className="border p-2 w-full rounded-lg"
-                name="crew.direccionFotografia"
-                value={formData.crew.direccionFotografia}
-                onChange={handleChange}
+          type="text"
+          className="border p-2 w-full rounded-lg"
+          name="crew.direccionFotografia"
+          value={formData.crew.direccionFotografia}
+          onChange={handleChange}
               />
             </div>
             <div>
               <label>Producción ejecutiva</label>
               <input
-                type="text"
-                className="border p-2 w-full rounded-lg"
-                name="crew.produccionEjecutiva"
-                value={formData.crew.produccionEjecutiva}
-                onChange={handleChange}
+          type="text"
+          className="border p-2 w-full rounded-lg"
+          name="crew.produccionEjecutiva"
+          value={formData.crew.produccionEjecutiva}
+          onChange={handleChange}
               />
             </div>
-            <div className="col-span-3">
-              <label>Descripción (Opcional)</label>
+            <div>
+              <label>Descripción adicional</label>
               <input
-                type="text"
-                className="border p-2 w-full rounded-lg"
-                name="crew.descripcionOpcional"
-                value={formData.crew.descripcionOpcional}
-                onChange={handleChange}
+          type="text"
+          className="border p-2 w-full rounded-lg"
+          name="crew.descripcionOpcional"
+          value={formData.crew.descripcionOpcional}
+          onChange={handleChange}
               />
             </div>
             <div>
               <label>Cantidad total</label>
               <input
-                type="number"
-                className="border p-2 w-full rounded-lg"
-                name="crew.cantidadTotal"
-                value={formData.crew.cantidadTotal}
-                onChange={handleChange}
+          type="number"
+          className="border p-2 w-full rounded-lg"
+          name="crew.cantidadTotal"
+          value={formData.crew.cantidadTotal}
+          onChange={handleChange}
               />
             </div>
           </div>

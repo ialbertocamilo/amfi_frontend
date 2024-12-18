@@ -1,22 +1,21 @@
+import { ICompany } from '@/interfaces/company.interface';
 import React from 'react';
-import './ProposalPDF.css';
-import { ReportHeader } from './ReportHeader';
-import { BudgetSection } from './BudgetSection';
 import { BidLetterSection } from './BidLetterSection';
+import { BudgetSection } from './BudgetSection';
 import { CrewSection } from './CrewSection';
 import { EquipmentSection } from './EquipmentSection';
+import './ProposalPDF.css';
+import { ReportHeader } from './ReportHeader';
 
-const ProposalPDF: React.FC<{data:any}> = ({data}:{data:any}) => (
-  <div className="container">
-    <div className="content w-3/4">
-      <div className="card w-full">
-      <ReportHeader />
+const ProposalPDF: React.FC<{ data: any, productionHouse: ICompany | undefined }> = ({ data, productionHouse }) => (
+  <div className="content ">
+    <div className="w-full border border-gray-200 rounded-md ">
+      <ReportHeader productionHouse={productionHouse} />
       <div className="sections">
-        <BudgetSection data={data}/>
-        <BidLetterSection data={data}/>
-        <CrewSection data={data}/>
-        <EquipmentSection data={data}/>
-      </div>
+      <BudgetSection data={data} />
+      <BidLetterSection data={data} />
+      <CrewSection data={data} />
+      <EquipmentSection data={data} />
       </div>
     </div>
   </div>

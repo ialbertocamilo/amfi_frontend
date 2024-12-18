@@ -40,9 +40,8 @@ const ResumenProyecto: React.FC<ResumenProyectoProps> = ({ data }) => {
         <div>
           <h2 className="text-xl font-semibold">Notas</h2>
           <div className="grid grid-cols-2 gap-4 mt-4">
-            <p>Cinematografía: {data?.cinematografia}</p>
             <p>Locación: {data?.locacion}</p>
-            <p>Arte/Props: {data?.arteprops}</p>
+            <p>Arte: {data?.arteprops}</p>
             <p>Casting: {data?.casting}</p>
             <p>Talento: {data?.talento}</p>
             <p>Compensación: {data?.compensacion}</p>
@@ -62,16 +61,6 @@ const ResumenProyecto: React.FC<ResumenProyectoProps> = ({ data }) => {
             <p>Audio: {data?.audio}</p>
             <p>Locutor: {data?.locutor}</p>
             <p>Entrega: {data?.entrega}</p>
-          </div>
-        </div>
-        <hr className={'my-6'}/>
-
-        {/* Sección Asistentes filmación */}
-        <div>
-          <h2 className="text-xl font-semibold">Asistentes filmación</h2>
-          <div className="grid grid-cols-2 gap-4 mt-4">
-            <p>Cantidad: {data?.cantidadAsistentes}</p>
-            <p>Puesto: {data?.puestoAsistentes}</p>
           </div>
         </div>
 

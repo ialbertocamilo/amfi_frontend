@@ -1,12 +1,12 @@
-import {useEffect, useState} from "react";
-import {addDirectorsToProject} from "@/api/projectApi";
-import {casasProductorasSelected, selectedCasasProductorasState} from "@/state/producerState";
-import {useRouter} from "next/router";
+import { addDirectorsToProject } from "@/api/projectApi";
+import { validateFormData } from "@/lib/utils";
+import { casasProductorasSelected, selectedCasasProductorasState } from "@/state/producerState";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import {useRecoilState, useRecoilValue} from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import ListaCasasProductoras from "../ListaCasasProductoras";
 import CasasProductorasModal from "./CasasProductorasModal";
-import {validateFormData} from "@/lib/utils";
 
 interface registroEntity {
     formData: any;
@@ -24,7 +24,7 @@ const ProyectoSteep5 = ({
 
     useEffect(() => {
         console.log('On steep 5')
-        if (!validateFormData(formData)) {
+        if (!validateFormData(formData,['entregaBidLetter','moneda','cantidadAsistentes','puestoAsistentes'])) {
             toast.error("Por favor, llena todos los campos para llegar a la siguiente etapa");
             setactiveTab("1");
         }

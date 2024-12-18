@@ -1,12 +1,13 @@
 'use client'
 import { getPostulationById } from '@/api/postulationApi';
+import Layout from '@/components/Layout';
+import Loader from '@/components/Loader';
 import ProposalPDF from '@/components/Proposal/ProposalPDF';
+import { ICompany } from '@/interfaces/company.interface';
 import { manageLogicError } from '@/lib/utils';
 import { useRouter } from 'next/router';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePDF } from "react-to-pdf";
-import '../app/globals.css';
-import Loader from '@/components/Loader';
 
 const Propuesta = () => {
     const [isClient, setIsClient] = useState(false);
@@ -22,10 +23,13 @@ const Propuesta = () => {
     const [loading, setLoading] = useState(true);
 
     const [postulation, setPostulation] = useState<any>()
+    
+    const [productionHouse, setProductionHouse] = useState<ICompany>();
+
     useEffect(() => {
         if (postulationId) {
             getPostulationById(postulationId as string).then((data) => {
-                console.log(data)
+                setProductionHouse(data?.projectInvitation?.productionHouse)
                 setPostulation(data.metadata)
             }).catch((error) => {
                 manageLogicError(error)
@@ -38,18 +42,18 @@ const Propuesta = () => {
         return null;
     }
     return (
-        <Fragment >
+        <Layout >
             <Loader loading={loading} >
                 <div className="flex justify-center mt-4">
                     <button className="bg-red-500 text-white py-2 px-4 rounded" onClick={() => toPDF()}>
                         Descargar PDF
                     </button>
                 </div>
-                <div ref={targetRef} className="container mx-auto p-4">
-                    <ProposalPDF data={postulation} />
+                <div ref={targetRef} >
+                    <ProposalPDF data={postulation} productionHouse={productionHouse}/>
                 </div>
             </Loader>
-        </Fragment >
+        </Layout >
     );
 };
 

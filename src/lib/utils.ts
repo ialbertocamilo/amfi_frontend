@@ -157,3 +157,21 @@ export const formatToUtcBackend = (isoDate: string): Date => {
   moment.locale("es");
   return new Date(moment(isoDate).format("YYYY-MM-DDTHH:mm:ss"));
 };
+
+
+export const formatToMxn = (value?: number) => {
+  if (value === undefined || value === null) {
+    return '-';
+  }
+  return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(value) + ' MXN';
+};
+
+
+export const validateInputs = (formData: any, inputNames: string[],fieldLabels) => {
+  for (const name of inputNames) {
+    if (!formData[name]) {
+      return `Por favor, complete el campo: ${fieldLabels[name]}`;
+    }
+  }
+  return null;
+};

@@ -234,14 +234,18 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
                   value={formData.entregables.descripcion}
                   onChange={handleChange}
               />
-                <textarea
-                    placeholder="Notas"
+              </div>
+            </div>
+            <div>
+              <h2>Notas</h2>
+
+              <textarea
+                    placeholder="Escriba sus notas aquí"
                     className="border p-2 w-full"
                     name="entregables.notas"
                     value={formData.entregables.notas}
                     onChange={handleChange}
                 />
-              </div>
             </div>
           </div>
         {/* Botones */}

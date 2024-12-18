@@ -1,6 +1,9 @@
-import UploaderComponent from '../UploaderComponent';
-import { toast } from 'react-hot-toast';
+import { validateInputs } from '@/lib/utils';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+import UploaderComponent from '../UploaderComponent';
+import Input from '../inputs/Input';
 
 interface registroEntity {
   formData: any,
@@ -8,14 +11,46 @@ interface registroEntity {
   handleSubmit: any;
 }
 
-const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEntity) => {
+const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntity) => {
+  const fieldLabels = {
+    link1: "Link 1",
+    link2: "Link 2",
+    responsablePago: "Responsable de pago",
+    politicaPago: "Política de pago",
+    procesoFacturacion: "Proceso de facturación",
+    politicaPagoAgencia: "Política de pago para agencia",
+    procesoFacturacionAgencia: "Proceso de facturación para agencia",
+    contratoProyecto: "Contrato de proyecto",
+    tipoContratoProyecto: "Tipo de contrato de proyecto",
+    rondaCotizacion: "Ronda de cotización",
+    visualizacion: "Visualización",
+    politicaAltaProveedor:"Política de alta al proveedor",
+    anticipo:"Anticipo",
+    antesDeFilmar:'Antes de filmar',
+    porcentajeTasaAnticipo:'Porcentaje de tasa sobre el anticipo',
+    porcentajeTasaFiniquito:'Porcentaje de tasa sobre el finiquito',
+    porcentajeTasaTotal:'Porcentaje de tasa total',
+    informacionAdicional:'Política (Información adicional a considerar)',
+  };
 
+  const inputNames = Object.keys(fieldLabels);
   const router = useRouter();
   const projectId = router.query.id as string;
   const handleNext = () => {
-    handleSubmit('4');
+    const errorMessage = validateInputs(formData, inputNames, fieldLabels);
+    if (errorMessage) {
+      toast.error(errorMessage);
+    } else {
+      handleSubmit('4');
+    }
   };
+  const [showAgencyFields, setShowAgencyFields] = useState(false);
 
+  const handleResponsablePagoChange = (e) => {
+    const { value } = e.target;
+    handleChange(e);
+    setShowAgencyFields(value === "agencia");
+  };
   return (
     <div className="space-y-8 p-4">
 
@@ -83,7 +118,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEnti
               </div>
               <div>
                 <label htmlFor="line1"
-                       className="block text-sm font-medium text-gray-700">Referencias</label>
+                  className="block text-sm font-medium text-gray-700">Referencias</label>
                 <UploaderComponent identifier={'second_file'} projectId={projectId} />
               </div>
               <div>
@@ -102,62 +137,95 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEnti
           </div>
 
           <div>
-            <h2 className="text-xl font-bold mb-4">Licitación Finanzas</h2>
-            <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
-              <div>
-                <label htmlFor="responsablePago" className="block text-sm font-medium text-gray-700">Responsable
-                  de pago</label>
-                <select
-                  id="responsablePago"
-                  name="responsablePago"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData?.responsablePago}
-                  onChange={handleChange}
-                >
-                  <option value="">Seleccionar</option>
-                  <option value="Anunciante">Anunciante</option>
-                  <option value="Agencia de publicidad">Agencia de publicidad</option>
-                </select>
+            <div>
+              <h2 className="text-xl font-bold mb-4">Licitación Finanzas</h2>
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
+                <div>
+                  <label htmlFor="responsablePago" className="block text-sm font-medium text-gray-700">Responsable de pago</label>
+                  <select
+                    id="responsablePago"
+                    name="responsablePago"
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                    value={formData?.responsablePago}
+                    onChange={handleResponsablePagoChange}
+                  >
+                    <option value="">Seleccionar</option>
+                    <option value="anunciante">Anunciante</option>
+                    <option value="agencia">Agencia de publicidad</option>
+                  </select>
+                </div>
+
+                <div>
+                  <Input
+                    name="politicaPago"
+                    value={formData?.politicaPago}
+                    onChange={handleChange}
+                    label='Política de pago'
+                    placeholder="Ingrese la política de pago en días (Ej. 30 días)"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="procesoFacturacion" className="block text-sm font-medium text-gray-700">Proceso de facturación</label>
+                  <select
+                    id="procesoFacturacion"
+                    name="procesoFacturacion"
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                    value={formData?.procesoFacturacion}
+                    onChange={handleChange}
+                  >
+                    <option value="">Seleccionar</option>
+                    <option value="Asignación">Asignación</option>
+                    <option value="1er día de prod.">1er día de prod.</option>
+                    <option value="CT">CT</option>
+                    <option value="Entrega">Entrega</option>
+                    <option value="Posterior">Posterior</option>
+                  </select>
+                </div>
               </div>
-              <div>
-                <label htmlFor="procesoFacturacion"
-                       className="block text-sm font-medium text-gray-700">Proceso de facturación </label>
-                <select
-                  id="procesoFacturacion"
-                  name="procesoFacturacion"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData?.procesoFacturacion}
-                  onChange={handleChange}
-                >
-                  <option value="">Seleccionar</option>
-                  <option value="Asignación">Asignación</option>
-                  <option value="1er día de prod.">1er día de prod.</option>
-                  <option value="CT">CT</option>
-                  <option value="Entrega">Entrega</option>
-                  <option value="Posterior">Posterior</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="politicaPago" className="block text-sm font-medium text-gray-700">Política
-                  de pago</label>
-                <select
-                  id="politicaPago"
-                  name="politicaPago"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData?.politicaPago}
-                  onChange={handleChange}
-                >
-                  <option value="">Seleccionar</option>
-                  <option value="0 dias">0 dias</option>
-                  <option value="15 dias">15 dias</option>
-                  <option value="30 dias">30 dias</option>
-                  <option value="45 dias">45 dias</option>
-                  <option value="60 dias">60 dias</option>
-                  <option value="75 dias">75 dias</option>
-                  <option value="90 dias">90 dias</option>
-                  <option value="210 dias">210 dias</option>
-                </select>
-              </div>
+
+              {showAgencyFields && (
+                <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8 p-6 bg-white rounded-lg shadow-[0_0_10px_rgba(0,0,0,0.1)]">
+                  <div>
+                  <label htmlFor="agency" className="block text-sm font-medium text-gray-700">Agencia</label>
+                  <input
+                    type="text"
+                    id="agency"
+                    name="agency"
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-100"
+                    value="Agencia de publicidad"
+                    readOnly
+                  />
+                  </div>
+                  <div>
+                  <Input
+                    name="politicaPagoAgencia"
+                    value={formData?.politicaPagoAgencia}
+                    onChange={handleChange}
+                    label='Política de pago de agencia'
+                    placeholder="Ingrese la política de pago en días (Ej. 30 días)"
+                  />
+                  </div>
+                  <div>
+                  <label htmlFor="procesoFacturacionAgencia" className="block text-sm font-medium text-gray-700">Proceso de facturación para agencia</label>
+                  <select
+                    id="procesoFacturacionAgencia"
+                    name="procesoFacturacionAgencia"
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                    value={formData?.procesoFacturacionAgencia}
+                    onChange={handleChange}
+                  >
+                    <option value="">Seleccionar</option>
+                    <option value="Asignación">Asignación</option>
+                    <option value="1er día de prod.">1er día de prod.</option>
+                    <option value="CT">CT</option>
+                    <option value="Entrega">Entrega</option>
+                    <option value="Posterior">Posterior</option>
+                  </select>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className='grid grid-cols-2 md:grid-cols-2 gap-8 mb-8'>
               <div>
                 <label htmlFor="contratoProyecto" className="block text-sm font-medium text-gray-700">Contrato
                   de proyecto</label>
@@ -173,6 +241,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEnti
                   <option value="no">No</option>
                 </select>
               </div>
+
               <div>
                 <label htmlFor="tipoContratoProyecto" className="block text-sm font-medium text-gray-700">Tipo de contrato
                   de proyecto</label>
@@ -230,7 +299,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEnti
               </div>
               <div>
                 <label htmlFor="politicaAltaProveedor"
-                       className="block text-sm font-medium text-gray-700">Política de alta al
+                  className="block text-sm font-medium text-gray-700">Política de alta al
                   proveedor</label>
                 <textarea
                   id="politicaAltaProveedor"
@@ -249,7 +318,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEnti
             <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
               <div>
                 <label htmlFor="anticipo"
-                       className="block text-sm font-medium text-gray-700">Anticipo</label>
+                  className="block text-sm font-medium text-gray-700">Anticipo</label>
                 <select
                   id="anticipo"
                   name="anticipo"
@@ -279,7 +348,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEnti
               </div>
               <div>
                 <label htmlFor="porcentajeTasaAnticipo"
-                       className="block text-sm font-medium text-gray-700">Porcentaje de tasa sobre el
+                  className="block text-sm font-medium text-gray-700">Porcentaje de tasa sobre el
                   anticipo</label>
                 <input
                   type="number"
@@ -293,7 +362,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEnti
               </div>
               <div>
                 <label htmlFor="porcentajeTasaFiniquito"
-                       className="block text-sm font-medium text-gray-700">Porcentaje de tasa sobre el
+                  className="block text-sm font-medium text-gray-700">Porcentaje de tasa sobre el
                   finiquito</label>
                 <input
                   type="number"
@@ -308,7 +377,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEnti
 
               <div>
                 <label htmlFor="porcentajeTasaTotal"
-                       className="block text-sm font-medium text-gray-700">Porcentaje de tasa
+                  className="block text-sm font-medium text-gray-700">Porcentaje de tasa
                   total</label>
                 <input
                   type="number"
@@ -322,7 +391,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEnti
               </div>
               <div>
                 <label htmlFor="informacionAdicional"
-                       className="block text-sm font-medium text-gray-700">Política (Información adicional a
+                  className="block text-sm font-medium text-gray-700">Política (Información adicional a
                   considerar)</label>
                 <textarea
                   id="informacionAdicional"
@@ -338,10 +407,10 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit,  }: registroEnti
 
           <div className="flex justify-center space-x-4">
             <button type="button" className="w-1/4 bg-white text-red-500 border border-red-500 py-2 rounded"
-                    onClick={() => handleSubmit('2')}>Atras
+              onClick={() => handleSubmit('2')}>Atras
             </button>
             <button type="button" className="w-1/4 bg-red-500 text-white py-2 rounded"
-                    onClick={handleNext}>Siguiente
+              onClick={handleNext}>Siguiente
             </button>
           </div>
         </div>

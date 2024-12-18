@@ -1,4 +1,6 @@
 import { FaCheck } from "react-icons/fa";
+import Input from "../inputs/Input";
+
 
 interface registroEntity {
   formData: any,
@@ -133,26 +135,20 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
             {/* Post Producción Section */}
             <div>
               <h2 className="text-xl font-bold mb-4">Post producción</h2>
-              {['edicion', 'audio', 'online', 'masterizacion'].map((item) => (
+              {['edicion', 'audio', 'online', 'masterizacion','cc'].map((item) => (
                   <div key={item} className="grid grid-cols-2 gap-4 mb-4">
                     <input
                         type="number"
                         placeholder={item.charAt(0).toUpperCase() + item.slice(1)}
                         className="border p-2 w-full"
                         name={`postProduccion.${item}.numero`}
-                        value={formData.postProduccion[item].numero}
-                        onChange={handleChange}
-                    />
-                    <input
-                        type="number"
-                        placeholder="CC"
-                        className="border p-2 w-full"
-                        name={`postProduccion.${item}.cc`}
-                        value={formData.postProduccion[item].cc}
+                        value={formData.postProduccion[item]}
                         onChange={handleChange}
                     />
                   </div>
               ))}
+
+              <Input label={"Descripción adicional"} onChange={handleChange} name="postproduccion.descripcion" value={formData.postproduccion}/>
             </div>
           </div>
 

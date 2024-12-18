@@ -51,6 +51,7 @@ const Comparacion: React.FC<ComparisonProps> = ({ data }) => {
   const [projectAssigned, setProjectAssigned] = useState(false);
   
   const router = useRouter()
+  
 
   const backToList = () => {
     router.back()

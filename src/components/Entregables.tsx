@@ -132,7 +132,7 @@ const Entregables = ({
             name="locutor"
             className="mt-1 block w-3/4 p-2 border border-gray-300 rounded-md"
             placeholder="Descripción aquí"
-            value={formData.locutor}
+            value={formData.locutor || 0}
             onChange={handleChange}
           />
         </div>

@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
-import "./globals.css";
+import Layout from "@/components/Layout";
+import Loader from "@/components/Loader";
+import CreatedProject from "@/components/Proyecto/ProjectCreated";
 import ProyectoSteep1 from "@/components/Proyecto/ProyectoSteep1";
 import ProyectoSteep2 from "@/components/Proyecto/ProyectoSteep2";
-import ProyectoSteep4 from "@/components/Proyecto/ProyectoSteep4";
 import ProyectoSteep3 from "@/components/Proyecto/ProyectoSteep3";
+import ProyectoSteep4 from "@/components/Proyecto/ProyectoSteep4";
 import ProyectoSteep5 from "@/components/Proyecto/ProyectoSteep5";
-import { useRouter } from "next/router";
-import Layout from "@/components/Layout";
-import useProject from "@/hooks/project.hook";
-import { CreateProjectDto } from "@/dto/create-project.dto";
-import { UpdateProjectDto } from "@/dto/update-project.dto";
-import CreatedProject from "@/components/Proyecto/ProjectCreated";
-import { ProjectMapper, ProjectStatus } from "@/mappers/project.mapper";
-import { toast } from "react-hot-toast";
-import { formatToUtcBackend, validateFormData } from "@/lib/utils";
-import Loader from "@/components/Loader";
 import StepIndicator from "@/components/Proyecto/StepIndicator/StepIndicator";
 import { CompanyType } from "@/constants";
+import { CreateProjectDto } from "@/dto/create-project.dto";
+import { UpdateProjectDto } from "@/dto/update-project.dto";
+import useProject from "@/hooks/project.hook";
+import { formatToUtcBackend, validateFormData } from "@/lib/utils";
+import { ProjectMapper, ProjectStatus } from "@/mappers/project.mapper";
 import { useUserContext } from "@/providers/user.context";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import "./globals.css";
 
 const Proyecto: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -44,7 +44,6 @@ const Proyecto: React.FC = () => {
     entregaPresupuesto: "",
     entregaProyecto: "",
     presupuesto: "",
-    moneda: "",
     link1: "",
     link2: "",
     responsablePago: "",
@@ -66,10 +65,9 @@ const Proyecto: React.FC = () => {
     locacion: "",
     maquillajepeinado: "",
     musica: "",
+    postproduccion: "",
     animacion: "",
     vfx: "",
-    cantidadAsistentes: "",
-    puestoAsistentes: "",
     comentarioEntregables: "",
     comentarios: "",
     titularResponsable: "",
@@ -91,8 +89,9 @@ const Proyecto: React.FC = () => {
     aCargoDe: "",
     creatividadAprobada: "",
     tipoContratoProyecto: "",
-    entregaBidLetter: "",
     entregables: [],
+    politicaPagoAgencia:"",
+    procesoFacturacionAgencia:""
   });
   const router = useRouter();
   const { id } = router.query;
@@ -123,8 +122,8 @@ const Proyecto: React.FC = () => {
       product: formData?.product,
       projectName: formData?.projectName,
       budget: Number(formData?.presupuesto),
-      bidDeadline: formData?.entregaBidLetter
-        ? formatToUtcBackend(formData.entregaBidLetter)
+      bidDeadline: formData?.entregaPresupuesto
+        ? formatToUtcBackend(formData.entregaPresupuesto)
         : undefined,
       extra: formData,
       status: page === "6" ? ProjectStatus.InProgress : ProjectStatus.Draft, // Cuando termina de crear el proyecto, se cambia el estado a En proceso

@@ -3,7 +3,7 @@ import { IDirector } from "@/interfaces/director.interface";
 import { IProject } from "@/interfaces/project.interface";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
-import { CheckProjectInvitationStatusResponse } from "@/interfaces/project-director.interface";
+import { CheckProjectInvitationStatusResponse, IProjectInvitation } from "@/interfaces/project-director.interface";
 import ApiService from "@/lib/api";
 import { manageLogicError } from "@/lib/utils";
 import { IInvitationResponse } from "@/interfaces/invitation.interface";
@@ -83,7 +83,7 @@ export const acceptInvitation = async (token: string) => {
 };
 export const getPostulationById = async (postulationId: string) => {
     const response = await api.get(`/postulation/${postulationId}`);
-    return response.data as { metadata: Record<string, any>, project: IProject, status: string };
+    return response.data as { metadata: Record<string, any>, projectInvitation: IProjectInvitation, status: string };
 }
 
 export const declineInvitation = async (tokenOrInvitationId: string) => {

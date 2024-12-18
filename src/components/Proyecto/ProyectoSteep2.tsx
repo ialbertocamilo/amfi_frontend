@@ -1,5 +1,5 @@
+import { validateInputs } from '@/lib/utils';
 import toast from 'react-hot-toast';
-import StepIndicator from './StepIndicator/StepIndicator';
 
 interface registroEntity {
   formData: any;
@@ -39,10 +39,42 @@ const TerritorioSelect: React.FC<TerritorioSelectProps> = ({ value, onChange, na
 };
 
 const ProyectoSteep2 = ({
-                          formData,
-                          handleChange,
-                          handleSubmit,
-                        }: registroEntity) => {
+  formData,
+  handleChange,
+  handleSubmit,
+}: registroEntity) => {
+
+  const fieldLabels = {
+    medios: 'Medios',
+    temporalidad: 'Temporalidad',
+    desglose: 'Desglose',
+    territorio1: 'Territorio 1',
+    territorio2: 'Territorio 2',
+    territorio3: 'Territorio 3',
+    tipoProduccion1: 'Tipos de producción 1',
+    tipoProduccion2: 'Tipos de producción 2',
+    tipoProduccion3: 'Tipos de producción 3',
+    productodummie: 'Producto/Dummie',
+    cantidadDiasProduccion: 'Cantidad días de producción',
+    creatividadAprobada: 'Creatividad aprobada por anunciante',
+    entregaBrief: 'Entrega de Brief',
+    entregaPresupuesto: 'Entrega presupuesto y TT',
+    entregaProyecto: 'Entrega proyecto',
+    presupuestoAsignado: 'Presupuesto asignado',
+    presupuesto: 'Monto',
+  };
+
+  const inputNames = Object.keys(fieldLabels);
+
+  const onNext = () => {
+
+    const errorMessage = validateInputs(formData, inputNames, fieldLabels)
+    if (errorMessage) {
+      toast.error(errorMessage);
+    } else {
+      handleSubmit('3');
+    }
+  }
   return (
     <div className="space-y-8 p-4">
 
@@ -241,19 +273,6 @@ const ProyectoSteep2 = ({
                   name="entregaPresupuesto"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.entregaPresupuesto || ''}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label htmlFor="entregaBidLetter" className="block text-sm font-medium text-gray-700">
-                  Limite de entrega de ofertas
-                </label>
-                <input
-                  type="date"
-                  id="entregaBidLetter"
-                  name="entregaBidLetter"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                  value={formData?.entregaBidLetter || ''}
                   onChange={(e) => {
                     const selectedDate = new Date(e.target.value);
                     const currentDate = new Date();
@@ -316,17 +335,7 @@ const ProyectoSteep2 = ({
                     step="0.01"
                     placeholder="Ingrese el presupuesto"
                   />
-                  <select
-                    id="moneda"
-                    name="moneda"
-                    className="mt-1 block p-2 border border-gray-300 rounded-md bg-white"
-                    value={formData?.moneda || ''}
-                    onChange={handleChange}
-                  >
-                    <option value="">Seleccionar</option>
-                    <option value="mxn">MXN</option>
-                    <option value="usd">USD</option>
-                  </select>
+                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2">MXN</span>
                 </div>
 
               </div>
@@ -343,7 +352,7 @@ const ProyectoSteep2 = ({
             <button
               type="button"
               className="w-1/4 bg-red-500 text-white py-2 rounded"
-              onClick={() => handleSubmit('3')}
+              onClick={onNext}
             >
               Siguiente
             </button>

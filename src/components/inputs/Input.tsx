@@ -6,6 +6,8 @@ interface InputProps {
   className?: string;
   name?: string;
   value?: string;
+  placeholder?:string;
+  posText?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -15,19 +17,24 @@ const Input: React.FC<InputProps> = ({
   className = "",
   name,
   value,
+  posText,
   onChange,
+  placeholder
 }) => {
   return (
     <div>
-      <label>{label}</label>
+      <label className="block text-sm font-medium">{label}</label>
       <input
         type={type}
         className={`border p-2 w-full rounded-lg ${className}`}
         name={name}
         value={value}
-        placeholder={"Ingrese " + label}
+        placeholder={placeholder || "Ingrese " + label}
         onChange={onChange}
       />
+      {posText && (
+        <span className="absolute right-3 top-1/2 transform -translate-y-1/2">{posText}</span>
+      )}
     </div>
   );
 };

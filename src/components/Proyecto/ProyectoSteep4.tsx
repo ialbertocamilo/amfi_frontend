@@ -1,8 +1,11 @@
 import { getOwnerByCompany, getSecondaryUsers } from '@/api/userApi';
 import Entregables from '@/components/Entregables';
 import { IUser } from '@/interfaces/user.interface';
+import { validateInputs } from '@/lib/utils';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import Input from '../inputs/Input';
 
 interface registroEntity {
   formData: any;
@@ -13,11 +16,11 @@ interface registroEntity {
 }
 
 const ProyectoSteep4 = ({
-                          formData,
-                          setEntregables, entregables,
-                          handleChange,
-                          handleSubmit,
-                        }: registroEntity) => {
+  formData,
+  setEntregables, entregables,
+  handleChange,
+  handleSubmit,
+}: registroEntity) => {
   const [secondaryUsers, setSecondaryUsers] = useState<IUser[]>();
   const [owner, setOwner] = useState('');
   const router = useRouter();
@@ -29,7 +32,7 @@ const ProyectoSteep4 = ({
 
     getOwnerByCompany().then((res) => {
       if (res) {
-        const fullname=res.name + ' ' + res.lastname
+        const fullname = res.name + ' ' + res.lastname
         setOwner(fullname);
         if (formData) {
           handleChange({ target: { name: 'titularResponsable', value: fullname } });
@@ -38,7 +41,40 @@ const ProyectoSteep4 = ({
       }
     });
   }, []);
+  const fieldLabels = {
+    talento: "Talento",
+    talentoExclusividad: "Exclusividad",
+    talentoTipoCasting: "Tipo casting",
+    talentoACargoDe: "A cargo de",
+    competencia: "Competencia",
+    menoresDeEdad: "Menores de edad",
+    animales: "Animales", 
+    especieProtegida: "Especie protegida",
+    locacion: "Locación",
+    vestuario: "Vestuario",
+    efectos: "Efectos",
+    maquillajepeinado: "Maquillaje y peinado",
+    arteprops: "Arte",
+    locucionInstitucional: "Locución Institucional",
+    locucionAgencia: "Locución Agencia",
+    musica: "Música",
+    aCargoDe: "A cargo de",
+    postproduccion: "Post producción",
+    animacion: "Animación",
+    vfx: "VFX",
+    comentarioEntregables: "Comentarios de entregables",
+    comentarios: "Comentarios",
+    titularResponsable: "Titular responsable",
+  };
 
+  const onNext = () => {
+    const errorMessage = validateInputs(formData, Object.keys(fieldLabels), fieldLabels);
+    if (errorMessage) {
+      toast.error(errorMessage);
+    } else {
+      handleSubmit('5');
+    }
+  };
   return (
     <div className="space-y-8 p-4">
       <form>
@@ -272,27 +308,10 @@ const ProyectoSteep4 = ({
             </div>
             <div>
               <label
-                htmlFor="cinematografía"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Cinematografía
-              </label>
-              <input
-                type="text"
-                id="cinematografía"
-                name="cinematografia"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Descripción aquí"
-                value={formData?.cinematografia}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label
                 htmlFor="arte/props"
                 className="block text-sm font-medium text-gray-700"
               >
-                Arte/ Props
+                Arte
               </label>
               <input
                 type="text"
@@ -393,25 +412,17 @@ const ProyectoSteep4 = ({
             </div>
 
           </div>
-          {/* Sección: Post Producción */}
-          <h2 className="text-md font-medium mb-4">Post producción</h2>
-          <div className="grid grid-cols-2 gap-8 mb-8">
+
+          <div className="grid grid-cols-2 gap-8">
             <div>
-              <label
-                htmlFor="animacion"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Animación (Tipo de animación que se solicita: 2D, 3D, Motion graphics, stop motion y/o técnicas.)
-              </label>
-              <input
-                type="text"
-                id="animacion"
-                name="animacion"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                placeholder="Descripción aquí"
-                value={formData.animacion}
-                onChange={handleChange}
-              />
+
+            <Input label={'Animación'} name='animacion' value={formData.animacion} onChange={handleChange}/>
+            
+            <span className='text-sm font-medium'>Tipo de animación que se solicita: 2D, 3D, Motion graphics, stop motion y/o técnicas.</span>
+            </div>
+            <div>
+              <Input label={'Post producción'} name='postproduccion' 
+              value={formData.postproduccion} onChange={handleChange}/>
             </div>
             <div>
 
@@ -432,47 +443,7 @@ const ProyectoSteep4 = ({
               />
             </div>
           </div>
-          {/* Sección: Asistentes filmación */}
-          <h2 className="text-xl font-bold mb-4">Asistentes filmación</h2>
-          <div className="grid grid-cols-2 gap-8 mb-8">
-            <div>
-              <label
-                htmlFor="cantidadAsistentes"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Cantidad
-              </label>
-              <input
-                type="number"
-                id="cantidadAsistentes"
-                name="cantidadAsistentes"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.cantidadAsistentes}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="puestoAsistentes"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Puesto
-              </label>
-              <select
-                id="puestoAsistentes"
-                name="puestoAsistentes"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                value={formData?.puestoAsistentes}
-                onChange={handleChange}
-              >
-                <option value="">Seleccionar</option>
-                <option value="Cámara">Cámara</option>
-                <option value="Sonido">Sonido</option>
-                <option value="Producción">Producción</option>
-              </select>
-            </div>
-          </div>
-
+          <br />
           {/* Sección: Entregables */}
           <h2 className="text-xl font-bold mb-4">Entregables</h2>
           <div className="grid grid-cols-2 gap-8 mb-8">
@@ -488,7 +459,7 @@ const ProyectoSteep4 = ({
             </div>
             <div className="">
               <label htmlFor="comentarioEntregables"
-                     className="block text-sm font-medium text-gray-700">Comentarios</label>
+                className="block text-sm font-medium text-gray-700">Comentarios</label>
               <textarea
                 id="comentarioEntregables"
                 name="comentarioEntregables"
@@ -574,9 +545,7 @@ const ProyectoSteep4 = ({
             <button
               type="button"
               className="w-1/4 bg-red-500 text-white py-2 rounded"
-              onClick={() => {
-                handleSubmit('5');
-              }}
+              onClick={onNext}
             >
               Siguiente
             </button>
