@@ -1,8 +1,8 @@
-import React, {Fragment, useEffect, useRef, useState} from "react";
-import {FaUpload} from "react-icons/fa";
-import {downloadFile, uploadFileToProject} from "@/api/filesApi";
-import toast from "react-hot-toast";
+import { downloadFile, uploadFileToProject } from "@/api/filesApi";
 import useDownloadFiles from "@/hooks/files.hook";
+import React, { Fragment, useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
+import { FaUpload } from "react-icons/fa";
 
 const UploaderComponent: React.FC<{ projectId: string; identifier: string, blockUpload?: boolean }> = ({
                                                                                                           blockUpload = false,
@@ -23,11 +23,6 @@ const UploaderComponent: React.FC<{ projectId: string; identifier: string, block
         }
     };
 
-    useEffect(() => {
-        if (fileData) {
-
-        }
-    }, [fileData]);
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();

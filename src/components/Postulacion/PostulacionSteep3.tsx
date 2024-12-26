@@ -78,7 +78,7 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                     placeholder="Descripción adicional"
                     className="border p-2 w-full"
                     name="locaciones.descripcion"
-                    value={formData.locaciones.descripcion}
+                    value={formData.locaciones?.descripcion||''}
                     onChange={handleChange}
                 />
               </div>
@@ -148,7 +148,7 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                   </div>
               ))}
 
-              <Input label={"Descripción adicional"} onChange={handleChange} name="postproduccion.descripcion" value={formData.postproduccion}/>
+              <Input label={"Descripción adicional"} onChange={handleChange} name="postproduccion.descripcion" value={formData.postproduccion?.descripcion}/>
             </div>
           </div>
 

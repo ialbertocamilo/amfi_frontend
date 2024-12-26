@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import {getFileByProjectIdAndIdentifier, getFilesByProjectId} from "@/api/filesApi";
-import {IFileDataResponse} from "@/interfaces/file.interface";
+import { getFileByProjectIdAndIdentifier } from "@/api/filesApi";
+import { IFileDataResponse } from "@/interfaces/file.interface";
+import { useEffect, useState } from 'react';
 
 const useDownloadFiles = (projectId: string, identifier:string) => {
     const [fileData, setFileData] = useState<IFileDataResponse|null>()

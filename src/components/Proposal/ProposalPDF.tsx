@@ -3,6 +3,7 @@ import React from 'react';
 import { BidLetterSection } from './BidLetterSection';
 import { BudgetSection } from './BudgetSection';
 import { CrewSection } from './CrewSection';
+import { DeliverableSection } from './DeliverableSection';
 import { EquipmentSection } from './EquipmentSection';
 import './ProposalPDF.css';
 import { ReportHeader } from './ReportHeader';
@@ -16,6 +17,7 @@ const ProposalPDF: React.FC<{ data: any, productionHouse: ICompany | undefined }
       <BidLetterSection data={data} />
       <CrewSection data={data} />
       <EquipmentSection data={data} />
+      <DeliverableSection data={data} />
       </div>
     </div>
   </div>

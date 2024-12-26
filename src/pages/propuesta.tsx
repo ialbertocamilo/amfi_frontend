@@ -12,7 +12,7 @@ import { usePDF } from "react-to-pdf";
 const Propuesta = () => {
     const [isClient, setIsClient] = useState(false);
 
-    const { toPDF, targetRef } = usePDF({ filename: 'page.pdf' });
+    const { toPDF, targetRef } = usePDF({ filename: 'propuesta.pdf' });
     useEffect(() => {
         setIsClient(true);
     }, []);

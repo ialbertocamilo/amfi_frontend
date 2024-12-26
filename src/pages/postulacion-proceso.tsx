@@ -11,13 +11,13 @@ import PostulacionSteep1 from "@/components/Postulacion/PostulacionSteep1";
 import PostulacionSteep2 from "@/components/Postulacion/PostulacionSteep2";
 import PostulacionSteep3 from "@/components/Postulacion/PostulacionSteep3";
 import PostulacionSteep4 from "@/components/Postulacion/PostulacionSteep4";
+import StepIndicator from "@/components/Proyecto/StepIndicator/StepIndicator";
 import { IProject } from "@/interfaces/project.interface";
 import { manageLogicError } from "@/lib/utils";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import "./globals.css";
-import StepIndicator from "@/components/Proyecto/StepIndicator/StepIndicator";
 
 //?projectInvitationId=
 const PostulacionProceso: React.FC = () => {
@@ -60,6 +60,7 @@ const PostulacionProceso: React.FC = () => {
       audio: { numero: "", cc: "" },
       online: { numero: "", cc: "" },
       masterizacion: { numero: "", cc: "" },
+      descripcion:''
     },
     animacion: {
       twoD: "",
@@ -82,17 +83,10 @@ const PostulacionProceso: React.FC = () => {
       voces: "",
       descripcion: "",
     },
-    entregables: {
-      titulo: "",
-      duracion: "",
-      formato: "",
-      lift: "",
-      descripcion: "",
-      notas: "",
-    },
+    entregables: {lista: []},
+    notas:{text:''},
     presupuesto: {
       total: "",
-      moneda: "",
       personal: "",
       preYPro: "",
       talento: "",
@@ -127,6 +121,7 @@ const PostulacionProceso: React.FC = () => {
       especializado: "",
       descripcionAdicional: "",
     },
+    files: [] as File[],
   });
   const router = useRouter();
   const { projectInvitationId } = router.query;
@@ -245,10 +240,21 @@ const PostulacionProceso: React.FC = () => {
     setActiveTab(page);
   };
 
+  const onLoadFiles = (files: File[]) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      files: files,
+    }));
+  };
   return (
     <Layout>
       <Loader loading={loading}>
         <h1 className="text-2xl font-bold mb-6 ">Proyecto</h1>
+        <div className="flex justify-end mb-4">
+          <button className="bg-green-500 hover:bg-green-600 border text-white font-bold py-2 px-4 rounded" onClick={() => router.push(`/consulta-brief?projectInvitationId=${projectInvitationId}`)}>
+            Consultar Brief
+          </button>
+        </div>
         <div className="text-sm text-gray-500 mb-8">
           <span>Lista de Proyectos</span> {">"} <span>{projectName}</span> {">"}{" "}
           <span>Postular</span>
@@ -291,6 +297,7 @@ const PostulacionProceso: React.FC = () => {
             handleSubmit={handleSubmit}
             activeTab={activeTab}
             setactiveTab={setActiveTab}
+            files={onLoadFiles}
           />
         )}
 

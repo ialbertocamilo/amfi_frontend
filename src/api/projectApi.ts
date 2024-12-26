@@ -4,7 +4,6 @@ import moment from 'moment';
 import { CreateProjectDto } from "../dto/create-project.dto";
 import { UpdateProjectDto } from "../dto/update-project.dto";
 import { Budget, Evaluation, InvitedDirectorsResponse } from "./interface/api.interface";
-import { IInvitationResponse } from "@/interfaces/invitation.interface";
 import { EvaluationScore } from "@/components/DetalleProyecto/Comparacion";
 import { IProject } from '@/interfaces/project.interface';
 
