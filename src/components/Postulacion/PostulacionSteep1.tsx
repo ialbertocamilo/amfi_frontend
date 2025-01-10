@@ -147,11 +147,17 @@ const PostulacionSteep1 = ({
         </div>
         <br />
 
-        {/* Sección Bid Letter */}
+        {/* Sección Proyecto */}
         <div>
-          <h2 className="text-2xl font-semibold mb-4">Bid Letter</h2>
-          <h2 className="text-1xl font-semibold mb-4">Dias</h2>
+          <h2 className="text-2xl font-semibold mb-4">Proyecto</h2>
             <div className="grid grid-cols-2 gap-4">
+            <Input
+              label={"Días"}
+              type={"text"}
+              name={"bidLetter.dias"}
+              value={formData.bidLetter.dias}
+              onChange={handleChange}
+            />
             <Input
               label={"Producción"}
               type={"text"}
@@ -192,15 +198,9 @@ const PostulacionSteep1 = ({
               value={formData.bidLetter.version}
               onChange={handleChange}
             />
-            <Input
-              label={"Descripción"}
-              type={"text"}
-              name={"bidLetter.descripcion"}
-              value={formData.bidLetter.descripcion}
-              onChange={handleChange}
-            />
             </div>
         </div>
+        <br />
 
         {/* Sección Crew */}
         <div>
@@ -259,6 +259,7 @@ const PostulacionSteep1 = ({
           </div>
         </div>
 
+        <br />
         {/* Sección Equipo */}
         <div>
           <h2 className="text-2xl font-semibold mb-4">Equipo</h2>

@@ -192,8 +192,6 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
             />
           </div>
 
-          {/* Proposal uploader Section */}
-          <ProposalUploaderComponent identifier={"1"} onFilesChange={files}/>
 <br />
           {/* Entregables Section */}
             <div className="grid grid-cols-1 gap-4 mb-4">
@@ -208,8 +206,7 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
               />
             </div>
           <div>
-            <h2>Notas</h2>
-
+            <h2 className="text-xl font-bold mb-4">Notas</h2>
             <textarea
               placeholder="Escriba sus notas aquí"
               className="border p-2 w-full"
@@ -217,6 +214,12 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
               value={formData.notas?.text}
               onChange={handleChange}
             />
+          </div>
+          {/* Proposal uploader Section */}
+          <div>
+          <h2 className="text-xl font-bold mb-4">Subir archivos adjuntos</h2>
+          <ProposalUploaderComponent identifier={"1"} onFilesChange={files}/>
+
           </div>
         </div>
         {/* Botones */}

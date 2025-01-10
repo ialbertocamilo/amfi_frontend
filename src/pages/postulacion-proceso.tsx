@@ -105,7 +105,7 @@ const PostulacionProceso: React.FC = () => {
       foraneo: "",
       ciudad: "",
       version: "",
-      descripcion: "",
+      dias: ""
     },
     crew: {
       direccion: "",

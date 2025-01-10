@@ -7,6 +7,7 @@ interface Entregable {
     duracion: number;
     formato: string;
     lift: string;
+    descripcion: string;
 }
 
 const EntregablePostulacion = ({
@@ -18,13 +19,15 @@ const EntregablePostulacion = ({
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
-    const [formData, setFormData] = useState<Entregable>({
+    const initialData={
         id: '',
         titulo: '',
         duracion: 0,
         formato: '',
-        lift: ''
-    });
+        lift: '',
+        descripcion:''
+    }
+    const [formData, setFormData] = useState<Entregable>(initialData);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -46,13 +49,7 @@ const EntregablePostulacion = ({
             setEntregables([...entregables, newEntregable]);
         }
 
-        setFormData({
-            id: '',
-            titulo: '',
-            duracion: 0,
-            formato: '',
-            lift: ''
-        });
+        setFormData(initialData);
         setIsModalOpen(false);
     };
 
@@ -95,6 +92,7 @@ const EntregablePostulacion = ({
                                             <p>Duración: {entregable.duracion}</p>
                                             <p>Formato: {entregable.formato}</p>
                                             <p>Lift: {entregable.lift}</p>
+                                            <p>Descripción: {entregable.descripcion}</p>
                                         </div>
                                         <div className="space-x-2">
                                             <button
@@ -170,6 +168,18 @@ const EntregablePostulacion = ({
                                                 onChange={handleInputChange}
                                             />
                                         </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">
+                                                Descripción
+                                            </label>
+                                            <input
+                                                type="text"
+                                                name="descripcion"
+                                                className="mt-1 block w-full p-2 border rounded-md"
+                                                value={formData.descripcion}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
                                     </div>
                                     <div className="mt-4 flex justify-end space-x-2">
                                         <button
@@ -177,13 +187,7 @@ const EntregablePostulacion = ({
                                             onClick={() => {
                                                 setIsModalOpen(false);
                                                 setEditingId(null);
-                                                setFormData({
-                                                    id: '',
-                                                    titulo: '',
-                                                    duracion: 0,
-                                                    formato: '',
-                                                    lift: ''
-                                                });
+                                                setFormData(initialData);
                                             }}
                                         >
                                             Cancelar
