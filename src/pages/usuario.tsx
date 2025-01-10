@@ -11,7 +11,7 @@ const UserInfo: React.FC = () => {
   const { id } = router.query;
   const [user, setUser] = useState<IUser | null>(null);
 
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
     if (id) {
@@ -24,7 +24,7 @@ const UserInfo: React.FC = () => {
 
   return (
     <Layout>
-      <Loading loading={loading} />
+      <Loading loading={loading} >
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Información de usuario</h1>
         <div className="bg-white shadow-md rounded p-4">
@@ -38,20 +38,21 @@ const UserInfo: React.FC = () => {
             <strong>Email:</strong> {user?.email}
           </p>
           <p>
-            <strong>Rol:</strong> {UserMapper.mapRole(user?.role)}
+            <strong>Rol:</strong> {user?UserMapper.mapRole(user?.role):''}
           </p>
           <p>
             <strong>Empresa:</strong> {}
           </p>
           <p>
             <strong>Fecha de registro:</strong>{" "}
-            {new Date(user?.createdAt).toLocaleDateString()}
+            {user? new Date(user.createdAt).toLocaleDateString():''}
           </p>
           <p>
             <strong>Verificado:</strong> {user?.isVerified ? "Sí" : "No"}
           </p>
         </div>
       </div>
+      </Loading>
     </Layout>
   );
 };
