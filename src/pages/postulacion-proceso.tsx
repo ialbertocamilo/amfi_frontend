@@ -55,12 +55,12 @@ const PostulacionProceso: React.FC = () => {
       foraneo: "",
       descripcion: "",
     },
-    postProduccion: {
-      edicion: { numero: "", cc: "" },
-      audio: { numero: "", cc: "" },
-      online: { numero: "", cc: "" },
-      masterizacion: { numero: "", cc: "" },
-      descripcion:''
+    postproduccion: {
+      edicion: { numero: "" },
+      audio: { numero: "" },
+      online: { numero: "" },
+      masterizacion: { numero: "" },
+      cc: { numero: "" }
     },
     animacion: {
       twoD: "",
@@ -83,8 +83,8 @@ const PostulacionProceso: React.FC = () => {
       voces: "",
       descripcion: "",
     },
-    entregables: {lista: []},
-    notas:{text:''},
+    entregables: { lista: [] },
+    notas: { text: '' },
     presupuesto: {
       total: "",
       personal: "",
@@ -99,10 +99,10 @@ const PostulacionProceso: React.FC = () => {
       markUp: "",
     },
     bidLetter: {
-      produccion: "",
-      locacion: "",
-      foro: "",
-      foraneo: "",
+      produccion: { dias: "", ciudad: "", versiones: "" },
+      locacion: { dias: "", versiones: "" },
+      foro: { dias: "" },
+      foraneo: { dias: "" },
       ciudad: "",
       version: "",
       dias: ""

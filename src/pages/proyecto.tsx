@@ -21,11 +21,12 @@ import "./globals.css";
 
 const Proyecto: React.FC = () => {
   const [formData, setFormData] = useState({
+    advertiserId: null,
+    agencyId: null,
     brand: "",
     product: "",
     projectName: "",
     versionName: "",
-    agencyName: "",
     agencyEmail: "",
     agencyProductor: "",
     agencyCreativeDirector: "",
@@ -90,8 +91,8 @@ const Proyecto: React.FC = () => {
     creatividadAprobada: "",
     tipoContratoProyecto: "",
     entregables: [],
-    politicaPagoAgencia:"",
-    procesoFacturacionAgencia:""
+    politicaPagoAgencia: "",
+    procesoFacturacionAgencia: ""
   });
   const router = useRouter();
   const { id } = router.query;
@@ -123,8 +124,10 @@ const Proyecto: React.FC = () => {
       projectName: formData?.projectName,
       budget: Number(formData?.presupuesto),
       bidDeadline: formData?.entregaPresupuesto
-        ? formatToUtcBackend(formData.entregaPresupuesto)
-        : undefined,
+      ? formatToUtcBackend(formData.entregaPresupuesto)
+      : undefined,
+      advertiserId: user?.company?.type === CompanyType.Advertiser ? user.company.id : formData?.advertiserId ?? undefined,
+      agencyId: user?.company?.type === CompanyType.Agency ? user.company.id : formData?.agencyId ?? undefined,
       extra: formData,
       status: page === "6" ? ProjectStatus.InProgress : ProjectStatus.Draft, // Cuando termina de crear el proyecto, se cambia el estado a En proceso
     };
@@ -157,9 +160,15 @@ const Proyecto: React.FC = () => {
           agencyEmail,
           agencyName,
         }));
+      } else {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          client: user?.company?.legalName,
+        }));
       }
     }
   }, [user]);
+
   useEffect(() => {
     if (id) {
       setLoading(true);
@@ -248,6 +257,7 @@ const Proyecto: React.FC = () => {
               handleSubmit={handleSubmit}
               isEditing={readonly}
               readonly={readonly}
+              project={project}
             />
           )}
           {activeTab === "2" && (

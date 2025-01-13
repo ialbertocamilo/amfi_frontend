@@ -1,7 +1,7 @@
 export class UpdateProjectDto {
   id?:string
-  advertiserId?: string;
-  agencyId?: string;
+  advertiserId: string;
+  agencyId: string;
   brand?: string;
   product?: string;
   projectName?: string;

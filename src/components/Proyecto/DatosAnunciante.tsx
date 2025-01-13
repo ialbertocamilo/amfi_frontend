@@ -1,34 +1,46 @@
-import React from 'react';
+import { CompanyType } from '@/constants';
+import { useUserContext } from '@/providers/user.context';
+import React, { useEffect, useState } from 'react';
+import AddAnunciante from './AddAnunciante';
+import { ICompany } from '@/interfaces/company.interface';
 
 interface DatosAnuncianteProps {
   formData: Record<string, any>;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   readonly?: boolean;
+  advertiser?: ICompany;
 }
 
-const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ formData, handleChange, readonly }) => {
+const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ advertiser,formData, handleChange, readonly }) => {
 
+  const userContext = useUserContext();
+  const user = userContext?.user;
+  const [blocked, setBlocked] = useState(false);
 
+  useEffect(() => {
+    if (
+      user &&
+      user.company?.type === CompanyType.Advertiser 
+    ) {
+      setBlocked(true)
+    }
+  }, [user]);
+
+  const selectingAnunciante= (result: ICompany) => {
+
+    handleChange({
+      target: {
+        name: 'advertiserId',
+        value: result?.id || ''
+      } as any
+    } as any);
+  }
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">Datos del anunciante</h2>
       <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
-        <div>
-          <label htmlFor="client" className="block text-sm font-medium text-gray-700">
-            Cliente
-          </label>
-          <input
-            type="text"
-            id="client"
-            name="client"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            value={formData?.client || ''}
-            onChange={handleChange}
-            disabled={readonly}
-          />
-        </div>
-        {/* TODO: agregar anunciante */}
-        {/* <AddAnunciante/> */}
+
+        {user && <AddAnunciante user={user} doSelect={selectingAnunciante} />}
         <div>
           <label htmlFor="brand" className="block text-sm font-medium text-gray-700">
             Marca

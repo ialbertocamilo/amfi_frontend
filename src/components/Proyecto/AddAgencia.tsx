@@ -5,33 +5,34 @@ import FastSearch from '../modals/FastSearch';
 import { IUser } from '@/interfaces/user.interface';
 import { CompanyType } from '@/constants';
 import { ICompany } from '@/interfaces/company.interface';
+import { useSearchAgencies } from '@/hooks/search.agencies.hook';
 
 Modal.setAppElement('#root');
 
-interface AddAnuncianteProps {
+interface AddAgenciaProps {
   blocked?: boolean;
   user: IUser;
   doSelect?: (result: ICompany) => void;
-  advertiser?: ICompany;
+  agency?: ICompany; // Agrega la propiedad agency
 }
 
-const AddAnunciante: React.FC<AddAnuncianteProps> = ({ advertiser, doSelect = () => {}, user, blocked = false }) => {
-  const useSearch = useSearchAdvertisers();
+const AddAgencia: React.FC<AddAgenciaProps> = ({ doSelect = () => { }, user, blocked = false, agency }) => {
+  const useSearch = useSearchAgencies();
 
   return (
     <div>
-      {advertiser ? (
+      {agency ? (
         <>
           <label htmlFor="searchInput" className="block text-sm font-medium text-gray-700">
-            Cliente
+          Nombre de la agencia
           </label>
-          <div className="mt-1 block w-full p-2 border-gray-300 rounded-md bg-gray-100">
-            {advertiser.name}
+          <div className="mt-1 block w-full p-2  border-gray-300 rounded-md bg-gray-100">
+            {agency.name}
           </div>
         </>
       ) : (
         <FastSearch
-          label="Cliente"
+          label="Nombre de la agencia"
           results={useSearch.results}
           loading={useSearch.loading}
           error={useSearch.error}
@@ -39,7 +40,7 @@ const AddAnunciante: React.FC<AddAnuncianteProps> = ({ advertiser, doSelect = ()
           setResults={useSearch.setResults}
           disabled={blocked}
           user={user}
-          companyType={CompanyType.Advertiser}
+          companyType={CompanyType.Agency}
           doSelect={doSelect}
         />
       )}
@@ -47,4 +48,4 @@ const AddAnunciante: React.FC<AddAnuncianteProps> = ({ advertiser, doSelect = ()
   );
 };
 
-export default AddAnunciante;
+export default AddAgencia;

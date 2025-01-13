@@ -1,6 +1,7 @@
 import { FaCheck } from "react-icons/fa";
 import EntregablePostulacion from "../EntregablePostulacion";
 import ProposalUploaderComponent from "../ProposalUploaderComponent";
+import Input from "../inputs/Input";
 
 interface registroEntity {
   formData: any,
@@ -12,7 +13,7 @@ interface registroEntity {
   files: (files: File[]) => void
 }
 
-const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, setactiveTab,files }: registroEntity) => {
+const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, setactiveTab, files }: registroEntity) => {
 
 
   return (
@@ -50,35 +51,32 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
           <div>
             <h2 className="text-xl font-bold mb-4">Animación</h2>
             <div className="grid grid-cols-2 gap-4 mb-4">
-              <input
+              <Input
+                label="2D"
                 type="text"
-                placeholder="2D"
-                className="border p-2 w-full"
                 name="animacion.twoD"
                 value={formData.animacion.twoD}
                 onChange={handleChange}
               />
-              <input
+              <Input
+                label="3D"
                 type="text"
-                placeholder="3D"
-                className="border p-2 w-full"
                 name="animacion.threeD"
                 value={formData.animacion.threeD}
                 onChange={handleChange}
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
-              <input
+              <Input
+                label="VFX"
                 type="text"
-                placeholder="VFX"
-                className="border p-2 w-full"
                 name="animacion.vfx"
                 value={formData.animacion.vfx}
                 onChange={handleChange}
               />
-              <textarea
-                placeholder="Descripción adicional"
-                className="border p-2 w-full"
+              <Input
+                label="Descripción adicional"
+                type="text"
                 name="animacion.descripcion"
                 value={formData.animacion.descripcion}
                 onChange={handleChange}
@@ -90,53 +88,48 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
           <div>
             <h2 className="text-xl font-bold mb-4">Música</h2>
             <div className="grid grid-cols-2 gap-4 mb-4">
-              <input
+              <Input
+                label="Original"
                 type="text"
-                placeholder="Original"
-                className="border p-2 w-full"
                 name="musica.original"
                 value={formData.musica.original}
                 onChange={handleChange}
               />
-              <input
+              <Input
+                label="Sound-alike"
                 type="text"
-                placeholder="Sound-alike"
-                className="border p-2 w-full"
                 name="musica.soundALike"
                 value={formData.musica.soundALike}
                 onChange={handleChange}
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
-              <input
+              <Input
+                label="Stock"
                 type="text"
-                placeholder="Stock"
-                className="border p-2 w-full"
                 name="musica.stock"
                 value={formData.musica.stock}
                 onChange={handleChange}
               />
-              <input
+              <Input
+                label="Licencia"
                 type="text"
-                placeholder="Licencia"
-                className="border p-2 w-full"
                 name="musica.licencia"
                 value={formData.musica.licencia}
                 onChange={handleChange}
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
-              <input
+              <Input
+                label="Otro"
                 type="text"
-                placeholder="Otro"
-                className="border p-2 w-full"
                 name="musica.otro"
                 value={formData.musica.otro}
                 onChange={handleChange}
               />
-              <textarea
-                placeholder="Descripción adicional"
-                className="border p-2 w-full"
+              <Input
+                label="Descripción adicional"
+                type="text"
                 name="musica.descripcion"
                 value={formData.musica.descripcion}
                 onChange={handleChange}
@@ -148,41 +141,38 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
           <div>
             <h2 className="text-xl font-bold mb-4">Locutor</h2>
             <div className="grid grid-cols-2 gap-4 mb-4">
-              <input
+              <Input
+                label="Institucional"
                 type="text"
-                placeholder="Institucional"
-                className="border p-2 w-full"
                 name="locutor.institucional"
                 value={formData.locutor.institucional}
                 onChange={handleChange}
               />
-              <input
+              <Input
+                label="Principal"
                 type="text"
-                placeholder="Principal"
-                className="border p-2 w-full"
                 name="locutor.principal"
                 value={formData.locutor.principal}
                 onChange={handleChange}
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
-              <input
+              <Input
+                label="Secundario"
                 type="text"
-                placeholder="Secundario"
-                className="border p-2 w-full"
                 name="locutor.secundario"
                 value={formData.locutor.secundario}
                 onChange={handleChange}
               />
-              <input
+              <Input
+                label="Voces"
                 type="text"
-                placeholder="Voces"
-                className="border p-2 w-full"
                 name="locutor.voces"
                 value={formData.locutor.voces}
                 onChange={handleChange}
               />
             </div>
+            <label htmlFor="locutor.descripcion">Descripción adicional</label>
             <textarea
               placeholder="Descripción adicional"
               className="border p-2 w-full"
@@ -192,19 +182,19 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
             />
           </div>
 
-<br />
+          <br />
           {/* Entregables Section */}
-            <div className="grid grid-cols-1 gap-4 mb-4">
-              <EntregablePostulacion
-                entregables={formData.entregables?.lista || []}
-                setEntregables={(entregables) => handleChange({
-                  target: { 
-                    name: 'entregables.lista',
-                    value: entregables
-                  }
-                })}
-              />
-            </div>
+          <div className="grid grid-cols-1 gap-4 mb-4">
+            <EntregablePostulacion
+              entregables={formData.entregables?.lista || []}
+              setEntregables={(entregables) => handleChange({
+                target: {
+                  name: 'entregables.lista',
+                  value: entregables
+                }
+              })}
+            />
+          </div>
           <div>
             <h2 className="text-xl font-bold mb-4">Notas</h2>
             <textarea
@@ -217,8 +207,8 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
           </div>
           {/* Proposal uploader Section */}
           <div>
-          <h2 className="text-xl font-bold mb-4">Subir archivos adjuntos</h2>
-          <ProposalUploaderComponent identifier={"1"} onFilesChange={files}/>
+            <h2 className="text-xl font-bold mb-4">Subir archivos adjuntos</h2>
+            <ProposalUploaderComponent identifier={"1"} onFilesChange={files} />
 
           </div>
         </div>

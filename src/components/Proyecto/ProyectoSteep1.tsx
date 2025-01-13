@@ -2,6 +2,8 @@ import { toast } from 'react-hot-toast';
 import NextButton from '../buttons/NextButton';
 import { DatosAgenciaPublicidad } from './DatosAgenciaPublicidad';
 import DatosAnunciante from './DatosAnunciante';
+import { Project } from 'next/dist/build/swc/types';
+import { IProject } from '@/interfaces/project.interface';
 
 interface registroEntity {
   formData: {
@@ -25,10 +27,12 @@ interface registroEntity {
   handleSubmit: any;
   isEditing?: boolean;
   readonly?: boolean;
+  project:IProject
 }
 
 const ProyectoSteep1 = ({
                           formData,
+                          project,
                           handleChange,
                           handleSubmit,
                           readonly,
@@ -104,8 +108,8 @@ const ProyectoSteep1 = ({
             </select>
           </div>
         </div>
-        <DatosAnunciante formData={formData} handleChange={handleChange} readonly={readonly} />
-        <DatosAgenciaPublicidad formData={formData} handleChange={handleChange} readonly={readonly} />
+        <DatosAnunciante formData={formData} handleChange={handleChange} readonly={readonly} advertiser={project?.advertiser} />
+        <DatosAgenciaPublicidad formData={formData} handleChange={handleChange} readonly={readonly} agency={project?.agency} />
         <div className="flex justify-center space-x-4">
           <NextButton onClick={handleNext} />
         </div>

@@ -1,4 +1,7 @@
+import { CompanyType } from '@/constants';
 import { useSearchAdvertisers } from '@/hooks/search.advertisers.hook';
+import { ICompany } from '@/interfaces/company.interface';
+import { IUser } from '@/interfaces/user.interface';
 import { motion } from 'framer-motion';
 import React, { useCallback, useEffect, useState } from 'react';
 import Modal from 'react-modal';
@@ -7,36 +10,56 @@ Modal.setAppElement('#root');
 
 interface FullScreenSearchProps {
   label: string;
+  disabled: boolean
+  user: IUser
+  companyType: string
+  doSelect: (result: ICompany) => void;
 }
 
-const FullScreenSearch: React.FC<FullScreenSearchProps> = ({ label }) => {
+const FullScreenSearch: React.FC<FullScreenSearchProps & ReturnType<typeof useSearchAdvertisers>> = ({ doSelect,companyType, user, disabled, label, results, loading, error, performSearch, setResults }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const { results, loading, error, performSearch,setResults } = useSearchAdvertisers();
 
   const openModal = useCallback(() => setIsOpen(true), []);
   const closeModal = useCallback(() => setIsOpen(false), []);
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value), []);
 
   useEffect(() => {
-    if (query.length > 1) {
-      performSearch(query);
-    } else {
-      setResults([]);
-    }
+    performSearch(query);
   }, [query, performSearch, setResults]);
 
+
+  const [selected, setSelected] = useState<ICompany>();
+
+  const onSelect = (result) => {
+    setSelected(result);
+    doSelect(result);
+    setQuery(result.name);
+    closeModal();
+  }
+  if (user?.company?.type === companyType)
+    return <>
+      <label htmlFor="searchInput" className="block text-sm font-medium text-gray-700 mb-2">
+        {label}
+      </label>
+      <div className="mt-1 block w-full p-2  border-gray-300 rounded-md bg-gray-100 mb-4">
+        {user.company.name}
+      </div>
+    </>
   return (
     <div>
       <label htmlFor="searchInput" className="block text-sm font-medium text-gray-700">
         {label}
       </label>
+
       <input
         id="searchInput"
         type="text"
         placeholder="Click to search..."
         onClick={openModal}
         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+        value={selected?.name || ''}
+        disabled={disabled}
       />
       {/*@ts-ignore*/}
       <Modal
@@ -95,8 +118,9 @@ const FullScreenSearch: React.FC<FullScreenSearchProps> = ({ label }) => {
                     className="p-4 mb-2 rounded-md shadow-md bg-white cursor-pointer flex items-center justify-between"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={()=>onSelect(result)}
                   >
-                    <span className="text-sm font-light">{result.legalName}</span>
+                    <span className="text-sm font-light">{result.name}</span>
                   </motion.div>
                 ))}
               </>
@@ -108,6 +132,6 @@ const FullScreenSearch: React.FC<FullScreenSearchProps> = ({ label }) => {
       </Modal>
     </div>
   );
-};
+}
 
 export default FullScreenSearch;

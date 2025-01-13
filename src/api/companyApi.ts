@@ -95,5 +95,25 @@ export const getAdvertisersWithOwners = async (search: string) => {
         return null;
     }
 }
+
+export const getAgenciesWithOwners = async (search: string) => {
+    try {
+        const response = await ApiService.post(`/company/agencies/search`, { search });
+        return response.data;
+    } catch (error) {
+        if (error?.response) {
+            if (error.response.status === 400) {
+                error.response.data.message.forEach((value: any) => toast.error(value));
+            } else if (error.response.status === 409) {
+                toast.error(error.response.data.clientMessage);
+            } else {
+                toast.error('An unexpected error occurred');
+            }
+        } else {
+            toast.error('Network error or server is not responding');
+        }
+        return null;
+    }
+}
 export default createCompanyUser;
 

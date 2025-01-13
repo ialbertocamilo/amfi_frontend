@@ -2,14 +2,17 @@ import { CompanyType } from "@/constants";
 import { useUserContext } from "@/providers/user.context";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import AddAgencia from "./AddAgencia";
+import { ICompany } from "@/interfaces/company.interface";
 
 interface AgenciaPublicidadProps {
   formData: Record<string, any>;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   readonly?: boolean;
+  agency?: ICompany;
 }
 
-export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({
+export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({agency,
   formData,
   handleChange,
   readonly,
@@ -31,6 +34,21 @@ export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({
       setBlocked(true);
     }
   }, [user]);
+
+  useEffect(() => {
+
+    console.log("agency")
+    console.log(agency)
+  }, [agency]);
+
+  const selectingAgencia = (result: ICompany) => {
+    handleChange({
+      target: {
+        name: 'agencyId',
+        value: result.id || ''
+      } as any
+    } as any);
+  };
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">
@@ -38,21 +56,8 @@ export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
         <div>
-          <label
-            htmlFor="agencyName"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Nombre de la agencia
-          </label>
-          <input
-            type="text"
-            id="agencyName"
-            name="agencyName"
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            value={formData?.agencyName}
-            onChange={handleChange}
-            disabled={readonly || blocked}
-          />
+       
+       {user && <AddAgencia user={user} doSelect={selectingAgencia} agency={agency} />}
         </div>
         <div>
           <label
