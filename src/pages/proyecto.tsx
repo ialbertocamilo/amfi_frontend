@@ -245,7 +245,7 @@ const Proyecto: React.FC = () => {
               handleSubmit={handleSubmit}
               isEditing={readonly}
               readonly={readonly}
-              project={project}
+              project={project!}
             />
           )}
           {activeTab === "2" && (
