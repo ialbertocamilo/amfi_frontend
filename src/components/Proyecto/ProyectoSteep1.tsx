@@ -13,7 +13,6 @@ interface registroEntity {
     agencyProductor?: string;
     projectName?: string;
     versionName?: string;
-    agencyName?: string;
     agencyEmail?: string;
     agencyCreativeDirector?: string;
     contactoMarketing?: string;
@@ -40,7 +39,7 @@ const ProyectoSteep1 = ({
   const validateFormData = (formData: Record<string, any>): boolean => {
     const requiredFields = [
       'brand', 'product',  'projectName', 'versionName',
-      'agencyName', 'agencyEmail', 'agencyCreativeDirector', 'contactoFinanzas',
+      'agencyEmail', 'agencyCreativeDirector', 'contactoFinanzas',
       'agencyAccountDirector', 'odtNumber', 'buyerContact',
     ];
 

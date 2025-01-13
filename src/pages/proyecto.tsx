@@ -144,27 +144,15 @@ const Proyecto: React.FC = () => {
 
   useEffect(() => {
     let agencyEmail = "";
-    let agencyName = "";
     // Sirve para el step1
     if (!id) {
       if (
         user &&
         user.company?.type === CompanyType.Agency &&
-        formData.agencyName === "" &&
+     
         formData.agencyEmail === ""
       ) {
         agencyEmail = user?.email;
-        agencyName = user?.company?.legalName;
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          agencyEmail,
-          agencyName,
-        }));
-      } else {
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          client: user?.company?.legalName,
-        }));
       }
     }
   }, [user]);

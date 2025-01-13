@@ -40,7 +40,7 @@ const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ advertiser,formData, 
       <h2 className="text-xl font-bold mb-4">Datos del anunciante</h2>
       <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
 
-        {user && <AddAnunciante user={user} doSelect={selectingAnunciante} />}
+        {user && <AddAnunciante user={user} doSelect={selectingAnunciante} advertiser={advertiser}/>}
         <div>
           <label htmlFor="brand" className="block text-sm font-medium text-gray-700">
             Marca
