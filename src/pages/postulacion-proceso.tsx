@@ -103,9 +103,6 @@ const PostulacionProceso: React.FC = () => {
       locacion: { dias: "", versiones: "" },
       foro: { dias: "" },
       foraneo: { dias: "" },
-      ciudad: "",
-      version: "",
-      dias: ""
     },
     crew: {
       direccion: "",
