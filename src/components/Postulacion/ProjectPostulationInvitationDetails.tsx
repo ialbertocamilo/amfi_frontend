@@ -97,7 +97,7 @@ const ProjectPostulationInvitationDetails: React.FC<ProjectDetailsProps> = ({
     
       <>
       
-      <Brief project={project} data={data} invitedDirectors={invitedDirectors} />
+      <Brief projectJson={project} data={data} invitedDirectors={invitedDirectors} />
       <br />
       {postulacion && (
         <>

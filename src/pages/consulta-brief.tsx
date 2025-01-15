@@ -5,6 +5,7 @@ import Layout from '@/components/Layout';
 import Loader from '@/components/Loader';
 import ResumenProyecto from '@/components/Postulacion/ResumenProyecto';
 import { IProjectInvitation } from '@/interfaces/project-director.interface';
+import { IProject } from '@/interfaces/project.interface';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -15,10 +16,12 @@ const ConsultaBrief: React.FC = () => {
 
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState<IProjectInvitation | null>(null);
-    const [project, setProject] = useState<any>(null);
+    const [projectJson, setJsonProject] = useState<any>(null);
+    const [project, setProject] = useState<IProject>();
     useEffect(() => {
         if (data?.project?.extra) {
-            setProject(data.project.extra);
+            setJsonProject(data.project.extra);
+            setProject(data.project);
         }
     }, [data]);
     const [invitedDirectors, setInvitedDirectors] = useState<IProjectInvitation[]>([]);
@@ -50,13 +53,14 @@ const ConsultaBrief: React.FC = () => {
         <Layout>
             <Loader loading={loading} >
                 <div className="container mx-auto p-6 bg-white shadow-lg rounded-md">
-                    {data && project && <Brief
+                    {data && projectJson && project && <Brief
+                        projectJson={projectJson}
                         project={project}
                         data={data}
                         invitedDirectors={invitedDirectors}
                     />}
 
-                    <ResumenProyecto data={project} />
+                    <ResumenProyecto data={projectJson} />
                     <div className="mt-4 flex justify-end">
                         <button
                             onClick={() => router.back()}

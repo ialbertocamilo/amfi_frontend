@@ -54,13 +54,12 @@ const ResumenProyecto: React.FC<ResumenProyectoProps> = ({ data }) => {
       <div>
         <h2 className="text-xl font-semibold">Post producción</h2>
         <div className="grid grid-cols-2 gap-4 mt-4">
-          <p>Online: {data?.online}</p>
           <p>Animación: {data?.animacion}</p>
           <p>Música/Audio: {data?.musica}</p>
           <p>Fotos: {data?.photos}</p>
           <p>Videos: {data?.videos}</p>
           <p>Locutor: {data?.locutor}</p>
-          <p>Entrega: {data?.entrega}</p>
+          {/* <p>Entrega: {data?.entrega}</p> */}
         </div>
       </div>
 

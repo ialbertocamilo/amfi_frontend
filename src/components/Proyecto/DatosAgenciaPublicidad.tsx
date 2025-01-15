@@ -21,9 +21,6 @@ export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({agency
 
   const userContext = useUserContext();
   const user = userContext?.user;
-  const router = useRouter();
-  const { id } = router.query;
-  // Bloquear los campos Nombre de agencia y Correo del responsable
   useEffect(() => {
     if (
       user &&

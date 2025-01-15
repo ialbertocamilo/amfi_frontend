@@ -1,9 +1,8 @@
+import { IProject } from '@/interfaces/project.interface';
 import { toast } from 'react-hot-toast';
 import NextButton from '../buttons/NextButton';
 import { DatosAgenciaPublicidad } from './DatosAgenciaPublicidad';
 import DatosAnunciante from './DatosAnunciante';
-import { Project } from 'next/dist/build/swc/types';
-import { IProject } from '@/interfaces/project.interface';
 
 interface registroEntity {
   formData: {
