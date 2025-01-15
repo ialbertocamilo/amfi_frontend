@@ -13,6 +13,8 @@ export interface ICompany {
     web_url: string | null;
     amfiId: string | null;
     certificationId: string | null;
+    address: string | null;
+    phone: string | null;
     createdAt: string;
     updatedAt: string;
 }

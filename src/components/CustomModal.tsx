@@ -45,7 +45,15 @@ const CustomModal: React.FC<CustomModalProps> = ({
         },
       }}
     >
-      <h2>{title}</h2>
+      <h2 style={{ 
+        margin: '0 0 15px 0',
+        fontSize: '1.5rem',
+        fontWeight: 600,
+        color: '#333'
+      }}>
+        {title}
+      </h2>
+      <br />
       <p>{message}</p>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
         <button

@@ -1,10 +1,13 @@
+import { CompanyType } from '@/constants';
 import { useSearchAdvertisers } from '@/hooks/search.advertisers.hook';
+import { ICompany } from '@/interfaces/company.interface';
+import { IUser } from '@/interfaces/user.interface';
 import React from 'react';
 import Modal from 'react-modal';
 import FastSearch from '../modals/FastSearch';
-import { IUser } from '@/interfaces/user.interface';
-import { CompanyType } from '@/constants';
-import { ICompany } from '@/interfaces/company.interface';
+import { useProjectContext } from '@/providers/project.context';
+import { checkProjectReadonly } from '@/lib/utils';
+import { ProjectStatus } from '@/mappers/project.mapper';
 
 Modal.setAppElement('#root');
 
@@ -17,32 +20,22 @@ interface AddAnuncianteProps {
 
 const AddAnunciante: React.FC<AddAnuncianteProps> = ({ advertiser, doSelect = () => {}, user, blocked = false }) => {
   const useSearch = useSearchAdvertisers();
-
+  const projectContext = useProjectContext();
   return (
     <div>
-      {advertiser ? (
-        <>
-          <label htmlFor="searchInput" className="block text-sm font-medium text-gray-700">
-            Cliente
-          </label>
-          <div className="mt-1 block w-full p-2 border-gray-300 rounded-md bg-gray-100">
-            {advertiser.name}
-          </div>
-        </>
-      ) : (
         <FastSearch
           label="Cliente"
+          value={advertiser?.name || ''}
           results={useSearch.results}
           loading={useSearch.loading}
           error={useSearch.error}
           performSearch={useSearch.performSearch}
           setResults={useSearch.setResults}
-          disabled={blocked}
+          disabled={blocked || checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
           user={user}
           companyType={CompanyType.Advertiser}
           doSelect={doSelect}
         />
-      )}
     </div>
   );
 };

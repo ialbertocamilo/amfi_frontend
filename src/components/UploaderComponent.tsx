@@ -1,6 +1,6 @@
 import { downloadFile, uploadFileToProject } from "@/api/filesApi";
 import useDownloadFiles from "@/hooks/files.hook";
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { Fragment, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { FaUpload } from "react-icons/fa";
 

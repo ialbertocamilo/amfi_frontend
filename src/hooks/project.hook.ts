@@ -1,11 +1,13 @@
-import { createProject, getProjectById, updateProjectById } from '@/api/projectApi';
+import { createProject, getProjectById, updateProjectById, updateProjectStatus } from '@/api/projectApi';
 import { CompanyType } from '@/constants';
 import { IProject } from '@/interfaces/project.interface';
+import { ProjectStatus } from '@/mappers/project.mapper';
 import { useUserContext } from '@/providers/user.context';
 import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { CreateProjectDto } from '../dto/create-project.dto';
 import { UpdateProjectDto } from '../dto/update-project.dto';
+import { useProjectContext } from '@/providers/project.context';
 
 const useProject = (projectId: string | null) => {
     const [project, setProject] = useState<IProject | null>(null);
@@ -13,6 +15,7 @@ const useProject = (projectId: string | null) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const userContext = useUserContext();
+    const projectContext=useProjectContext();
     const user = userContext?.user;
     useEffect(() => {
         if (error) {
@@ -20,11 +23,11 @@ const useProject = (projectId: string | null) => {
         }
     }, [error]);
 
-    const [status, setStatus] = useState<string | null>(null);
+    const [status, setStatus] = useState<ProjectStatus | null>(null);
 
     useEffect(() => {
         if (project) {
-            setStatus(project.status);
+            setStatus(project.status as ProjectStatus);
         }
     }, [project]);
 
@@ -37,9 +40,10 @@ const useProject = (projectId: string | null) => {
                 throw new Error('Error al obtener el proyecto');
             }
             const data: IProject = response;
-            setStatus(data.status);
+            setStatus(data.status as ProjectStatus);
             setProject(data);
             setProjectJson(data?.extra);
+            projectContext?.setProject(data);
         } catch (err: any) {
             if (err?.status === 400) err?.response?.data?.message.forEach((value: any) => toast.error(value));
             if (err?.status === 409) toast.error(err?.response?.data?.clientMessage);
@@ -106,8 +110,20 @@ const useProject = (projectId: string | null) => {
         }
     };
 
+    const updateStatus = async (newStatus: ProjectStatus) => {
+        try {
+            setLoading(true);
+            await updateProjectStatus(projectId as string, newStatus);
+            await fetchProject();
+            setStatus(newStatus);
+        } catch (err: any) {
+            setError(err.message || 'Error al actualizar el estado del proyecto');
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    return { project, loading, error, fetchProject, projectJson, saveOrUpdateProject, status };
+    return { project, loading, error, fetchProject, projectJson, saveOrUpdateProject, status,updateStatus };
 };
 
 export default useProject;

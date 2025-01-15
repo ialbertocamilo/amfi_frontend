@@ -29,7 +29,7 @@ interface DeliverableItem {
                       </div>
                       <div>
                         <h3 className="text-sm font-medium text-gray-600">Duración</h3>
-                        <p className="mt-1 text-base text-gray-800">{item?.duracion}</p>
+                        <p className="mt-1 text-base text-gray-800">{item?.duracion}"</p>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-6 mt-4">

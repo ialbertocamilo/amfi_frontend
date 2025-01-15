@@ -1,4 +1,4 @@
-import { formatToMxn } from "@/lib/utils";
+import { formatToCurrency, formatToMxn } from "@/lib/utils";
 
 interface BudgetItemProps {
     label: string;
@@ -26,20 +26,20 @@ interface BudgetItemProps {
             <div className="flex justify-between items-center">
               <span className="text-lg font-medium">Total</span>
               <div className="flex items-center gap-2">
-                <span className="text-2xl font-bold text-red-500">{formatToMxn(data?.presupuesto?.total)}</span>
+          <span className="text-2xl font-bold text-red-500">{formatToMxn(data?.presupuesto?.total)}</span>
               </div>
             </div>
           </div>
-          <BudgetItem label="Personal" value={data?.presupuesto?.personal} />
-          <BudgetItem label="Pre y Pro" value={data?.presupuesto?.preYPro} />
-          <BudgetItem label="Talento" value={data?.presupuesto?.talento} />
-          <BudgetItem label="Equipo" value={data?.presupuesto?.equipo}/>
-          <BudgetItem label="Set/Locación" value={data?.presupuesto?.setLocacion} />
-          <BudgetItem label="Viajes" value={data?.presupuesto?.viajes}/>
-          <BudgetItem label="Digital" value={data?.presupuesto?.digital} />
-          <BudgetItem label="Foto Fija" value={data?.presupuesto?.fotoFija}/>
-          <BudgetItem label="Post Producción" value={data?.presupuesto?.postProduccion} />
-            <BudgetItem label="Mark Up (15%)" value={data?.presupuesto?.markUp} />
+          <BudgetItem label="Personal" value={formatToCurrency(data?.presupuesto?.personal)} />
+          <BudgetItem label="Pre y Pro" value={formatToCurrency(data?.presupuesto?.preYPro)} />
+          <BudgetItem label="Talento" value={formatToCurrency(data?.presupuesto?.talento)} />
+          <BudgetItem label="Equipo" value={formatToCurrency(data?.presupuesto?.equipo)}/>
+          <BudgetItem label="Set/Locación" value={formatToCurrency(data?.presupuesto?.setLocacion)} />
+          <BudgetItem label="Viajes" value={formatToCurrency(data?.presupuesto?.viajes)}/>
+          <BudgetItem label="Digital" value={formatToCurrency(data?.presupuesto?.digital)} />
+          <BudgetItem label="Foto Fija" value={formatToCurrency(data?.presupuesto?.fotoFija)}/>
+          <BudgetItem label="Post Producción" value={formatToCurrency(data?.presupuesto?.postProduccion)} />
+          <BudgetItem label="Mark Up (15%)" value={formatToCurrency(data?.presupuesto?.markUp)} />
         </div>
       </div>
     );

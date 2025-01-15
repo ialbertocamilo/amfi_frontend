@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import Loader from "@/components/Loader";
+import ProjectControl from "@/components/Proyecto/ProjectControl";
 import CreatedProject from "@/components/Proyecto/ProjectCreated";
 import ProyectoSteep1 from "@/components/Proyecto/ProyectoSteep1";
 import ProyectoSteep2 from "@/components/Proyecto/ProyectoSteep2";
@@ -11,14 +12,41 @@ import { CompanyType } from "@/constants";
 import { CreateProjectDto } from "@/dto/create-project.dto";
 import { UpdateProjectDto } from "@/dto/update-project.dto";
 import useProject from "@/hooks/project.hook";
-import { formatToUtcBackend, validateFormData } from "@/lib/utils";
-import { ProjectMapper, ProjectStatus } from "@/mappers/project.mapper";
+import { checkProjectReadonly, formatToUtcBackend, validateFormData } from "@/lib/utils";
+import { ProjectStatus } from "@/mappers/project.mapper";
+import { useProjectContext } from "@/providers/project.context";
 import { useUserContext } from "@/providers/user.context";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import "./globals.css";
+const ReadonlyBadge = ({ readonly }: { readonly: boolean }) => {
+  return (
+    <div className="relative sm:float-right">
+      {readonly && (
+        <span
+          className={` top-0 right-0 m-2 py-1 px-2 rounded-md font-bold flex items-center justify-center bg-green-500 text-white text-xs`}
+        >
+          👀 Solo lectura
+        </span>
+      )}
+    </div>
+  );
+};
 
+interface ReadonlyProps {
+  readonly: boolean;
+}
+
+const ProjectHeader = React.memo(({ readonly }: ReadonlyProps) => {
+  return (
+    <>
+      <ProjectControl />
+      <ReadonlyBadge readonly={readonly} />
+      <br />
+    </>
+  );
+});
 const Proyecto: React.FC = () => {
   const [formData, setFormData] = useState({
     advertiserId: null,
@@ -57,9 +85,9 @@ const Proyecto: React.FC = () => {
     rondaCotizacion: "",
     visualizacion: "",
     politicaAltaProveedor: "",
-    porcentajeTasaAnticipo: "",
-    porcentajeTasaFiniquito: "",
-    porcentajeTasaTotal: "",
+    // porcentajeTasaAnticipo: "",
+    // porcentajeTasaFiniquito: "",
+    // porcentajeTasaTotal: "",
     informacionAdicional: "",
     talento: "",
     vestuario: "",
@@ -97,8 +125,14 @@ const Proyecto: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
 
+  const projectContext = useProjectContext()
   const [readonly, setReadonly] = useState(false);
 
+  useEffect(() => {
+    if (projectContext?.project?.status) {
+      setReadonly(checkProjectReadonly(projectContext.project.status as ProjectStatus));
+    }
+  }, [projectContext?.project?.status]);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -112,11 +146,12 @@ const Proyecto: React.FC = () => {
     useProject(id as string);
   const handleSubmit = async (page: string) => {
     if (page === "6") {
-      if (!validateFormData(formData, ["videos", "photos", "locutor"])) {
+      if (!validateFormData(formData, ["videos", "photos", "locutor", 'politicaPagoAgencia', 'procesoFacturacionAgencia', 'advertiserName'])) {
         toast.error("Por favor, llena todos los campos para crear el proyecto");
         return;
       }
     }
+    if (checkProjectReadonly(projectContext?.project?.status as ProjectStatus)) { setActiveTab(page); return; }
     const data: CreateProjectDto | UpdateProjectDto = {
       id: (id as string) ?? undefined,
       brand: formData?.brand,
@@ -124,12 +159,12 @@ const Proyecto: React.FC = () => {
       projectName: formData?.projectName,
       budget: Number(formData?.presupuesto),
       bidDeadline: formData?.entregaPresupuesto
-      ? formatToUtcBackend(formData.entregaPresupuesto)
-      : undefined,
+        ? formatToUtcBackend(formData.entregaPresupuesto)
+        : undefined,
       advertiserId: user?.company?.type === CompanyType.Advertiser ? user.company.id : formData?.advertiserId ?? undefined,
       agencyId: user?.company?.type === CompanyType.Agency ? user.company.id : formData?.agencyId ?? undefined,
       extra: formData,
-      status: page === "6" ? ProjectStatus.InProgress : ProjectStatus.Draft, // Cuando termina de crear el proyecto, se cambia el estado a En proceso
+      status: page === "6" ? ProjectStatus.InProgress : ProjectStatus.Draft, 
     };
     const createdProject = await saveOrUpdateProject(data);
     if (createdProject?.id) {
@@ -144,12 +179,11 @@ const Proyecto: React.FC = () => {
 
   useEffect(() => {
     let agencyEmail = "";
-    // Sirve para el step1
     if (!id) {
       if (
         user &&
         user.company?.type === CompanyType.Agency &&
-     
+
         formData.agencyEmail === ""
       ) {
         agencyEmail = user?.email;
@@ -180,47 +214,7 @@ const Proyecto: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("1");
   const [entregables, setEntregables] = useState<any[]>([]);
 
-  const ReadonlyBadge = ({ readonly }: { readonly: boolean }) => {
-    return (
-      <div className="relative sm:container">
-        {readonly && (
-          <span
-            className={`absolute top-0 right-0 m-2 py-1 px-2 rounded-md font-bold flex items-center justify-center bg-green-500 text-white text-xs`}
-          >
-            Solo lectura
-          </span>
-        )}
-      </div>
-    );
-  };
 
-  const ProjectHeader = () => {
-    if (status)
-      return (
-        <>
-          <h1 className="text-2xl font-bold mb-6 space-y-4">
-            Estado del proyecto:{" "}
-            <span className="text-blue-500">
-              {ProjectMapper.mapProjectStatus(status)}
-            </span>
-          </h1>
-          <hr />
-          <br />
-          <div className="text-sm text-gray-500 mb-8">
-            <span>Proyectos</span> {">"} <span>{project?.name}</span>
-          </div>
-        </>
-      );
-    return (
-      <>
-        {" "}
-        <h1 className="text-2xl font-bold mb-6 space-y-4">Nuevo proyecto</h1>
-        <div className="text-sm text-gray-500 mb-8">
-          <span>Proyectos</span> {">"} <span>Nuevo proyecto</span>
-        </div>
-      </>
-    );
-  };
 
   useEffect(() => {
     if (entregables)
@@ -232,9 +226,17 @@ const Proyecto: React.FC = () => {
   return (
     <Layout>
       <Loader loading={loader}>
-        <ReadonlyBadge readonly={readonly} />
         <div>
-          <ProjectHeader />
+          <div>
+            {status ? <ProjectHeader readonly={readonly} /> : (
+              <>
+                <h1 className="text-2xl font-bold mb-6 space-y-4">Nuevo proyecto</h1>
+                <div className="text-sm text-gray-500 mb-8">
+                  <span>Proyectos</span> {">"} <span>Nuevo proyecto</span>
+                </div>
+              </>
+            )}
+          </div>
           <div className="tabs flex justify-center space-x-10">
             <StepIndicator activeTab={activeTab} setactiveTab={setActiveTab} />
           </div>
@@ -243,7 +245,6 @@ const Proyecto: React.FC = () => {
               formData={formData as any}
               handleChange={handleChange}
               handleSubmit={handleSubmit}
-              isEditing={readonly}
               readonly={readonly}
               project={project!}
             />

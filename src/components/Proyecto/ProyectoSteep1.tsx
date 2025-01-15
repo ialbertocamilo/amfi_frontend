@@ -24,7 +24,6 @@ interface registroEntity {
   };
   handleChange: any;
   handleSubmit: any;
-  isEditing?: boolean;
   readonly?: boolean;
   project:IProject
 }

@@ -1,9 +1,9 @@
-import React, { useMemo, useCallback } from "react";
-import ActionList from "./ActionList";
-import { useRouter } from "next/router";
-import { ActionRoleProps } from "./ActionRole";
 import { updateProjectStatus } from "@/api/projectApi";
 import { ProjectStatus } from "@/mappers/project.mapper";
+import { useRouter } from "next/router";
+import React, { useCallback, useMemo } from "react";
+import ActionList from "./ActionList";
+import { ActionRoleProps } from "./ActionRole";
 
 const enum Actions {
     view = "Ver",
@@ -21,22 +21,10 @@ const roleActionsMap: Record<string, string[]> = {
 
 const allActions = [
     {
-        id: "2",
+        id: "1",
         name: Actions.edit,
         description: "Editar ",
         onClick: (id: string, router: any) => router.push(`/proyecto?id=${id}`),
-    },
-    {
-        id: "3",
-        name: Actions.pause,
-        description: "Pausar proyecto",
-        onClick: (id: string, handlePause: (id: string) => void) => handlePause(id),
-    },
-    {
-        id: "4",
-        name: Actions.cancel,
-        description: "Cancelar ",
-        onClick: (id: string) => console.log("Cancelar"),
     },
 ];
 
@@ -58,7 +46,7 @@ const ActionProjects: React.FC<ActionRoleProps> = ({ id, userRole }) => {
         })).filter(action =>
             roleActionsMap[userRole]?.includes(action.name)
         );
-    }, [id, userRole, handlePause, router]);
+    }, [id, userRole, router]);
 
     return (
             <ActionList actions={availableActions} resourceId={id} />

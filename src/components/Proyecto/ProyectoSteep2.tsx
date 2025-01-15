@@ -1,19 +1,23 @@
-import { validateInputs } from '@/lib/utils';
+import { checkProjectReadonly, validateInputs } from '@/lib/utils';
+import { ProjectStatus } from '@/mappers/project.mapper';
+import { useProjectContext } from '@/providers/project.context';
 import toast from 'react-hot-toast';
 
 interface registroEntity {
   formData: any;
   handleChange: any;
   handleSubmit: any;
+  readOnly?: boolean;
 }
 
 interface TerritorioSelectProps {
   name: string;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  disabled?: boolean;
 }
 
-const TerritorioSelect: React.FC<TerritorioSelectProps> = ({ value, onChange, name }) => {
+const TerritorioSelect: React.FC<TerritorioSelectProps> = ({ value, onChange, name,disabled }) => {
   return (
     <select
       id={name}
@@ -21,6 +25,7 @@ const TerritorioSelect: React.FC<TerritorioSelectProps> = ({ value, onChange, na
       className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
       value={value}
       onChange={onChange}
+disabled={disabled}
     >
       <option value="">Seleccionar</option>
       <option value="mexico">México</option>
@@ -71,6 +76,8 @@ const ProyectoSteep2 = ({
       handleSubmit('3');
     }
   }
+
+  const projectContext = useProjectContext()
   return (
     <div className="space-y-8 p-4">
 
@@ -90,6 +97,9 @@ const ProyectoSteep2 = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData?.medios || ''}
                 onChange={handleChange}
+                disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)
+
+                }
               />
             </div>
             <div>
@@ -102,6 +112,7 @@ const ProyectoSteep2 = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData?.temporalidad || ''}
                 onChange={handleChange}
+                disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               >
                 <option value="">Seleccionar</option>
                 <option value="6">6 meses</option>
@@ -124,25 +135,26 @@ const ProyectoSteep2 = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData?.desglose || ''}
                 onChange={handleChange}
+                disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               />
             </div>
             <div>
               <label htmlFor="territorio1" className="block text-sm font-medium text-gray-700">
                 Territorio 1
               </label>
-              <TerritorioSelect name={'territorio1'} value={formData?.territorio1 || ''} onChange={handleChange} />
+              <TerritorioSelect name={'territorio1'} value={formData?.territorio1 || ''}disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)} onChange={handleChange} />
             </div>
             <div>
               <label htmlFor="territorio2" className="block text-sm font-medium text-gray-700">
                 Territorio 2
               </label>
-              <TerritorioSelect name={'territorio2'} value={formData?.territorio2 || ''} onChange={handleChange} />
+              <TerritorioSelect name={'territorio2'} value={formData?.territorio2 || ''} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)} onChange={handleChange} />
             </div>
             <div>
               <label htmlFor="territorio3" className="block text-sm font-medium text-gray-700">
                 Territorio 3
               </label>
-              <TerritorioSelect name={'territorio3'} value={formData?.territorio3 || ''} onChange={handleChange} />
+              <TerritorioSelect name={'territorio3'} value={formData?.territorio3 || ''}disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)} onChange={handleChange} />
             </div>
 
             <div>
@@ -153,6 +165,7 @@ const ProyectoSteep2 = ({
                 name="tipoProduccion1"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData?.tipoProduccion1}
+                disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -169,6 +182,7 @@ const ProyectoSteep2 = ({
                 name="tipoProduccion2"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData?.tipoProduccion2}
+                disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 onChange={handleChange}
               >
                 <option value="">Seleccionar</option>
@@ -186,6 +200,7 @@ const ProyectoSteep2 = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData?.tipoProduccion3}
                 onChange={handleChange}
+                disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               >
                 <option value="">Seleccionar</option>
                 <option value="tv">TV</option>
@@ -205,6 +220,7 @@ const ProyectoSteep2 = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData?.productodummie || ''}
                 onChange={handleChange}
+                disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               />
             </div>
             <div>
@@ -217,6 +233,7 @@ const ProyectoSteep2 = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData?.cantidadDiasProduccion || ''}
                 onChange={handleChange}
+                disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               >
                 <option value="">Seleccionar</option>
                 {Array.from({ length: 30 }, (_, i) => (
@@ -234,6 +251,7 @@ const ProyectoSteep2 = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData?.creatividadAprobada || ''}
                 onChange={handleChange}
+                disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               >
                 <option value="">Seleccionar</option>
                 <option value="si">Sí, lista para producir</option>
@@ -257,6 +275,7 @@ const ProyectoSteep2 = ({
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.entregaBrief || ''}
                   onChange={handleChange}
+                  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 />
               </div>
               <div>
@@ -269,6 +288,7 @@ const ProyectoSteep2 = ({
                   name="entregaPresupuesto"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.entregaPresupuesto || ''}
+                  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                   onChange={(e) => {
                     const selectedDate = new Date(e.target.value);
                     const currentDate = new Date();
@@ -291,6 +311,7 @@ const ProyectoSteep2 = ({
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.entregaProyecto || ''}
                   onChange={handleChange}
+                  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 />
               </div>
             </div>
@@ -309,6 +330,7 @@ const ProyectoSteep2 = ({
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.presupuestoAsignado || ''}
                   onChange={handleChange}
+                  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 >
                   <option value="">Seleccionar</option>
                   <option value="si">Sí</option>
@@ -330,6 +352,7 @@ const ProyectoSteep2 = ({
                     min="0"
                     step="0.01"
                     placeholder="Ingrese el presupuesto"
+                    disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                   />
                   <span className="absolute right-3 top-1/2 transform -translate-y-1/2">MXN</span>
                 </div>

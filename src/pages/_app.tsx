@@ -4,6 +4,7 @@ import 'react-tooltip/dist/react-tooltip.css'
 import { Open_Sans } from 'next/font/google';
 import { UserProvider } from '@/providers/user.context';
 import RecoilContextProvider from '@/components/RecoilContextProvider';
+import { ProjectProvider } from '@/providers/project.context';
 
 const openSans = Open_Sans({
   subsets: ['latin'],
@@ -15,12 +16,13 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <UserProvider>
-      <RecoilContextProvider>
-        <main className={openSans.className}>
-          <Toaster position="top-right" reverseOrder={false} />
-          <Component {...pageProps} />
-        </main>
-        </RecoilContextProvider>
+      <ProjectProvider>
+        <RecoilContextProvider>
+          <main className={openSans.className}>
+            <Toaster position="top-right" reverseOrder={false} />
+            <Component {...pageProps} />
+          </main>
+        </RecoilContextProvider></ProjectProvider>
     </UserProvider>
   );
 }

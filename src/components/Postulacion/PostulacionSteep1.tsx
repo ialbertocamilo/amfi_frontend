@@ -155,22 +155,22 @@ const PostulacionSteep1 = ({
             <Input
               label={"Días"}
               type={"text"}
-              name={"bidLetter.produccion.dias"}
-              value={formData.bidLetter.produccion.dias}
+              name={"bidLetter.produccionDias"}
+              value={formData.bidLetter.produccionDias}
               onChange={handleChange}
             />
             <Input
               label={"Ciudad"}
               type={"text"}
-              name={"bidLetter.produccion.ciudad"}
-              value={formData.bidLetter.produccion.ciudad}
+              name={"bidLetter.produccionCiudad"}
+              value={formData.bidLetter.produccionCiudad}
               onChange={handleChange}
             />
             <Input
               label={"Versiones"}
               type={"text"}
-              name={"bidLetter.produccion.versiones"}
-              value={formData.bidLetter.produccion.versiones}
+              name={"bidLetter.produccionVersiones"}
+              value={formData.bidLetter.produccionVersiones}
               onChange={handleChange}
             />
           </div>
@@ -181,15 +181,15 @@ const PostulacionSteep1 = ({
             <Input
               label={"Días"}
               type={"text"}
-              name={"bidLetter.locacion.dias"}
-              value={formData.bidLetter.locacion.dias}
+              name={"bidLetter.locacionDias"}
+              value={formData.bidLetter.locacionDias}
               onChange={handleChange}
             />
             <Input
               label={"Versiones"}
               type={"text"}
-              name={"bidLetter.locacion.versiones"}
-              value={formData.bidLetter.locacion.versiones}
+              name={"bidLetter.locacionVersiones"}
+              value={formData.bidLetter.locacionVersiones}
               onChange={handleChange}
             />
           </div>
@@ -200,8 +200,8 @@ const PostulacionSteep1 = ({
           <Input
               label={"Días"}
               type={"text"}
-              name={"bidLetter.foro.dias"}
-              value={formData.bidLetter.foro.dias}
+              name={"bidLetter.foroDias"}
+              value={formData.bidLetter.foroDias}
               onChange={handleChange}
             />
           </div>
@@ -213,8 +213,8 @@ const PostulacionSteep1 = ({
           <Input
               label={"Días"}
               type={"text"}
-              name={"bidLetter.foraneo.dias"}
-              value={formData.bidLetter.foraneo.dias}
+              name={"bidLetter.foraneoDias"}
+              value={formData.bidLetter.foraneoDias}
               onChange={handleChange}
             />
           </div>

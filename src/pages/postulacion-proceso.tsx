@@ -21,6 +21,7 @@ import "./globals.css";
 
 //?projectInvitationId=
 const PostulacionProceso: React.FC = () => {
+
   const [formData, setFormData] = useState({
     talento: {
       principalNumero: "",
@@ -99,10 +100,13 @@ const PostulacionProceso: React.FC = () => {
       markUp: "",
     },
     bidLetter: {
-      produccion: { dias: "", ciudad: "", versiones: "" },
-      locacion: { dias: "", versiones: "" },
-      foro: { dias: "" },
-      foraneo: { dias: "" },
+      produccionDias:"",
+      produccionCiudad:"",
+      produccionVersiones:"",
+      locacionDias: "", 
+      locacionVersiones: "" ,
+      foroDias: "" ,
+      foraneoDias: "" ,
     },
     crew: {
       direccion: "",
@@ -131,6 +135,12 @@ const PostulacionProceso: React.FC = () => {
   interface FormData {
     [key: string]: any;
   }
+  useEffect(() => {
+    if (project?.status === 'closed') {
+      toast.error('Este proyecto está cerrado');
+      router.push('/lista-de-proyectos');
+    }
+  }, [project, router]);
 
   const validateFormData = (formData: FormData): boolean => {
     const validateFields = (data: any, parentKey: string = ""): boolean => {

@@ -1,5 +1,7 @@
 import { addDirectorsToProject } from "@/api/projectApi";
-import { validateFormData } from "@/lib/utils";
+import { checkProjectReadonly, validateFormData } from "@/lib/utils";
+import { ProjectStatus } from "@/mappers/project.mapper";
+import { useProjectContext } from "@/providers/project.context";
 import { casasProductorasSelected, selectedCasasProductorasState } from "@/state/producerState";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -7,6 +9,8 @@ import toast from "react-hot-toast";
 import { useRecoilState, useRecoilValue } from "recoil";
 import ListaCasasProductoras from "../ListaCasasProductoras";
 import CasasProductorasModal from "./CasasProductorasModal";
+import { getInvitedDirectors } from "@/api/directorApi";
+import { IProjectInvitation } from "@/interfaces/project-director.interface";
 
 interface registroEntity {
     formData: any;
@@ -14,24 +18,67 @@ interface registroEntity {
     handleSubmit: any;
     setactiveTab: any
 }
+const ListaCasasProductorasWrapper = ({ searchTerm }: { searchTerm: string }) => {
+    const projectContext = useProjectContext();
 
+    if (!checkProjectReadonly(projectContext?.project?.status as ProjectStatus)) {
+        return <ListaCasasProductoras buscar={searchTerm.toLowerCase()} />;
+    }
+
+    const router=useRouter()
+    const {id} = router.query
+
+    const [invitedDirectors, setInvitedDirectors] = useState<IProjectInvitation[]>([]);
+    useEffect(() => {
+
+        if(id){
+            getInvitedDirectors(id as string).then((res) => {
+                const result = res.filter(value => value.accepted)
+                setInvitedDirectors(result)
+            })
+        }
+    }, [id])
+    
+    return (
+        <div className="mt-4 p-4 bg-gray-100 rounded">
+            <p className="text-gray-600">
+                ℹ️ El proyecto está en proceso. No se pueden realizar cambios.
+            </p>
+            <div className="mt-4">
+                {invitedDirectors.map((director) => (
+                    <div key={director.id} className="mb-2 border border-gray-200 rounded-md p-3">
+                        <p className="flex items-center">
+                            <span className="text-green-500 mr-2">✔</span> 
+                            {director.productionHouse.name}
+                        </p>
+                        <p className="ml-6">
+                            Director: {director.director?.name} {director.director?.lastname}
+                        </p>
+                    </div>
+                ))}
+                {invitedDirectors.length === 0 && (
+                    <p>Aún no hay casas productoras invitadas.</p>
+                )}
+            </div>
+        </div>
+    );
+};
 const ProyectoSteep5 = ({
-                            formData,
-                            handleSubmit,
-                            setactiveTab,
-                        }: registroEntity) => {
+    formData,
+    handleSubmit,
+    setactiveTab,
+}: registroEntity) => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        console.log('On steep 5')
-        if (!validateFormData(formData,['entregaBidLetter','moneda','cantidadAsistentes','puestoAsistentes','momentoFacturacionAgencia'])) {
+        if (!validateFormData(formData, ['porcentajeTasaTotal', 'porcentajeTasaFiniquito', 'porcentajeTasaAnticipo', 'procesoFacturacionAgencia', 'advertiserName', 'entregaBidLetter', 'moneda', 'cantidadAsistentes', 'puestoAsistentes', 'politicaPagoAgencia', 'momentoFacturacionAgencia'])) {
             toast.error("Por favor, llena todos los campos para llegar a la siguiente etapa");
             setactiveTab("1");
         }
     }, []);
     const router = useRouter();
 
-    const {id} = router.query;
+    const { id } = router.query;
     const selectedCasas = useRecoilValue(selectedCasasProductorasState);
     const [casasProductorasNames, setCasasProductorasNames] = useRecoilState(casasProductorasSelected);
     const arrInvitedProductors: { projectId: string, directorId: string, productionHouseId: string }[] = []
@@ -105,6 +152,8 @@ const ProyectoSteep5 = ({
     const [isCasasProductorasModalOpen, setIsCasasProductorasModalOpen] =
         useState(false);
 
+
+    const projectContext = useProjectContext();
     return (
         <div className="space-y-8 p-4">
             <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
@@ -122,35 +171,22 @@ const ProyectoSteep5 = ({
                             onChange={(e) => setBuscar(e.target.value)}
                         />
                     </div>
-
-                    <ListaCasasProductoras buscar={buscar.toLowerCase()}/>
+                    <ListaCasasProductorasWrapper searchTerm={buscar} />
 
                     {/* Mensaje informativo */}
                     <div
                         className="mt-6 p-4 text-black-700 rounded-lg"
-                        style={{backgroundColor: "#DFF9FF"}}
+                        style={{ backgroundColor: "#DFF9FF" }}
                     >
                         La lista muestra casas productoras que tienen al menos un director.
                     </div>
                     <div
                         className="mt-6 p-4 text-black-700 rounded-lg"
-                        style={{backgroundColor: "#DFF9FF"}}
+                        style={{ backgroundColor: "#DFF9FF" }}
                     >
                         Te recomendamos que solo invites a 5 Casas Productoras como máximo.
                     </div>
 
-                    {/* Revisar propuesta creativa */}
-                    {/*<div className="mt-4 flex items-center space-x-2">*/}
-                    {/*  <span className="text-sm font-medium">*/}
-                    {/*    Revisión de propuesta creativa*/}
-                    {/*  </span>*/}
-                    {/*  <input*/}
-                    {/*      type="checkbox"*/}
-                    {/*      checked={revisarPropuesta}*/}
-                    {/*      onChange={() => setRevisarPropuesta(!revisarPropuesta)}*/}
-                    {/*      className="form-checkbox h-5 w-5 text-red-500"*/}
-                    {/*  />*/}
-                    {/*</div>*/}
                     <p className="text-sm text-gray-500">
                         De activar esta opción la evaluación de propuesta creativa será
                         incluida en este proyecto.
@@ -164,12 +200,14 @@ const ProyectoSteep5 = ({
                         >
                             Atras
                         </button>
-                        <button
+                        {!checkProjectReadonly(projectContext?.project?.status as ProjectStatus) && <button
                             className="w-1/4 bg-red-500 text-white py-2 rounded"
                             onClick={handleSave}
+
                         >
                             Guardar proyecto
-                        </button>
+                        </button>}
+
                     </div>
                 </div>
             </div>

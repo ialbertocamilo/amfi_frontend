@@ -17,6 +17,8 @@ const useDownloadFiles = (projectId: string, identifier:string) => {
             setLoading(true);
             setError(null);
             try {
+                console.log(projectId)
+                console.log(identifier)
                 const fileData=await getFileByProjectIdAndIdentifier(projectId,identifier);
                 setFileData(fileData);
             } catch (err) {

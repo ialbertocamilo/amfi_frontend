@@ -9,6 +9,7 @@ interface InputProps {
   placeholder?:string;
   posText?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -19,7 +20,8 @@ const Input: React.FC<InputProps> = ({
   value,
   posText,
   onChange,
-  placeholder
+  placeholder,
+  disabled
 }) => {
   return (
     <div>
@@ -31,6 +33,7 @@ const Input: React.FC<InputProps> = ({
         value={value}
         placeholder={placeholder || "Ingrese " + label}
         onChange={onChange}
+        disabled={disabled}
       />
       {posText && (
         <span className="absolute right-3 top-1/2 transform -translate-y-1/2">{posText}</span>

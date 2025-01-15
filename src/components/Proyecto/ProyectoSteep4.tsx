@@ -1,11 +1,13 @@
 import { getOwnerByCompany, getSecondaryUsers } from '@/api/userApi';
 import Entregables from '@/components/Entregables';
 import { IUser } from '@/interfaces/user.interface';
-import { validateInputs } from '@/lib/utils';
+import { checkProjectReadonly, validateInputs } from '@/lib/utils';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import Input from '../inputs/Input';
+import { ProjectStatus } from '@/mappers/project.mapper';
+import { useProjectContext } from '@/providers/project.context';
 
 interface registroEntity {
   formData: any;
@@ -48,7 +50,7 @@ const ProyectoSteep4 = ({
     talentoACargoDe: "A cargo de",
     competencia: "Competencia",
     menoresDeEdad: "Menores de edad",
-    animales: "Animales", 
+    animales: "Animales",
     especieProtegida: "Especie protegida",
     locacion: "Locación",
     vestuario: "Vestuario",
@@ -75,6 +77,8 @@ const ProyectoSteep4 = ({
       handleSubmit('5');
     }
   };
+
+  const projectContext = useProjectContext();
   return (
     <div className="space-y-8 p-4">
       <form>
@@ -95,7 +99,7 @@ const ProyectoSteep4 = ({
                 name="talentoExclusividad"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.talentoExclusividad}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               >
                 <option value="">Seleccionar</option>
                 <option value="si">Sí</option>
@@ -114,7 +118,7 @@ const ProyectoSteep4 = ({
                 name="talentoTipoCasting"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.talentoTipoCasting}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               >
                 <option value="">Seleccionar</option>
                 <option value="celebrity">Celebrity</option>
@@ -134,7 +138,7 @@ const ProyectoSteep4 = ({
                 name="talentoACargoDe"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.talentoACargoDe}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               >
                 <option value="">Seleccionar</option>
                 <option value="Casaproductora">Casa productora</option>
@@ -155,7 +159,7 @@ const ProyectoSteep4 = ({
                 name="talento"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
-                value={formData.talento}
+                value={formData.talento} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 onChange={handleChange}
               />
             </div>
@@ -175,7 +179,7 @@ const ProyectoSteep4 = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
                 value={formData.competencia || ''}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               />
             </div>
             <div>
@@ -190,7 +194,7 @@ const ProyectoSteep4 = ({
                 name="menoresDeEdad"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.menoresDeEdad}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               >
                 <option value="">Seleccionar</option>
                 <option value="si">Sí</option>
@@ -209,7 +213,7 @@ const ProyectoSteep4 = ({
                 name="animales"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.animales}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               >
                 <option value="">Seleccionar</option>
                 <option value="si">Sí</option>
@@ -228,7 +232,7 @@ const ProyectoSteep4 = ({
                 name="especieProtegida"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.especieProtegida}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               >
                 <option value="">Seleccionar</option>
                 <option value="si">Sí</option>
@@ -247,7 +251,7 @@ const ProyectoSteep4 = ({
                 name="locacion"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.locacion}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               >
                 <option value="">Seleccionar</option>
                 <option value="foroconstruccion">Foro/Construcción</option>
@@ -269,7 +273,7 @@ const ProyectoSteep4 = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
                 value={formData.vestuario}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               />
             </div>
             <div>
@@ -286,7 +290,7 @@ const ProyectoSteep4 = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
                 value={formData?.efectos || ''}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               />
             </div>
             <div>
@@ -303,7 +307,7 @@ const ProyectoSteep4 = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
                 value={formData?.maquillajepeinado}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               />
             </div>
             <div>
@@ -320,7 +324,7 @@ const ProyectoSteep4 = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
                 value={formData?.arteprops}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               />
             </div>
 
@@ -340,7 +344,7 @@ const ProyectoSteep4 = ({
                 name="locucionInstitucional"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData?.locucionInstitucional}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               >
                 <option value="">Seleccionar</option>
                 <option value="si">Sí</option>
@@ -361,7 +365,7 @@ const ProyectoSteep4 = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
                 value={formData?.locucionAgencia}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               />
             </div>
           </div>
@@ -381,7 +385,7 @@ const ProyectoSteep4 = ({
                 name="musica"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.musica}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               >
                 <option value="">Seleccionar</option>
                 <option value="Libreria">Librería</option>
@@ -402,7 +406,7 @@ const ProyectoSteep4 = ({
                 name="aCargoDe"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData.aCargoDe}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               >
                 <option value="">Seleccionar</option>
                 <option value="Casa productora">Casa productora</option>
@@ -416,13 +420,13 @@ const ProyectoSteep4 = ({
           <div className="grid grid-cols-2 gap-8">
             <div>
 
-            <Input label={'Animación'} name='animacion' value={formData.animacion} onChange={handleChange}/>
-            
-            <span className='text-sm font-medium'>Tipo de animación que se solicita: 2D, 3D, Motion graphics, stop motion y/o técnicas.</span>
+              <Input label={'Animación'} name='animacion' value={formData.animacion} onChange={handleChange} />
+
+              <span className='text-sm font-medium'>Tipo de animación que se solicita: 2D, 3D, Motion graphics, stop motion y/o técnicas.</span>
             </div>
             <div>
-              <Input label={'Post producción'} name='postproduccion' 
-              value={formData.postproduccion} onChange={handleChange}/>
+              <Input label={'Post producción'} name='postproduccion' disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
+                value={formData.postproduccion} onChange={handleChange} />
             </div>
             <div>
 
@@ -438,7 +442,7 @@ const ProyectoSteep4 = ({
                 name="vfx"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Descripción aquí"
-                value={formData.vfx}
+                value={formData.vfx} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 onChange={handleChange}
               />
             </div>
@@ -466,7 +470,7 @@ const ProyectoSteep4 = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData?.comentarioEntregables}
                 onChange={handleChange}
-                maxLength={300}
+                maxLength={300} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               />
             </div>
 
@@ -482,7 +486,7 @@ const ProyectoSteep4 = ({
               className="w-full p-2 border border-gray-300 rounded-md"
               placeholder="Descripción aquí"
               value={formData?.comentarios}
-              onChange={handleChange}
+              onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
             />
           </div>
 
@@ -504,7 +508,7 @@ const ProyectoSteep4 = ({
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 placeholder="Títular"
                 value={formData?.titularResponsable}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               />
             </div>
             <div>
@@ -519,7 +523,7 @@ const ProyectoSteep4 = ({
                 name="secundarioResponsable"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData?.secundarioResponsable}
-                onChange={handleChange}
+                onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               >
                 <option value="">Seleccionar</option>
                 {secondaryUsers?.map((user) => (

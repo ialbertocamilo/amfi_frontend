@@ -1,6 +1,7 @@
 import { IPostulationData } from '@/api/postulationApi';
 import { IProjectInvitation } from '@/interfaces/project-director.interface';
 import { ProjectMapper } from '@/mappers/project.mapper';
+import moment from 'moment';
 import React from 'react';
 import UploaderComponent from './UploaderComponent';
 interface BriefProps {
@@ -11,14 +12,15 @@ interface BriefProps {
         status: string;
         brand: string;
         product: string;
+        versionName:string;
         category: string;
         projectName: string;
-        quantity: number;
-        entregables: {
+        entregables: [{
             duracion: string;
-            aspecto: string;
-            formato: string;
-        };
+            aspectRatio: string;
+            formatoMedidas: string;
+            cantidad: number;
+        }];
         entregaBrief: string;
         visualizacion: string;
         entregaPresupuesto: string;
@@ -39,7 +41,7 @@ export const Brief: React.FC<BriefProps> = ({ project, data, invitedDirectors })
             <div key={director.id}>
                 <p className="flex items-center"><span
                     className="text-green-500 mr-2">✔</span> {director.productionHouse.name}</p>
-                <p>Director licitante: {director.director.name} {director.director.lastname}</p>
+                <p>Director licitante: {director.director?.name} {director.director?.lastname}</p>
             </div>
         ))
     }
@@ -58,28 +60,25 @@ export const Brief: React.FC<BriefProps> = ({ project, data, invitedDirectors })
         </div>
         {/* Información de proyecto */}
         <div className="mb-8">
-            <h2 className="text-lg font-semibold mb-4">Información de proyecto</h2>
+            <h2 className="text-lg font-semibold mb-4">Información de proyecto {project?.projectName}</h2>
             <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                     <p><strong>Marca:</strong> {project?.brand}</p>
                     <p><strong>Producto:</strong> {project?.product}</p>
-                    <p><strong>Categoría:</strong> {project?.category}</p>
-                    <p><strong>Campaña:</strong> {project?.projectName}</p>
+                    </div>
+                    <div>
+                    <p><strong>Versiones:</strong> {project?.versionName}</p>
+                    <p><strong>Campaña/Nombre del proyecto:</strong> {project?.projectName}</p>
                 </div>
                 <div>
-                    <p><strong>Cantidad:</strong> {project?.quantity}</p>
-                    <p><strong>Duración:</strong> {project?.entregables?.duracion}</p>
-                    <p><strong>Aspecto:</strong> {project?.entregables?.aspecto}</p>
-                    <p><strong>Formato:</strong> {project?.entregables?.formato}</p>
-                </div>
-                <div>
-                    <p><strong>Brief:</strong> {new Date(project?.entregaBrief).toLocaleDateString()}</p>
+                    <p><strong>Entrega Brief:</strong> {moment(project?.entregaBrief as string).format('DD/MM/YYYY')}</p>
                     <p><strong>Visualización:</strong> {project?.visualizacion}</p>
                 </div>
                 <div>
-                    <p><strong>Entrega de presupuestos y TT:</strong> {new Date(project?.entregaPresupuesto).toLocaleDateString()}</p>
-                    <p><strong>Entrega proyecto:</strong> {new Date(project?.entregaProyecto).toLocaleDateString()}</p>
+                    <p><strong>Entrega de presupuestos y TT:</strong> {moment(project?.entregaPresupuesto as string).format('DD/MM/YYYY')}</p>
+                    <p><strong>Entrega proyecto:</strong> {moment(project?.entregaProyecto as string).format('DD/MM/YYYY')}</p>
                 </div>
+      
             </div>
         </div>
         {/* Documentos de proyecto */}

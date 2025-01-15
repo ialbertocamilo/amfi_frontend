@@ -34,6 +34,8 @@ class ApiService {
                     } else if (error?.response?.status === 401) {
                         toast.error('Sesión expirada, por favor inicie sesión nuevamente.');
                         location.href = "/login";
+                    } else if (error?.response?.status === 403) {
+                        toast.error('No tiene permisos para realizar esta acción.');
                     }
                     return Promise.reject(error);
                 },

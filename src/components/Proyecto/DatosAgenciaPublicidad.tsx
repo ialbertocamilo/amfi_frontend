@@ -1,9 +1,9 @@
 import { CompanyType } from "@/constants";
+import { ICompany } from "@/interfaces/company.interface";
 import { useUserContext } from "@/providers/user.context";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import AddAgencia from "./AddAgencia";
-import { ICompany } from "@/interfaces/company.interface";
 
 interface AgenciaPublicidadProps {
   formData: Record<string, any>;
@@ -35,11 +35,6 @@ export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({agency
     }
   }, [user]);
 
-  useEffect(() => {
-
-    console.log("agency")
-    console.log(agency)
-  }, [agency]);
 
   const selectingAgencia = (result: ICompany) => {
     handleChange({

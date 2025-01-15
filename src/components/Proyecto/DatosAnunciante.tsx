@@ -11,7 +11,7 @@ interface DatosAnuncianteProps {
   advertiser?: ICompany;
 }
 
-const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ advertiser,formData, handleChange, readonly }) => {
+const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ advertiser, formData, handleChange, readonly }) => {
 
   const userContext = useUserContext();
   const user = userContext?.user;
@@ -20,13 +20,13 @@ const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ advertiser,formData, 
   useEffect(() => {
     if (
       user &&
-      user.company?.type === CompanyType.Advertiser 
+      user.company?.type === CompanyType.Advertiser
     ) {
       setBlocked(true)
     }
   }, [user]);
 
-  const selectingAnunciante= (result: ICompany) => {
+  const selectingAnunciante = (result: ICompany) => {
 
     handleChange({
       target: {
@@ -40,7 +40,7 @@ const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ advertiser,formData, 
       <h2 className="text-xl font-bold mb-4">Datos del anunciante</h2>
       <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
 
-        {user && <AddAnunciante user={user} doSelect={selectingAnunciante} advertiser={advertiser}/>}
+        {user && <AddAnunciante user={user} doSelect={selectingAnunciante} advertiser={advertiser} />}
         <div>
           <label htmlFor="brand" className="block text-sm font-medium text-gray-700">
             Marca

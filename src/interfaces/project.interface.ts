@@ -20,6 +20,7 @@ export interface IProject {
     agency?: ICompany;
     advertiser?:ICompany
     createdAt: string;
+    updatedAt?: Date;
     creator: {
       id: string;
       name: string;

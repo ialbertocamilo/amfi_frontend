@@ -1,4 +1,5 @@
 import { Evaluation } from "@/api/interface/api.interface";
+import { ProjectStatus } from "@/mappers/project.mapper";
 import { type ClassValue, clsx } from "clsx";
 import moment from "moment";
 import toast from "react-hot-toast";
@@ -159,6 +160,13 @@ export const formatToUtcBackend = (isoDate: string): Date => {
 };
 
 
+export const formatToCurrency = (value?: number) => {
+  if (value === undefined || value === null) {
+    return '-';
+  }
+  return new Intl.NumberFormat('es-MX', { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
+}
+
 export const formatToMxn = (value?: number) => {
   if (value === undefined || value === null) {
     return '-';
@@ -175,3 +183,19 @@ export const validateInputs = (formData: any, inputNames: string[],fieldLabels) 
   }
   return null;
 };
+
+export const checkProjectReadonly = (status: ProjectStatus): boolean => {
+  return status === ProjectStatus.Closed || status === ProjectStatus.InProgress || status === ProjectStatus.Finished;
+};
+
+export const fixYesNo = (value: string) => {
+
+  switch (value?.toLowerCase()) {
+    case 'si':
+      return 'Sí';
+    case 'no':
+      return 'No';
+    default:
+      return '';
+  }
+}

@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
 
     return (
         <div className="flex items-center justify-between px-6 py-4  ">
-            <Menu as="div" className="relative inline-block text-left">
+            <Menu as="div" className="relative inline-block text-left z-50">
                 <div className="flex items-center space-x-2">
                     <span className='h2'>
                     🧑‍💻
@@ -98,7 +98,7 @@ const Navbar: React.FC = () => {
                                     <a
                                         onClick={() => logout()}
                                         className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                                        } block px-4 py-2 text-sm`}
+                                        } block px-4 py-2 text-sm cursor-pointer`}
                                     >
                                         Cerrar sesión
                                     </a>

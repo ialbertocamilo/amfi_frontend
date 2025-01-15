@@ -19,6 +19,7 @@ const Postulacion: React.FC = () => {
                 }
             })
             setLoading(false)
+            
         }
     }, [token]);
 
@@ -35,7 +36,6 @@ const Postulacion: React.FC = () => {
                 </div>
 
             ) : (
-
                 <ProjectPostulationInvitationDetails
                     data={postulationData}
                     token={token as string}

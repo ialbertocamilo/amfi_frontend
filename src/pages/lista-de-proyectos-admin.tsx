@@ -98,7 +98,7 @@ const ListaProyectosAdmin = () => {
                         />
                     </div>
                     <button
-                        className="bg-red-500 text-xs text-white px-4 rounded transform transition-transform duration-200 hover:scale-105"
+                        className="bg-red-500 text-xs text-white px-4 rounded z-10 transform transition-transform duration-200 hover:scale-105"
                         onClick={crearProyecto}
                     >
                         Nuevo proyecto

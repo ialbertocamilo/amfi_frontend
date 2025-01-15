@@ -68,8 +68,9 @@ const ProjectPostulationInvitationDetails: React.FC<ProjectDetailsProps> = ({
   };
 
   useEffect(() => {
-    if (data.project.status === ProjectStatus.Closed) {
+    if (data.project?.status === ProjectStatus.Closed) {
       toast.error('El proyecto se encuentra cerrado')
+      router.push('/lista-de-proyectos')
       return;
     }
     setProject(data.project.extra)
@@ -93,6 +94,9 @@ const ProjectPostulationInvitationDetails: React.FC<ProjectDetailsProps> = ({
   return (
 
     <div className="container mt-4 mx-auto p-6 bg-white shadow-lg rounded-md">
+    
+      <>
+      
       <Brief project={project} data={data} invitedDirectors={invitedDirectors} />
       <br />
       {postulacion && (
@@ -127,6 +131,7 @@ const ProjectPostulationInvitationDetails: React.FC<ProjectDetailsProps> = ({
         cancelText="No, volver"
         onConfirm={handleDecline}
         onCancel={handleCancel} isOpen={modalDecline} />
+        </>
     </div>
   );
 };

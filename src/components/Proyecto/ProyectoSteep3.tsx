@@ -1,4 +1,6 @@
-import { validateInputs } from '@/lib/utils';
+import { checkProjectReadonly, validateInputs } from '@/lib/utils';
+import { ProjectStatus } from '@/mappers/project.mapper';
+import { useProjectContext } from '@/providers/project.context';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -24,13 +26,13 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
     tipoContratoProyecto: "Tipo de contrato de proyecto",
     rondaCotizacion: "Ronda de cotización",
     visualizacion: "Visualización",
-    politicaAltaProveedor:"Política de alta al proveedor",
-    anticipo:"Anticipo",
-    antesDeFilmar:'Antes de filmar',
-    porcentajeTasaAnticipo:'Porcentaje de tasa sobre el anticipo',
-    porcentajeTasaFiniquito:'Porcentaje de tasa sobre el finiquito',
-    porcentajeTasaTotal:'Porcentaje de tasa total',
-    informacionAdicional:'Política (Información adicional a considerar)',
+    politicaAltaProveedor: "Política de alta al proveedor",
+    anticipo: "Anticipo",
+    antesDeFilmar: 'Antes de filmar',
+    // porcentajeTasaAnticipo: 'Porcentaje de tasa sobre el anticipo',
+    // porcentajeTasaFiniquito: 'Porcentaje de tasa sobre el finiquito',
+    // porcentajeTasaTotal: 'Porcentaje de tasa total',
+    informacionAdicional: 'Política (Información adicional a considerar)',
   };
 
   const inputNames = Object.keys(fieldLabels);
@@ -52,9 +54,10 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
     setShowAgencyFields(value === "agencia");
   };
 
-  useEffect(()=>{
-        setShowAgencyFields(formData?.responsablePago === 'agencia')
-  },[formData?.responsablePago])
+  const projectContext = useProjectContext()
+  useEffect(() => {
+    setShowAgencyFields(formData?.responsablePago === 'agencia')
+  }, [formData?.responsablePago])
   return (
     <div className="space-y-8 p-4">
 
@@ -67,7 +70,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
               <div>
                 <label htmlFor="line1" className="block text-sm font-medium text-gray-700">Subir
                   archivo</label>
-                <UploaderComponent identifier={'first_file'} projectId={projectId} />
+                <UploaderComponent identifier={'first_file'} projectId={projectId} blockUpload={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)} />
               </div>
               <div>
                 <label htmlFor="link1" className="block text-sm font-medium text-gray-700">Link</label>
@@ -78,13 +81,14 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.link1}
                   onChange={handleChange}
+                  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                   placeholder="www.google.com (Referencias)"
                 />
               </div>
               <div>
                 <label htmlFor="line1"
                   className="block text-sm font-medium text-gray-700">Referencias</label>
-                <UploaderComponent identifier={'second_file'} projectId={projectId} />
+                <UploaderComponent identifier={'second_file'} projectId={projectId} blockUpload={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}/>
               </div>
               <div>
                 <label htmlFor="link2" className="block text-sm font-medium text-gray-700">Link</label>
@@ -96,6 +100,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                   value={formData?.link2}
                   onChange={handleChange}
                   placeholder="www.google.com (Referencias)"
+                  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 />
               </div>
             </div>
@@ -113,6 +118,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                     value={formData?.responsablePago}
                     onChange={handleResponsablePagoChange}
+                    disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                   >
                     <option value="">Seleccionar</option>
                     <option value="anunciante">Anunciante</option>
@@ -127,6 +133,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                     onChange={handleChange}
                     label='Política de pago'
                     placeholder="Ingrese la política de pago en días (Ej. 30 días)"
+                    disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                   />
                 </div>
                 <div>
@@ -137,6 +144,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                     value={formData?.procesoFacturacion}
                     onChange={handleChange}
+                    disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                   >
                     <option value="">Seleccionar</option>
                     <option value="Asignación">Asignación</option>
@@ -151,41 +159,43 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
               {showAgencyFields && (
                 <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8 p-6 bg-white rounded-lg shadow-[0_0_10px_rgba(0,0,0,0.1)]">
                   <div>
-                  <label htmlFor="agency" className="block text-sm font-medium text-gray-700">Agencia</label>
-                  <input
-                    type="text"
-                    id="agency"
-                    name="agency"
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                    value="Agencia de publicidad"
-                    readOnly
-                  />
+                    <label htmlFor="agency" className="block text-sm font-medium text-gray-700">Agencia</label>
+                    <input
+                      type="text"
+                      id="agency"
+                      name="agency"
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-100"
+                      value="Agencia de publicidad"
+                      readOnly
+                      disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
+                    />
                   </div>
                   <div>
-                  <Input
-                    name="politicaPagoAgencia"
-                    value={formData?.politicaPagoAgencia}
-                    onChange={handleChange}
-                    label='Política de pago de agencia'
-                    placeholder="Ingrese la política de pago en días (Ej. 30 días)"
-                  />
+                    <Input
+                      name="politicaPagoAgencia"
+                      value={formData?.politicaPagoAgencia}
+                      onChange={handleChange}
+                      label='Política de pago de agencia'
+                      placeholder="Ingrese la política de pago en días (Ej. 30 días)"
+                      disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
+                    />
                   </div>
                   <div>
-                  <label htmlFor="procesoFacturacionAgencia" className="block text-sm font-medium text-gray-700">Proceso de facturación para agencia</label>
-                  <select
-                    id="procesoFacturacionAgencia"
-                    name="procesoFacturacionAgencia"
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                    value={formData?.procesoFacturacionAgencia}
-                    onChange={handleChange}
-                  >
-                    <option value="">Seleccionar</option>
-                    <option value="Asignación">Asignación</option>
-                    <option value="1er día de prod.">1er día de prod.</option>
-                    <option value="CT">CT</option>
-                    <option value="Entrega">Entrega</option>
-                    <option value="Posterior">Posterior</option>
-                  </select>
+                    <label htmlFor="procesoFacturacionAgencia" className="block text-sm font-medium text-gray-700">Proceso de facturación para agencia</label>
+                    <select
+                      id="procesoFacturacionAgencia"
+                      name="procesoFacturacionAgencia"
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                      value={formData?.procesoFacturacionAgencia}
+                      onChange={handleChange} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
+                    >
+                      <option value="">Seleccionar</option>
+                      <option value="Asignación">Asignación</option>
+                      <option value="1er día de prod.">1er día de prod.</option>
+                      <option value="CT">CT</option>
+                      <option value="Entrega">Entrega</option>
+                      <option value="Posterior">Posterior</option>
+                    </select>
                   </div>
                 </div>
               )}
@@ -199,7 +209,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                   name="contratoProyecto"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.contratoProyecto}
-                  onChange={handleChange}
+                  onChange={handleChange}  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 >
                   <option value="">Seleccionar</option>
                   <option value="si">Sí</option>
@@ -215,7 +225,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                   name="tipoContratoProyecto"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.tipoContratoProyecto}
-                  onChange={handleChange}
+                  onChange={handleChange}  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 >
                   <option value="">Seleccionar</option>
                   <option value="colaboracionRemunerada">Colaboración remunerada</option>
@@ -231,7 +241,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                   name="rondaCotizacion"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.rondaCotizacion}
-                  onChange={handleChange}
+                  onChange={handleChange}  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 >
                   <option value="">Seleccionar</option>
                   <option value="1">1ª</option>
@@ -248,7 +258,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                     name="visualizacion"
                     value="si"
                     checked={formData?.visualizacion === 'si'}
-                    onChange={handleChange}
+                    onChange={handleChange}  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                   />
                   <label htmlFor="visualizacionSi" className="mr-4">Sí</label>
                   <input
@@ -258,6 +268,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                     value="no"
                     checked={formData?.visualizacion === 'no'}
                     onChange={handleChange}
+                    disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                   />
                   <label htmlFor="visualizacionNo">No</label>
                 </div>
@@ -272,6 +283,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.politicaAltaProveedor}
                   onChange={handleChange}
+                  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                   maxLength={300}
                 />
               </div>
@@ -289,6 +301,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                   name="anticipo"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.anticipo}
+                  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                   onChange={handleChange}
                 >
                   <option value="">Seleccionar</option>
@@ -305,13 +318,14 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.antesDeFilmar}
                   onChange={handleChange}
+                  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 >
                   <option value="">Seleccionar</option>
                   <option value="si">Sí</option>
                   <option value="no">No</option>
                 </select>
               </div>
-              <div>
+              {/* <div>
                 <label htmlFor="porcentajeTasaAnticipo"
                   className="block text-sm font-medium text-gray-700">Porcentaje de tasa sobre el
                   anticipo</label>
@@ -322,6 +336,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.porcentajeTasaAnticipo}
                   onChange={handleChange}
+                  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                   placeholder="%"
                 />
               </div>
@@ -337,6 +352,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                   value={formData?.porcentajeTasaFiniquito}
                   onChange={handleChange}
                   placeholder="%"
+                  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 />
               </div>
 
@@ -352,8 +368,9 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                   value={formData?.porcentajeTasaTotal}
                   onChange={handleChange}
                   placeholder="%"
+                  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 />
-              </div>
+              </div> */}
               <div>
                 <label htmlFor="informacionAdicional"
                   className="block text-sm font-medium text-gray-700">Política (Información adicional a
@@ -365,6 +382,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                   value={formData?.informacionAdicional}
                   onChange={handleChange}
                   maxLength={300}
+                  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 />
               </div>
             </div>
