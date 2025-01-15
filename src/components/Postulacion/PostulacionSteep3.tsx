@@ -133,15 +133,15 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
               <Input
                 label="Edición"
                 type="number"
-                name="postproduccion.edicion.numero"
-                value={formData.postproduccion.edicion.numero}
+                name="postproduccion.edicion"
+                value={formData.postproduccion.edicion}
                 onChange={handleChange}
               />
               <Input
                 label="Audio"
                 type="number"
-                name="postproduccion.audio.numero"
-                value={formData.postproduccion.audio.numero}
+                name="postproduccion.audio"
+                value={formData.postproduccion.audio}
                 onChange={handleChange}
               />
             </div>
@@ -149,15 +149,15 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
               <Input
                 label="Online"
                 type="number"
-                name="postproduccion.online.numero"
-                value={formData.postproduccion.online.numero}
+                name="postproduccion.online"
+                value={formData.postproduccion.online}
                 onChange={handleChange}
               />
               <Input
                 label="Masterización"
                 type="number"
-                name="postproduccion.masterizacion.numero"
-                value={formData.postproduccion.masterizacion.numero}
+                name="postproduccion.masterizacion"
+                value={formData.postproduccion.masterizacion}
                 onChange={handleChange}
               />
             </div>
@@ -165,8 +165,8 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
               <Input
                 label="CC"
                 type="number"
-                name="postproduccion.cc.numero"
-                value={formData.postproduccion.cc.numero}
+                name="postproduccion.cc"
+                value={formData.postproduccion.cc}
                 onChange={handleChange}
               />
             </div>

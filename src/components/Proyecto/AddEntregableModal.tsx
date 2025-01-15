@@ -186,7 +186,6 @@ const AddEntregableModal = ({ isOpen, onClose, onAdd, entregable, onUpdate }: Ad
                 <option value="90">90&#34;</option>
                 <option value="120">120&#34;</option>
                 <option value="+120">+120&#34;</option>
-                {/* Agregar más opciones según sea necesario */}
               </select>
             </div>
 

@@ -45,7 +45,6 @@ const ProyectoSteep1 = ({
 
     for (const field of requiredFields) {
       if (!formData[field]) {
-        console.log('field', field);
         return false;
       }
     }
@@ -99,6 +98,7 @@ const ProyectoSteep1 = ({
               onChange={handleChange}
               disabled={readonly}
             >
+              <option value="">Seleccionar</option>
               {[...Array(20).keys()].map((num) => (
                 <option key={num + 1} value={num + 1}>
                   {num + 1}

@@ -24,7 +24,7 @@ const ProyectoSteep5 = ({
 
     useEffect(() => {
         console.log('On steep 5')
-        if (!validateFormData(formData,['entregaBidLetter','moneda','cantidadAsistentes','puestoAsistentes'])) {
+        if (!validateFormData(formData,['entregaBidLetter','moneda','cantidadAsistentes','puestoAsistentes','momentoFacturacionAgencia'])) {
             toast.error("Por favor, llena todos los campos para llegar a la siguiente etapa");
             setactiveTab("1");
         }

@@ -146,7 +146,13 @@ const AddEntregableModalFoto = ({ isOpen, onClose, onAdd, entregable, onUpdate }
                     <div className={styles.formGroup}>
                         <label>
                             Medios
-                            <input className="border p-2 rounded" type="text" name="medios" value={state.medios} onChange={handleChange} placeholder="Medios" />
+                            <select className="border p-2 rounded" name="medios" value={state.medios} onChange={handleChange}>
+                                <option value="">Seleccionar</option>
+                                <option value="OOH">OOH</option>
+                                <option value="POP">POP</option>
+                                <option value="Impresos">Impresos</option>
+                                <option value="Catalogos">Catálogos</option>
+                            </select>
                         </label>
                     </div>
                     <div className={styles.formGroup}>
@@ -199,10 +205,10 @@ const AddEntregableModalFoto = ({ isOpen, onClose, onAdd, entregable, onUpdate }
                             Espacio de color
                             <select className="border p-2 rounded" name="espacioColor" value={state.espacioColor} onChange={handleChange}>
                                 <option value="">Seleccionar</option>
-                                <option value="rec2020">Rec.2020</option>
-                                <option value="dci">DCI-P3</option>
-                                <option value="rec709">Rec.709</option>
+                                <option value="adobe">Adobe</option>
+                                <option value="rgb">RGB</option>
                                 <option value="srgb">sRGB</option>
+                                <option value="cmyk">CMYK</option>
                             </select>
                         </label>
                     </div>

@@ -1,6 +1,6 @@
 import { validateInputs } from '@/lib/utils';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import UploaderComponent from '../UploaderComponent';
 import Input from '../inputs/Input';
@@ -18,8 +18,8 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
     responsablePago: "Responsable de pago",
     politicaPago: "Política de pago",
     procesoFacturacion: "Proceso de facturación",
-    politicaPagoAgencia: "Política de pago para agencia",
-    procesoFacturacionAgencia: "Proceso de facturación para agencia",
+    // politicaPagoAgencia: "Política de pago para agencia",
+    // procesoFacturacionAgencia: "Proceso de facturación para agencia",
     contratoProyecto: "Contrato de proyecto",
     tipoContratoProyecto: "Tipo de contrato de proyecto",
     rondaCotizacion: "Ronda de cotización",
@@ -51,50 +51,15 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
     handleChange(e);
     setShowAgencyFields(value === "agencia");
   };
+
+  useEffect(()=>{
+        setShowAgencyFields(formData?.responsablePago === 'agencia')
+  },[formData?.responsablePago])
   return (
     <div className="space-y-8 p-4">
 
       <form>
         <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
-          {/*TODO: estos datos estan por ver porque fueron aceptados en un principio*/}
-          {/*<h2 className="text-xl font-bold mb-4">Objetivos de marca</h2>*/}
-          {/*<div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">*/}
-          {/*  <div>*/}
-          {/*    <label htmlFor="objetivoComunicacion" className="block text-sm font-medium text-gray-700">Objetivos*/}
-          {/*      de comunicación</label>*/}
-          {/*    <textarea*/}
-          {/*      id="objetivoComunicacion"*/}
-          {/*      name="objetivoComunicacion"*/}
-          {/*      className="mt-1 block w-full p-2 border border-gray-300 rounded-md"*/}
-          {/*      value={formData?.objetivoComunicacion}*/}
-          {/*      onChange={handleChange}*/}
-          {/*      maxLength={300}*/}
-          {/*    />*/}
-          {/*  </div>*/}
-          {/*  <div>*/}
-          {/*    <label htmlFor="target" className="block text-sm font-medium text-gray-700">Target</label>*/}
-          {/*    <textarea*/}
-          {/*      id="target"*/}
-          {/*      name="target"*/}
-          {/*      className="mt-1 block w-full p-2 border border-gray-300 rounded-md"*/}
-          {/*      value={formData?.target}*/}
-          {/*      onChange={handleChange}*/}
-          {/*      maxLength={300}*/}
-          {/*    />*/}
-          {/*  </div>*/}
-          {/*  <div>*/}
-          {/*    <label htmlFor="lineamientosMarca" className="block text-sm font-medium text-gray-700">Lineamientos*/}
-          {/*      de marca</label>*/}
-          {/*    <textarea*/}
-          {/*      id="lineamientosMarca"*/}
-          {/*      name="lineamientosMarca"*/}
-          {/*      className="mt-1 block w-full p-2 border border-gray-300 rounded-md"*/}
-          {/*      value={formData?.lineamientosMarca}*/}
-          {/*      onChange={handleChange}*/}
-          {/*      maxLength={300}*/}
-          {/*    />*/}
-          {/*  </div>*/}
-          {/*</div>*/}
 
           <div>
             <h2 className="text-xl font-bold mb-4">Documentos</h2>
@@ -237,7 +202,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                   onChange={handleChange}
                 >
                   <option value="">Seleccionar</option>
-                  <option value="si">Si</option>
+                  <option value="si">Sí</option>
                   <option value="no">No</option>
                 </select>
               </div>
@@ -327,7 +292,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                   onChange={handleChange}
                 >
                   <option value="">Seleccionar</option>
-                  <option value="si">Si</option>
+                  <option value="si">Sí</option>
                   <option value="no">No</option>
                 </select>
               </div>
@@ -342,7 +307,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                   onChange={handleChange}
                 >
                   <option value="">Seleccionar</option>
-                  <option value="si">Si</option>
+                  <option value="si">Sí</option>
                   <option value="no">No</option>
                 </select>
               </div>

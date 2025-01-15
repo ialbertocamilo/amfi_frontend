@@ -29,7 +29,7 @@ const EntregablePostulacion = ({
     }
     const [formData, setFormData] = useState<Entregable>(initialData);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
@@ -129,20 +129,35 @@ const EntregablePostulacion = ({
                                                 name="titulo"
                                                 className="mt-1 block w-full p-2 border rounded-md"
                                                 value={formData.titulo}
-                                                onChange={handleInputChange}
+                                                onChange={(e) => handleInputChange(e)}
                                             />
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700">
                                                 Duración
                                             </label>
-                                            <input
-                                                type="number"
+                                            <select
                                                 name="duracion"
                                                 className="mt-1 block w-full p-2 border rounded-md"
                                                 value={formData.duracion}
                                                 onChange={handleInputChange}
-                                            />
+                                            >
+                                                <option value="">Seleccionar</option>
+                                                <option value="5">5&#34;</option>
+                                                <option value="6">6&#34;</option>
+                                                <option value="7">7&#34;</option>
+                                                <option value="8">8&#34;</option>
+                                                <option value="9">9&#34;</option>
+                                                <option value="10">10&#34;</option>
+                                                <option value="15">15&#34;</option>
+                                                <option value="20">20&#34;</option>
+                                                <option value="30">30&#34;</option>
+                                                <option value="40">40&#34;</option>
+                                                <option value="60">60&#34;</option>
+                                                <option value="90">90&#34;</option>
+                                                <option value="120">120&#34;</option>
+                                                <option value="+120">+120&#34;</option>
+                                            </select>
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700">

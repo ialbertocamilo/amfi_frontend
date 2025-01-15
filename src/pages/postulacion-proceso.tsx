@@ -56,11 +56,11 @@ const PostulacionProceso: React.FC = () => {
       descripcion: "",
     },
     postproduccion: {
-      edicion: { numero: "" },
-      audio: { numero: "" },
-      online: { numero: "" },
-      masterizacion: { numero: "" },
-      cc: { numero: "" }
+      edicion: "" ,
+      audio:  "",
+      online:  "",
+      masterizacion:  "",
+      cc:  ""
     },
     animacion: {
       twoD: "",
