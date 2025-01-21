@@ -1,6 +1,7 @@
 import { getInvitedDirectors } from '@/api/directorApi';
 import { acceptDirectInvitation, acceptInvitation, declineInvitation, IPostulationData } from '@/api/postulationApi';
 import { IProjectInvitation } from '@/interfaces/project-director.interface';
+import { IProject } from '@/interfaces/project.interface';
 import { manageLogicError } from '@/lib/utils';
 import { ProjectStatus } from '@/mappers/project.mapper';
 import { useRouter } from 'next/router';
@@ -34,7 +35,8 @@ const ProjectPostulationInvitationDetails: React.FC<ProjectDetailsProps> = ({
   const [postulacion, setPostulacion] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [project, setProject] = useState<any>()
+  const [projectJSON, setProjectJSON] = useState<any>()
+  const [project, setProject] = useState<IProject>()
 
 
   const [invitationId, setInvitationId] = useState('');
@@ -73,7 +75,8 @@ const ProjectPostulationInvitationDetails: React.FC<ProjectDetailsProps> = ({
       router.push('/lista-de-proyectos')
       return;
     }
-    setProject(data.project.extra)
+    setProjectJSON(data.project.extra)
+    setProject(data.project)
     getInvitedDirectors(data.project.id).then((res) => {
       const result = res.filter(value => value.accepted)
       setInvitedDirectors(result)
@@ -86,7 +89,7 @@ const ProjectPostulationInvitationDetails: React.FC<ProjectDetailsProps> = ({
 
   const handleDecline = () => {
 
-    declineInvitation(token as string || projectInvitationId as string).then((data) => {
+    declineInvitation(token as string || projectInvitationId as string).then(() => {
       toast.success('Invitación rechazada')
       router.push('/lista-de-proyectos')
     })
@@ -96,12 +99,11 @@ const ProjectPostulationInvitationDetails: React.FC<ProjectDetailsProps> = ({
     <div className="container mt-4 mx-auto p-6 bg-white shadow-lg rounded-md">
     
       <>
-      
-      <Brief projectJson={project} data={data} invitedDirectors={invitedDirectors} />
+      <Brief projectJson={projectJSON} data={data} project={project} invitedDirectors={invitedDirectors} />
       <br />
       {postulacion && (
         <>
-          <ResumenProyecto data={project} />
+          <ResumenProyecto data={projectJSON} />
           <div className="flex justify-center pt-8">
             <button className="bg-red-500 text-white py-2 px-4 rounded" onClick={startPostulation}>
               Iniciar postulación

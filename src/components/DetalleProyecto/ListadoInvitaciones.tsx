@@ -111,6 +111,7 @@ const ListadoInvitaciones = ({
                     className="proposal-uploaded"
                     isUploaded={invitation.proposalUploaded}
                     onClick={(e) => {
+                      console.log('Open proposal')
                       e.stopPropagation();
                     }}
                   />

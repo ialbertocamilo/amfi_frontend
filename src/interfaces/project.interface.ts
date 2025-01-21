@@ -21,6 +21,7 @@ export interface IProject {
     advertiser?:ICompany
     createdAt: string;
     updatedAt?: Date;
+    unlockedForAgency?:boolean;
     creator: {
       id: string;
       name: string;

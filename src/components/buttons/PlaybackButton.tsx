@@ -18,7 +18,7 @@ export default function PlaybackControl({ status, onStatusChange }: PlaybackCont
   const [playbackState, setPlaybackState] = useState<PlaybackState>('stopped')
 
   useEffect(() => {
-    switch(status) {
+    switch (status) {
       case ProjectStatus.Draft:
         setPlaybackState('draft');
         break;
@@ -41,7 +41,7 @@ export default function PlaybackControl({ status, onStatusChange }: PlaybackCont
     setPlaybackState('playing');
     onStatusChange?.(ProjectStatus.InProgress);
   }
-  
+
   const handlePause = () => {
     setPlaybackState('paused');
     onStatusChange?.(ProjectStatus.Paused);
@@ -85,10 +85,9 @@ export default function PlaybackControl({ status, onStatusChange }: PlaybackCont
               </Tooltip>
             </motion.div>
           )}
-  
           {(playbackState === 'playing' || playbackState === 'paused') && (
             <>
-              {playbackState === 'playing' && (
+              {playbackState === 'playing' ? (
                 <motion.div key="pause" {...buttonVariants}>
                   <Tooltip title="Pausar - Detener temporalmente" arrow placement="top">
                     <Button
@@ -102,8 +101,22 @@ export default function PlaybackControl({ status, onStatusChange }: PlaybackCont
                     </Button>
                   </Tooltip>
                 </motion.div>
+              ) : (
+                <motion.div key="play" {...buttonVariants}>
+                  <Tooltip title="Reanudar proyecto" arrow placement="top">
+                    <Button
+                      onClick={handlePlay}
+                      variant="outlined"
+                      size="small"
+                      className="transition-colors duration-300 hover:bg-green-100 rounded-xl"
+                    >
+                      <Play className="h-6 w-6 text-green-600" />
+                      <span className="sr-only">Play</span>
+                    </Button>
+                  </Tooltip>
+                </motion.div>
               )}
-  
+
               <motion.div key="stop" {...buttonVariants}>
                 <Tooltip title="Detener - Cancelar el proyecto" arrow placement="top">
                   <Button
@@ -146,4 +159,5 @@ export default function PlaybackControl({ status, onStatusChange }: PlaybackCont
         cancelText="No, continuar"
       />
     </div>
-  )}
+  )
+}

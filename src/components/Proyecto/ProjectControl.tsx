@@ -1,6 +1,7 @@
-import { updateProjectStatus } from '@/api/projectApi';
+import { updateProjectById, updateProjectStatus } from '@/api/projectApi';
 import { formatToLocalTime } from '@/lib/utils';
 import { ProjectStatus } from '@/mappers/project.mapper';
+import { Role } from '@/mappers/user.mapper';
 import { useProjectContext } from '@/providers/project.context';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, ChevronUp } from 'lucide-react';
@@ -8,6 +9,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import PlaybackControl from '../buttons/PlaybackButton';
 import ProjectStatusText from '../inputs/ProjectStatusText';
+import { checkPermission } from '@/api/authorization';
 
 
 export const ProjectControl: React.FC = () => {
@@ -18,6 +20,20 @@ export const ProjectControl: React.FC = () => {
     const project = context?.project;
     const memoizedProject = useMemo(() => project, [project?.id, project?.status]);
 
+    const [unlockedAgency, setUnlockedAgency] = useState(project?.unlockedForAgency);
+    const [enabledUnlockForAgency, setEnabledUnlockForAgency] = useState(false);
+
+    useEffect(() => {
+        const checkUnlockPermission = async () => {
+            const hasPermission = await checkPermission('can.modify.unlockedForAgency');
+            console.log('hasPermission', hasPermission);
+            setEnabledUnlockForAgency(hasPermission);
+        };
+        checkUnlockPermission();
+    }, []);
+    useEffect(() => {
+        setUnlockedAgency(project?.unlockedForAgency);
+    }, [project?.unlockedForAgency]);
     const handleStatusChange = useCallback(async (newStatus: ProjectStatus) => {
         try {
             if (!memoizedProject?.id) return;
@@ -28,7 +44,15 @@ export const ProjectControl: React.FC = () => {
             toast.error('Error al actualizar estado');
         }
     }, [memoizedProject?.id, updateProjectStatus]);
+
+
+    const unlockForAgency = (e) => {
+        setUnlockedAgency(e.target.checked);
+        updateProjectById(project?.id as string, { unlockedForAgency: e.target.checked })
+        context?.fetchProject(project?.id as string);
+    }
     const [displayStatus, setDisplayStatus] = useState(project?.status);
+
 
     useEffect(() => {
         setDisplayStatus(project?.status);
@@ -93,6 +117,30 @@ export const ProjectControl: React.FC = () => {
                                                     <span>{project?.creator.name} {project?.creator?.lastname}</span>
                                                 </div>
                                             </div>
+
+
+                                            {enabledUnlockForAgency&& (
+                                                <div className="space-y-2 text-xs text-gray-500 font-mono">
+                                                    <div className="flex justify-between">
+                                                        <span className={'uppercase'}>Desbloquear visibilidad a agencia publicitaria</span>
+                                                        <label className="relative inline-flex items-center cursor-pointer">
+                                                            <input
+                                                                type="checkbox"
+                                                                className="sr-only peer"
+                                                                checked={unlockedAgency}
+                                                                onChange={unlockForAgency}
+                                                            />
+                                                            <div className="w-11 h-6 bg-gray-200 rounded-full peer 
+                                                    peer-focus:ring-4 peer-focus:ring-blue-300 
+                                                    peer-checked:after:translate-x-full peer-checked:after:border-white 
+                                                    after:content-[''] after:absolute after:top-0.5 after:left-[2px] 
+                                                    after:bg-white after:border-gray-300 after:border after:rounded-full 
+                                                    after:h-5 after:w-5 after:transition-all
+                                                    peer-checked:bg-blue-600">
+                                                            </div>
+                                                        </label>
+                                                    </div></div>
+                                            )}
                                         </div>
                                     </div>
 
@@ -108,8 +156,11 @@ export const ProjectControl: React.FC = () => {
                                                     <span>{formatToLocalTime(project?.createdAt?.toLocaleString() as string)}</span>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
+
+
                                 </div>
                                 <br />
                                 <div className="fixed bottom-4 right-4">
@@ -124,7 +175,7 @@ export const ProjectControl: React.FC = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     );
 };
 

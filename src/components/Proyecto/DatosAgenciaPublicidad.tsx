@@ -1,7 +1,6 @@
 import { CompanyType } from "@/constants";
 import { ICompany } from "@/interfaces/company.interface";
 import { useUserContext } from "@/providers/user.context";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import AddAgencia from "./AddAgencia";
 

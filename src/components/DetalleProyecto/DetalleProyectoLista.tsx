@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Tooltip } from "react-tooltip";
+import ProjectStatusText from "../inputs/ProjectStatusText";
 import { EvaluationScore } from "./Comparacion";
 import ListadoInvitaciones from "./ListadoInvitaciones";
 
@@ -51,7 +52,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
     contactoCompras: "",
     creado: "",
     estado: "",
-    entregaBidLetter: ""
+    entregaBidLetter: "",
+    status:""
   });
   const calculateRemainingDays = (deadline: string) => {
     const now = moment();
@@ -85,6 +87,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
         contactoCompras: projectData?.creator?.nationalIdentifierOrRFC || "",
         creado: formatUtcToLocalDate(projectData?.createdAt) || "",
         estado: ProjectMapper.mapProjectStatus(projectData?.status) || "",
+        status:projectData?.status,
         entregaBidLetter: formatUtcToLocalDate(projectData?.bidDeadline) || "",
       });
     }
@@ -98,25 +101,23 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
 
   const updateScoreEvaluation = (invitationData: InvitedDirectorsResponse) => {
     const evaluationScoreList: EvaluationScore[] = [];
-
     console.log("evaluationScoreList", evaluationScoreList);
     setEvaluationScore(evaluationScoreList);
   };
 
   const sendReminder = () => {
     sendReminderToProductionHouses(id as string)
-      .then((data) => {
+      .then(() => {
         toast.success("Recordatorio enviado");
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error("Error al enviar recordatorio");
       });
   };
 
   const router = useRouter();
   const closeProject = () => {
-    console.log("closing project");
-    updateProjectStatus(id as string, ProjectStatus.Closed).then((data) => {
+    updateProjectStatus(id as string, ProjectStatus.Closed).then(() => {
       toast.success("Convocatoria cerrada");
       router.push("/lista-de-proyectos-admin");
     });
@@ -138,9 +139,14 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
   return <Loader loading={loading}>
     <div className="mt-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl space-y-6 ">
       <div className="flex flex-col border-b">
-        <h1 className="text-xl font-semibold pb-4">
-          {formData?.nombreProyecto}
-        </h1>
+        <div className="flex justify-between items-center pb-4">
+          <h1 className="text-xl font-semibold">
+            {formData?.nombreProyecto}
+          </h1>
+          <ProjectStatusText status={formData?.status as ProjectStatus} />
+        </div>
+        <hr />
+        <br />
         <div className="flex justify-between pb-4">
           <div>
             <p className="text-sm font-medium text-gray-600 pb-2">
@@ -151,26 +157,20 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
             </p>
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-600 pb-2">
-              Creado: {formData?.creado}
-            </p>
-            <p className="text-sm font-medium text-gray-600 pb-2">
-              Estado: {formData?.estado}
-            </p>
-          </div>
-          <div>
             <p className=" text-sm font-medium text-gray-600 pb-2">
               Fecha limite de entrega de ofertas: {formData?.entregaBidLetter}
-
               <span className="invitation-bid-deadline text-sm font-medium text-red-600 pb-2 cursor-pointer">
                 ℹ️
               </span>
+            </p>
+            <p className="text-sm font-medium text-gray-600 pb-2">
+              Creado: {formData?.creado}
             </p>
           </div>
           <div className="flex items-end min-w-[10%]">
             <p
               onClick={() => setIsVisible(!isVisible)}
-              className="text-sm text-orange-500 font-medium hover:underline"
+              className="text-sm text-orange-500 font-medium hover:underline cursor-pointer"
             >
               {isVisible ? "Ocultar detalle" : "Ver detalle"}
             </p>

@@ -30,7 +30,7 @@ interface BriefProps {
         link1?: string;
         link2?: string;
     };
-    project: IProject;
+    project?: IProject;
     data: IPostulationData
     invitedDirectors: IProjectInvitation[];
 }
@@ -54,13 +54,12 @@ export const Brief: React.FC<BriefProps> = ({ projectJson, project, data, invite
                 <h1 className="text-2xl font-bold">{projectJson?.name}</h1>
                 <p>Creador: <strong>{data?.director?.name}</strong></p>
                 <p>Agencia: <strong>{data.project?.agency?.name}</strong></p>
+            </div>
+            <div className="text-right">
                 <div className="flex justify-start items-center mt-1">
                     <p className="mr-2">Estado: </p> <ProjectStatusText status={project?.status as ProjectStatus} />
                 </div>
-            </div>
-            <div className="text-right">
                 <p>Creado: {new Date(data?.project?.createdAt as string).toLocaleDateString()}</p>
-                <div className="flex items-center space-x-4 mt-2"></div>
             </div>
         </div>
         {/* Información de proyecto */}

@@ -13,7 +13,7 @@ export class UpdateProjectDto {
   isFinancialInfoUnlocked?: boolean;
   maxProducers?: number;
   projectStep?: number;
-
+  unlockedForAgency?: boolean;
   constructor(obj: Partial<UpdateProjectDto> = {}) {
     this.id = obj.id;
     this.advertiserId = obj.advertiserId;
@@ -29,5 +29,6 @@ export class UpdateProjectDto {
     this.isFinancialInfoUnlocked = obj.isFinancialInfoUnlocked;
     this.maxProducers = obj.maxProducers;
     this.projectStep = obj.projectStep;
+    this.unlockedForAgency=obj.unlockedForAgency;
   }
 }

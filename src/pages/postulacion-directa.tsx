@@ -20,6 +20,10 @@ const PostulacionDirecta: React.FC = () => {
             checkInvitationStatusDirect(projectInvitationId as string).then((res) => {
                 if (res?.result) {
                     setData(res.result);
+                    if (res.result.accepted===true) {
+                        toast.success('Invitación aceptada')
+                        router.push(`/postulacion-proceso?projectInvitationId=${projectInvitationId}`);
+                    }
                 }
             }).catch((err) => {
                 toast.error('Error al cargar la información del proyecto')

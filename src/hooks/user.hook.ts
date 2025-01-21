@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
 import { getCurrentUser } from '@/api/authenticationApi';
-import { IUser } from '@/interfaces/user.interface';
 import { storageConstants } from '@/constants';
+import { IUser } from '@/interfaces/user.interface';
+import { useCallback, useState } from 'react';
 
 
 
