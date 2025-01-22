@@ -27,6 +27,8 @@ const ComparativoPage: React.FC = () => {
             let creativeProposal = 0;
             let experience = 0;
             let budget = 0;
+            console.log("item");
+            console.log(item);
 
             if (item.evaluation) {
               const evaluationScore = calculateEvaluationScore(
@@ -47,7 +49,6 @@ const ComparativoPage: React.FC = () => {
                 item.project.budget,
                 item.project.creativeProposalWeight,
               );
-              console.log("budgetScore", budgetScore);
               budget = budgetScore.budget;
             }
 
@@ -72,7 +73,9 @@ const ComparativoPage: React.FC = () => {
           });
 
           setEvaluationScore(evaluationData);
-          setProject(data.project);
+          if (setProject) {
+            setProject(data.project);
+          }
         })
         .finally(() => {
           setLoading(false);

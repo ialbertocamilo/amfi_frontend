@@ -8,6 +8,7 @@ import DownloadIcon from "../icons/DownloadIcon";
 import NextIcon from "../icons/NextIcon";
 import { ProposalUploaded } from "@/components/buttons/ProposalUploadedButton";
 import { ProjectInvitationMapper } from "@/mappers/project-invitation.mapper";
+import { IProjectInvitation } from "@/interfaces/project-director.interface";
 
 interface ListadoInvitacionesProps {
   invitationData: InvitedDirectorsResponse;

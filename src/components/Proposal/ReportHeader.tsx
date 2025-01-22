@@ -1,5 +1,4 @@
-
-import { ICompany } from '@/interfaces/company.interface';
+import { ICompany } from "@/interfaces/company.interface";
 
 interface ReportHeaderProps {
   productionHouse: ICompany | undefined;
@@ -7,7 +6,7 @@ interface ReportHeaderProps {
 
 export function ReportHeader({ productionHouse }: ReportHeaderProps) {
   return (
-    <div className="bg-gray-300 text-white p-6 rounded-t-lg">
+    <div className="bg-gray-600 text-white p-6 rounded-t-lg">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <h1 className="text-3xl font-bold">Propuesta de </h1>

@@ -188,10 +188,12 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
     }));
   };
 
-  const { setProject } = useProjectContext();
+  const setProject = useProjectContext()?.setProject;
   const onInit = async () => {
     const result = (await getBidEvaluation(projectInvitationId))?.result;
-    setProject(result.project);
+    if (setProject && result?.project) {
+      setProject(result?.project);
+    }
     const evaluation = result?.evaluation;
     const budget = result?.budget;
 
@@ -218,9 +220,6 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
       setQuestionsDirector(
         updateEvaluation(questionsDirector, evaluation.experience.director),
       );
-
-      console.log("creativeProposalPercentage", creativeProposalPercentage);
-
       const { creativeProposal: creativeScore, experience } =
         calculateEvaluationScore(evaluation, result!.creativeProposalWeight);
       console.log("creativeScore", creativeScore);

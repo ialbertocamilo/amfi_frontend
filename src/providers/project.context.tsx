@@ -9,7 +9,7 @@ interface ProjectContextProps {
   error: string | null;
   fetchProject: (id: string) => Promise<void>;
   updateStatus: (projectId: string, status: ProjectStatus) => Promise<void>;
-  setProject: (project: IProject | null) => void;
+  setProject: (project: IProject) => void;
 }
 
 const ProjectContext = createContext<ProjectContextProps | undefined>(

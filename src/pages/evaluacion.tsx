@@ -2,7 +2,7 @@ import Evaluacion from "@/components/DetalleProyecto/Evaluacion";
 import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import ProjectBreadcrumb from "@/components/Proyecto/ProjectBreadcrumb";
+import Breadcrumb from "@/components/Proyecto/ProjectBreadcrumb";
 
 const EvaluacionPage = () => {
   const [creativeProposalPercentage, setCreativeProposalPercentage] =
@@ -13,7 +13,7 @@ const EvaluacionPage = () => {
 
   return (
     <Layout>
-      <ProjectBreadcrumb />
+      <Breadcrumb />
       <Evaluacion
         projectInvitationId={projectInvitationId}
         creativeProposalPercentage={creativeProposalPercentage}

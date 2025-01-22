@@ -11,10 +11,10 @@ export function cn(...inputs: ClassValue[]) {
 
 export const validateFormData = (
   obj: Record<string, any>,
-  excludeFields: string[] = []
+  excludeFields: string[] = [],
 ): boolean => {
   for (const [key, value] of Object.entries(obj)) {
-    if (value === '' && !excludeFields.includes(key)) {
+    if (value === "" && !excludeFields.includes(key)) {
       console.warn(`Field ${key} is empty`);
       return false;
     }
@@ -24,9 +24,9 @@ export const validateFormData = (
 export const validateFormData2 = (formData: Record<string, any>): boolean => {
   for (const key in formData) {
     if (formData.hasOwnProperty(key)) {
-      console.warn('Field is empty ', key);
+      console.warn("Field is empty ", key);
       const value = formData[key];
-      if (typeof value === 'object' && value !== null) {
+      if (typeof value === "object" && value !== null) {
         if (!validateFormData(value)) {
           return false;
         }
@@ -37,7 +37,6 @@ export const validateFormData2 = (formData: Record<string, any>): boolean => {
   }
   return true;
 };
-
 
 export const formatToLocalTime = (isoDate: string): string => {
   if (!isoDate) return "";
@@ -59,7 +58,7 @@ export const getObjectLength = (obj: Record<string, any>): number => {
 
 export const calculateEvaluationScore = (
   evaluation: Evaluation,
-  creativeProposalPercentage: number /*entre 0.3 - 0.5*/
+  creativeProposalPercentage: number /*entre 0.3 - 0.5*/,
 ): {
   creativeProposal: number;
   experience: number;
@@ -83,22 +82,22 @@ export const calculateEvaluationScore = (
 
   score.creativeProposal = Object.values(evaluation.creativeProposal).reduce(
     (acc, value) => acc + value * creativeProposalWeight,
-    0
+    0,
   );
 
   score.experience += Object.values(evaluation.experience.company).reduce(
     (acc, value) => acc + (value ? experiencelWeight : 0),
-    0
+    0,
   );
 
   score.experience += Object.values(evaluation.experience.support).reduce(
     (acc, value) => acc + (value ? experiencelWeight : 0),
-    0
+    0,
   );
 
   score.experience += Object.values(evaluation.experience.director).reduce(
     (acc, value) => acc + (value ? experiencelWeight : 0),
-    0
+    0,
   );
 
   return {
@@ -110,29 +109,36 @@ export const calculateEvaluationScore = (
 export const calculateBudgetScore = (
   budget: number,
   baselineBudget: number | null,
-  creativeProposalPercentage: number
+  creativeProposalPercentage: number,
 ): { budget: number } => {
-  console.log("budget", budget);
   if (!baselineBudget) {
     return {
       budget: 0,
     };
   }
 
-  let budgetScore = 0;
-  const experiencePercentage = 0.2;
+  let firstCalc = budget / baselineBudget - 1;
+  const creativeProposalPercentageNormalized = creativeProposalPercentage * 100;
+  let secondCalc = creativeProposalPercentageNormalized * firstCalc;
+  const resultScore = (prevCalc: number, unitaryValue: number) => {
+    if (prevCalc === -unitaryValue) {
+      return 0;
+    } else if (prevCalc < 0) {
+      return unitaryValue;
+    } else if (prevCalc > 0) {
+      return unitaryValue - prevCalc;
+    } else if (prevCalc === 0) {
+      return unitaryValue;
+    }
+    return 0;
+  };
 
-  const budgetPercentage =
-    1 - creativeProposalPercentage - experiencePercentage;
-
-  const budgetVariation = budget / baselineBudget - 1;
-  console.log("budgetVariation", budgetVariation);
-  if (budgetPercentage > budgetVariation && budgetVariation > 0) {
-    budgetScore = budgetPercentage - budgetVariation;
-  }
-
+  const budgetScore = resultScore(
+    secondCalc,
+    creativeProposalPercentageNormalized,
+  );
   return {
-    budget: Math.round(budgetScore * 100),
+    budget: Math.round(budgetScore),
   };
 };
 
@@ -159,23 +165,34 @@ export const formatToUtcBackend = (isoDate: string): Date => {
   return new Date(moment(isoDate).format("YYYY-MM-DDTHH:mm:ss"));
 };
 
-
 export const formatToCurrency = (value?: number) => {
   if (value === undefined || value === null) {
-    return '-';
+    return "-";
   }
-  return new Intl.NumberFormat('es-MX', { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
-}
+  return new Intl.NumberFormat("es-MX", {
+    style: "decimal",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
+};
 
 export const formatToMxn = (value?: number) => {
   if (value === undefined || value === null) {
-    return '-';
+    return "-";
   }
-  return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(value) + ' MXN';
+  return (
+    new Intl.NumberFormat("es-MX", {
+      style: "currency",
+      currency: "MXN",
+    }).format(value) + " MXN"
+  );
 };
 
-
-export const validateInputs = (formData: any, inputNames: string[],fieldLabels) => {
+export const validateInputs = (
+  formData: any,
+  inputNames: string[],
+  fieldLabels,
+) => {
   for (const name of inputNames) {
     if (!formData[name]) {
       return `Por favor, complete el campo: ${fieldLabels[name]}`;
@@ -185,17 +202,20 @@ export const validateInputs = (formData: any, inputNames: string[],fieldLabels) 
 };
 
 export const checkProjectReadonly = (status: ProjectStatus): boolean => {
-  return status === ProjectStatus.Closed || status === ProjectStatus.InProgress || status === ProjectStatus.Finished;
+  return (
+    status === ProjectStatus.Closed ||
+    status === ProjectStatus.InProgress ||
+    status === ProjectStatus.Finished
+  );
 };
 
 export const fixYesNo = (value: string) => {
-
   switch (value?.toLowerCase()) {
-    case 'si':
-      return 'Sí';
-    case 'no':
-      return 'No';
+    case "si":
+      return "Sí";
+    case "no":
+      return "No";
     default:
-      return '';
+      return "";
   }
-}
+};
