@@ -1,6 +1,4 @@
-import {
-  InvitedDirectorsResponse
-} from "@/api/interface/api.interface";
+import { InvitedDirectorsResponse } from "@/api/interface/api.interface";
 import { sendReminderToProductionHouses } from "@/api/productoraApi";
 import {
   getInvitationsByProjectId,
@@ -9,7 +7,7 @@ import {
 } from "@/api/projectApi";
 import Loader from "@/components/Loader";
 import useLoader from "@/hooks/loader.hook";
-import { formatUtcToLocalDate } from '@/lib/utils';
+import { formatUtcToLocalDate } from "@/lib/utils";
 import { ProjectMapper, ProjectStatus } from "@/mappers/project.mapper";
 import moment from "moment";
 import { useRouter } from "next/router";
@@ -25,8 +23,6 @@ interface ProjectDetailsProps {
 }
 
 const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
-  const [isVisible, setIsVisible] = useState(true);
-
   const [evaluationScore, setEvaluationScore] = useState<EvaluationScore[]>([]);
 
   const [invitationData, setInvitationData] =
@@ -53,15 +49,15 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
     creado: "",
     estado: "",
     entregaBidLetter: "",
-    status:""
+    status: "",
   });
   const calculateRemainingDays = (deadline: string) => {
     const now = moment();
     const end = moment(deadline);
-    return end.diff(now, 'days');
+    return end.diff(now, "days");
   };
 
-  const [remainingDays, setRemainingDays] = useState(0)
+  const [remainingDays, setRemainingDays] = useState(0);
   const onInit = async () => {
     setLoading(true);
     const projectData = await getProjectById(id);
@@ -87,11 +83,13 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
         contactoCompras: projectData?.creator?.nationalIdentifierOrRFC || "",
         creado: formatUtcToLocalDate(projectData?.createdAt) || "",
         estado: ProjectMapper.mapProjectStatus(projectData?.status) || "",
-        status:projectData?.status,
+        status: projectData?.status,
         entregaBidLetter: formatUtcToLocalDate(projectData?.bidDeadline) || "",
       });
     }
-    setRemainingDays(calculateRemainingDays(projectData?.bidDeadline as string));
+    setRemainingDays(
+      calculateRemainingDays(projectData?.bidDeadline as string),
+    );
     if (invitationData) {
       setInvitationData(invitationData);
       updateScoreEvaluation(invitationData);
@@ -129,57 +127,50 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
     }
   }, [id]);
 
-
   const handleItemClick = () => {
     router.push(`/evaluacion?projectInvitationId=${bidId}`);
   };
 
-
   const { loading, setLoading } = useLoader(false);
-  return <Loader loading={loading}>
-    <div className="mt-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl space-y-6 ">
-      <div className="flex flex-col border-b">
-        <div className="flex justify-between items-center pb-4">
-          <h1 className="text-xl font-semibold">
-            {formData?.nombreProyecto}
-          </h1>
-          <ProjectStatusText status={formData?.status as ProjectStatus} />
-        </div>
-        <hr />
-        <br />
-        <div className="flex justify-between pb-4">
-          <div>
-            <p className="text-sm font-medium text-gray-600 pb-2">
-              Creador: {formData?.anunciante}
-            </p>
-            <p className="text-sm font-medium text-gray-600 pb-2">
-              Agencia: {formData?.agencia}
-            </p>
+  return (
+    <Loader loading={loading}>
+      <div className="mt-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl space-y-6 ">
+        <div className="flex flex-col border-b">
+          <div className="flex justify-between items-center pb-4">
+            <h1 className="text-xl font-semibold">
+              {formData?.nombreProyecto}
+            </h1>
+            <div className={"flex flex-col"}>
+              <ProjectStatusText status={formData?.status as ProjectStatus} />
+            </div>
           </div>
-          <div>
-            <p className=" text-sm font-medium text-gray-600 pb-2">
-              Fecha limite de entrega de ofertas: {formData?.entregaBidLetter}
-              <span className="invitation-bid-deadline text-sm font-medium text-red-600 pb-2 cursor-pointer">
-                ℹ️
-              </span>
-            </p>
-            <p className="text-sm font-medium text-gray-600 pb-2">
-              Creado: {formData?.creado}
-            </p>
-          </div>
-          <div className="flex items-end min-w-[10%]">
-            <p
-              onClick={() => setIsVisible(!isVisible)}
-              className="text-sm text-orange-500 font-medium hover:underline cursor-pointer"
-            >
-              {isVisible ? "Ocultar detalle" : "Ver detalle"}
-            </p>
+          <hr />
+          <br />
+          <div className="flex justify-between pb-4">
+            <div>
+              <p className="text-sm font-medium text-gray-600 pb-2">
+                Creador: {formData?.anunciante}
+              </p>
+              <p className="text-sm font-medium text-gray-600 pb-2">
+                Agencia: {formData?.agencia}
+              </p>
+            </div>
+            <div>
+              <p className=" text-sm font-medium text-gray-600 pb-2">
+                Fecha limite de entrega de ofertas: {formData?.entregaBidLetter}
+                <span className="invitation-bid-deadline text-sm font-medium text-red-600 pb-2 cursor-pointer">
+                  ℹ️
+                </span>
+              </p>
+              <p className="text-sm font-medium text-gray-600 pb-2">
+                Creado: {formData?.creado}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      <Tooltip anchorSelect=".invitation-bid-deadline" place={"bottom"}>Restan {remainingDays} dias para finalizar con la entrega.</Tooltip>
-      <div className={isVisible ? "" : "hidden"}>
-
+        <Tooltip anchorSelect=".invitation-bid-deadline" place={"bottom"}>
+          Restan {remainingDays} días para finalizar con la entrega.
+        </Tooltip>
         <ListadoInvitaciones
           invitationData={invitationData}
           setBidId={setBidId}
@@ -188,11 +179,9 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
           closeProject={closeProject}
           sendReminder={sendReminder}
         ></ListadoInvitaciones>
-
       </div>
-    </div>
-  </Loader>
-    ;
+    </Loader>
+  );
 };
 
 export default ProjectDetails;

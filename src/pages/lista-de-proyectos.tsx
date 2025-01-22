@@ -6,15 +6,21 @@ import Loader from "@/components/Loader";
 import { CompanyType } from "@/constants";
 import { IProjectInvitation } from "@/interfaces/project-director.interface";
 import { ProjectInvitationMapper } from "@/mappers/project-invitation.mapper";
-import { EstadoProyecto, ProjectMapper } from "@/mappers/project.mapper";
+import {
+  EstadoProyecto,
+  ProjectMapper,
+  ProjectStatus,
+} from "@/mappers/project.mapper";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Tooltip } from "react-tooltip";
 import "./globals.css";
+import { ProposalUploaded } from "@/components/buttons/ProposalUploadedButton";
+import ProjectStatusText from "@/components/inputs/ProjectStatusText";
 
-const ProjectStatus = ({ status }: { status: string }) => {
+const ProjectStatusComponent = ({ status }: { status: string }) => {
   if (!status) {
     return (
       <span className="project-status bg-red-100 text-red-500 text-sm px-4 py-2 rounded">
@@ -29,22 +35,26 @@ const ProjectStatus = ({ status }: { status: string }) => {
 
   switch (mappedStatus) {
     case EstadoProyecto.EnProgreso:
-      bgColor = "bg-blue-100";
-      textColor = "text-blue-500";
+      bgColor = "bg-green-50";
+      textColor = "text-green-700";
       break;
     case EstadoProyecto.Terminado:
-      bgColor = "bg-green-100";
-      textColor = "text-green-500";
+      bgColor = "bg-teal-100";
+      textColor = "text-teal-700";
       break;
     case EstadoProyecto.Pausado:
+      bgColor = "bg-yellow-100";
+      textColor = "text-yellow-500";
+      break;
+    case EstadoProyecto.Cerrado:
       bgColor = "bg-red-100";
       textColor = "text-red-500";
       break;
-    case EstadoProyecto.Cerrado:
+    case EstadoProyecto.Borrador:
       bgColor = "bg-gray-100";
       textColor = "text-gray-500";
       break;
-    default:
+    default: // Borrador
       bgColor = "bg-yellow-100";
       textColor = "text-yellow-500";
       break;
@@ -52,9 +62,9 @@ const ProjectStatus = ({ status }: { status: string }) => {
 
   return (
     <span
-      className={`project-status ${bgColor} ${textColor} text-sm px-4 py-2 rounded `}
+      className={`project-status ${bgColor} ${textColor} text-sm w-40 h-8 flex items-center justify-center rounded `}
     >
-      {mappedStatus}
+      <ProjectStatusText status={status as ProjectStatus} />
     </span>
   );
 };
@@ -95,27 +105,7 @@ const NewBadge = ({ createdAt }: { createdAt: Date }) => {
     )
   );
 };
-const ProposalUploaded = ({
-  isUploaded,
-  onClick,
-  className,
-}: {
-  isUploaded: boolean;
-  onClick?: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
-  className?: string;
-}) => {
-  if (isUploaded)
-    return (
-      <span
-        className={`proposal-uploaded text-sm text-red-500 text-bold flex items-center cursor-pointer ${className}`}
-        onClick={onClick}
-      >
-        <DownloadIcon />
-        <b className="ml-2">Abrir propuesta enviada</b>
-      </span>
-    );
-  return null;
-};
+
 const ListaDeProyectos = () => {
   const [projects, setProjects] = useState<IProjectInvitation[]>([]);
   const [filterText, setFilterText] = useState("");
@@ -166,11 +156,11 @@ const ListaDeProyectos = () => {
           <h1 className="text-2xl font-semibold">Lista de Proyectos</h1>
         </div>
 
-        <div className="flex mb-4">
+        <div className="flex flex-col md:flex-row mb-4 justify-between">
           <input
             type="text"
             placeholder="Filtrar tabla..."
-            className="p-2 border border-gray-300 rounded w-full"
+            className="p-2 border border-gray-300 rounded w-full mb-2 md:mb-0 md:mr-2"
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
           />
@@ -186,8 +176,7 @@ const ListaDeProyectos = () => {
           {filteredProjects.map((projectInvitation, index) => (
             <div
               key={index}
-              className="flex justify-between items-center p-4 bg-white shadow-md rounded-lg space-y-4 hover:bg-gray-100 ttransition-transform duration-300 ease-in-out transform hover:scale-105
-                    cursor-pointer"
+              className="flex flex-col md:flex-row justify-between items-center p-4 bg-white shadow-md rounded-lg space-y-4 md:space-y-0 hover:bg-gray-100 transition-transform duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer"
               onClick={() => handleRedirect(projectInvitation)}
             >
               <div className="flex items-center space-x-4">
@@ -196,28 +185,23 @@ const ListaDeProyectos = () => {
                 </span>
                 <NewBadge createdAt={projectInvitation.createdAt} />
               </div>
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 space-x-0 md:space-x-3">
                 <ProposalUploaded
-                  className="proposal-uploaded"
+                  className={"proposal-uploaded"}
                   isUploaded={projectInvitation.proposalUploaded}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    router.push(
-                      `/propuesta?postulationId=${projectInvitation?.postulation?.id}`,
-                    );
-                  }}
+                  invitation={projectInvitation}
                 />
                 <InvitationStatus status={projectInvitation.accepted} />
-                <ProjectStatus status={projectInvitation.project.status} />
+                <ProjectStatusComponent
+                  status={projectInvitation.project.status}
+                />
                 <NextIcon />
               </div>
             </div>
           ))}
         </div>
       </Loader>
-      <Tooltip anchorSelect=".proposal-uploaded" place={"bottom"}>
-        Propuesta técnica está disponible.
-      </Tooltip>
+
       <Tooltip anchorSelect=".invitation-status" place={"bottom"}>
         Estado de la invitación al proyecto.
       </Tooltip>

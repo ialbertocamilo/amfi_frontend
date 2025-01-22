@@ -1,11 +1,13 @@
+import React, { useState } from "react";
 import { InvitedDirectorsResponse } from "@/api/interface/api.interface";
-import { IProjectInvitation } from "@/interfaces/project-director.interface";
-import { ProjectInvitationMapper } from "@/mappers/project-invitation.mapper";
+import { sendReminderToProductionHouses } from "@/api/productoraApi";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { Tooltip } from "react-tooltip";
 import DownloadIcon from "../icons/DownloadIcon";
 import NextIcon from "../icons/NextIcon";
+import { ProposalUploaded } from "@/components/buttons/ProposalUploadedButton";
+import { ProjectInvitationMapper } from "@/mappers/project-invitation.mapper";
 
 interface ListadoInvitacionesProps {
   invitationData: InvitedDirectorsResponse;
@@ -22,6 +24,22 @@ const ListadoInvitaciones = ({
   sendReminder,
   closeProject,
 }: ListadoInvitacionesProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
+
+  const handleSendReminderClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleConfirm = () => {
+    setIsModalOpen(false);
+    sendReminder();
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   const InvitationStatus = ({ status }: { status: boolean }) => {
     const mappedStatus = ProjectInvitationMapper.mapStatus(status);
     let bgColor = "";
@@ -51,29 +69,6 @@ const ListadoInvitaciones = ({
     );
   };
 
-  const ProposalUploaded = ({
-    isUploaded,
-    onClick,
-    className,
-  }: {
-    isUploaded: boolean;
-    onClick?: (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => void;
-    className?: string;
-  }) => {
-    if (isUploaded)
-      return (
-        <span
-          className={`proposal-uploaded text-sm text-red-500 text-bold flex items-center cursor-pointer ${className}`}
-          onClick={onClick}
-        >
-          <DownloadIcon />
-          <b className="ml-2">Abrir propuesta enviada</b>
-        </span>
-      );
-    return null;
-  };
-
-  const router = useRouter();
   const doClick = (
     e: React.MouseEvent<HTMLDivElement>,
     invitation: IProjectInvitation,
@@ -90,14 +85,14 @@ const ListadoInvitaciones = ({
     <>
       <div className="pb-4">
         <h2 className="text-lg font-medium mb-4">
-          Casas Productoras invitadas
+          Casas productoras invitadas
         </h2>
         <ul>
           <div className="space-y-4">
             {invitation.result?.map((invitation, index) => (
               <div
                 key={index}
-                className={`flex justify-between items-center p-4 bg-white shadow-md rounded-lg space-y-4 hover:bg-gray-100 ttransition-transform duration-300 ease-in-out transform hover:scale-105
+                className={`flex justify-between items-center p-4 bg-white shadow-md rounded-lg space-y-4 hover:bg-gray-100 ttransition-transform duration-300 ease-in-out transform hover:-translate-y-1
                     cursor-pointer ${
                       invitation.proposalUploaded ? "cursor-pointer" : ""
                     }`}
@@ -110,10 +105,7 @@ const ListadoInvitaciones = ({
                   <ProposalUploaded
                     className="proposal-uploaded"
                     isUploaded={invitation.proposalUploaded}
-                    onClick={(e) => {
-                      console.log('Open proposal')
-                      e.stopPropagation();
-                    }}
+                    invitation={invitation}
                   />
                   <InvitationStatus status={invitation?.accepted} />
                   <NextIcon />
@@ -133,11 +125,36 @@ const ListadoInvitaciones = ({
         </p>
         <button
           className="text-xs text-red-500 hover:text-red-600 font-semibold"
-          onClick={() => sendReminder()}
+          onClick={handleSendReminderClick}
         >
           Enviar recordatorio
         </button>
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded-lg shadow-lg">
+            <h2 className="text-lg font-medium mb-4">Confirmar</h2>
+            <p className="mb-4">
+              ¿Estás seguro de que deseas enviar el recordatorio?
+            </p>
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={handleCancel}
+                className="bg-gray-500 text-white p-2 rounded-lg hover:bg-gray-700 transition-colors duration-300"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleConfirm}
+                className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
+              >
+                Confirmar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Tooltip anchorSelect=".invitation-status" place={"bottom"}>
         Estado de la invitación al proyecto.
