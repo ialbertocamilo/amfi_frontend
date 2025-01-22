@@ -10,6 +10,7 @@ import PercentageSelector from "../Commons/PercentageSelector/PercentageSelector
 import ScoreModal from "../Commons/ScoreModal/ScoreModal";
 import StarRating from "../Commons/StarRating/StarRating";
 import BudgetBarChart from "./BudgetBarChart";
+import { useProjectContext } from "@/providers/project.context";
 
 interface ProposalItem {
   key: string;
@@ -178,7 +179,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
 
   const updateEvaluation = (
     proposal: ProposalItem[] | QuestionItem[],
-    evaluation: object
+    evaluation: object,
   ) => {
     return proposal.map((item) => ({
       ...item,
@@ -187,10 +188,13 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
     }));
   };
 
+  const { setProject } = useProjectContext();
   const onInit = async () => {
     const result = (await getBidEvaluation(projectInvitationId))?.result;
+    setProject(result.project);
     const evaluation = result?.evaluation;
     const budget = result?.budget;
+
     setCreativeProposalPercentage(result!.creativeProposalWeight * 100);
     setBudgetBaseline(result!.baselineBudget);
     const calculatedEvaluationScore = {
@@ -203,16 +207,16 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
       setEvaluation(evaluation);
 
       setCreativeProposal(
-        updateEvaluation(creativeProposal, evaluation.creativeProposal)
+        updateEvaluation(creativeProposal, evaluation.creativeProposal),
       );
       setQuestionsEmpresa(
-        updateEvaluation(questionsEmpresa, evaluation.experience.company)
+        updateEvaluation(questionsEmpresa, evaluation.experience.company),
       );
       setQuestionsRespaldo(
-        updateEvaluation(questionsRespaldo, evaluation.experience.support)
+        updateEvaluation(questionsRespaldo, evaluation.experience.support),
       );
       setQuestionsDirector(
-        updateEvaluation(questionsDirector, evaluation.experience.director)
+        updateEvaluation(questionsDirector, evaluation.experience.director),
       );
 
       console.log("creativeProposalPercentage", creativeProposalPercentage);
@@ -228,7 +232,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
       setBudget(budget);
       const totalBudget = Object.values(budget).reduce(
         (acc, value) => acc + value,
-        0
+        0,
       );
 
       calculatedEvaluationScore.budget = calculateBudgetScore(
@@ -293,7 +297,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
   };
 
   const handlePercentageChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     setCreativeProposalPercentage(Number(e.target.value));
   };
@@ -337,17 +341,17 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
     };
 
     creativeProposal.map(
-      (item) => (newEvaluation.creativeProposal[item.key] = item.value)
+      (item) => (newEvaluation.creativeProposal[item.key] = item.value),
     );
 
     questionsEmpresa.map(
-      (item) => (newEvaluation.experience.company[item.key] = item.value)
+      (item) => (newEvaluation.experience.company[item.key] = item.value),
     );
     questionsRespaldo.map(
-      (item) => (newEvaluation.experience.support[item.key] = item.value)
+      (item) => (newEvaluation.experience.support[item.key] = item.value),
     );
     questionsDirector.map(
-      (item) => (newEvaluation.experience.director[item.key] = item.value)
+      (item) => (newEvaluation.experience.director[item.key] = item.value),
     );
 
     return newEvaluation;
@@ -416,17 +420,15 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
           <div className="pt-4">
             <h3 className="text-xl font">Empresa</h3>
             <div className="grid grid-cols-2 gap-6 mt-4">
-              {questionsEmpresa.map((question, _) => (
-                <>
-                  <div key={question.key}>
-                    <BinaryChoice
-                      label={question.label}
-                      keyName={question.key}
-                      answer={question.value}
-                      handleAnswerChange={handleAnswerChange}
-                    ></BinaryChoice>
-                  </div>
-                </>
+              {questionsEmpresa.map((question) => (
+                <div key={question.key}>
+                  <BinaryChoice
+                    label={question.label}
+                    keyName={question.key}
+                    answer={question.value}
+                    handleAnswerChange={handleAnswerChange}
+                  ></BinaryChoice>
+                </div>
               ))}
             </div>
           </div>

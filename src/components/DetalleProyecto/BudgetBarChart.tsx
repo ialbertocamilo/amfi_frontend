@@ -10,6 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { Budget } from "@/api/interface/api.interface";
+import { formatToCurrency, formatToMxn } from "@/lib/utils";
 
 ChartJS.register(
   CategoryScale,
@@ -17,7 +18,7 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 interface BudgetBarChartProps {
@@ -27,7 +28,7 @@ interface BudgetBarChartProps {
 const BudgetBarChart: React.FC<BudgetBarChartProps> = ({ budget }) => {
   const addEmptyData = (
     array: string[] | number[],
-    quantity: number
+    quantity: number,
   ): string[] | number[] => {
     const fillValue = typeof array[0] === "number" ? 0 : "";
 
@@ -146,7 +147,7 @@ const BudgetBarChart: React.FC<BudgetBarChartProps> = ({ budget }) => {
         ))}
       </div>
       <p className="text-lg font-normal text-gray-700 text-center pt-2">
-        Presupuesto Total: ${totalBudget}
+        Presupuesto Total: {formatToMxn(totalBudget)}
       </p>
     </>
   );
