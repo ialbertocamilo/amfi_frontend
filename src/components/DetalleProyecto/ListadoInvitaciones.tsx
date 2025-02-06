@@ -17,6 +17,7 @@ interface ListadoInvitacionesProps {
   handleItemClick: (e) => void;
   sendReminder: () => void;
   closeProject: () => void;
+  disabled: boolean;
 }
 
 const ListadoInvitaciones = ({
@@ -24,12 +25,15 @@ const ListadoInvitaciones = ({
   formData,
   sendReminder,
   closeProject,
+  disabled,
 }: ListadoInvitacionesProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
   const handleSendReminderClick = () => {
-    setIsModalOpen(true);
+    if (!disabled) {
+      setIsModalOpen(true);
+    }
   };
 
   const handleConfirm = () => {
@@ -74,11 +78,13 @@ const ListadoInvitaciones = ({
     e: React.MouseEvent<HTMLDivElement>,
     invitation: IProjectInvitation,
   ) => {
-    if (invitation.proposalUploaded) {
+    if (!disabled && invitation.proposalUploaded) {
       router.push(`/evaluacion?projectInvitationId=${invitation.id}`);
     } else {
       e.preventDefault();
-      toast.error("La propuesta aún no ha sido subida");
+      toast.error(
+        "La propuesta aún no ha sido subida o la acción está deshabilitada",
+      );
     }
   };
 
@@ -93,10 +99,8 @@ const ListadoInvitaciones = ({
             {invitation.result?.map((invitation, index) => (
               <div
                 key={index}
-                className={`flex justify-between items-center p-4 bg-white shadow-md rounded-lg space-y-4 hover:bg-gray-100 ttransition-transform duration-300 ease-in-out transform hover:-translate-y-1
-                    cursor-pointer ${
-                      invitation.proposalUploaded ? "cursor-pointer" : ""
-                    }`}
+                className={`flex justify-between items-center p-4 bg-white shadow-md rounded-lg space-y-4 hover:bg-gray-100 transition-transform duration-300 ease-in-out transform hover:-translate-y-1
+                    ${!disabled && invitation.proposalUploaded ? "cursor-pointer" : "cursor-not-allowed"}`}
                 onClick={(e) => doClick(e, invitation)}
               >
                 <span className="text-gray-800 font-medium">
@@ -125,8 +129,9 @@ const ListadoInvitaciones = ({
           postulación.
         </p>
         <button
-          className="text-xs text-red-500 hover:text-red-600 font-semibold"
+          className={`text-xs ${disabled ? "text-gray-400" : "text-red-500 hover:text-red-600"} font-semibold`}
           onClick={handleSendReminderClick}
+          disabled={disabled}
         >
           Enviar recordatorio
         </button>
@@ -164,8 +169,9 @@ const ListadoInvitaciones = ({
       <div className="flex justify-start pt-4">
         {formData?.estado !== "Cerrado" && (
           <button
-            className="border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white"
-            onClick={() => closeProject()}
+            className={`border ${disabled ? "border-gray-400 text-gray-400" : "border-red-500 text-red-500 hover:bg-red-500 hover:text-white"} px-4 py-2 rounded-lg`}
+            onClick={() => !disabled && closeProject()}
+            disabled={disabled}
           >
             Cerrar Convocatoria
           </button>

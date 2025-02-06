@@ -1,90 +1,94 @@
-import EntregableList from '@/components/Proyecto/EntregableList';
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaExclamationCircle } from 'react-icons/fa';
-import AddEntregableModal from './Proyecto/AddEntregableModal';
+import EntregableList from './Proyecto/EntregableList';
+import AddEntregableModalVideo from './Proyecto/AddEntregableModalVideo';
 import AddEntregableModalFoto from './Proyecto/AddEntregableModalFoto';
+import AddEntregableModalLocutor from './Proyecto/AddEntregableModalLocutor';
 
-type EntregablesProps = {
-  projectId: string;
-  total: number;
-  setEntregables: React.Dispatch<React.SetStateAction<any[]>>;
-  entregables: any[];
-  handleChange: (e) => void;
-  formData: any;
-};
-
-const Entregables = ({
-                       projectId,
-                       entregables,
-                       setEntregables,
-                       total,
-                       handleChange,
-                       formData,
-                     }: EntregablesProps) => {
-  const [videoCount, setVideoCount] = useState(formData?.videos || 0);
-  const [photoCount, setPhotoCount] = useState(formData?.photos || 0);
-  const [totalNumber, setTotalNumber] = useState(total || 0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const Entregables = () => {
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isFotoModalOpen, setIsFotoModalOpen] = useState(false);
-
-  const handleAddEntregable = (entregable: any) => {
-    const updatedEntregable = [...entregables, entregable];
-    setEntregables(updatedEntregable);
-  };
-
-  const updateEntregable = (entregable: any) => {
-    setEntregables(entregable);
-  };
-
+  const [isLocutorModalOpen, setIsLocutorModalOpen] = useState(false);
+  const [entregablesVideo, setEntregablesVideo] = useState([]);
+  const [entregablesFoto, setEntregablesFoto] = useState([]);
+  const [entregablesLocutor, setEntregablesLocutor] = useState([]);
+  const [formData, setFormData] = useState({ videos: 0, photos: 0, locutor: 0 });
+  const [totalNumber, setTotalNumber] = useState(0);
 
   useEffect(() => {
-    console.log('Adding ');
-    const total = Number(videoCount) + Number(photoCount) + (Number(formData.locutor) || 0);
-    handleChange({ target: { name: 'total', value: total } });
+    const total = Number(formData.videos) + Number(formData.photos) + Number(formData.locutor);
     setTotalNumber(total);
   }, [formData.videos, formData.photos, formData.locutor]);
 
-  const handleAddEntregableFoto = (entregable: any) => {
-    const newPhotoCount = Number(photoCount) + 1;
-    setPhotoCount(newPhotoCount);
-    handleChange({ target: { name: 'photos', value: newPhotoCount ? Number(newPhotoCount) : undefined } as any });
-    handleAddEntregable(entregable);
-  };
-
-  const handleAddEntregableVideo = (entregable: any) => {
-    const newVideoCount = Number(videoCount) + 1;
-    setVideoCount(newVideoCount);
-    handleChange({ target: { name: 'videos', value: newVideoCount ? Number(newVideoCount) : undefined } as any });
-    handleAddEntregable(entregable);
-  };
-
+  useEffect(() => {
+    setFormData({
+      videos: entregablesVideo.length,
+      photos: entregablesFoto.length,
+      locutor: entregablesLocutor.length,
+    });
+  }, [entregablesVideo, entregablesFoto, entregablesLocutor]);
 
   return (
     <div className="text-left">
-      {entregables.length > 0 ? (
-        <EntregableList entregablesIni={entregables} setEntregables={updateEntregable} />
+      {entregablesVideo.length > 0 || entregablesFoto.length > 0 || entregablesLocutor.length > 0 ? (
+        <EntregableList
+          entregablesVideoIni={entregablesVideo}
+          entregablesFotoIni={entregablesFoto}
+          setEntregablesVideo={setEntregablesVideo}
+          setEntregablesFoto={setEntregablesFoto}
+        />
       ) : (
         <div className="bg-[#DFF9FF] rounded p-4 flex items-center">
           <FaExclamationCircle className="mr-2" style={{ color: '#4B9AA5' }} />
-          Aqui puedes agregar tus entregable.
+          Aquí puedes agregar tus entregables.
         </div>
       )}
 
       <button
         type="button"
         className="bg-red-500 text-white px-4 py-2 mr-2 mt-4 rounded"
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => setIsVideoModalOpen(true)}
       >
         Agregar Video
       </button>
       <button
         type="button"
-        className="bg-red-500 text-white px-4 py-2 mt-4 rounded"
+        className="bg-blue-500 text-white px-4 py-2 mr-2 mt-4 rounded"
         onClick={() => setIsFotoModalOpen(true)}
       >
         Agregar Foto
       </button>
-      <div>
+      <button
+        type="button"
+        className="bg-green-500 text-white px-4 py-2 mt-4 rounded"
+        onClick={() => setIsLocutorModalOpen(true)}
+      >
+        Agregar Locutor
+      </button>
+
+      <AddEntregableModalVideo
+        isOpen={isVideoModalOpen}
+        onClose={() => setIsVideoModalOpen(false)}
+        listaEntregables={entregablesVideo}
+        setListaEntregables={setEntregablesVideo}
+        entregable={null}
+      />
+      <AddEntregableModalFoto
+        isOpen={isFotoModalOpen}
+        onClose={() => setIsFotoModalOpen(false)}
+        listaEntregables={entregablesFoto}
+        setListaEntregables={setEntregablesFoto}
+        entregable={null}
+      />
+      <AddEntregableModalLocutor
+        isOpen={isLocutorModalOpen}
+        onClose={() => setIsLocutorModalOpen(false)}
+        listaEntregables={entregablesLocutor}
+        setListaEntregables={setEntregablesLocutor}
+        entregable={null}
+      />
+
+      <div className="mt-8">
         <div className="flex items-center mb-4">
           <label
             htmlFor="videos"
@@ -99,7 +103,7 @@ const Entregables = ({
             readOnly
             className="mt-1 block w-3/4 p-2 border border-gray-300 rounded-md bg-gray-200"
             placeholder="Descripción aquí"
-            value={formData?.videos || 0}
+            value={formData.videos}
           />
         </div>
         <div className="flex items-center mb-4">
@@ -116,7 +120,7 @@ const Entregables = ({
             readOnly
             className="mt-1 block w-3/4 p-2 border border-gray-300 rounded-md bg-gray-200"
             placeholder="Descripción aquí"
-            value={formData?.photos || 0}
+            value={formData.photos}
           />
         </div>
         <div className="flex items-center mb-4">
@@ -130,10 +134,10 @@ const Entregables = ({
             type="number"
             id="locutor"
             name="locutor"
-            className="mt-1 block w-3/4 p-2 border border-gray-300 rounded-md"
+            readOnly
+            className="mt-1 block w-3/4 p-2 border border-gray-300 rounded-md bg-gray-200"
             placeholder="Descripción aquí"
-            value={formData.locutor || 0}
-            onChange={handleChange}
+            value={formData.locutor}
           />
         </div>
         <div className="flex items-center mb-4">
@@ -151,24 +155,9 @@ const Entregables = ({
             className="mt-1 block w-3/4 p-2 border border-gray-300 rounded-md bg-gray-200"
             placeholder="Total"
             value={totalNumber}
-            onChange={(e) => setTotalNumber(Number(e.target.value))}
           />
         </div>
       </div>
-      <AddEntregableModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onAdd={handleAddEntregableVideo}
-        entregable={null}
-        onUpdate={null}
-      />
-      <AddEntregableModalFoto
-        isOpen={isFotoModalOpen}
-        onClose={() => setIsFotoModalOpen(false)}
-        onAdd={handleAddEntregableFoto}
-        entregable={null}
-        onUpdate={null}
-      />
     </div>
   );
 };

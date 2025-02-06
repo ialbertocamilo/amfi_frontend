@@ -12,7 +12,11 @@ import { CompanyType } from "@/constants";
 import { CreateProjectDto } from "@/dto/create-project.dto";
 import { UpdateProjectDto } from "@/dto/update-project.dto";
 import useProject from "@/hooks/project.hook";
-import { checkProjectReadonly, formatToUtcBackend, validateFormData } from "@/lib/utils";
+import {
+  checkProjectReadonly,
+  formatToUtcBackend,
+  validateFormData,
+} from "@/lib/utils";
 import { ProjectStatus } from "@/mappers/project.mapper";
 import { useProjectContext } from "@/providers/project.context";
 import { useUserContext } from "@/providers/user.context";
@@ -120,17 +124,19 @@ const Proyecto: React.FC = () => {
     tipoContratoProyecto: "",
     entregables: [],
     politicaPagoAgencia: "",
-    procesoFacturacionAgencia: ""
+    procesoFacturacionAgencia: "",
   });
   const router = useRouter();
   const { id } = router.query;
 
-  const projectContext = useProjectContext()
+  const projectContext = useProjectContext();
   const [readonly, setReadonly] = useState(false);
 
   useEffect(() => {
     if (projectContext?.project?.status) {
-      setReadonly(checkProjectReadonly(projectContext.project.status as ProjectStatus));
+      setReadonly(
+        checkProjectReadonly(projectContext.project.status as ProjectStatus),
+      );
     }
   }, [projectContext?.project?.status]);
   const handleChange = (
@@ -146,12 +152,26 @@ const Proyecto: React.FC = () => {
     useProject(id as string);
   const handleSubmit = async (page: string) => {
     if (page === "6") {
-      if (!validateFormData(formData, ["videos", "photos", "locutor", 'politicaPagoAgencia', 'procesoFacturacionAgencia', 'advertiserName'])) {
+      if (
+        !validateFormData(formData, [
+          "videos",
+          "photos",
+          "locutor",
+          "politicaPagoAgencia",
+          "procesoFacturacionAgencia",
+          "advertiserName",
+        ])
+      ) {
         toast.error("Por favor, llena todos los campos para crear el proyecto");
         return;
       }
     }
-    if (checkProjectReadonly(projectContext?.project?.status as ProjectStatus)) { setActiveTab(page); return; }
+    if (
+      checkProjectReadonly(projectContext?.project?.status as ProjectStatus)
+    ) {
+      setActiveTab(page);
+      return;
+    }
     const data: CreateProjectDto | UpdateProjectDto = {
       id: (id as string) ?? undefined,
       brand: formData?.brand,
@@ -161,10 +181,16 @@ const Proyecto: React.FC = () => {
       bidDeadline: formData?.entregaPresupuesto
         ? formatToUtcBackend(formData.entregaPresupuesto)
         : undefined,
-      advertiserId: user?.company?.type === CompanyType.Advertiser ? user.company.id : formData?.advertiserId ?? undefined,
-      agencyId: user?.company?.type === CompanyType.Agency ? user.company.id : formData?.agencyId ?? undefined,
+      advertiserId:
+        user?.company?.type === CompanyType.Advertiser
+          ? user.company.id
+          : (formData?.advertiserId ?? undefined),
+      agencyId:
+        user?.company?.type === CompanyType.Agency
+          ? user.company.id
+          : (formData?.agencyId ?? undefined),
       extra: formData,
-      status: page === "6" ? ProjectStatus.InProgress : ProjectStatus.Draft, 
+      status: page === "6" ? ProjectStatus.InProgress : ProjectStatus.Draft,
     };
     const createdProject = await saveOrUpdateProject(data);
     if (createdProject?.id) {
@@ -183,7 +209,6 @@ const Proyecto: React.FC = () => {
       if (
         user &&
         user.company?.type === CompanyType.Agency &&
-
         formData.agencyEmail === ""
       ) {
         agencyEmail = user?.email;
@@ -214,8 +239,6 @@ const Proyecto: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("1");
   const [entregables, setEntregables] = useState<any[]>([]);
 
-
-
   useEffect(() => {
     if (entregables)
       setFormData((prevFormData) => ({
@@ -228,9 +251,13 @@ const Proyecto: React.FC = () => {
       <Loader loading={loader}>
         <div>
           <div>
-            {status ? <ProjectHeader readonly={readonly} /> : (
+            {status ? (
+              <ProjectHeader readonly={readonly} />
+            ) : (
               <>
-                <h1 className="text-2xl font-bold mb-6 space-y-4">Nuevo proyecto</h1>
+                <h1 className="text-2xl font-bold mb-6 space-y-4">
+                  Nuevo proyecto
+                </h1>
                 <div className="text-sm text-gray-500 mb-8">
                   <span>Proyectos</span> {">"} <span>Nuevo proyecto</span>
                 </div>
