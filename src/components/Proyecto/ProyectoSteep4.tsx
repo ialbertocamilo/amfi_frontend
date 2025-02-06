@@ -453,12 +453,6 @@ const ProyectoSteep4 = ({
           <div className="grid grid-cols-2 gap-8 mb-8">
             <div className="text-left">
               <Entregables
-                projectId={id as string}
-                formData={formData}
-                handleChange={handleChange}
-                total={formData?.total}
-                entregables={entregables}
-                setEntregables={setEntregables}
               />
             </div>
             <div className="">

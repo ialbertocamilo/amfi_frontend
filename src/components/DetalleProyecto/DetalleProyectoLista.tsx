@@ -99,10 +99,11 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
           "",
       });
     }
-    setUnlocked(
-      projectData?.unlockedForAgency ||
-        CompanyType.Advertiser === user?.company.type,
-    );
+    if (user)
+      setUnlocked(
+        projectData?.unlockedForAgency ||
+          CompanyType.Advertiser === user?.company?.type,
+      );
     setRemainingDays(
       calculateRemainingDays(projectData?.bidDeadline as string),
     );
@@ -152,7 +153,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
   return (
     <Loader loading={loading}>
       <div className="mt-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl space-y-6 ">
-        {user?.company.type === CompanyType.Agency && !unlocked && (
+        {user?.company?.type === CompanyType.Agency && !unlocked && (
           <span className="badge badge-warning text-white bg-red-500 px-2 py-1 rounded">
             Esperando desbloqueo por parte del anunciante
           </span>
