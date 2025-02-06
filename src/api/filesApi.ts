@@ -1,6 +1,8 @@
 import ApiService from "@/lib/api";
 import {IFileDataResponse} from "@/interfaces/file.interface";
 
+import {open} from "fs"
+
 export const getFilesByProjectId = async (projectId: string) => {
     const response = await ApiService.get(`/files/project/${projectId}`);
     return response.data;

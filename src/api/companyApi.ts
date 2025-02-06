@@ -7,6 +7,7 @@ const createCompanyUser = async (type: string, data: {
     companyName: string, legalName: string, name: string, lastName: string, jobTitle: string,
     email: string, password: string
 }) => {
+
     try {
         const response = await ApiService.post(`/company/${type}`, {
             "comercialName": data.companyName,
@@ -14,7 +15,8 @@ const createCompanyUser = async (type: string, data: {
             "name": data.name,
             "lastname": data.lastName,
             "jobPosition": data.jobTitle,
-            "email": data.email,
+            "email": 
+      data.email,
             "password": data.password
         });
         return response.data;
