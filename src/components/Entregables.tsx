@@ -6,52 +6,72 @@ import AddEntregableModalVideo from './Proyecto/AddEntregableModalVideo';
 import EntregableList from './Proyecto/EntregableList';
 
 interface EntregablesProps {
-  initialData?: {
-    videos?: any[];
-    photos?: any[];
-    locutor?: any[];
-  };
-  onUpdate?: (data: any) => void;
+  initialEntregables?: any[];
+  onEntregablesChange?: (entregables: any[]) => void;
 }
 
-const Entregables: React.FC<EntregablesProps> = ({ initialData, onUpdate }) => {
+const Entregables: React.FC<EntregablesProps> = ({ 
+  initialEntregables = [], 
+  onEntregablesChange 
+}) => {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isFotoModalOpen, setIsFotoModalOpen] = useState(false);
   const [isLocutorModalOpen, setIsLocutorModalOpen] = useState(false);
-  const [entregablesVideo, setEntregablesVideo] = useState(initialData?.videos || []);
-  const [entregablesFoto, setEntregablesFoto] = useState(initialData?.photos || []);
-  const [entregablesLocutor, setEntregablesLocutor] = useState(initialData?.locutor || []);
+  const [entregablesVideo, setEntregablesVideo] = useState([]);
+  const [entregablesFoto, setEntregablesFoto] = useState([]);
+  const [entregablesLocutor, setEntregablesLocutor] = useState([]);
   const [formData, setFormData] = useState({ videos: 0, photos: 0, locutor: 0 });
   const [totalNumber, setTotalNumber] = useState(0);
 
   useEffect(() => {
-    const total = Number(formData.videos) + Number(formData.photos) + Number(formData.locutor);
-    setTotalNumber(total);
-  }, [formData.videos, formData.photos, formData.locutor]);
-
+    if (initialEntregables && initialEntregables?.length > 0) {
+      const videos = initialEntregables.filter(e => e.type === 'video') || [];
+      const fotos = initialEntregables.filter(e => e.type === 'foto') || [];
+      const locutores = initialEntregables.filter(e => e.type === 'locutor') || [];
+      
+      setEntregablesVideo(videos as typeof entregablesVideo);
+      setEntregablesFoto(fotos as typeof entregablesFoto);
+      setEntregablesLocutor(locutores as typeof entregablesLocutor);
+    }
+  }, [initialEntregables]);
   useEffect(() => {
-    setFormData({
+    const newFormData = {
       videos: entregablesVideo.length,
       photos: entregablesFoto.length,
-      locutor: entregablesLocutor.length,
-    });
+      locutor: entregablesLocutor.length
+    };
+    
+    setFormData(newFormData);
+    setTotalNumber(newFormData.videos + newFormData.photos + newFormData.locutor);
 
-    if (onUpdate) {
-      onUpdate({
-        videos: entregablesVideo,
-        photos: entregablesFoto,
-        locutor: entregablesLocutor
+    // Only update parent if the callback exists and there are actual changes
+    if (onEntregablesChange) {
+      const allEntregables = [
+        ...entregablesVideo.map(e => ({ ...(e as object), type: 'video' })),
+        ...entregablesFoto.map(e => ({ ...(e as object), type: 'foto' })),
+        ...entregablesLocutor.map(e => ({ ...(e as object), type: 'locutor' }))
+      ];
+      
+      // Use requestAnimationFrame to prevent rapid successive updates
+      requestAnimationFrame(() => {
+        onEntregablesChange(allEntregables);
       });
     }
   }, [entregablesVideo, entregablesFoto, entregablesLocutor]);
 
-  useEffect(() => {
-    if (initialData) {
-      setEntregablesVideo(initialData.videos || []);
-      setEntregablesFoto(initialData.photos || []);
-      setEntregablesLocutor(initialData.locutor || []);
+  const handleEntregableUpdate = (type: string, updatedEntregables: any[]) => {
+    switch(type) {
+      case 'video':
+        setEntregablesVideo(updatedEntregables as React.SetStateAction<typeof entregablesVideo>);
+        break;
+      case 'foto':
+        setEntregablesFoto(updatedEntregables as React.SetStateAction<typeof entregablesFoto>);
+        break;
+      case 'locutor':
+        setEntregablesLocutor(updatedEntregables as React.SetStateAction<typeof entregablesLocutor>);
+        break;
     }
-  }, [initialData]);
+  };
 
   return (
     <div className="text-left">
@@ -59,8 +79,11 @@ const Entregables: React.FC<EntregablesProps> = ({ initialData, onUpdate }) => {
         <EntregableList
           entregablesVideoIni={entregablesVideo}
           entregablesFotoIni={entregablesFoto}
+          entregablesLocutorIni={entregablesLocutor}
           setEntregablesVideo={setEntregablesVideo}
           setEntregablesFoto={setEntregablesFoto}
+          setEntregablesLocutor={setEntregablesLocutor}
+          onUpdate={handleEntregableUpdate}
         />
       ) : (
         <div className="bg-[#DFF9FF] rounded p-4 flex items-center">
@@ -93,23 +116,38 @@ const Entregables: React.FC<EntregablesProps> = ({ initialData, onUpdate }) => {
 
       <AddEntregableModalVideo
         isOpen={isVideoModalOpen}
-        onClose={() => setIsVideoModalOpen(false)}
+        onClose={() => {
+          setIsVideoModalOpen(false);
+        }}
         listaEntregables={entregablesVideo}
-        setListaEntregables={setEntregablesVideo}
+        setListaEntregables={(updatedEntregables) => {
+          setEntregablesVideo(updatedEntregables);
+          handleEntregableUpdate('video', updatedEntregables);
+        }}
         entregable={null}
       />
       <AddEntregableModalFoto
         isOpen={isFotoModalOpen}
-        onClose={() => setIsFotoModalOpen(false)}
+        onClose={() => {
+          setIsFotoModalOpen(false);
+        }}
         listaEntregables={entregablesFoto}
-        setListaEntregables={setEntregablesFoto}
+        setListaEntregables={(updatedEntregables) => {
+          setEntregablesFoto(updatedEntregables);
+          handleEntregableUpdate('foto', updatedEntregables);
+        }}
         entregable={null}
       />
       <AddEntregableModalLocutor
         isOpen={isLocutorModalOpen}
-        onClose={() => setIsLocutorModalOpen(false)}
+        onClose={() => {
+          setIsLocutorModalOpen(false);
+        }}
         listaEntregables={entregablesLocutor}
-        setListaEntregables={setEntregablesLocutor}
+        setListaEntregables={(updatedEntregables) => {
+          setEntregablesLocutor(updatedEntregables);
+          handleEntregableUpdate('locutor', updatedEntregables);
+        }}
         entregable={null}
       />
 

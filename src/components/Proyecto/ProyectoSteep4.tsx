@@ -452,7 +452,17 @@ const ProyectoSteep4 = ({
           <h2 className="text-xl font-bold mb-4">Entregables</h2>
           <div className="grid grid-cols-2 gap-8 mb-8">
             <div className="text-left">
-              <Entregables
+            <Entregables
+                initialEntregables={formData?.entregables || []}
+                onEntregablesChange={(newEntregables) => {
+                  handleChange({
+                    target: {
+                      name: 'entregables',
+                      value: newEntregables
+                    }
+                  });
+                  setEntregables(newEntregables);
+                }}
               />
             </div>
             <div className="">
