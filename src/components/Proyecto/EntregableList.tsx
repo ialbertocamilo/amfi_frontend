@@ -1,34 +1,34 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { useEffect, useState } from 'react';
+import AddEntregableModalFoto from './AddEntregableModalFoto';
+import AddEntregableModalVideo from './AddEntregableModalVideo';
 
 type inputEntity = {
+  entregablesVideoIni: any[];
+  entregablesFotoIni: any[];
+  setEntregablesVideo: React.Dispatch<React.SetStateAction<any[]>>;
+  setEntregablesFoto: React.Dispatch<React.SetStateAction<any[]>>;
+};
 
-    entregablesVideoIni: any[];
-  
-    entregablesFotoIni: any[];
-  
-    setEntregablesVideo: React.Dispatch<React.SetStateAction<any[]>>;
-  
-    setEntregablesFoto: React.Dispatch<React.SetStateAction<any[]>>;
-  
-  };
-  
 const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregablesFotoIni, setEntregablesVideo, setEntregablesFoto }) => {
   const [entregablesVideo, setEntregablesVideoIn] = useState<any[]>([]);
   const [entregablesFoto, setEntregablesFotoIn] = useState<any[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [isFotoModalOpen, setIsFotoModalOpen] = useState(false);
   const [currentEntregable, setCurrentEntregable] = useState<any | null>(null);
-  const [indexId, setIndexId] = useState('');
 
   useEffect(() => {
     setEntregablesVideoIn(entregablesVideoIni);
     setEntregablesFotoIn(entregablesFotoIni);
   }, [entregablesVideoIni, entregablesFotoIni]);
 
-  const handleEdit = (entregable: any, index: number, type: 'video' | 'foto') => {
-    setCurrentEntregable({ ...entregable, id: index, type });
-    setIndexId(index.toString());
-    setIsModalOpen(true);
+  const handleEdit = (entregable: any, type: 'video' | 'foto') => {
+
+    setCurrentEntregable({ ...entregable, type });
+    if (type === 'video') {
+      setIsVideoModalOpen(true);
+    } else {
+      setIsFotoModalOpen(true);
+    }
   };
 
   const handleDelete = (index: number, type: 'video' | 'foto') => {
@@ -46,21 +46,28 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
   return (
     <div className="w-full border border-gray-300 p-2.5">
       <h2 className="text-lg font-bold mb-4">Entregables de Video</h2>
-      <ul style={{ listStyleType: 'none', padding: 0 }}>
+      <ul className="space-y-2">
         {entregablesVideo.map((entregable, index) => (
-          <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span>{entregable.version} {JSON.stringify(entregable.category)}</span>
+          <li key={index} className="flex justify-between items-center p-4 border rounded hover:bg-gray-50">
             <div>
-              <button onClick={(e) => {
-                e.preventDefault();
-                handleEdit(entregable, index, 'video');
-              }} style={{ marginRight: '10px' }}>
+              <h3 className="font-semibold">{entregable.version}</h3>
+              <p className="text-sm text-gray-600">Duración: {entregable.duracion}&quot;</p>
+              <p className="text-sm text-gray-600">Formato: {entregable.formatoMedidas}</p>
+            </div>
+            <div className="flex space-x-2">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleEdit(entregable, 'video');
+                }}
+                className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+              >
                 ✏️
               </button>
-              <button onClick={(e) => {
-                e.preventDefault();
-                handleDelete(index, 'video');
-              }}>
+              <button
+                onClick={() => handleDelete(index, 'video')}
+                className="p-2 text-red-600 hover:bg-red-50 rounded"
+              >
                 🗑️
               </button>
             </div>
@@ -69,27 +76,55 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
       </ul>
 
       <h2 className="text-lg font-bold mt-8 mb-4">Entregables de Foto</h2>
-      <ul style={{ listStyleType: 'none', padding: 0 }}>
+      <ul className="space-y-2">
         {entregablesFoto.map((entregable, index) => (
-          <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span>{entregable.version} {JSON.stringify(entregable.category)}</span>
+          <li key={index} className="flex justify-between items-center p-4 border rounded hover:bg-gray-50">
             <div>
-              <button onClick={(e) => {
-                e.preventDefault();
-                handleEdit(entregable, index, 'foto');
-              }} style={{ marginRight: '10px' }}>
+              <h3 className="font-semibold">{entregable.version}</h3>
+              <p className="text-sm text-gray-600">Medios: {entregable.medios}</p>
+              <p className="text-sm text-gray-600">Resolución: {entregable.resolucion}</p>
+            </div>
+            <div className="flex space-x-2">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleEdit(entregable, 'foto');
+                }}
+                className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+              >
                 ✏️
               </button>
-              <button onClick={(e) => {
-                e.preventDefault();
-                handleDelete(index, 'foto');
-              }}>
+              <button
+                onClick={() => handleDelete(index, 'foto')}
+                className="p-2 text-red-600 hover:bg-red-50 rounded"
+              >
                 🗑️
               </button>
             </div>
           </li>
         ))}
       </ul>
+
+      <AddEntregableModalVideo
+        isOpen={isVideoModalOpen}
+        onClose={() => {
+          setIsVideoModalOpen(false);
+          setCurrentEntregable(null);
+        }}
+        listaEntregables={entregablesVideo}
+        setListaEntregables={setEntregablesVideo}
+        entregable={currentEntregable?.type === 'video' ? currentEntregable : null}
+      />
+      <AddEntregableModalFoto
+        isOpen={isFotoModalOpen}
+        onClose={() => {
+          setIsFotoModalOpen(false);
+          setCurrentEntregable(null);
+        }}
+        listaEntregables={entregablesFoto}
+        setListaEntregables={setEntregablesFoto}
+        entregable={currentEntregable?.type === 'foto' ? currentEntregable : null}
+      />
     </div>
   );
 };

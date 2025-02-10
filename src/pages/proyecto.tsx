@@ -44,13 +44,14 @@ interface ReadonlyProps {
 
 const ProjectHeader = React.memo(({ readonly }: ReadonlyProps) => {
   return (
-    <>
+    <div className="mb-4">
       <ProjectControl />
       <ReadonlyBadge readonly={readonly} />
-      <br />
-    </>
+    </div>
   );
 });
+
+ProjectHeader.displayName = 'ProjectHeader';
 const Proyecto: React.FC = () => {
   const [formData, setFormData] = useState({
     advertiserId: null,
@@ -192,6 +193,8 @@ const Proyecto: React.FC = () => {
       extra: formData,
       status: page === "6" ? ProjectStatus.InProgress : ProjectStatus.Draft,
     };
+
+    console.log(data)
     const createdProject = await saveOrUpdateProject(data);
     if (createdProject?.id) {
       await router.replace(`/proyecto?id=${createdProject.id}`);

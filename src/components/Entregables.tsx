@@ -1,17 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaExclamationCircle } from 'react-icons/fa';
-import EntregableList from './Proyecto/EntregableList';
-import AddEntregableModalVideo from './Proyecto/AddEntregableModalVideo';
 import AddEntregableModalFoto from './Proyecto/AddEntregableModalFoto';
 import AddEntregableModalLocutor from './Proyecto/AddEntregableModalLocutor';
+import AddEntregableModalVideo from './Proyecto/AddEntregableModalVideo';
+import EntregableList from './Proyecto/EntregableList';
 
-const Entregables = () => {
+interface EntregablesProps {
+  initialData?: {
+    videos?: any[];
+    photos?: any[];
+    locutor?: any[];
+  };
+  onUpdate?: (data: any) => void;
+}
+
+const Entregables: React.FC<EntregablesProps> = ({ initialData, onUpdate }) => {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isFotoModalOpen, setIsFotoModalOpen] = useState(false);
   const [isLocutorModalOpen, setIsLocutorModalOpen] = useState(false);
-  const [entregablesVideo, setEntregablesVideo] = useState([]);
-  const [entregablesFoto, setEntregablesFoto] = useState([]);
-  const [entregablesLocutor, setEntregablesLocutor] = useState([]);
+  const [entregablesVideo, setEntregablesVideo] = useState(initialData?.videos || []);
+  const [entregablesFoto, setEntregablesFoto] = useState(initialData?.photos || []);
+  const [entregablesLocutor, setEntregablesLocutor] = useState(initialData?.locutor || []);
   const [formData, setFormData] = useState({ videos: 0, photos: 0, locutor: 0 });
   const [totalNumber, setTotalNumber] = useState(0);
 
@@ -26,7 +35,23 @@ const Entregables = () => {
       photos: entregablesFoto.length,
       locutor: entregablesLocutor.length,
     });
+
+    if (onUpdate) {
+      onUpdate({
+        videos: entregablesVideo,
+        photos: entregablesFoto,
+        locutor: entregablesLocutor
+      });
+    }
   }, [entregablesVideo, entregablesFoto, entregablesLocutor]);
+
+  useEffect(() => {
+    if (initialData) {
+      setEntregablesVideo(initialData.videos || []);
+      setEntregablesFoto(initialData.photos || []);
+      setEntregablesLocutor(initialData.locutor || []);
+    }
+  }, [initialData]);
 
   return (
     <div className="text-left">
