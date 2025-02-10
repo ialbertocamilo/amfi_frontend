@@ -139,7 +139,7 @@ export const ProjectControl: React.FC = () => {
                         <div className="space-y-2 text-xs text-gray-500 font-mono">
                           <div className="flex justify-between">
                             <span className={"uppercase"}>
-                              Desbloquear visibilidad a agencia publicitaria
+                              Desbloquear agencia para manejo de proyecto
                             </span>
                             <label className="relative inline-flex items-center cursor-pointer">
                               <input
