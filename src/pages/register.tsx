@@ -116,14 +116,14 @@ const Register = () => {
         }
 
         const requiredFields = [
-            {name: 'Nombre comercial de la empresa', field: 'companyName'},
-            {name: 'Razón Social', field: 'legalName'},
-            {name: 'Correo electrónico', field: 'email'},
-            {name: 'Cargo o Puesto', field: 'jobTitle'},
-            {name: 'Contraseña', field: 'password'},
-            {name: 'Repetir Contraseña', field: 'confirmPassword'},
-            {name: 'Nombres', field: 'name'},
-            {name: 'Apellidos', field: 'lastName'}
+            {name: 'Nombre comercial de la empresa', field: 'companyName', label: 'Nombre comercial de la empresa'},
+            {name: 'Razón Social', field: 'legalName', label: 'Razón Social'},
+            {name: 'Correo electrónico', field: 'email', label: 'Correo electrónico'},
+            {name: 'Cargo o Puesto', field: 'jobTitle', label: 'Cargo o Puesto'},
+            {name: 'Contraseña', field: 'password', label: 'Contraseña'},
+            {name: 'Repetir Contraseña', field: 'confirmPassword', label: 'Repetir Contraseña'},
+            {name: 'Nombres', field: 'name', label: 'Nombres'},
+            {name: 'Apellidos', field: 'lastName', label: 'Apellidos'}
         ];
 
         for (const {name, field} of requiredFields) {

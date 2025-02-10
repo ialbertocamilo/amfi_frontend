@@ -1,4 +1,5 @@
-import { checkProjectReadonly, validateInputs } from '@/lib/utils';
+import { useFormValidation } from '@/hooks/useFormValidation';
+import { checkProjectReadonly } from '@/lib/utils';
 import { ProjectStatus } from '@/mappers/project.mapper';
 import { useProjectContext } from '@/providers/project.context';
 import toast from 'react-hot-toast';
@@ -67,12 +68,26 @@ const ProyectoSteep2 = ({
 
   const inputNames = Object.keys(fieldLabels);
 
-  const onNext = () => {
+  const validationRules = {
+    medios: { required: true, message: 'Los medios son requeridos', label: 'Medios' },
+    temporalidad: { required: true, message: 'La temporalidad es requerida', label: 'Temporalidad' },
+    desglose: { required: true, message: 'El desglose es requerido', label: 'Desglose' },
+    territorio1: { required: true, message: 'El territorio 1 es requerido', label: 'Territorio 1' },
+    tipoProduccion1: { required: true, message: 'El tipo de producción 1 es requerido', label: 'Tipo de Producción 1' },
+    productodummie: { required: true, message: 'El producto/dummie es requerido', label: 'Producto/Dummie' },
+    cantidadDiasProduccion: { required: true, message: 'La cantidad de días de producción es requerida', label: 'Cantidad de Días de Producción' },
+    creatividadAprobada: { required: true, message: 'La creatividad aprobada es requerida', label: 'Creatividad Aprobada' },
+    entregaBrief: { required: true, message: 'La fecha de entrega del brief es requerida', label: 'Entrega de Brief' },
+    entregaPresupuesto: { required: true, message: 'La fecha de entrega del presupuesto es requerida', label: 'Entrega de Presupuesto' },
+    entregaProyecto: { required: true, message: 'La fecha de entrega del proyecto es requerida', label: 'Entrega de Proyecto' },
+    presupuestoAsignado: { required: true, message: 'El presupuesto asignado es requerido', label: 'Presupuesto Asignado' },
+    presupuesto: { required: true, message: 'El monto del presupuesto es requerido', label: 'Monto' }
+  };
 
-    const errorMessage = validateInputs(formData, inputNames, fieldLabels)
-    if (errorMessage) {
-      toast.error(errorMessage);
-    } else {
+  const { validateForm, getFieldError } = useFormValidation(formData, validationRules);
+
+  const onNext = () => {
+    if (validateForm(formData)) {
       handleSubmit('3');
     }
   }

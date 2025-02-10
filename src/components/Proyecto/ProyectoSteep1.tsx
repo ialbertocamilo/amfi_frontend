@@ -1,5 +1,5 @@
+import { useFormValidation } from '@/hooks/useFormValidation';
 import { IProject } from '@/interfaces/project.interface';
-import { toast } from 'react-hot-toast';
 import NextButton from '../buttons/NextButton';
 import { DatosAgenciaPublicidad } from './DatosAgenciaPublicidad';
 import DatosAnunciante from './DatosAnunciante';
@@ -34,27 +34,31 @@ const ProyectoSteep1 = ({
                           handleSubmit,
                           readonly,
                         }: registroEntity) => {
-  const validateFormData = (formData: Record<string, any>): boolean => {
-    const requiredFields = [
-      'brand', 'product',  'projectName', 'versionName',
-      'agencyEmail', 'agencyCreativeDirector', 'contactoFinanzas',
-      'agencyAccountDirector', 'odtNumber', 'buyerContact',
-    ];
-
-    for (const field of requiredFields) {
-      if (!formData[field]) {
-        return false;
-      }
-    }
-    return true;
+  const validationRules = {
+    brand: { required: true, message: 'La marca es requerida', label: 'Marca' },
+    product: { required: true, message: 'El producto es requerido', label: 'Producto' },
+    projectName: { required: true, message: 'El nombre del proyecto es requerido', label: 'Nombre de Proyecto' },
+    versionName: { required: true, message: 'La cantidad de versiones es requerida', label: 'Cantidad de Versiones' },
+    agencyEmail: { 
+      required: true, 
+      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      message: 'Email inválido',
+      label: 'Correo Electrónico'
+    },
+    agencyCreativeDirector: { required: true, message: 'El director creativo es requerido', label: 'Director Creativo' },
+    contactoFinanzas: { required: true, message: 'El contacto de finanzas es requerido', label: 'Contacto de Finanzas' },
+    contactoMarketing: { required: true, message: 'El contacto de marketing es requerido', label: 'Contacto de Marketing' },
+    agencyAccountDirector: { required: true, message: 'El director de cuenta es requerido', label: 'Director de Cuenta' },
+    odtNumber: { required: true, message: 'El número ODT es requerido', label: 'Número ODT' },
+    buyerContact: { required: true, message: 'El contacto de compras es requerido', label: 'Contacto de Compras' }
   };
 
+  const { validateForm, getFieldError } = useFormValidation(formData, validationRules);
+
   const handleNext = () => {
-    if (!validateFormData(formData)) {
-      toast.error('Por favor llena todos los campos');
-      return;
+    if (validateForm(formData)) {
+      handleSubmit('2');
     }
-    handleSubmit('2');
   };
 
 

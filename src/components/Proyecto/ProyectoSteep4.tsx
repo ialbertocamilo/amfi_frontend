@@ -1,13 +1,13 @@
 import { getOwnerByCompany, getSecondaryUsers } from '@/api/userApi';
 import Entregables from '@/components/Entregables';
+import { useFormValidation } from '@/hooks/useFormValidation';
 import { IUser } from '@/interfaces/user.interface';
-import { checkProjectReadonly, validateInputs } from '@/lib/utils';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import Input from '../inputs/Input';
+import { checkProjectReadonly } from '@/lib/utils';
 import { ProjectStatus } from '@/mappers/project.mapper';
 import { useProjectContext } from '@/providers/project.context';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import Input from '../inputs/Input';
 
 interface registroEntity {
   formData: any;
@@ -19,7 +19,7 @@ interface registroEntity {
 
 const ProyectoSteep4 = ({
   formData,
-  setEntregables, entregables,
+  setEntregables,
   handleChange,
   handleSubmit,
 }: registroEntity) => {
@@ -27,6 +27,35 @@ const ProyectoSteep4 = ({
   const [owner, setOwner] = useState('');
   const router = useRouter();
   const { id } = router.query;
+
+  const validationRules = {
+    talento: { required: true, message: 'El talento es requerido', label: 'Talento' },
+    talentoExclusividad: { required: true, message: 'La exclusividad es requerida', label: 'Exclusividad' },
+    talentoTipoCasting: { required: true, message: 'El tipo de casting es requerido', label: 'Tipo de Casting' },
+    talentoACargoDe: { required: true, message: 'El responsable del talento es requerido', label: 'A Cargo De' },
+    competencia: { required: true, message: 'La competencia es requerida', label: 'Competencia' },
+    menoresDeEdad: { required: true, message: 'Debe especificar si hay menores de edad', label: 'Menores de Edad' },
+    animales: { required: true, message: 'Debe especificar si hay animales', label: 'Animales' },
+    especieProtegida: { required: true, message: 'Debe especificar si hay especies protegidas', label: 'Especie Protegida' },
+    locacion: { required: true, message: 'La locación es requerida', label: 'Locación' },
+    vestuario: { required: true, message: 'El vestuario es requerido', label: 'Vestuario' },
+    efectos: { required: true, message: 'Los efectos son requeridos', label: 'Efectos' },
+    maquillajepeinado: { required: true, message: 'El maquillaje y peinado es requerido', label: 'Maquillaje y Peinado' },
+    arteprops: { required: true, message: 'El arte/props es requerido', label: 'Arte/Props' },
+    locucionInstitucional: { required: true, message: 'El campo institucional en locución es requerida', label: 'Locución Institucional' },
+    locucionAgencia: { required: true, message: 'El campo agencia en locución  es requerida', label: 'Locución Agencia' },
+    musica: { required: true, message: 'La música es requerida', label: 'Música' },
+    aCargoDe: { required: true, message: 'El responsable es requerido', label: 'A Cargo De' },
+    postproduccion: { required: true, message: 'La postproducción es requerida', label: 'Postproducción' },
+    animacion: { required: true, message: 'La animación es requerida', label: 'Animación' },
+    vfx: { required: true, message: 'Los VFX son requeridos', label: 'VFX' },
+    comentarioEntregables: { required: true, message: 'Los comentarios de entregables son requeridos', label: 'Comentarios Entregables' },
+    comentarios: { required: true, message: 'Los comentarios son requeridos', label: 'Comentarios' },
+    titularResponsable: { required: true, message: 'El titular responsable es requerido', label: 'Titular Responsable' }
+  };
+
+  const { validateForm, getFieldError } = useFormValidation(formData, validationRules);
+
   useEffect(() => {
     getSecondaryUsers().then((res) => {
       setSecondaryUsers(res);
@@ -39,10 +68,16 @@ const ProyectoSteep4 = ({
         if (formData) {
           handleChange({ target: { name: 'titularResponsable', value: fullname } });
         }
-        console.log(formData.titularResponsable);
       }
     });
   }, []);
+
+  const onNext = () => {
+    if (validateForm(formData)) {
+      handleSubmit('5');
+    }
+  };
+
   const fieldLabels = {
     talento: "Talento",
     talentoExclusividad: "Exclusividad",
@@ -67,15 +102,6 @@ const ProyectoSteep4 = ({
     comentarioEntregables: "Comentarios de entregables",
     comentarios: "Comentarios",
     titularResponsable: "Titular responsable",
-  };
-
-  const onNext = () => {
-    const errorMessage = validateInputs(formData, Object.keys(fieldLabels), fieldLabels);
-    if (errorMessage) {
-      toast.error(errorMessage);
-    } else {
-      handleSubmit('5');
-    }
   };
 
   const projectContext = useProjectContext();
@@ -452,7 +478,7 @@ const ProyectoSteep4 = ({
           <h2 className="text-xl font-bold mb-4">Entregables</h2>
           <div className="grid grid-cols-2 gap-8 mb-8">
             <div className="text-left">
-            <Entregables
+              <Entregables
                 initialEntregables={formData?.entregables || []}
                 onEntregablesChange={(newEntregables) => {
                   handleChange({

@@ -1,4 +1,5 @@
-import Entregables from '../Entregables';
+import { FaCheck } from "react-icons/fa";
+import EntregablePostulacion from "../EntregablePostulacion";
 import ProposalUploaderComponent from "../ProposalUploaderComponent";
 import Input from "../inputs/Input";
 
@@ -13,14 +14,7 @@ interface registroEntity {
 }
 
 const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, setactiveTab, files }: registroEntity) => {
-  const handleEntregablesUpdate = (entregablesData: any) => {
-    handleChange({
-      target: {
-        name: 'entregables',
-        value: entregablesData
-      }
-    });
-  };
+
 
   return (
     <div className="space-y-8 p-4">
@@ -30,25 +24,25 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
             onClick={() => setactiveTab('1')}
             className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= 1 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
           >
-            {Number(activeTab) >= 1 ? '✓' : '1'}
+            {Number(activeTab) >= 1 ? <FaCheck /> : '1'}
           </button>
           <button
             onClick={() => setactiveTab('2')}
             className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= 2 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
           >
-            {Number(activeTab) >= 2 ? '✓' : '2'}
+            {Number(activeTab) >= 2 ? <FaCheck /> : '2'}
           </button>
           <button
             onClick={() => setactiveTab('3')}
             className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= 3 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
           >
-            {Number(activeTab) >= 3 ? '✓' : '3'}
+            {Number(activeTab) >= 3 ? <FaCheck /> : '3'}
           </button>
           <button
             onClick={() => setactiveTab('4')}
             className={`w-10 h-10 rounded-full flex items-center justify-center ${Number(activeTab) >= 4 ? 'bg-red-500 text-white' : 'bg-gray-200 text-black'}`}
           >
-            {Number(activeTab) >= 4 ? '✓' : '4'}
+            {Number(activeTab) >= 4 ? <FaCheck /> : '4'}
           </button>
         </div>
 
@@ -191,9 +185,14 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
           <br />
           {/* Entregables Section */}
           <div className="grid grid-cols-1 gap-4 mb-4">
-            <Entregables
-              initialData={formData.entregables}
-              onUpdate={handleEntregablesUpdate}
+            <EntregablePostulacion
+              entregables={formData.entregables?.lista || []}
+              setEntregables={(entregables) => handleChange({
+                target: {
+                  name: 'entregables.lista',
+                  value: entregables
+                }
+              })}
             />
           </div>
           <div>
@@ -210,8 +209,10 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
           <div>
             <h2 className="text-xl font-bold mb-4">Subir archivos adjuntos</h2>
             <ProposalUploaderComponent identifier={"1"} onFilesChange={files} />
+
           </div>
         </div>
+        {/* Botones */}
 
         <div className="flex justify-center mt-8">
           <div className="flex space-x-4">
@@ -223,6 +224,8 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
             </button>
           </div>
         </div>
+
+
       </div>
     </div>
   );

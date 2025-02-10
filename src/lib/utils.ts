@@ -9,6 +9,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const validateInputs = (formData: Record<string, any>, requiredFields: string[], fieldLabels: Record<string, string>): string | null => {
+  for (const field of requiredFields) {
+    if (!formData[field]) {
+      const label = fieldLabels[field] || field;
+      return `Debes llenar ${label}`;
+    }
+  }
+  return null;
+};
+
 export const validateFormData = (
   obj: Record<string, any>,
   excludeFields: string[] = [],
@@ -21,6 +31,7 @@ export const validateFormData = (
   }
   return true;
 };
+
 export const validateFormData2 = (formData: Record<string, any>): boolean => {
   for (const key in formData) {
     if (formData.hasOwnProperty(key)) {
@@ -188,11 +199,12 @@ export const formatToMxn = (value?: number) => {
   );
 };
 
-export const validateInputs = (
+export const validateInputs2 = (
   formData: any,
   inputNames: string[],
   fieldLabels,
 ) => {
+
   for (const name of inputNames) {
     if (!formData[name]) {
       return `Por favor, complete el campo: ${fieldLabels[name]}`;

@@ -1,4 +1,4 @@
-import { checkProjectReadonly, validateInputs } from '@/lib/utils';
+import { checkProjectReadonly, validateInputs2 } from '@/lib/utils';
 import { ProjectStatus } from '@/mappers/project.mapper';
 import { useProjectContext } from '@/providers/project.context';
 import { useRouter } from 'next/router';
@@ -39,7 +39,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
   const router = useRouter();
   const projectId = router.query.id as string;
   const handleNext = () => {
-    const errorMessage = validateInputs(formData, inputNames, fieldLabels);
+    const errorMessage = validateInputs2(formData, inputNames, fieldLabels);
     if (errorMessage) {
       toast.error(errorMessage);
     } else {
