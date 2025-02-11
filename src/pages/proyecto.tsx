@@ -268,11 +268,11 @@ const Proyecto: React.FC = () => {
             )}
           </div>
           <div className="tabs flex justify-center space-x-10">
-            <StepIndicator activeTab={activeTab} setactiveTab={setActiveTab} />
+            <StepIndicator activeTab={activeTab} setactiveTab={setActiveTab} formData={formData}/>
           </div>
           {activeTab === "1" && (
             <ProyectoSteep1
-              formData={formData as any}
+              formData={formData}
               handleChange={handleChange}
               handleSubmit={handleSubmit}
               readonly={readonly}

@@ -1,9 +1,9 @@
-import { checkProjectReadonly, validateInputs2 } from '@/lib/utils';
+import { useFormValidation } from '@/hooks/useFormValidation';
+import { checkProjectReadonly } from '@/lib/utils';
 import { ProjectStatus } from '@/mappers/project.mapper';
 import { useProjectContext } from '@/providers/project.context';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import UploaderComponent from '../UploaderComponent';
 import Input from '../inputs/Input';
 
@@ -13,36 +13,30 @@ interface registroEntity {
   handleSubmit: any;
 }
 
-const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntity) => {
-  const fieldLabels = {
-    link1: "Link 1",
-    link2: "Link 2",
-    responsablePago: "Responsable de pago",
-    politicaPago: "Política de pago",
-    procesoFacturacion: "Proceso de facturación",
-    // politicaPagoAgencia: "Política de pago para agencia",
-    // procesoFacturacionAgencia: "Proceso de facturación para agencia",
-    contratoProyecto: "Contrato de proyecto",
-    tipoContratoProyecto: "Tipo de contrato de proyecto",
-    rondaCotizacion: "Ronda de cotización",
-    visualizacion: "Visualización",
-    politicaAltaProveedor: "Política de alta al proveedor",
-    anticipo: "Anticipo",
-    antesDeFilmar: 'Antes de filmar',
-    // porcentajeTasaAnticipo: 'Porcentaje de tasa sobre el anticipo',
-    // porcentajeTasaFiniquito: 'Porcentaje de tasa sobre el finiquito',
-    // porcentajeTasaTotal: 'Porcentaje de tasa total',
-    informacionAdicional: 'Política (Información adicional a considerar)',
-  };
+export const validationRules = {
+  link1: { required: false, message: 'El Link 1 es requerido', label: 'Link 1' },
+  link2: { required: false, message: 'El Link 2 es requerido', label: 'Link 2' },
+  responsablePago: { required: true, message: 'El responsable de pago es requerido', label: 'Responsable de pago' },
+  politicaPago: { required: true, message: 'La política de pago es requerida', label: 'Política de pago' },
+  procesoFacturacion: { required: true, message: 'El proceso de facturación es requerido', label: 'Proceso de facturación' },
+  contratoProyecto: { required: true, message: 'El contrato de proyecto es requerido', label: 'Contrato de proyecto' },
+  tipoContratoProyecto: { required: true, message: 'El tipo de contrato de proyecto es requerido', label: 'Tipo de contrato de proyecto' },
+  rondaCotizacion: { required: true, message: 'La ronda de cotización es requerida', label: 'Ronda de cotización' },
+  visualizacion: { required: true, message: 'La visualización es requerida', label: 'Visualización' },
+  politicaAltaProveedor: { required: true, message: 'La política de alta al proveedor es requerida', label: 'Política de alta al proveedor' },
+  anticipo: { required: true, message: 'El anticipo es requerido', label: 'Anticipo' },
+  antesDeFilmar: { required: true, message: 'El campo antes de filmar es requerido', label: 'Antes de filmar' },
+  informacionAdicional: { required: true, message: 'La información adicional es requerida', label: 'Información adicional' }
+};
 
-  const inputNames = Object.keys(fieldLabels);
+const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntity) => {
   const router = useRouter();
   const projectId = router.query.id as string;
+
+  const { validate } = useFormValidation();
+
   const handleNext = () => {
-    const errorMessage = validateInputs2(formData, inputNames, fieldLabels);
-    if (errorMessage) {
-      toast.error(errorMessage);
-    } else {
+    if (validate(formData,validationRules)) {
       handleSubmit('4');
     }
   };
@@ -58,6 +52,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
   useEffect(() => {
     setShowAgencyFields(formData?.responsablePago === 'agencia')
   }, [formData?.responsablePago])
+
   return (
     <div className="space-y-8 p-4">
 

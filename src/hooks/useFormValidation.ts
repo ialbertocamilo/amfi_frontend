@@ -7,6 +7,7 @@ interface ValidationRules {
     pattern?: RegExp;
     message?: string;
     label?: string;
+    step?: string;
   };
 }
 
@@ -14,46 +15,40 @@ interface ValidationErrors {
   [key: string]: string;
 }
 
-export const useFormValidation = (initialData: any, validationRules: ValidationRules) => {
+export const useFormValidation = () => {
   const [errors, setErrors] = useState<ValidationErrors>({});
 
-  const validateForm = (formData: any): boolean => {
+  const validate = (formData: any,  validationRules: ValidationRules): boolean => {
     const newErrors: ValidationErrors = {};
     let isValid = true;
-    let firstErrorField = '';
 
-    Object.keys(validationRules).forEach((field) => {
+    // Validate each field in the rules
+    Object.entries(validationRules).forEach(([field, rules]) => {
       const value = formData[field];
-      const rules = validationRules[field];
 
-      if (rules.required && (!value || value.trim() === '')) {
-        newErrors[field] = rules.message || 'Este campo es requerido';
-        isValid = false;
-        if (!firstErrorField) firstErrorField = field;
-        toast.error(`${rules.message || `El campo ${rules.label || field} es requerido`}`);
-      } else if (rules.pattern && value && !rules.pattern.test(value)) {
-        newErrors[field] = rules.message || 'Formato inválido';
-        isValid = false;
-        if (!firstErrorField) firstErrorField = field;
-        toast.error(`El campo ${rules.label || field}: ${rules.message || 'Formato inválido'}`);
+      // Check required fields
+      if (rules.required) {
+        if (!value || (typeof value === 'string' && value.trim() === '')) {
+          newErrors[field] = rules.message || ''; 
+          isValid = false;
+          toast.error(rules.message || `El campo ${rules.label} es requerido`);
+          return;
+        }
+      }
+
+      // Check email pattern if exists
+      if (rules.pattern && value) {
+        if (!rules.pattern.test(value)) {
+          newErrors[field] = rules.message || '';
+          isValid = false;
+          toast.error(`${rules.label}: ${rules.message}`);
+          return;
+        }
       }
     });
 
     setErrors(newErrors);
     return isValid;
-  };
-
-  const validateStep = (formData: any, step: string): boolean => {
-    const stepFields = Object.keys(validationRules).filter(field => 
-      (validationRules[field] as any).step === step
-    );
-
-    const stepValidationRules = stepFields.reduce((acc, field) => {
-      acc[field] = validationRules[field];
-      return acc;
-    }, {} as ValidationRules);
-
-    return validateForm(formData);
   };
 
   const getFieldError = (field: string): string | undefined => {
@@ -66,8 +61,7 @@ export const useFormValidation = (initialData: any, validationRules: ValidationR
 
   return {
     errors,
-    validateForm,
-    validateStep,
+    validate,
     getFieldError,
     clearErrors
   };

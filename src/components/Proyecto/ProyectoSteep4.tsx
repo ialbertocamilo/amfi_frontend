@@ -17,44 +17,65 @@ interface registroEntity {
   entregables: any[];
 }
 
-const ProyectoSteep4 = ({
-  formData,
-  setEntregables,
-  handleChange,
-  handleSubmit,
-}: registroEntity) => {
+export const validationRules = {
+  talento: { required: true, message: 'El talento es requerido', label: 'Talento' },
+  talentoExclusividad: { required: true, message: 'La exclusividad es requerida', label: 'Exclusividad' },
+  talentoTipoCasting: { required: true, message: 'El tipo de casting es requerido', label: 'Tipo de Casting' },
+  talentoACargoDe: { required: true, message: 'El responsable del talento es requerido', label: 'A Cargo De' },
+  competencia: { required: true, message: 'La competencia es requerida', label: 'Competencia' },
+  menoresDeEdad: { required: true, message: 'Debe especificar si hay menores de edad', label: 'Menores de Edad' },
+  animales: { required: true, message: 'Debe especificar si hay animales', label: 'Animales' },
+  especieProtegida: { required: true, message: 'Debe especificar si hay especies protegidas', label: 'Especie Protegida' },
+  locacion: { required: true, message: 'La locación es requerida', label: 'Locación' },
+  vestuario: { required: true, message: 'El vestuario es requerido', label: 'Vestuario' },
+  efectos: { required: true, message: 'Los efectos son requeridos', label: 'Efectos' },
+  maquillajepeinado: { required: true, message: 'El maquillaje y peinado es requerido', label: 'Maquillaje y Peinado' },
+  arteprops: { required: true, message: 'El arte/props es requerido', label: 'Arte/Props' },
+  locucionInstitucional: { required: true, message: 'El campo institucional en locución es requerida', label: 'Locución Institucional' },
+  locucionAgencia: { required: true, message: 'El campo agencia en locución  es requerida', label: 'Locución Agencia' },
+  musica: { required: true, message: 'La música es requerida', label: 'Música' },
+  aCargoDe: { required: true, message: 'El responsable es requerido', label: 'A Cargo De' },
+  postproduccion: { required: true, message: 'La postproducción es requerida', label: 'Postproducción' },
+  animacion: { required: true, message: 'La animación es requerida', label: 'Animación' },
+  vfx: { required: true, message: 'Los VFX son requeridos', label: 'VFX' },
+  comentarioEntregables: { required: true, message: 'Los comentarios de entregables son requeridos', label: 'Comentarios Entregables' },
+  comentarios: { required: true, message: 'Los comentarios son requeridos', label: 'Comentarios' },
+  titularResponsable: { required: true, message: 'El titular responsable es requerido', label: 'Titular Responsable' }
+};
+
+const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }: registroEntity) => {
   const [secondaryUsers, setSecondaryUsers] = useState<IUser[]>();
   const [owner, setOwner] = useState('');
   const router = useRouter();
   const { id } = router.query;
 
   const validationRules = {
-    talento: { required: true, message: 'El talento es requerido', label: 'Talento' },
-    talentoExclusividad: { required: true, message: 'La exclusividad es requerida', label: 'Exclusividad' },
-    talentoTipoCasting: { required: true, message: 'El tipo de casting es requerido', label: 'Tipo de Casting' },
-    talentoACargoDe: { required: true, message: 'El responsable del talento es requerido', label: 'A Cargo De' },
-    competencia: { required: true, message: 'La competencia es requerida', label: 'Competencia' },
-    menoresDeEdad: { required: true, message: 'Debe especificar si hay menores de edad', label: 'Menores de Edad' },
-    animales: { required: true, message: 'Debe especificar si hay animales', label: 'Animales' },
-    especieProtegida: { required: true, message: 'Debe especificar si hay especies protegidas', label: 'Especie Protegida' },
-    locacion: { required: true, message: 'La locación es requerida', label: 'Locación' },
-    vestuario: { required: true, message: 'El vestuario es requerido', label: 'Vestuario' },
-    efectos: { required: true, message: 'Los efectos son requeridos', label: 'Efectos' },
-    maquillajepeinado: { required: true, message: 'El maquillaje y peinado es requerido', label: 'Maquillaje y Peinado' },
-    arteprops: { required: true, message: 'El arte/props es requerido', label: 'Arte/Props' },
-    locucionInstitucional: { required: true, message: 'El campo institucional en locución es requerida', label: 'Locución Institucional' },
-    locucionAgencia: { required: true, message: 'El campo agencia en locución  es requerida', label: 'Locución Agencia' },
-    musica: { required: true, message: 'La música es requerida', label: 'Música' },
-    aCargoDe: { required: true, message: 'El responsable es requerido', label: 'A Cargo De' },
-    postproduccion: { required: true, message: 'La postproducción es requerida', label: 'Postproducción' },
-    animacion: { required: true, message: 'La animación es requerida', label: 'Animación' },
-    vfx: { required: true, message: 'Los VFX son requeridos', label: 'VFX' },
-    comentarioEntregables: { required: true, message: 'Los comentarios de entregables son requeridos', label: 'Comentarios Entregables' },
-    comentarios: { required: true, message: 'Los comentarios son requeridos', label: 'Comentarios' },
-    titularResponsable: { required: true, message: 'El titular responsable es requerido', label: 'Titular Responsable' }
+    talento: { required: true, message: 'El talento es requerido', label: 'Talento', step: '4' },
+    talentoExclusividad: { required: true, message: 'La exclusividad es requerida', label: 'Exclusividad', step: '4' },
+    talentoTipoCasting: { required: true, message: 'El tipo de casting es requerido', label: 'Tipo de Casting', step: '4' },
+    talentoACargoDe: { required: true, message: 'El responsable del talento es requerido', label: 'A Cargo De', step: '4' },
+    competencia: { required: true, message: 'La competencia es requerida', label: 'Competencia', step: '4' },
+    menoresDeEdad: { required: true, message: 'Debe especificar si hay menores de edad', label: 'Menores de Edad', step: '4' },
+    animales: { required: true, message: 'Debe especificar si hay animales', label: 'Animales', step: '4' },
+    especieProtegida: { required: true, message: 'Debe especificar si hay especies protegidas', label: 'Especie Protegida', step: '4' },
+    locacion: { required: true, message: 'La locación es requerida', label: 'Locación', step: '4' },
+    vestuario: { required: true, message: 'El vestuario es requerido', label: 'Vestuario', step: '4' },
+    efectos: { required: true, message: 'Los efectos son requeridos', label: 'Efectos', step: '4' },
+    maquillajepeinado: { required: true, message: 'El maquillaje y peinado es requerido', label: 'Maquillaje y Peinado', step: '4' },
+    arteprops: { required: true, message: 'El arte/props es requerido', label: 'Arte/Props', step: '4' },
+    locucionInstitucional: { required: true, message: 'El campo institucional en locución es requerida', label: 'Locución Institucional', step: '4' },
+    locucionAgencia: { required: true, message: 'El campo agencia en locución  es requerida', label: 'Locución Agencia', step: '4' },
+    musica: { required: true, message: 'La música es requerida', label: 'Música', step: '4' },
+    aCargoDe: { required: true, message: 'El responsable es requerido', label: 'A Cargo De', step: '4' },
+    postproduccion: { required: true, message: 'La postproducción es requerida', label: 'Postproducción', step: '4' },
+    animacion: { required: true, message: 'La animación es requerida', label: 'Animación', step: '4' },
+    vfx: { required: true, message: 'Los VFX son requeridos', label: 'VFX', step: '4' },
+    comentarioEntregables: { required: true, message: 'Los comentarios de entregables son requeridos', label: 'Comentarios Entregables', step: '4' },
+    comentarios: { required: true, message: 'Los comentarios son requeridos', label: 'Comentarios', step: '4' },
+    titularResponsable: { required: true, message: 'El titular responsable es requerido', label: 'Titular Responsable', step: '4' }
   };
 
-  const { validateForm, getFieldError } = useFormValidation(formData, validationRules);
+  const { validate } = useFormValidation();
 
   useEffect(() => {
     getSecondaryUsers().then((res) => {
@@ -73,36 +94,11 @@ const ProyectoSteep4 = ({
   }, []);
 
   const onNext = () => {
-    if (validateForm(formData)) {
+    if (validate(formData, validationRules)) {
       handleSubmit('5');
     }
   };
 
-  const fieldLabels = {
-    talento: "Talento",
-    talentoExclusividad: "Exclusividad",
-    talentoTipoCasting: "Tipo casting",
-    talentoACargoDe: "A cargo de",
-    competencia: "Competencia",
-    menoresDeEdad: "Menores de edad",
-    animales: "Animales",
-    especieProtegida: "Especie protegida",
-    locacion: "Locación",
-    vestuario: "Vestuario",
-    efectos: "Efectos",
-    maquillajepeinado: "Maquillaje y peinado",
-    arteprops: "Arte",
-    locucionInstitucional: "Locución Institucional",
-    locucionAgencia: "Locución Agencia",
-    musica: "Música",
-    aCargoDe: "A cargo de",
-    postproduccion: "Post producción",
-    animacion: "Animación",
-    vfx: "VFX",
-    comentarioEntregables: "Comentarios de entregables",
-    comentarios: "Comentarios",
-    titularResponsable: "Titular responsable",
-  };
 
   const projectContext = useProjectContext();
   return (

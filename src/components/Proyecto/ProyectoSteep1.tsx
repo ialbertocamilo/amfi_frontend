@@ -17,54 +17,50 @@ interface registroEntity {
     contactoMarketing?: string;
     contactoFinanzas?: string;
     agencyAccountDirector?: string;
-    // productorAgencia?: string;
     odtNumber?: string;
     buyerContact?: string;
   };
   handleChange: any;
   handleSubmit: any;
   readonly?: boolean;
-  project:IProject
+  project: IProject
 }
 
-const ProyectoSteep1 = ({
-                          formData,
-                          project,
-                          handleChange,
-                          handleSubmit,
-                          readonly,
-                        }: registroEntity) => {
-  const validationRules = {
-    brand: { required: true, message: 'La marca es requerida', label: 'Marca' },
-    product: { required: true, message: 'El producto es requerido', label: 'Producto' },
-    projectName: { required: true, message: 'El nombre del proyecto es requerido', label: 'Nombre de Proyecto' },
-    versionName: { required: true, message: 'La cantidad de versiones es requerida', label: 'Cantidad de Versiones' },
-    agencyEmail: { 
-      required: true, 
-      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      message: 'Email inválido',
-      label: 'Correo Electrónico'
-    },
-    agencyCreativeDirector: { required: true, message: 'El director creativo es requerido', label: 'Director Creativo' },
-    contactoFinanzas: { required: true, message: 'El contacto de finanzas es requerido', label: 'Contacto de Finanzas' },
-    contactoMarketing: { required: true, message: 'El contacto de marketing es requerido', label: 'Contacto de Marketing' },
-    agencyAccountDirector: { required: true, message: 'El director de cuenta es requerido', label: 'Director de Cuenta' },
-    odtNumber: { required: true, message: 'El número ODT es requerido', label: 'Número ODT' },
-    buyerContact: { required: true, message: 'El contacto de compras es requerido', label: 'Contacto de Compras' }
-  };
+export const validationRules = {
+  brand: { required: true, message: 'La marca es requerida', label: 'Marca' },
+  product: { required: true, message: 'El producto es requerido', label: 'Producto' },
+  projectName: { required: true, message: 'El nombre del proyecto es requerido', label: 'Nombre de Proyecto' },
+  versionName: { required: true, message: 'La cantidad de versiones es requerida', label: 'Cantidad de Versiones' },
+  agencyEmail: {
+    required: true,
+    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    message: 'Email inválido',
+    label: 'Correo Electrónico'
+  },
+  agencyCreativeDirector: { required: true, message: 'El director creativo es requerido', label: 'Director Creativo' },
+  contactoFinanzas: { required: true, message: 'El contacto de finanzas es requerido', label: 'Contacto de Finanzas' },
+  contactoMarketing: { required: true, message: 'El contacto de marketing es requerido', label: 'Contacto de Marketing' },
+  agencyAccountDirector: { required: true, message: 'El director de cuenta es requerido', label: 'Director de Cuenta' },
+  odtNumber: { required: true, message: 'El número ODT es requerido', label: 'Número ODT' },
+  buyerContact: { required: true, message: 'El contacto de compras es requerido', label: 'Contacto de Compras' }
+};
 
-  const { validateForm, getFieldError } = useFormValidation(formData, validationRules);
+const ProyectoSteep1 = ({
+  formData,
+  project,
+  handleChange,
+  handleSubmit,
+  readonly,
+}: registroEntity) => {
+  const { validate } = useFormValidation();
 
   const handleNext = () => {
-    if (validateForm(formData)) {
+    if (validate(formData, validationRules))
       handleSubmit('2');
-    }
   };
-
 
   return (
     <div className="space-y-8 p-4">
-
       <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
         <h2 className="text-xl font-bold mb-4">Datos del proyecto</h2>
         <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
