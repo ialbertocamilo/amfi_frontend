@@ -194,7 +194,6 @@ const Proyecto: React.FC = () => {
       status: page === "6" ? ProjectStatus.InProgress : ProjectStatus.Draft,
     };
 
-    console.log(data)
     const createdProject = await saveOrUpdateProject(data);
     if (createdProject?.id) {
       await router.replace(`/proyecto?id=${createdProject.id}`);

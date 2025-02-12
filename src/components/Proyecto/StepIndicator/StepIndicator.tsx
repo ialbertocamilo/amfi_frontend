@@ -19,18 +19,29 @@ const StepIndicator = ({ activeTab, setactiveTab, formData }: StepIndicatorProps
   const validator = useFormValidation();
 
   const validateCurrentStep = (currentStep: string): boolean => {
+    let isValid = false;
     switch (currentStep) {
       case "1":
-        return validator.validate(formData, validation1);
+        isValid = validator.validate(formData, validation1);
+        break;
       case "2":
-        return validator.validate(formData,  validation2);
+        isValid = validator.validate(formData, validation2);
+        break;
       case "3":
-        return validator.validate(formData,  validation3);
+        isValid = validator.validate(formData, validation3);
+        break;
       case "4":
-        return validator.validate(formData, validation4);
+        isValid = validator.validate(formData, validation4);
+        break;
+
+      case "6":
+
+      console.log('Proceso finalizado')
+      break;
       default:
-        return true;
+        isValid = true;
     }
+    return isValid;
   };
 
   const handleClick = (e: React.MouseEvent, targetStep: string) => {
@@ -40,8 +51,9 @@ const StepIndicator = ({ activeTab, setactiveTab, formData }: StepIndicatorProps
       const targetStepNumber = Number(targetStep);
 
       if (targetStepNumber > currentStepNumber) {
-        if (!validateCurrentStep(activeTab)) {
-          return; 
+        // Only validate the current step when moving forward
+        if (!validateCurrentStep(currentStepNumber.toString())) {
+          return;
         }
       }
 

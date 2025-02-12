@@ -8,11 +8,13 @@ import EntregableList from './Proyecto/EntregableList';
 interface EntregablesProps {
   initialEntregables?: any[];
   onEntregablesChange?: (entregables: any[]) => void;
+  disabled?: boolean;
 }
 
 const Entregables: React.FC<EntregablesProps> = ({
   initialEntregables = [],
-  onEntregablesChange
+  onEntregablesChange,
+   disabled = true
 }) => {
   // Define types for entregables
   type Entregable = {
@@ -90,8 +92,9 @@ const Entregables: React.FC<EntregablesProps> = ({
       setEntregablesFoto={(items: Entregable[]) => handleEntregableUpdate('foto', items)}
       setEntregablesLocutor={(items: Entregable[]) => handleEntregableUpdate('locutor', items)}
       onUpdate={handleEntregableUpdate}
+      disabled={disabled}
     />
-  ), [entregables]);
+  ), [entregables, disabled]);
 
   const memoizedModals = useMemo(() => (
     <React.Fragment>
@@ -110,7 +113,8 @@ const Entregables: React.FC<EntregablesProps> = ({
         />
       ))}
     </React.Fragment>
-  ), [modalState, entregables]);
+  ), [modalState, entregables, disabled]);
+
   // Memoize the form inputs section
   const memoizedFormInputs = useMemo(() => (
     <div className="mt-8">
@@ -184,27 +188,31 @@ const Entregables: React.FC<EntregablesProps> = ({
         </div>
       )}
 
-      <button
-        type="button"
-        className="bg-red-500 text-white px-4 py-2 mr-2 mt-4 rounded"
-        onClick={() => setModalState(prev => ({ ...prev, video: true }))}
-      >
-        Agregar Video
-      </button>
-      <button
-        type="button"
-        className="bg-blue-500 text-white px-4 py-2 mr-2 mt-4 rounded"
-        onClick={() => setModalState(prev => ({ ...prev, foto: true }))}
-      >
-        Agregar Foto
-      </button>
-      <button
-        type="button"
-        className="bg-green-500 text-white px-4 py-2 mt-4 rounded"
-        onClick={() => setModalState(prev => ({ ...prev, locutor: true }))}
-      >
-        Agregar Locutor
-      </button>
+      {!disabled && (
+        <>
+          <button
+            type="button"
+            className="bg-red-500 text-white px-4 py-2 mr-2 mt-4 rounded"
+            onClick={() => setModalState(prev => ({ ...prev, video: true }))}
+          >
+            Agregar Video
+          </button>
+          <button
+            type="button"
+            className="bg-blue-500 text-white px-4 py-2 mr-2 mt-4 rounded"
+            onClick={() => setModalState(prev => ({ ...prev, foto: true }))}
+          >
+            Agregar Foto
+          </button>
+          <button
+            type="button"
+            className="bg-green-500 text-white px-4 py-2 mt-4 rounded"
+            onClick={() => setModalState(prev => ({ ...prev, locutor: true }))}
+          >
+            Agregar Locutor
+          </button>
+        </>
+      )}
 
       {memoizedModals}
       {memoizedFormInputs}

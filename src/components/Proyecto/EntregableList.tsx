@@ -11,9 +11,10 @@ type inputEntity = {
   setEntregablesFoto: React.Dispatch<React.SetStateAction<any[]>>;
   setEntregablesLocutor: React.Dispatch<React.SetStateAction<any[]>>;
   onUpdate?: (type: string, updatedEntregables: any[]) => void;
+  disabled?: boolean;
 };
 
-const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregablesFotoIni, entregablesLocutorIni, setEntregablesVideo, setEntregablesFoto, setEntregablesLocutor, onUpdate }) => {
+const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregablesFotoIni, entregablesLocutorIni, setEntregablesVideo, setEntregablesFoto, setEntregablesLocutor, onUpdate, disabled}) => {
   const [entregablesVideo, setEntregablesVideoIn] = useState<any[]>([]);
   const [entregablesFoto, setEntregablesFotoIn] = useState<any[]>([]);
   const [entregablesLocutor, setEntregablesLocutorIn] = useState<any[]>([]);
@@ -68,23 +69,25 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
               <p className="text-sm text-gray-600">Duración: {entregable.duracion}&quot;</p>
               <p className="text-sm text-gray-600">Formato: {entregable.formatoMedidas}</p>
             </div>
-            <div className="flex space-x-2">
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleEdit(entregable, 'video');
-                }}
-                className="p-2 text-blue-600 hover:bg-blue-50 rounded"
-              >
-                ✏️
-              </button>
-              <button
-                onClick={() => handleDelete(index, 'video')}
-                className="p-2 text-red-600 hover:bg-red-50 rounded"
-              >
-                🗑️
-              </button>
-            </div>
+            {disabled && (
+              <div className="flex space-x-2">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleEdit(entregable, 'video');
+                  }}
+                  className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                >
+                  ✏️
+                </button>
+                <button
+                  onClick={() => handleDelete(index, 'video')}
+                  className="p-2 text-red-600 hover:bg-red-50 rounded"
+                >
+                  🗑️
+                </button>
+              </div>
+            )}
           </li>
         ))}
       </ul>
@@ -98,23 +101,25 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
               <p className="text-sm text-gray-600">Medios: {entregable.medios}</p>
               <p className="text-sm text-gray-600">Resolución: {entregable.resolucion}</p>
             </div>
-            <div className="flex space-x-2">
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleEdit(entregable, 'foto');
-                }}
-                className="p-2 text-blue-600 hover:bg-blue-50 rounded"
-              >
-                ✏️
-              </button>
-              <button
-                onClick={() => handleDelete(index, 'foto')}
-                className="p-2 text-red-600 hover:bg-red-50 rounded"
-              >
-                🗑️
-              </button>
-            </div>
+            {disabled && (
+              <div className="flex space-x-2">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleEdit(entregable, 'foto');
+                  }}
+                  className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                >
+                  ✏️
+                </button>
+                <button
+                  onClick={() => handleDelete(index, 'foto')}
+                  className="p-2 text-red-600 hover:bg-red-50 rounded"
+                >
+                  🗑️
+                </button>
+              </div>
+            )}
           </li>
         ))}
       </ul>
@@ -128,23 +133,25 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
               <p className="text-sm text-gray-600">Tipo: {entregablesLocutor[0].tipo}</p>
               <p className="text-sm text-gray-600">Especificaciones: {entregablesLocutor[0].especificaciones}</p>
             </div>
-            <div className="flex space-x-2">
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleEdit(entregablesLocutor[0], 'locutor');
-                }}
-                className="p-2 text-blue-600 hover:bg-blue-50 rounded"
-              >
-                ✏️
-              </button>
-              <button
-                onClick={() => handleDelete(0, 'locutor')}
-                className="p-2 text-red-600 hover:bg-red-50 rounded"
-              >
-                🗑️
-              </button>
-            </div>
+            {disabled && (
+              <div className="flex space-x-2">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleEdit(entregablesLocutor[0], 'locutor');
+                  }}
+                  className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                >
+                  ✏️
+                </button>
+                <button
+                  onClick={() => handleDelete(0, 'locutor')}
+                  className="p-2 text-red-600 hover:bg-red-50 rounded"
+                >
+                  🗑️
+                </button>
+              </div>
+            )}
           </li>
         ) : null}
       </ul>

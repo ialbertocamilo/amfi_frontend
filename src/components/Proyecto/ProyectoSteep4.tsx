@@ -105,6 +105,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
     <div className="space-y-8 p-4">
       <form>
         <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
+     
           {/* Sección: Desglose Creativo */}
           <h2 className="text-xl font-bold mb-4">Notas</h2>
           <h2 className="text-md font-medium mb-4">Talento</h2>
@@ -485,6 +486,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
                   });
                   setEntregables(newEntregables);
                 }}
+                disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               />
             </div>
             <div className="">
