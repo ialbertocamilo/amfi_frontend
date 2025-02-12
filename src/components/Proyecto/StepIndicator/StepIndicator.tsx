@@ -39,10 +39,9 @@ const StepIndicator = ({ activeTab, setactiveTab, formData }: StepIndicatorProps
       const currentStepNumber = Number(activeTab);
       const targetStepNumber = Number(targetStep);
 
-      // Moving forward: validate current step
       if (targetStepNumber > currentStepNumber) {
         if (!validateCurrentStep(activeTab)) {
-          return; // Stop if validation fails
+          return; 
         }
       }
 

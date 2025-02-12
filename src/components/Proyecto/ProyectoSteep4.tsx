@@ -50,7 +50,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
   const { id } = router.query;
 
   const validationRules = {
-    talento: { required: true, message: 'El talento es requerido', label: 'Talento', step: '4' },
+    talento: { required: true, message: 'La descripción de talento es requerido', label: 'Talento', step: '4' },
     talentoExclusividad: { required: true, message: 'La exclusividad es requerida', label: 'Exclusividad', step: '4' },
     talentoTipoCasting: { required: true, message: 'El tipo de casting es requerido', label: 'Tipo de Casting', step: '4' },
     talentoACargoDe: { required: true, message: 'El responsable del talento es requerido', label: 'A Cargo De', step: '4' },

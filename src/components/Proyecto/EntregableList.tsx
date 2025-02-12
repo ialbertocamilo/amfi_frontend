@@ -61,7 +61,7 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
     <div className="w-full border border-gray-300 p-2.5">
       <h2 className="text-lg font-bold mb-4">Entregables de Video</h2>
       <ul className="space-y-2">
-        {entregablesVideo.map((entregable, index) => (
+        {entregablesVideo?.map((entregable, index) => (
           <li key={index} className="flex justify-between items-center p-4 border rounded hover:bg-gray-50">
             <div>
               <h3 className="font-semibold">{entregable.version}</h3>
@@ -91,7 +91,7 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
 
       <h2 className="text-lg font-bold mt-8 mb-4">Entregables de Foto</h2>
       <ul className="space-y-2">
-        {entregablesFoto.map((entregable, index) => (
+        {entregablesFoto?.map((entregable, index) => (
           <li key={index} className="flex justify-between items-center p-4 border rounded hover:bg-gray-50">
             <div>
               <h3 className="font-semibold">{entregable.version}</h3>
@@ -121,7 +121,7 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
 
       <h2 className="text-lg font-bold mt-8 mb-4">Entregable de Locutor</h2>
       <ul className="space-y-2">
-        {entregablesLocutor.length > 0 ? (
+        {entregablesLocutor?.length > 0 ? (
           <li className="flex justify-between items-center p-4 border rounded hover:bg-gray-50">
             <div>
               <h3 className="font-semibold">{entregablesLocutor[0].version}</h3>

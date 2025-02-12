@@ -160,7 +160,7 @@ const Proyecto: React.FC = () => {
           "locutor",
           "politicaPagoAgencia",
           "procesoFacturacionAgencia",
-          "advertiserName",
+          "advertiserName","territorio2","territorio3"
         ])
       ) {
         toast.error("Por favor, llena todos los campos para crear el proyecto");

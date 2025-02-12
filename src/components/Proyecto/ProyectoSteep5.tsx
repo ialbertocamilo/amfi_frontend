@@ -1,5 +1,7 @@
+import { getInvitedDirectors } from "@/api/directorApi";
 import { addDirectorsToProject } from "@/api/projectApi";
-import { checkProjectReadonly, validateFormData } from "@/lib/utils";
+import { IProjectInvitation } from "@/interfaces/project-director.interface";
+import { checkProjectReadonly } from "@/lib/utils";
 import { ProjectStatus } from "@/mappers/project.mapper";
 import { useProjectContext } from "@/providers/project.context";
 import { casasProductorasSelected, selectedCasasProductorasState } from "@/state/producerState";
@@ -9,8 +11,6 @@ import toast from "react-hot-toast";
 import { useRecoilState, useRecoilValue } from "recoil";
 import ListaCasasProductoras from "../ListaCasasProductoras";
 import CasasProductorasModal from "./CasasProductorasModal";
-import { getInvitedDirectors } from "@/api/directorApi";
-import { IProjectInvitation } from "@/interfaces/project-director.interface";
 
 interface registroEntity {
     formData: any;
@@ -19,26 +19,26 @@ interface registroEntity {
     setactiveTab: any
 }
 const ListaCasasProductorasWrapper = ({ searchTerm }: { searchTerm: string }) => {
+
+    const router = useRouter()
+    const { id } = router.query
     const projectContext = useProjectContext();
-
-    if (!checkProjectReadonly(projectContext?.project?.status as ProjectStatus)) {
-        return <ListaCasasProductoras buscar={searchTerm.toLowerCase()} />;
-    }
-
-    const router=useRouter()
-    const {id} = router.query
 
     const [invitedDirectors, setInvitedDirectors] = useState<IProjectInvitation[]>([]);
     useEffect(() => {
 
-        if(id){
+        if (id) {
             getInvitedDirectors(id as string).then((res) => {
                 const result = res.filter(value => value.accepted)
                 setInvitedDirectors(result)
             })
         }
     }, [id])
-    
+
+    if (!checkProjectReadonly(projectContext?.project?.status as ProjectStatus)) {
+        return <ListaCasasProductoras buscar={searchTerm.toLowerCase()} />;
+    }
+
     return (
         <div className="mt-4 p-4 bg-gray-100 rounded">
             <p className="text-gray-600">
@@ -48,7 +48,7 @@ const ListaCasasProductorasWrapper = ({ searchTerm }: { searchTerm: string }) =>
                 {invitedDirectors.map((director) => (
                     <div key={director.id} className="mb-2 border border-gray-200 rounded-md p-3">
                         <p className="flex items-center">
-                            <span className="text-green-500 mr-2">✔</span> 
+                            <span className="text-green-500 mr-2">✔</span>
                             {director.productionHouse.name}
                         </p>
                         <p className="ml-6">
@@ -70,12 +70,12 @@ const ProyectoSteep5 = ({
 }: registroEntity) => {
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (!validateFormData(formData, ['porcentajeTasaTotal', 'porcentajeTasaFiniquito', 'porcentajeTasaAnticipo', 'procesoFacturacionAgencia', 'advertiserName', 'entregaBidLetter', 'moneda', 'cantidadAsistentes', 'puestoAsistentes', 'politicaPagoAgencia', 'momentoFacturacionAgencia'])) {
-            toast.error("Por favor, llena todos los campos para llegar a la siguiente etapa");
-            setactiveTab("1");
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (!validateFormData(formData, ['porcentajeTasaTotal', 'porcentajeTasaFiniquito', 'porcentajeTasaAnticipo', 'procesoFacturacionAgencia', 'advertiserName', 'entregaBidLetter', 'moneda', 'cantidadAsistentes', 'puestoAsistentes', 'politicaPagoAgencia', 'momentoFacturacionAgencia'])) {
+    //         toast.error("Por favor, llena todos los campos para llegar a la siguiente etapa");
+    //         setactiveTab("1");
+    //     }
+    // }, []);
     const router = useRouter();
 
     const { id } = router.query;

@@ -42,7 +42,8 @@ export const validationRules = {
   contactoMarketing: { required: true, message: 'El contacto de marketing es requerido', label: 'Contacto de Marketing' },
   agencyAccountDirector: { required: true, message: 'El director de cuenta es requerido', label: 'Director de Cuenta' },
   odtNumber: { required: true, message: 'El número ODT es requerido', label: 'Número ODT' },
-  buyerContact: { required: true, message: 'El contacto de compras es requerido', label: 'Contacto de Compras' }
+  buyerContact: { required: true, message: 'El contacto de compras es requerido', label: 'Contacto de Compras' },
+  agencyProductor: { required: true, message: 'El productor es requerido', label: 'Productor' },
 };
 
 const ProyectoSteep1 = ({
