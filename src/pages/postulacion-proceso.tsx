@@ -11,14 +11,14 @@ import PostulacionSteep1 from "@/components/Postulacion/PostulacionSteep1";
 import PostulacionSteep2 from "@/components/Postulacion/PostulacionSteep2";
 import PostulacionSteep3 from "@/components/Postulacion/PostulacionSteep3";
 import PostulacionSteep4 from "@/components/Postulacion/PostulacionSteep4";
-import StepIndicator from "@/components/Proyecto/StepIndicator/StepIndicator";
+import StepIndicatorForPostulation from "@/components/Proyecto/StepIndicator/StepIndicatorForPostulation";
 import { IProject } from "@/interfaces/project.interface";
 import { manageLogicError } from "@/lib/utils";
+import moment from "moment";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import "./globals.css";
-import StepIndicatorForPostulation from "@/components/Proyecto/StepIndicator/StepIndicatorForPostulation";
 
 //?projectInvitationId=
 const PostulacionProceso: React.FC = () => {
@@ -58,11 +58,11 @@ const PostulacionProceso: React.FC = () => {
       descripcion: "",
     },
     postproduccion: {
-      edicion: "" ,
-      audio:  "",
-      online:  "",
-      masterizacion:  "",
-      cc:  ""
+      edicion: "",
+      audio: "",
+      online: "",
+      masterizacion: "",
+      cc: ""
     },
     animacion: {
       twoD: "",
@@ -101,13 +101,13 @@ const PostulacionProceso: React.FC = () => {
       markUp: "",
     },
     bidLetter: {
-      produccionDias:"",
-      produccionCiudad:"",
-      produccionVersiones:"",
-      locacionDias: "", 
-      locacionVersiones: "" ,
-      foroDias: "" ,
-      foraneoDias: "" ,
+      produccionDias: "",
+      produccionCiudad: "",
+      produccionVersiones: "",
+      locacionDias: "",
+      locacionVersiones: "",
+      foroDias: "",
+      foraneoDias: "",
     },
     crew: {
       direccion: "",
@@ -130,8 +130,11 @@ const PostulacionProceso: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const [projectName, setProjectName] = useState("");
+  const [bidDeadline, setBidDeadline] = useState<string>("");
+  const [remainingTime, setRemainingTime] = useState<{days: number, hours: number, minutes: number} | null>(null);
 
   const [project, setProject] = useState<IProject>();
+  const [files, setFiles] = useState<File[]>([]);
 
   interface FormData {
     [key: string]: any;
@@ -173,24 +176,28 @@ const PostulacionProceso: React.FC = () => {
     if (data?.result?.proposalUploaded) setActiveTab("5");
     const projectId = data?.result?.project?.id as string;
     setProject(data?.result?.project);
-    checkInvitationStatus(projectId)
-      .then((response) => {
-        if (response) {
-          setProjectName(response?.result?.project?.name);
-        }
-      })
-      .catch((error) => {
-        // Si la invitacion no fue aceptada
-        if (error?.response?.data?.serverCodeError === 20) {
-          router.push(
-            "/postulacion-directa?projectInvitationId=" + data?.result?.id,
-          );
-        }
-        manageLogicError(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    if (projectId)
+      checkInvitationStatus(projectId)
+        .then((response) => {
+          if (response) {
+            setProjectName(response?.result?.project?.name);
+            setBidDeadline(response?.result?.project?.bidDeadline);
+          }
+        })
+        .catch((error) => {
+          // Si la invitacion no fue aceptada
+          if (error?.response?.data?.serverCodeError === 20) {
+            router.push(
+              "/postulacion-directa?projectInvitationId=" + data?.result?.id,
+            );
+          }
+          manageLogicError(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+        else
+        router.back();
   };
   useEffect(() => {
     if (projectInvitationId) processCheckInvitation();
@@ -230,10 +237,11 @@ const PostulacionProceso: React.FC = () => {
           markUp: formData.presupuesto.markUp ? parseFloat(formData.presupuesto.markUp) : 0,
         },
       })
+
       submitPostulation({
         projectId: project?.id as string,
         metadata: formData,
-      })
+      }, files)
         .then(() => {
           toast.success("La postulación ha sido enviada correctamente");
         })
@@ -249,26 +257,69 @@ const PostulacionProceso: React.FC = () => {
   };
 
   const onLoadFiles = (files: File[]) => {
+    setFiles(files)
     setFormData((prevData) => ({
       ...prevData,
       files: files,
     }));
+
+    console.log('Loading files', files)
   };
+  const [countdown, setCountdown] = useState<string>("");
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (bidDeadline) {
+      const updateCountdown = () => {
+        const now = moment();
+        const end = moment(bidDeadline);
+        const days = end.diff(now, 'days');
+        const hours = end.diff(now, 'hours') % 24;
+        const minutes = end.diff(now, 'minutes') % 60;
+        const seconds = end.diff(now, 'seconds') % 60;
+        const totalHours = end.diff(now, 'hours');
+    
+        if (moment().isAfter(bidDeadline)) {
+          setCountdown('El plazo de entrega para presentar propuestas ha vencido');
+        } else {
+          setCountdown(`Tiempo restante: ${days} días, ${hours} horas, ${minutes} minutos, ${seconds} segundos`);
+        }
+      };
+    
+      updateCountdown();
+      timer = setInterval(updateCountdown, 1000);
+    }
+  
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [bidDeadline]);
+  
+  const isDeadlinePassed = moment().isAfter(bidDeadline);
+  const isLessThanOneHour = moment(bidDeadline).diff(moment(), 'hours') < 1;
+  
   return (
     <Layout>
       <Loader loading={loading}>
-        <h1 className="text-2xl font-bold mb-6 ">Proyecto</h1>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold">Proyecto</h1>
+          {bidDeadline && (
+            <div className={`px-4 py-2 rounded-lg ${isDeadlinePassed ? 'bg-red-100 text-red-600' : isLessThanOneHour ? 'bg-red-100 text-red-600' : moment().add(2, 'days').isAfter(bidDeadline) ? 'bg-yellow-100 text-yellow-600' : 'bg-green-100 text-green-600'}`}>
+              <span>{countdown}</span>
+            </div>
+          )}
+        </div>
         <div className="flex justify-end mb-4">
           <button className="bg-green-500 hover:bg-green-600 border text-white font-bold py-2 px-4 rounded" onClick={() => router.push(`/consulta-brief?projectInvitationId=${projectInvitationId}`)}>
             Consultar Brief
           </button>
         </div>
-        <div className="text-sm text-gray-500 mb-8">
+        <div className="text-sm text-gray-500 ">
           <span>Lista de Proyectos</span> {">"} <span>{projectName}</span> {">"}{" "}
           <span>Postular</span>
         </div>
 
-        <div className="tabs flex justify-center space-x-10">
+        <div className="tabs flex justify-center">
           <StepIndicatorForPostulation activeTab={activeTab} setactiveTab={setActiveTab} />
         </div>
         {activeTab === "1" && (

@@ -26,12 +26,16 @@ const Propuesta = () => {
 
   const [productionHouse, setProductionHouse] = useState<ICompany>();
 
+  const [files, setFiles] = useState<File[]>([]);
+
   useEffect(() => {
     if (postulationId) {
       getPostulationById(postulationId as string)
         .then((data) => {
-          setProductionHouse(data?.projectInvitation?.productionHouse);
-          setPostulation(data.metadata);
+          setProductionHouse(data?.postulation?.projectInvitation?.productionHouse);
+          setPostulation(data.postulation.metadata);
+          setFiles(data.files);
+          console.log(data)
         })
         .catch((error) => {
           manageLogicError(error);

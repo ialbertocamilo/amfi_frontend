@@ -29,8 +29,9 @@ const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, se
     };
 
     return (
-        <div className="space-y-8 p-4">
-            <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
+
+        <div className="space-y-2">
+        <div className="mb-8 bg-white shadow-md rounded ">
                 <div className="tabs flex justify-center space-x-10">
                     <button
                         onClick={() => setactiveTab('1')}
