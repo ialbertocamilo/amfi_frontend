@@ -18,6 +18,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import "./globals.css";
+import StepIndicatorForPostulation from "@/components/Proyecto/StepIndicator/StepIndicatorForPostulation";
 
 //?projectInvitationId=
 const PostulacionProceso: React.FC = () => {
@@ -268,7 +269,7 @@ const PostulacionProceso: React.FC = () => {
         </div>
 
         <div className="tabs flex justify-center space-x-10">
-          <StepIndicator activeTab={activeTab} setactiveTab={setActiveTab} />
+          <StepIndicatorForPostulation activeTab={activeTab} setactiveTab={setActiveTab} />
         </div>
         {activeTab === "1" && (
           <PostulacionSteep1
