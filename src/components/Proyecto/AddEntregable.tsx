@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { Switch } from '@headlessui/react';
-import styles from './AddEntregableModal.module.css';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import toast from 'react-hot-toast';
+import styles from './AddEntregableModal.module.css';
 
 type EntregableModalProps = {
     isOpen: boolean;
@@ -20,45 +20,74 @@ export type Field = {
     opciones?: { value: string; label: string }[];
 };
 
-const CampoEntrada = ({ etiqueta, nombre, valor, onChange, tipo = 'text', placeholder = '' }) => (
-    <div className={styles.formGroup}>
-        <label>{etiqueta}</label>
-        <input
-            type={tipo}
-            name={nombre}
-            value={valor}
-            onChange={onChange}
-            placeholder={placeholder}
-            className="border p-2 rounded"
-        />
-    </div>
-);
+const CampoEntrada = ({ etiqueta, nombre, valor, onChange, tipo = 'text', placeholder = '', required = true }) => {
+    const isError = required && valor === '';
+    return (
+        <div className={styles.formGroup}>
+            <label>{etiqueta}</label>
+            <input
+                type={tipo}
+                name={nombre}
+                value={valor}
+                onChange={onChange}
+                placeholder={placeholder}
+                className={`border p-2 rounded ${isError ? 'border-red-500' : ''}`}
+            />
+            {isError && (
+                <span className="text-red-500 text-sm mt-1">
+                    Este campo es requerido
+                </span>
+            )}
+        </div>
+    );
+};
 
-const CampoSeleccion = ({ etiqueta, nombre, valor, onChange, opciones }) => (
-    <div className={styles.formGroup}>
-        <label>{etiqueta}</label>
-        <select name={nombre} value={valor} onChange={onChange} className="border p-2 rounded">
-            {opciones.map((opcion, index) => (
-                <option key={index} value={opcion.value}>
-                    {opcion.label}
-                </option>
-            ))}
-        </select>
-    </div>
-);
+const CampoSeleccion = ({ etiqueta, nombre, valor, onChange, opciones, required = true }) => {
+    const isError = required && valor === '';
+    return (
+        <div className={styles.formGroup}>
+            <label>{etiqueta}</label>
+            <select 
+                name={nombre} 
+                value={valor} 
+                onChange={onChange} 
+                className={`border p-2 rounded ${isError ? 'border-red-500' : ''}`}
+            >
+                {opciones.map((opcion, index) => (
+                    <option key={index} value={opcion.value}>
+                        {opcion.label}
+                    </option>
+                ))}
+            </select>
+            {isError && (
+                <span className="text-red-500 text-sm mt-1">
+                    Este campo es requerido
+                </span>
+            )}
+        </div>
+    );
+};
 
-const CampoAreaTexto = ({ etiqueta, nombre, valor, onChange, filas = 2 }) => (
-    <div className={styles.formGroup}>
-        <label>{etiqueta}</label>
-        <textarea
-            name={nombre}
-            value={valor}
-            onChange={onChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            rows={filas}
-        />
-    </div>
-);
+const CampoAreaTexto = ({ etiqueta, nombre, valor, onChange, filas = 2, required = true }) => {
+    const isError = required && valor === '';
+    return (
+        <div className={styles.formGroup}>
+            <label>{etiqueta}</label>
+            <textarea
+                name={nombre}
+                value={valor}
+                onChange={onChange}
+                className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${isError ? 'border-red-500' : ''}`}
+                rows={filas}
+            />
+            {isError && (
+                <span className="text-red-500 text-sm mt-1">
+                    Este campo es requerido
+                </span>
+            )}
+        </div>
+    );
+};
 
 const SwitchField = ({ label, checked, onChange }) => (
     <div className="flex items-center justify-center mb-4 w-full">
@@ -184,6 +213,7 @@ const EntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregable
                                         nombre={campo.nombre}
                                         valor={estado[campo.nombre]}
                                         onChange={manejarCambio}
+                                        
                                     />
                                 );
                             case 'switch':

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AddEntregableModalFoto from './AddEntregableModalFoto';
-import AddEntregableModalVideo from './AddEntregableModalVideo';
 import AddEntregableModalLocutor from './AddEntregableModalLocutor';
+import AddEntregableModalVideo from './AddEntregableModalVideo';
 
 type inputEntity = {
   entregablesVideoIni: any[];
@@ -51,10 +51,9 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
       setEntregablesFoto(updatedEntregables);
       onUpdate?.('foto', updatedEntregables);
     } else if (type === 'locutor') {
-      const updatedEntregables = entregablesLocutor.filter((_, i) => i !== index);
-      setEntregablesLocutorIn(updatedEntregables);
-      setEntregablesLocutor(updatedEntregables);
-      onUpdate?.('locutor', updatedEntregables);
+      setEntregablesLocutorIn([]);
+      setEntregablesLocutor([]);
+      onUpdate?.('locutor', []);
     }
   };
 
@@ -120,34 +119,34 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
         ))}
       </ul>
 
-      <h2 className="text-lg font-bold mt-8 mb-4">Entregables de Locutor</h2>
+      <h2 className="text-lg font-bold mt-8 mb-4">Entregable de Locutor</h2>
       <ul className="space-y-2">
-        {entregablesLocutor.map((entregable, index) => (
-          <li key={index} className="flex justify-between items-center p-4 border rounded hover:bg-gray-50">
+        {entregablesLocutor.length > 0 ? (
+          <li className="flex justify-between items-center p-4 border rounded hover:bg-gray-50">
             <div>
-              <h3 className="font-semibold">{entregable.version}</h3>
-              <p className="text-sm text-gray-600">Fecha de entrega: {entregable.fechaEntrega}</p>
-              <p className="text-sm text-gray-600">Especificaciones: {entregable.especificaciones}</p>
+              <h3 className="font-semibold">{entregablesLocutor[0].version}</h3>
+              <p className="text-sm text-gray-600">Tipo: {entregablesLocutor[0].tipo}</p>
+              <p className="text-sm text-gray-600">Especificaciones: {entregablesLocutor[0].especificaciones}</p>
             </div>
             <div className="flex space-x-2">
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                  handleEdit(entregable, 'locutor');
+                  handleEdit(entregablesLocutor[0], 'locutor');
                 }}
                 className="p-2 text-blue-600 hover:bg-blue-50 rounded"
               >
                 ✏️
               </button>
               <button
-                onClick={() => handleDelete(index, 'locutor')}
+                onClick={() => handleDelete(0, 'locutor')}
                 className="p-2 text-red-600 hover:bg-red-50 rounded"
               >
                 🗑️
               </button>
             </div>
           </li>
-        ))}
+        ) : null}
       </ul>
 
       <AddEntregableModalVideo

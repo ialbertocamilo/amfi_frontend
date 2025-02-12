@@ -1,4 +1,3 @@
-import React from 'react';
 import EntregableModal, { Field } from './AddEntregable';
 
 const AddEntregableModalLocutor = ({ isOpen, onClose, listaEntregables, setListaEntregables, entregable }) => {
@@ -14,12 +13,17 @@ const AddEntregableModalLocutor = ({ isOpen, onClose, listaEntregables, setLista
     { etiqueta: 'Notas', nombre: 'notas', tipo: 'textarea' },
   ];
 
+  const handleSetListaEntregables = (updatedEntregables) => {
+    // For locutor, we only want to keep the latest entry
+    setListaEntregables([updatedEntregables[updatedEntregables.length - 1]]);
+  };
+
   return (
     <EntregableModal
       isOpen={isOpen}
       onClose={onClose}
       listaEntregables={listaEntregables}
-      setListaEntregables={setListaEntregables}
+      setListaEntregables={handleSetListaEntregables}
       entregable={entregable}
       campos={campos}
     />

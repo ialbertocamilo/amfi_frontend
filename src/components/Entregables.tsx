@@ -10,9 +10,9 @@ interface EntregablesProps {
   onEntregablesChange?: (entregables: any[]) => void;
 }
 
-const Entregables: React.FC<EntregablesProps> = ({ 
-  initialEntregables = [], 
-  onEntregablesChange 
+const Entregables: React.FC<EntregablesProps> = ({
+  initialEntregables = [],
+  onEntregablesChange
 }) => {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isFotoModalOpen, setIsFotoModalOpen] = useState(false);
@@ -28,7 +28,7 @@ const Entregables: React.FC<EntregablesProps> = ({
       const videos = initialEntregables.filter(e => e.type === 'video') || [];
       const fotos = initialEntregables.filter(e => e.type === 'foto') || [];
       const locutores = initialEntregables.filter(e => e.type === 'locutor') || [];
-      
+
       setEntregablesVideo(videos as typeof entregablesVideo);
       setEntregablesFoto(fotos as typeof entregablesFoto);
       setEntregablesLocutor(locutores as typeof entregablesLocutor);
@@ -38,9 +38,9 @@ const Entregables: React.FC<EntregablesProps> = ({
     const newFormData = {
       videos: entregablesVideo.length,
       photos: entregablesFoto.length,
-      locutor: entregablesLocutor.length
+      locutor: entregablesLocutor.length > 0 ? (entregablesLocutor[entregablesLocutor.length - 1] as { cantidad: number })?.cantidad : 0
     };
-    
+
     setFormData(newFormData);
     setTotalNumber(newFormData.videos + newFormData.photos + newFormData.locutor);
 
@@ -51,7 +51,7 @@ const Entregables: React.FC<EntregablesProps> = ({
         ...entregablesFoto.map(e => ({ ...(e as object), type: 'foto' })),
         ...entregablesLocutor.map(e => ({ ...(e as object), type: 'locutor' }))
       ];
-      
+
       // Use requestAnimationFrame to prevent rapid successive updates
       requestAnimationFrame(() => {
         onEntregablesChange(allEntregables);
@@ -60,7 +60,7 @@ const Entregables: React.FC<EntregablesProps> = ({
   }, [entregablesVideo, entregablesFoto, entregablesLocutor]);
 
   const handleEntregableUpdate = (type: string, updatedEntregables: any[]) => {
-    switch(type) {
+    switch (type) {
       case 'video':
         setEntregablesVideo(updatedEntregables as React.SetStateAction<typeof entregablesVideo>);
         break;
