@@ -131,7 +131,7 @@ const PostulacionProceso: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [bidDeadline, setBidDeadline] = useState<string>("");
-  const [remainingTime, setRemainingTime] = useState<{days: number, hours: number, minutes: number} | null>(null);
+  const [remainingTime, setRemainingTime] = useState<{ days: number, hours: number, minutes: number } | null>(null);
 
   const [project, setProject] = useState<IProject>();
   const [files, setFiles] = useState<File[]>([]);
@@ -196,8 +196,8 @@ const PostulacionProceso: React.FC = () => {
         .finally(() => {
           setLoading(false);
         });
-        else
-        router.back();
+    else
+      router.back();
   };
   useEffect(() => {
     if (projectInvitationId) processCheckInvitation();
@@ -278,26 +278,26 @@ const PostulacionProceso: React.FC = () => {
         const minutes = end.diff(now, 'minutes') % 60;
         const seconds = end.diff(now, 'seconds') % 60;
         const totalHours = end.diff(now, 'hours');
-    
+
         if (moment().isAfter(bidDeadline)) {
           setCountdown('El plazo de entrega para presentar propuestas ha vencido');
         } else {
           setCountdown(`Tiempo restante: ${days} días, ${hours} horas, ${minutes} minutos, ${seconds} segundos`);
         }
       };
-    
+
       updateCountdown();
       timer = setInterval(updateCountdown, 1000);
     }
-  
+
     return () => {
       if (timer) clearInterval(timer);
     };
   }, [bidDeadline]);
-  
+
   const isDeadlinePassed = moment().isAfter(bidDeadline);
   const isLessThanOneHour = moment(bidDeadline).diff(moment(), 'hours') < 1;
-  
+
   return (
     <Layout>
       <Loader loading={loading}>
