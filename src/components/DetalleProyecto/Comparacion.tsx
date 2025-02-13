@@ -1,9 +1,11 @@
 import { assignProductionHouse } from "@/api/projectApi";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import DefaultButton from "../buttons/DefaultButton";
 import StackedBarChar from "./StackedBarChar";
+import { ProjectStatus } from "@/mappers/project.mapper";
+import { ICompany } from "@/interfaces/company.interface";
 
 export interface EvaluationScore {
   name: string;
@@ -19,10 +21,22 @@ export interface EvaluationScore {
 
 interface ComparisonProps {
   data: EvaluationScore[];
+  projectStatus: string; // Add projectStatus prop
+  productionHouseWinner:ICompany
 }
 
-const Comparacion: React.FC<ComparisonProps> = ({ data }) => {
+const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productionHouseWinner }) => {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+  const [projectAssigned, setProjectAssigned] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (projectStatus === ProjectStatus.Finished) {
+        setSelectedGroup(productionHouseWinner.id);
+        setProjectAssigned(true);
+    }
+  }, [projectStatus, data]);
+
   const StackedBarCharData = data.map((group) => ({
     name: group.name,
     score: {
@@ -39,18 +53,14 @@ const Comparacion: React.FC<ComparisonProps> = ({ data }) => {
     "Experiencia",
     "Presupuesto",
     "Puntaje final",
-    "Acción",
     "Estado",
   ];
 
-  const action = "Ver Bid letter";
-
   const handleCheckboxChange = (id: string) => {
-    setSelectedGroup(id);
+    if (projectStatus !== ProjectStatus.Finished) {
+      setSelectedGroup(id);
+    }
   };
-  const [projectAssigned, setProjectAssigned] = useState(false);
-
-  const router = useRouter();
 
   const backToList = () => {
     router.back();
@@ -77,6 +87,7 @@ const Comparacion: React.FC<ComparisonProps> = ({ data }) => {
       console.warn("No group selected");
     }
   };
+
   return (
     <div className="mt-6 p-6 w-full max-w-screen-xxl mx-auto bg-white rounded-xl shadow-md space-y-6 px-4 lg:px-8">
       <div className="max-w-6xl mx-auto p-4">
@@ -104,7 +115,9 @@ const Comparacion: React.FC<ComparisonProps> = ({ data }) => {
                 display: "grid",
                 gridTemplateColumns: `1fr repeat(${headers.length - 1}, minmax(0, 1.5fr)) 1fr`,
               }}
-              className="h-20 border rounded-lg border-gray-300 mb-4 transition-transform duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer"
+              className={`h-20 border rounded-lg border-gray-300 mb-4 transition-transform duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer ${
+                selectedGroup === group.id && projectStatus === ProjectStatus.Finished ? "bg-green-100" : ""
+              }`}
               key={`group-${index}`}
               onClick={() => handleCheckboxChange(group.id)}
             >
@@ -119,6 +132,7 @@ const Comparacion: React.FC<ComparisonProps> = ({ data }) => {
                     checked={selectedGroup === group.id}
                     onChange={() => handleCheckboxChange(group.id)}
                     className="w-6 h-6 rounded-full border-2 border-blue-600 text-blue-600 focus:ring-blue-500 appearance-none checked:bg-blue-600 checked:border-transparent"
+                    disabled={projectStatus === "finished"}
                   />
                 )}
               </span>
@@ -139,9 +153,6 @@ const Comparacion: React.FC<ComparisonProps> = ({ data }) => {
                   group.evaluationScore.experience +
                   group.evaluationScore.budget}
               </span>
-              <span className="flex items-center justify-center text-xs font-bold text-red-500">
-                {action}
-              </span>
               <div className="flex items-center justify-center">
                 <span
                   className={`h-7 w-24 flex items-center justify-center text-xs font-bold border rounded-md ${
@@ -160,9 +171,10 @@ const Comparacion: React.FC<ComparisonProps> = ({ data }) => {
         </div>
         <div className="mt-4 p-4 bg-blue-50 text-blue-700 rounded-md">
           <p>
-            Si has completado la evaluación de todos tus candidatos, puedes
-            elegir la <b>Casa productora</b> a la que deseas asignar el
-            proyecto.
+            {projectStatus === ProjectStatus.Finished
+              ? "El proyecto ya ha sido asignado a una Casa productora."
+              : "Si has completado la evaluación de todos tus candidatos, puedes elegir la Casa productora a la que deseas asignar el proyecto."
+            }
           </p>
         </div>
         <StackedBarChar data={StackedBarCharData}></StackedBarChar>
@@ -178,7 +190,7 @@ const Comparacion: React.FC<ComparisonProps> = ({ data }) => {
               <DefaultButton
                 onClick={assignProject}
                 label={"Asignar proyecto"}
-                disabled={!selectedGroup}
+                disabled={!selectedGroup || projectStatus === "finished"}
               />
             </>
           )}

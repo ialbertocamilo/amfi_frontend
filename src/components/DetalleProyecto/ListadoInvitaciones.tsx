@@ -12,7 +12,6 @@ import { IProjectInvitation } from "@/interfaces/project-director.interface";
 
 interface ListadoInvitacionesProps {
   invitationData: InvitedDirectorsResponse;
-  setBidId: React.Dispatch<React.SetStateAction<string | null>>;
   formData: any;
   handleItemClick: (e) => void;
   sendReminder: () => void;
@@ -87,6 +86,9 @@ const ListadoInvitaciones = ({
       );
     }
   };
+  const goToComparative = ()=>{
+    router.push(`/comparativo?projectInvitationId=${formData.id}`);
+  }
 
   return (
     <>
@@ -176,6 +178,14 @@ const ListadoInvitaciones = ({
             Cerrar Convocatoria
           </button>
         )}
+        
+        <button
+            type="submit"
+            className="w-1/4 bg-blue-500 mx-2 text-white py-2 rounded-lg"
+            onClick={goToComparative}
+          >
+            Comparativo
+          </button>
       </div>
     </>
   );

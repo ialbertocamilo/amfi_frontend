@@ -12,6 +12,7 @@ const DetalleProyecto = () => {
   return (
     <Layout>
         <DetalleProyectoLista id={id as string} />
+        
     </Layout>
   );
 };

@@ -198,10 +198,8 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
         <Tooltip anchorSelect=".invitation-bid-deadline" place={"bottom"}>
           Restan {remainingDays} días para finalizar con la entrega.
         </Tooltip>
-        {'Is unlocked'+JSON.stringify(unlocked)}
         <ListadoInvitaciones
           invitationData={invitationData}
-          setBidId={setBidId}
           formData={formData}
           handleItemClick={handleItemClick}
           closeProject={closeProject}

@@ -9,6 +9,8 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import ProjectBreadcrumb from "@/components/Proyecto/ProjectBreadcrumb";
 import { useProjectContext } from "@/providers/project.context";
+import { ProductionStudioCompany } from "@/components/interfaces/interfaces";
+import { ICompany } from "@/interfaces/company.interface";
 
 const ComparativoPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -18,17 +20,18 @@ const ComparativoPage: React.FC = () => {
   const router = useRouter();
   const { projectInvitationId } = router.query;
   const setProject = useProjectContext()?.setProject;
+  const project = useProjectContext()?.project;
+  const [selectedProductionHouse, setSelectedProductionHouse] = useState<ICompany>();
   useEffect(() => {
     if (projectInvitationId) {
       setLoading(true);
       getEvaluationComparison(projectInvitationId as string)
         .then((data) => {
+          setSelectedProductionHouse(data.project.assignedTo as ICompany);
           const evaluationData = data.comparison!.map((item) => {
             let creativeProposal = 0;
             let experience = 0;
             let budget = 0;
-            console.log("item");
-            console.log(item);
 
             if (item.evaluation) {
               const evaluationScore = calculateEvaluationScore(
@@ -87,7 +90,7 @@ const ComparativoPage: React.FC = () => {
     <Layout>
       <Loader loading={loading}>
         <ProjectBreadcrumb />
-        {evaluationScore && <Comparacion data={evaluationScore} />}
+        {evaluationScore && project && selectedProductionHouse && <Comparacion data={evaluationScore} projectStatus={project.status} productionHouseWinner={selectedProductionHouse} />}
       </Loader>
     </Layout>
   );
