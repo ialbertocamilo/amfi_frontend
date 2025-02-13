@@ -2,6 +2,7 @@ import { FaCheck } from "react-icons/fa";
 import EntregablePostulacion from "../EntregablePostulacion";
 import ProposalUploaderComponent from "../ProposalUploaderComponent";
 import Input from "../inputs/Input";
+import { useEffect } from "react";
 
 interface registroEntity {
   formData: any,

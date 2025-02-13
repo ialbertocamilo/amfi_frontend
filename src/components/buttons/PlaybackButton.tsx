@@ -14,7 +14,7 @@ interface PlaybackControlProps {
   onStatusChange?: (status: ProjectStatus) => void;
 }
 
-export default function PlaybackControl({ status, onStatusChange }: PlaybackControlProps) {
+export default function PlaybackButton({ status, onStatusChange }: PlaybackControlProps) {
   const [playbackState, setPlaybackState] = useState<PlaybackState>('stopped')
 
   useEffect(() => {

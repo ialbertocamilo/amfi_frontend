@@ -99,11 +99,12 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
           "",
       });
     }
-    if (user)
-      setUnlocked(
-        projectData?.unlockedForAgency ||
-          CompanyType.Advertiser === user?.company?.type,
-      );
+    console.log(!!projectData?.unlockedForAgency ||
+      (CompanyType.Agency === user?.company?.type && !!projectData?.unlockedForAgency));
+    setUnlocked(
+      !!projectData?.unlockedForAgency ||
+      (CompanyType.Agency === user?.company?.type && !!projectData?.unlockedForAgency)
+    );
     setRemainingDays(
       calculateRemainingDays(projectData?.bidDeadline as string),
     );
@@ -197,6 +198,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
         <Tooltip anchorSelect=".invitation-bid-deadline" place={"bottom"}>
           Restan {remainingDays} días para finalizar con la entrega.
         </Tooltip>
+        {'Is unlocked'+JSON.stringify(unlocked)}
         <ListadoInvitaciones
           invitationData={invitationData}
           setBidId={setBidId}
@@ -204,7 +206,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
           handleItemClick={handleItemClick}
           closeProject={closeProject}
           sendReminder={sendReminder}
-          disabled={!formData.unlockedForAgency}
+          disabled={!unlocked}
         ></ListadoInvitaciones>
       </div>
     </Loader>

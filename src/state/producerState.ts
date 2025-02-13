@@ -28,7 +28,7 @@ export const selectedCasasProductorasState = selector({
   },
 });
 
-export const casasProductorasSelected= atom<string[]>({
-  key: "casasProductorasSelected",
+export const casasProductorasSelected = atom<string[]>({
+  key: "uniqueCasasProductorasSelected",
   default: [],
 });
