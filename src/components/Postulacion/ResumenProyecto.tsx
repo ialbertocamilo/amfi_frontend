@@ -9,7 +9,7 @@ interface ResumenProyectoProps {
 }
 
 const ResumenProyecto: React.FC<ResumenProyectoProps> = ({ data }) => {
-  const [selectedEntregable, setSelectedEntregable] = useState(null);
+  const [selectedEntregable, setSelectedEntregable] = useState<{ type: string } | null>(null);
   const [modalState, setModalState] = useState({
     video: false,
     foto: false,
