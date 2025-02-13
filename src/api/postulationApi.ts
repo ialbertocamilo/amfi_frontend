@@ -1,17 +1,15 @@
 import { ICompany } from "@/interfaces/company.interface";
 import { IDirector } from "@/interfaces/director.interface";
-import { IProject } from "@/interfaces/project.interface";
-import api from "@/lib/api";
-import toast from "react-hot-toast";
-import {
-  CheckProjectInvitationStatusResponse,
-  IProjectInvitation,
-} from "@/interfaces/project-director.interface";
-import ApiService from "@/lib/api";
-import { manageLogicError } from "@/lib/utils";
 import { IInvitationResponse } from "@/interfaces/invitation.interface";
-import { Budget, Evaluation } from "./interface/api.interface";
 import { IPostulation } from "@/interfaces/postulation.interface";
+import {
+  CheckProjectInvitationStatusResponse
+} from "@/interfaces/project-director.interface";
+import { IProject } from "@/interfaces/project.interface";
+import { default as api, default as ApiService } from "@/lib/api";
+import { manageLogicError } from "@/lib/utils";
+import toast from "react-hot-toast";
+import { Budget, Evaluation } from "./interface/api.interface";
 
 export interface IPostulationData {
   id?: string;
@@ -74,8 +72,27 @@ export const checkInvitationStatusDirect = async (
   return response.data as CheckProjectInvitationStatusResponse;
 };
 
-export const submitPostulation = async (postulation: CreatePostulationDto) => {
-  const response = await ApiService.post("/postulation/submit", postulation);
+export const submitPostulation = async (
+  postulation: CreatePostulationDto,
+  files?: File[]
+) => {
+  const formData = new FormData();
+  
+  formData.append('projectId', postulation.projectId);
+  formData.append('metadata', JSON.stringify(postulation.metadata));
+  
+  if (files && files.length > 0) {
+    files.forEach(file => {
+      formData.append('files', file);
+    });
+  }
+
+  const response = await ApiService.post("/postulation/submit", formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  
   return response.data;
 };
 
@@ -101,7 +118,7 @@ export const acceptInvitation = async (token: string) => {
 };
 export const getPostulationById = async (postulationId: string) => {
   const response = await api.get(`/postulation/${postulationId}`);
-  return response.data as IPostulation;
+  return response.data as { postulation: IPostulation, files: any[] };
 };
 
 export const declineInvitation = async (tokenOrInvitationId: string) => {

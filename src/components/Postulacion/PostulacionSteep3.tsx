@@ -14,8 +14,8 @@ interface registroEntity {
 const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setactiveTab }: registroEntity) => {
 
   return (
-    <div className="space-y-8 p-4">
-      <div className="mb-8 bg-white shadow-md rounded m-4 p-6">
+    <div className="space-y-2">
+      <div className="mb-8 bg-white shadow-md rounded ">
         <div className="tabs flex justify-center space-x-10">
           <button
             onClick={() => setactiveTab('1')}
@@ -86,34 +86,34 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
             <h2 className="text-xl font-bold mb-4">Transporte</h2>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <Input
-              label={"Cliente"}
-              type={"number"}
-              name={"transporte.cliente"}
-              value={formData.transporte.cliente}
-              onChange={handleChange}
+                label={"Cliente"}
+                type={"number"}
+                name={"transporte.cliente"}
+                value={formData.transporte.cliente}
+                onChange={handleChange}
               />
               <Input
-              label={"Producción"}
-              type={"number"}
-              name={"transporte.produccion"}
-              value={formData.transporte.produccion}
-              onChange={handleChange}
+                label={"Producción"}
+                type={"number"}
+                name={"transporte.produccion"}
+                value={formData.transporte.produccion}
+                onChange={handleChange}
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <Input
-              label={"Vuelos"}
-              type={"number"}
-              name={"transporte.vuelos"}
-              value={formData.transporte.vuelos}
-              onChange={handleChange}
+                label={"Vuelos"}
+                type={"number"}
+                name={"transporte.vuelos"}
+                value={formData.transporte.vuelos}
+                onChange={handleChange}
               />
               <Input
-              label={"Foráneo"}
-              type={"number"}
-              name={"transporte.foraneo"}
-              value={formData.transporte.foraneo}
-              onChange={handleChange}
+                label={"Foráneo"}
+                type={"number"}
+                name={"transporte.foraneo"}
+                value={formData.transporte.foraneo}
+                onChange={handleChange}
               />
             </div>
             <label htmlFor="transporte.descripcion">Descripción</label>
