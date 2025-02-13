@@ -5,11 +5,11 @@ import Modal from 'react-modal';
 interface CustomModalProps {
   isOpen: boolean;
   title: string;
-  message: string;
+  message: string | React.ReactNode;
   confirmText: string;
-  cancelText: string;
+  cancelText?: string;
   onConfirm: () => void;
-  onCancel: () => void;
+  onCancel?: () => void;
 }
 
 const CustomModal: React.FC<CustomModalProps> = ({
@@ -45,7 +45,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
         },
       }}
     >
-      <h2 style={{ 
+      <h2 style={{
         margin: '0 0 15px 0',
         fontSize: '1.5rem',
         fontWeight: 600,
@@ -56,7 +56,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
       <br />
       <p>{message}</p>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
-        <button
+        {cancelText && (<button
           onClick={onCancel}
           style={{
             padding: '10px 20px',
@@ -68,7 +68,8 @@ const CustomModal: React.FC<CustomModalProps> = ({
           }}
         >
           {cancelText}
-        </button>
+        </button>)}
+
         <button
           onClick={onConfirm}
           style={{

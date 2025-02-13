@@ -11,6 +11,7 @@ type EntregableModalProps = {
     setListaEntregables: (lista: any[]) => void;
     entregable: any | null;
     campos: Field[];
+    noSave?:boolean
 };
 
 export type Field = {
@@ -109,7 +110,7 @@ const SwitchField = ({ label, checked, onChange }) => (
     </div>
   );
 
-const EntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregables, entregable, campos }: EntregableModalProps) => {
+const EntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregables, entregable, campos,noSave }: EntregableModalProps) => {
     const estadoInicial = campos.reduce((acc, campo) => {
         acc[campo.nombre] = campo.tipo === 'switch' ? false : '';
         return acc;
@@ -170,7 +171,7 @@ const EntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregable
             <div className={styles.modalContent}>
                 <div className={styles.modalHeader}>
                     <h2 className="text-2xl text-black font-bold">
-                        {entregable ? 'Editar Entregable' : 'Agregar Entregables'}
+                        {entregable ? 'Entregable' : 'Agregar Entregables'}
                     </h2>
                     <button className={styles.closeButton} onClick={manageClose}>
                         ×
@@ -231,7 +232,7 @@ const EntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregable
                     })}
                 </div>
                 <div className={styles.modalFooter}>
-                    <button
+                    {!noSave &&  <button
                         className={styles.primaryButton}
                         onClick={(e) => {
                             e.preventDefault();
@@ -240,7 +241,8 @@ const EntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregable
                         }}
                     >
                         Agregar
-                    </button>
+                    </button>}
+                   
                 </div>
             </div>
         </div>,

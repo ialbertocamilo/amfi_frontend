@@ -14,7 +14,7 @@ type inputEntity = {
   disabled?: boolean;
 };
 
-const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregablesFotoIni, entregablesLocutorIni, setEntregablesVideo, setEntregablesFoto, setEntregablesLocutor, onUpdate, disabled}) => {
+const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregablesFotoIni, entregablesLocutorIni, setEntregablesVideo, setEntregablesFoto, setEntregablesLocutor, onUpdate, disabled }) => {
   const [entregablesVideo, setEntregablesVideoIn] = useState<any[]>([]);
   const [entregablesFoto, setEntregablesFotoIn] = useState<any[]>([]);
   const [entregablesLocutor, setEntregablesLocutorIn] = useState<any[]>([]);
@@ -69,7 +69,7 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
               <p className="text-sm text-gray-600">Duración: {entregable.duracion}&quot;</p>
               <p className="text-sm text-gray-600">Formato: {entregable.formatoMedidas}</p>
             </div>
-            {disabled && (
+            {!disabled && (
               <div className="flex space-x-2">
                 <button
                   onClick={(e) => {
@@ -101,7 +101,7 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
               <p className="text-sm text-gray-600">Medios: {entregable.medios}</p>
               <p className="text-sm text-gray-600">Resolución: {entregable.resolucion}</p>
             </div>
-            {disabled && (
+            {!disabled && (
               <div className="flex space-x-2">
                 <button
                   onClick={(e) => {
@@ -133,7 +133,7 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
               <p className="text-sm text-gray-600">Tipo: {entregablesLocutor[0].tipo}</p>
               <p className="text-sm text-gray-600">Especificaciones: {entregablesLocutor[0].especificaciones}</p>
             </div>
-            {disabled && (
+            {!disabled && (
               <div className="flex space-x-2">
                 <button
                   onClick={(e) => {

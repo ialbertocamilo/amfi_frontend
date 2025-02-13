@@ -1,10 +1,31 @@
 import { fixYesNo } from '@/lib/utils';
-import React from 'react';
+import React, { useState } from 'react';
+import AddEntregableModalFoto from '../Proyecto/AddEntregableModalFoto';
+import AddEntregableModalLocutor from '../Proyecto/AddEntregableModalLocutor';
+import AddEntregableModalVideo from '../Proyecto/AddEntregableModalVideo';
+
 interface ResumenProyectoProps {
-  data: any
+  data: any;
 }
 
 const ResumenProyecto: React.FC<ResumenProyectoProps> = ({ data }) => {
+  const [selectedEntregable, setSelectedEntregable] = useState(null);
+  const [modalState, setModalState] = useState({
+    video: false,
+    foto: false,
+    locutor: false
+  });
+
+  const handleEntregableClick = (entregable) => {
+    setSelectedEntregable(entregable);
+    setModalState(prev => ({ ...prev, [entregable.type]: true }));
+  };
+
+  const closeModal = () => {
+    setSelectedEntregable(null);
+    setModalState({ video: false, foto: false, locutor: false });
+  };
+
   return (
     <div className="">
 
@@ -28,9 +49,9 @@ const ResumenProyecto: React.FC<ResumenProyectoProps> = ({ data }) => {
       <div>
         <h2 className="text-xl font-semibold">Financiamiento</h2>
         <div className="mt-4">
-          <p>Porcentaje de tasa sobre el anticipo: {data?.porcentajeTasaAnticipo}%</p>
-          <p>Porcentaje de tasa sobre el finiquito: {data?.porcentajeTasaFiniquito}%</p>
-          <p>Promedio de tasa total: {data?.porcentajeTasaTotal}%</p>
+          <p>Anticipo {data?.anticipo}</p>
+          <p>Antes de filmar {data?.antesDeFilmar}</p>
+          <p>Política: {data?.politicaAltaProveedor}</p>
         </div>
       </div>
 
@@ -68,34 +89,76 @@ const ResumenProyecto: React.FC<ResumenProyectoProps> = ({ data }) => {
       <div>
         <h2 className="text-xl font-semibold">Entregables</h2>
         <div className="grid grid-cols-2 gap-4 mt-4">
-            {data?.entregables?.length > 0 ? (
-              data.entregables.map((entregable, index) => (
-              <div key={index} className="border p-4 rounded mb-2">
-                <p><strong>Duración {index + 1}:</strong> {entregable.duracion}"</p>
-                <p><strong>Cantidad:</strong> {entregable?.cantidad}</p>
-                <p><strong>Aspecto:</strong> {entregable.aspectRatio}</p>
-                <p><strong>Formato:</strong> {entregable.formatoMedidas}</p>
-              </div>
-              ))
-            ) : (
-              <p>No hay entregables registrados</p>
-            )}
+          <h3 className="col-span-2 text-lg font-semibold">Videos</h3>
+          {data?.entregables?.filter(e => e.type === 'video').map((entregable, index) => (
+            <div
+              key={index}
+              className="border p-4 rounded mb-2 cursor-pointer"
+              onClick={() => handleEntregableClick(entregable)}
+            >
+              <p><strong>Duración {index + 1}:</strong> {entregable.duracion}"</p>
+              <p><strong>Aspecto:</strong> {entregable.aspectRatio}</p>
+              <p><strong>Formato:</strong> {entregable.formatoMedidas}</p>
+            </div>
+          ))}
+          <h3 className="col-span-2 text-lg font-semibold">Fotos</h3>
+          {data?.entregables?.filter(e => e.type === 'foto').map((entregable, index) => (
+            <div
+              key={index}
+              className="border p-4 rounded mb-2 cursor-pointer"
+              onClick={() => handleEntregableClick(entregable)}
+            >
+              <p><strong>Medios:</strong> {entregable.medios}</p>
+              <p><strong>Resolución:</strong> {entregable.resolucion}</p>
+              <p><strong>Tamaño:</strong> {entregable.tamano}</p>
+              <p><strong>Tipo de Encuadre:</strong> {entregable.tipoEncuadre}</p>
+            </div>
+          ))}
+          <h3 className="col-span-2 text-lg font-semibold">Locutores</h3>
+          {data?.entregables?.filter(e => e.type === 'locutor').map((entregable, index) => (
+            <div
+              key={index}
+              className="border p-4 rounded mb-2 cursor-pointer"
+              onClick={() => handleEntregableClick(entregable)}
+            >
+              <p><strong>Cantidad:</strong> {entregable.cantidad}</p>
+            </div>
+          ))}
         </div>
       </div>
-
       <hr className={'my-6'} />
 
-      {/* Sección Responsables de seguimiento */}
-      {/*        <div>
-          <h2 className="text-xl font-semibold">Responsables de seguimiento de agencia</h2>
-          <div className="grid grid-cols-2 gap-4 mt-4">
-            <p>Titular: {data?.titularResponsable}</p>
-            <p>Secundario: {data?.secundarioResponsable}</p>
-          </div>
-        </div>*/}
-
+      {selectedEntregable?.type === 'video' && (
+        <AddEntregableModalVideo
+          isOpen={modalState.video}
+          onClose={closeModal}
+          listaEntregables={data.entregables.filter(e => e.type === 'video')}
+          setListaEntregables={() => {}}
+          entregable={selectedEntregable}
+          noSave={true}
+        />
+      )}
+      {selectedEntregable?.type === 'foto' && (
+        <AddEntregableModalFoto
+          isOpen={modalState.foto}
+          onClose={closeModal}
+          listaEntregables={data.entregables.filter(e => e.type === 'foto')}
+          setListaEntregables={() => {}}
+          entregable={selectedEntregable}
+          noSave={true}
+        />
+      )}
+      {selectedEntregable?.type === 'locutor' && (
+        <AddEntregableModalLocutor
+          isOpen={modalState.locutor}
+          onClose={closeModal}
+          listaEntregables={data.entregables.filter(e => e.type === 'locutor')}
+          setListaEntregables={() => {}}
+          entregable={selectedEntregable}
+          noSave={true}
+        />
+      )}
     </div>
-
   );
 };
 

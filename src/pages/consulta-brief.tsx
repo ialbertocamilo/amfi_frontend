@@ -59,8 +59,7 @@ const ConsultaBrief: React.FC = () => {
                         data={data}
                         invitedDirectors={invitedDirectors}
                     />}
-
-                    <ResumenProyecto data={projectJson} />
+                    {data && projectJson && project && <ResumenProyecto data={projectJson} />}
                     <div className="mt-4 flex justify-end">
                         <button
                             onClick={() => router.back()}
