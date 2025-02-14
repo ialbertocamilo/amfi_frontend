@@ -19,10 +19,17 @@ const CreatedProject = () => {
             Proyecto creado exitosamente
           </h2>
           <div className="bg-blue-100 text-blue-700 rounded-lg p-4 flex items-start mb-6 w-1/3 max-w-screen-sm mx-auto">
-            <FaInfoCircle className="text-blue-700 text-lg mr-2 mt-1" />
+            <FaInfoCircle className="text-blue-700 text-lg mr-2 mt-1 w-6 h-6" />
             <p className="text-sm text-blue-700">
               Las casas productoras invitadas recibirán un correo para atender a
               la licitación
+            </p>
+
+          </div>
+          <div className="bg-blue-100 text-blue-700 rounded-lg p-4 flex items-start mb-6 w-1/3 max-w-screen-sm mx-auto">
+            <FaInfoCircle className="text-blue-700 text-lg mr-2 mt-1 w-6 h-6" />
+            <p className="text-sm text-blue-700">
+              El proyecto se ha cambiado a estado en proceso
             </p>
           </div>
           <button

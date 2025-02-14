@@ -11,6 +11,7 @@ type EntregableModalProps = {
     setListaEntregables: (lista: any[]) => void;
     entregable: any | null;
     campos: Field[];
+    viewMode?: boolean;
 };
 
 export type Field = {
@@ -47,10 +48,10 @@ const CampoSeleccion = ({ etiqueta, nombre, valor, onChange, opciones, required 
     return (
         <div className={styles.formGroup}>
             <label>{etiqueta}</label>
-            <select 
-                name={nombre} 
-                value={valor} 
-                onChange={onChange} 
+            <select
+                name={nombre}
+                value={valor}
+                onChange={onChange}
                 className={`border p-2 rounded ${isError ? 'border-red-500' : ''}`}
             >
                 {opciones.map((opcion, index) => (
@@ -91,25 +92,25 @@ const CampoAreaTexto = ({ etiqueta, nombre, valor, onChange, filas = 2, required
 
 const SwitchField = ({ label, checked, onChange }) => (
     <div className="flex items-center justify-center mb-4 w-full">
-      <label className="block text-sm font-medium text-gray-700 w-1/4 text-center">{label}</label>
-      <div className="ml-5 mt-2 w-2/5">
-        <Switch
-          checked={checked}
-          name={label}
-          onChange={onChange}
-          className={`${checked ? 'bg-red-500' : 'bg-gray-200'}
+        <label className="block text-sm font-medium text-gray-700 w-1/4 text-center">{label}</label>
+        <div className="ml-5 mt-2 w-2/5">
+            <Switch
+                checked={checked}
+                name={label}
+                onChange={onChange}
+                className={`${checked ? 'bg-red-500' : 'bg-gray-200'}
             relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none`}
-        >
-          <span
-            className={`${checked ? 'translate-x-6' : 'translate-x-1'}
+            >
+                <span
+                    className={`${checked ? 'translate-x-6' : 'translate-x-1'}
               inline-block w-4 h-4 transform bg-white rounded-full transition-transform`}
-          />
-        </Switch>
-      </div>
+                />
+            </Switch>
+        </div>
     </div>
-  );
+);
 
-const EntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregables, entregable, campos }: EntregableModalProps) => {
+const EntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregables, entregable, campos, viewMode }: EntregableModalProps) => {
     const estadoInicial = campos.reduce((acc, campo) => {
         acc[campo.nombre] = campo.tipo === 'switch' ? false : '';
         return acc;
@@ -118,7 +119,7 @@ const EntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregable
     const [estado, setEstado] = useState<any>(estadoInicial);
 
 
-    const manageClose = (e?:any) => {
+    const manageClose = (e?: any) => {
         e?.preventDefault()
         if (onClose) onClose();
     };
@@ -166,7 +167,7 @@ const EntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregable
     };
 
     return createPortal(
-        <div className={styles.modalOverlay}  onClick={manejarClickOverlay}>
+        <div className={styles.modalOverlay} onClick={manejarClickOverlay}>
             <div className={styles.modalContent}>
                 <div className={styles.modalHeader}>
                     <h2 className="text-2xl text-black font-bold">
@@ -213,7 +214,7 @@ const EntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregable
                                         nombre={campo.nombre}
                                         valor={estado[campo.nombre]}
                                         onChange={manejarCambio}
-                                        
+
                                     />
                                 );
                             case 'switch':
@@ -230,22 +231,24 @@ const EntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregable
                         }
                     })}
                 </div>
-                <div className={styles.modalFooter}>
+                {!viewMode && <div className={styles.modalFooter}>
                     <button
                         className={styles.primaryButton}
                         onClick={(e) => {
                             e.preventDefault();
                             manejarAgregar();
+                            manageClose();
                             toast.success('Entregable agregado exitosamente.');
                         }}
                     >
                         Agregar
                     </button>
-                </div>
+                </div>}
+
             </div>
         </div>,
         document.body
-        )
+    )
 };
 
 export default EntregableModal;

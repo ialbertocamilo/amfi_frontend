@@ -162,7 +162,10 @@ const Proyecto: React.FC = () => {
   const handleSubmit = async (page: string) => {
     if (page === "6") {
       // Logica para validar al finalizar el proyecto y lanzarlo
-      validator.validateArrayRules(formData, [validation1,validation2,validation3,validation4]);
+      if (!validator.validateArrayRules(formData, [validation1,validation2,validation3,validation4])){
+        return;
+      }
+      fetchProject()
     }
     if (
       checkProjectReadonly(projectContext?.project?.status as ProjectStatus)

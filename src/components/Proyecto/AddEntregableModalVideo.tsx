@@ -2,7 +2,7 @@ import React from 'react';
 import EntregableModal, { Field } from './AddEntregable';
 
 
-const AddEntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregables, entregable }) => {
+const AddEntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregables, entregable,disabled }) => {
   const campos: Field[] = [
     { etiqueta: 'Versión', nombre: 'version', tipo: 'text' },
     { etiqueta: 'Fecha de entrega', nombre: 'fechaEntrega', tipo: 'date' },
@@ -57,6 +57,7 @@ const AddEntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntrega
       setListaEntregables={setListaEntregables}
       entregable={entregable}
       campos={campos}
+      viewMode={disabled}
     />
   );
 };
