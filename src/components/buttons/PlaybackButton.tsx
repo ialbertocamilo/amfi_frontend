@@ -14,8 +14,10 @@ interface PlaybackControlProps {
   onStatusChange?: (status: ProjectStatus) => void;
 }
 
-export default function PlaybackButton({ status, onStatusChange }: PlaybackControlProps) {
+export default function PlaybackControl({ status, onStatusChange }: PlaybackControlProps) {
   const [playbackState, setPlaybackState] = useState<PlaybackState>('stopped')
+  const [showPlayModal, setShowPlayModal] = useState(false)
+  const [showCancelModal, setShowCancelModal] = useState(false)
 
   useEffect(() => {
     switch (status) {
@@ -37,17 +39,20 @@ export default function PlaybackButton({ status, onStatusChange }: PlaybackContr
     }
   }, [status])
 
-  const handlePlay = () => {
+  const handlePlayClick = () => {
+    setShowPlayModal(true);
+  }
+
+  const confirmPlay = () => {
     setPlaybackState('playing');
     onStatusChange?.(ProjectStatus.InProgress);
+    setShowPlayModal(false);
   }
 
   const handlePause = () => {
     setPlaybackState('paused');
     onStatusChange?.(ProjectStatus.Paused);
   }
-
-  const [showCancelModal, setShowCancelModal] = useState(false);
 
   const handleStop = () => {
     setShowCancelModal(true);
@@ -74,7 +79,7 @@ export default function PlaybackButton({ status, onStatusChange }: PlaybackContr
             <motion.div key="play" {...buttonVariants}>
               <Tooltip title="Iniciar - Comenzar el proyecto" arrow placement="top">
                 <Button
-                  onClick={handlePlay}
+                  onClick={handlePlayClick}
                   variant="outlined"
                   size="small"
                   className="transition-colors duration-300 hover:bg-green-100 rounded-xl"
@@ -105,7 +110,7 @@ export default function PlaybackButton({ status, onStatusChange }: PlaybackContr
                 <motion.div key="play" {...buttonVariants}>
                   <Tooltip title="Reanudar proyecto" arrow placement="top">
                     <Button
-                      onClick={handlePlay}
+                      onClick={handlePlayClick}
                       variant="outlined"
                       size="small"
                       className="transition-colors duration-300 hover:bg-green-100 rounded-xl"
@@ -148,6 +153,16 @@ export default function PlaybackButton({ status, onStatusChange }: PlaybackContr
           </Tooltip>
         </motion.div>
       )}
+
+      <CustomModal
+        isOpen={showPlayModal}
+        onCancel={() => setShowPlayModal(false)}
+        onConfirm={confirmPlay}
+        title="Iniciar proyecto"
+        message="¿Está seguro que desea iniciar el proyecto? Esto activará el flujo de trabajo del proyecto y permitirá que los participantes comiencen sus actividades."
+        confirmText="Sí, iniciar"
+        cancelText="No, cancelar"
+      />
 
       <CustomModal
         isOpen={showCancelModal}

@@ -5,6 +5,7 @@
   --foreground-color: #d6dbdc;
   --background-start-color: #d6dbdc;
   --background-end-color: #ffffff;
+  --color-primary: #045597;
 }
 .appearance-none {
   -webkit-appearance: none;

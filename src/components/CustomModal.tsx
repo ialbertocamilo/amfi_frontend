@@ -58,28 +58,14 @@ const CustomModal: React.FC<CustomModalProps> = ({
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
         {cancelText && (<button
           onClick={onCancel}
-          style={{
-            padding: '10px 20px',
-            backgroundColor: '#fff',
-            color: '#f00',
-            border: '1px solid #f00',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
+          className="px-5 py-2.5 bg-white border border-[var(--color-primary)] text-[var(--color-primary)] rounded cursor-pointer"
         >
           {cancelText}
         </button>)}
 
         <button
           onClick={onConfirm}
-          style={{
-            padding: '10px 20px',
-            backgroundColor: '#f00',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
+          className="px-5 py-2.5  text-white border-none rounded cursor-pointer bg-[var(--color-primary)] "
         >
           {confirmText}
         </button>
