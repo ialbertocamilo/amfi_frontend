@@ -18,6 +18,15 @@ export const getProductorasWithDirectors = async () => {
     }
 };
 
+export const getProductorasWithDirectorsAndInvited = async (projectId:string) => {
+    try {
+        const response = await api.get(`/company/production-houses-invited/${projectId}`);
+        return response.data;
+    } catch (error:any) {
+        throw new Error(error.response?.data?.message || 'Error fetching directors data');
+    }
+};
+
 export const sendReminderToProductionHouses = async (projectId: string) => {
     try {
         const response = await api.post(`/project-director/send-reminder/${projectId}`);

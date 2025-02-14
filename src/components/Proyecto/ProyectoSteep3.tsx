@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import UploaderComponent from '../UploaderComponent';
 import Input from '../inputs/Input';
+import RequiredTag from './RequiredTag';
 
 interface registroEntity {
   formData: any,
@@ -26,7 +27,6 @@ export const validationRules = {
   politicaAltaProveedor: { required: true, message: 'La política de alta al proveedor es requerida', label: 'Política de alta al proveedor' },
   anticipo: { required: true, message: 'El anticipo es requerido', label: 'Anticipo' },
   antesDeFilmar: { required: true, message: 'El campo antes de filmar es requerido', label: 'Antes de filmar' },
-  informacionAdicional: { required: true, message: 'La información adicional es requerida', label: 'Información adicional' }
 };
 
 const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntity) => {
@@ -106,7 +106,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
               <h2 className="text-xl font-bold mb-4">Licitación Finanzas</h2>
               <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
                 <div>
-                  <label htmlFor="responsablePago" className="block text-sm font-medium text-gray-700">Responsable de pago</label>
+                  <label htmlFor="responsablePago" className="block text-sm font-medium text-gray-700">Responsable de pago <RequiredTag/></label>
                   <select
                     id="responsablePago"
                     name="responsablePago"
@@ -126,13 +126,14 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                     name="politicaPago"
                     value={formData?.politicaPago}
                     onChange={handleChange}
+                    required
                     label='Política de pago'
                     placeholder="Ingrese la política de pago en días (Ej. 30 días)"
                     disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                   />
                 </div>
                 <div>
-                  <label htmlFor="procesoFacturacion" className="block text-sm font-medium text-gray-700">Proceso de facturación</label>
+                  <label htmlFor="procesoFacturacion" className="block text-sm font-medium text-gray-700">Proceso de facturación <RequiredTag/></label>
                   <select
                     id="procesoFacturacion"
                     name="procesoFacturacion"
@@ -198,7 +199,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
             <div className='grid grid-cols-2 md:grid-cols-2 gap-8 mb-8'>
               <div>
                 <label htmlFor="contratoProyecto" className="block text-sm font-medium text-gray-700">Contrato
-                  de proyecto</label>
+                  de proyecto <RequiredTag/></label>
                 <select
                   id="contratoProyecto"
                   name="contratoProyecto"
@@ -214,7 +215,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
 
               <div>
                 <label htmlFor="tipoContratoProyecto" className="block text-sm font-medium text-gray-700">Tipo de contrato
-                  de proyecto</label>
+                  de proyecto <RequiredTag/></label>
                 <select
                   id="tipoContratoProyecto"
                   name="tipoContratoProyecto"
@@ -230,7 +231,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
               </div>
               <div>
                 <label htmlFor="rondaCotizacion" className="block text-sm font-medium text-gray-700">Ronda
-                  de cotización</label>
+                  de cotización <RequiredTag/></label>
                 <select
                   id="rondaCotizacion"
                   name="rondaCotizacion"
@@ -245,7 +246,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Visualización</label>
+                <label className="block text-sm font-medium text-gray-700">Visualización <RequiredTag/></label>
                 <div className="mt-1 flex items-center">
                   <input
                     type="radio"
@@ -271,7 +272,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
               <div>
                 <label htmlFor="politicaAltaProveedor"
                   className="block text-sm font-medium text-gray-700">Política de alta al
-                  proveedor</label>
+                  proveedor <RequiredTag/></label>
                 <textarea
                   id="politicaAltaProveedor"
                   name="politicaAltaProveedor"
@@ -290,7 +291,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
             <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
               <div>
                 <label htmlFor="anticipo"
-                  className="block text-sm font-medium text-gray-700">Anticipo</label>
+                  className="block text-sm font-medium text-gray-700">Anticipo <RequiredTag/></label>
                 <select
                   id="anticipo"
                   name="anticipo"
@@ -306,7 +307,7 @@ const ProyectoSteep3 = ({ formData, handleChange, handleSubmit, }: registroEntit
               </div>
               <div>
                 <label htmlFor="antesDeFilmar" className="block text-sm font-medium text-gray-700">Antes de
-                  filmar</label>
+                  filmar <RequiredTag/></label>
                 <select
                   id="antesDeFilmar"
                   name="antesDeFilmar"

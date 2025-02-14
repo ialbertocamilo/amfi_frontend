@@ -3,6 +3,7 @@ import { checkProjectReadonly } from '@/lib/utils';
 import { ProjectStatus } from '@/mappers/project.mapper';
 import { useProjectContext } from '@/providers/project.context';
 import toast from 'react-hot-toast';
+import RequiredTag from './RequiredTag';
 
 interface registroEntity {
   formData: any;
@@ -87,7 +88,7 @@ const ProyectoSteep2 = ({
           <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
             <div>
               <label htmlFor="medios" className="block text-sm font-medium text-gray-700">
-                Medios
+                Medios <RequiredTag/>
               </label>
               <input
                 type="text"
@@ -104,7 +105,7 @@ const ProyectoSteep2 = ({
             </div>
             <div>
               <label htmlFor="temporalidad" className="block text-sm font-medium text-gray-700">
-                Temporalidad
+                Temporalidad <RequiredTag/>
               </label>
               <select
                 id="temporalidad"
@@ -125,7 +126,7 @@ const ProyectoSteep2 = ({
             </div>
             <div>
               <label htmlFor="desglose" className="block text-sm font-medium text-gray-700">
-                Desglose
+                Desglose <RequiredTag/>
               </label>
               <input
                 type="text"
@@ -140,7 +141,7 @@ const ProyectoSteep2 = ({
             </div>
             <div>
               <label htmlFor="territorio1" className="block text-sm font-medium text-gray-700">
-                Territorio 1
+                Territorio 1 <RequiredTag/>
               </label>
               <TerritorioSelect name={'territorio1'} value={formData?.territorio1 || ''}disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)} onChange={handleChange} />
             </div>
@@ -159,7 +160,7 @@ const ProyectoSteep2 = ({
 
             <div>
               <label htmlFor="tipoProduccion1" className="block text-sm font-medium text-gray-700">Tipos de producción
-                1</label>
+                1 <RequiredTag/></label>
               <select
                 id="tipoProduccion1"
                 name="tipoProduccion1"
@@ -210,7 +211,7 @@ const ProyectoSteep2 = ({
             </div>
             <div>
               <label htmlFor="productodummie" className="block text-sm font-medium text-gray-700">
-                Producto/Dummie
+                Producto/Dummie <RequiredTag/>
               </label>
               <input
                 type="text"
@@ -225,7 +226,7 @@ const ProyectoSteep2 = ({
             </div>
             <div>
               <label htmlFor="cantidadDiasProduccion" className="block text-sm font-medium text-gray-700">
-                Cantidad días de producción
+                Cantidad días de producción <RequiredTag/>
               </label>
               <select
                 id="cantidadDiasProduccion"
@@ -243,7 +244,7 @@ const ProyectoSteep2 = ({
             </div>
             <div>
               <label htmlFor="creatividadAprobada" className="block text-sm font-medium text-gray-700">
-                Creatividad aprobada por anunciante
+                Creatividad aprobada por anunciante <RequiredTag/>
               </label>
               <select
                 id="creatividadAprobada"
@@ -266,7 +267,7 @@ const ProyectoSteep2 = ({
             <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
               <div>
                 <label htmlFor="entregaBrief" className="block text-sm font-medium text-gray-700">
-                  Entrega de Brief
+                  Entrega de Brief <RequiredTag/>
                 </label>
                 <input
                   type="date"
@@ -274,13 +275,21 @@ const ProyectoSteep2 = ({
                   name="entregaBrief"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.entregaBrief || ''}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const selectedDate = new Date(e.target.value);
+                    const currentDate = new Date();
+                    if (selectedDate <= currentDate) {
+                      toast.error('La fecha de entrega de brief debe ser mayor a la fecha actual.');
+                      return;
+                    }
+                    handleChange(e);
+                  }}
                   disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 />
               </div>
               <div>
                 <label htmlFor="entregaPresupuesto" className="block text-sm font-medium text-gray-700">
-                  Entrega presupuesto y TT
+                  Entrega presupuesto y TT <RequiredTag/>
                 </label>
                 <input
                   type="date"
@@ -293,7 +302,7 @@ const ProyectoSteep2 = ({
                     const selectedDate = new Date(e.target.value);
                     const currentDate = new Date();
                     if (selectedDate <= currentDate) {
-                      toast.error('La fecha de entrega debe ser mayor a la fecha actual.');
+                      toast.error('La fecha de entrega de presupuesto debe ser mayor a la fecha actual.');
                       return;
                     }
                     handleChange(e);
@@ -302,7 +311,7 @@ const ProyectoSteep2 = ({
               </div>
               <div>
                 <label htmlFor="entregaProyecto" className="block text-sm font-medium text-gray-700">
-                  Entrega proyecto
+                  Entrega proyecto <RequiredTag/>
                 </label>
                 <input
                   type="date"
@@ -310,7 +319,15 @@ const ProyectoSteep2 = ({
                   name="entregaProyecto"
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                   value={formData?.entregaProyecto || ''}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const selectedDate = new Date(e.target.value);
+                    const currentDate = new Date();
+                    if (selectedDate <= currentDate) {
+                      toast.error('La fecha de entrega de proyecto debe ser mayor a la fecha actual.');
+                      return;
+                    }
+                    handleChange(e);
+                  }}
                   disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 />
               </div>
@@ -322,7 +339,7 @@ const ProyectoSteep2 = ({
             <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mb-8">
               <div>
                 <label htmlFor="presupuestoAsignado" className="block text-sm font-medium text-gray-700">
-                  Presupuesto asignado
+                  Presupuesto asignado <RequiredTag/>
                 </label>
                 <select
                   id="presupuestoAsignado"
@@ -339,7 +356,7 @@ const ProyectoSteep2 = ({
               </div>
               <div>
                 <label htmlFor="presupuesto" className="block text-sm font-medium text-gray-700">
-                  Monto
+                  Monto <RequiredTag/>
                 </label>
                 <div className="relative flex space-x-2">
                   <input

@@ -3,6 +3,7 @@ import { IProject } from '@/interfaces/project.interface';
 import NextButton from '../buttons/NextButton';
 import { DatosAgenciaPublicidad } from './DatosAgenciaPublicidad';
 import DatosAnunciante from './DatosAnunciante';
+import RequiredTag from './RequiredTag';
 
 interface registroEntity {
   formData: {
@@ -70,7 +71,7 @@ const ProyectoSteep1 = ({
               htmlFor="projectName"
               className="block text-sm font-medium text-gray-700"
             >
-              Nombre de Campaña / Proyecto
+              Nombre de Campaña / Proyecto <RequiredTag/>
             </label>
             <input
               type="text"
@@ -87,7 +88,7 @@ const ProyectoSteep1 = ({
               htmlFor="versionName"
               className="block text-sm font-medium text-gray-700"
             >
-              Cantidad Versiones
+              Cantidad Versiones <RequiredTag/>
             </label>
             <select
               id="versionName"

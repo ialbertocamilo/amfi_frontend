@@ -3,6 +3,7 @@ import { useUserContext } from '@/providers/user.context';
 import React, { useEffect, useState } from 'react';
 import AddAnunciante from './AddAnunciante';
 import { ICompany } from '@/interfaces/company.interface';
+import RequiredTag from './RequiredTag';
 
 interface DatosAnuncianteProps {
   formData: Record<string, any>;
@@ -43,7 +44,7 @@ const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ advertiser, formData,
         {user && <AddAnunciante user={user} doSelect={selectingAnunciante} advertiser={advertiser} />}
         <div>
           <label htmlFor="brand" className="block text-sm font-medium text-gray-700">
-            Marca
+            Marca <RequiredTag/>
           </label>
           <input
             type="text"
@@ -57,7 +58,7 @@ const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ advertiser, formData,
         </div>
         <div>
           <label htmlFor="product" className="block text-sm font-medium text-gray-700">
-            Producto
+            Producto <RequiredTag/>
           </label>
           <input
             type="text"
@@ -71,7 +72,7 @@ const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ advertiser, formData,
         </div>
         <div>
           <label htmlFor="contactoMarketing" className="block text-sm font-medium text-gray-700">
-            Contacto Responsable Marketing
+            Contacto Responsable Marketing <RequiredTag/>
           </label>
           <input
             type="text"
@@ -85,7 +86,7 @@ const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ advertiser, formData,
         </div>
         <div>
           <label htmlFor="contactoFinanzas" className="block text-sm font-medium text-gray-700">
-            Contacto Finanzas
+            Contacto Finanzas <RequiredTag/>
           </label>
           <input
             type="text"
@@ -99,7 +100,7 @@ const DatosAnunciante: React.FC<DatosAnuncianteProps> = ({ advertiser, formData,
         </div>
         <div>
           <label htmlFor="buyerContact" className="block text-sm font-medium text-gray-700">
-            Contacto Compras
+            Contacto Compras <RequiredTag/>
           </label>
           <input
             type="text"

@@ -12,18 +12,23 @@ import { CompanyType } from "@/constants";
 import { CreateProjectDto } from "@/dto/create-project.dto";
 import { UpdateProjectDto } from "@/dto/update-project.dto";
 import useProject from "@/hooks/project.hook";
+import { useFormValidation } from "@/hooks/useFormValidation";
 import {
   checkProjectReadonly,
-  formatToUtcBackend,
-  validateFormData,
+  formatToUtcBackend
 } from "@/lib/utils";
 import { ProjectStatus } from "@/mappers/project.mapper";
 import { useProjectContext } from "@/providers/project.context";
 import { useUserContext } from "@/providers/user.context";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
 import "./globals.css";
+
+import { validationRules as validation2 } from "../components/Proyecto//ProyectoSteep2";
+import { validationRules as validation3 } from "../components/Proyecto//ProyectoSteep3";
+import { validationRules as validation4 } from "../components/Proyecto//ProyectoSteep4";
+import { validationRules as validation1 } from "../components/Proyecto/ProyectoSteep1";
+
 const ReadonlyBadge = ({ readonly }: { readonly: boolean }) => {
   return (
     <div className="relative sm:float-right">
@@ -151,21 +156,13 @@ const Proyecto: React.FC = () => {
 
   const { projectJson, fetchProject, saveOrUpdateProject, status, project } =
     useProject(id as string);
+
+  const validator = useFormValidation();
+
   const handleSubmit = async (page: string) => {
     if (page === "6") {
-      if (
-        !validateFormData(formData, [
-          "videos",
-          "photos",
-          "locutor",
-          "politicaPagoAgencia",
-          "procesoFacturacionAgencia",
-          "advertiserName","territorio2","territorio3"
-        ])
-      ) {
-        toast.error("Por favor, llena todos los campos para crear el proyecto");
-        return;
-      }
+      // Logica para validar al finalizar el proyecto y lanzarlo
+      validator.validateArrayRules(formData, [validation1,validation2,validation3,validation4]);
     }
     if (
       checkProjectReadonly(projectContext?.project?.status as ProjectStatus)

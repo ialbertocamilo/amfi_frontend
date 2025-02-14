@@ -66,15 +66,18 @@ const Entregables: React.FC<EntregablesProps> = ({
 
     setFormData(newFormData);
     setTotalNumber(newFormData.videos + newFormData.photos + newFormData.locutor);
+  }, [entregables]);
 
+  // Separate useEffect for parent notification to prevent infinite loops
+  useEffect(() => {
     if (onEntregablesChange) {
       const allEntregables = Object.entries(entregables).flatMap(([type, items]) =>
         items.map(item => ({ ...item, type }))
       );
-
-      requestAnimationFrame(() => onEntregablesChange(allEntregables));
+      onEntregablesChange(allEntregables);
     }
-  }, [entregables, onEntregablesChange]);
+  }, [entregables]);
+
 
   const handleEntregableUpdate = (type: string, updatedEntregables: Entregable[]) => {
     setEntregables(prev => ({

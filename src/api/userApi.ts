@@ -30,8 +30,8 @@ export const fetchUserInfo = async () => {
 
 export const getSecondaryUsers = async () => {
     try {
-        const response = await api.get(`/company/logged/secondary-users`);
-        return response.data.map((user: User) => ({
+        const response = await api?.get(`/company/logged/secondary-users`);
+        return response?.data?.map((user: User) => ({
             ...user,
             registrationDate: moment(user.registrationDate).format('DD/MM/YYYY HH:mm'),
             type: UserMapper.mapRole(user.type),

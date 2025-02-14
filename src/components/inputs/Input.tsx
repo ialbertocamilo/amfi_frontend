@@ -1,4 +1,5 @@
 import React from "react";
+import RequiredTag from "../Proyecto/RequiredTag";
 
 interface InputProps {
   label: string;
@@ -10,6 +11,7 @@ interface InputProps {
   posText?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
+  required?:boolean
 }
 
 const Input: React.FC<InputProps> = ({
@@ -18,6 +20,7 @@ const Input: React.FC<InputProps> = ({
   className = "",
   name,
   value,
+  required,
   posText,
   onChange,
   placeholder,
@@ -25,7 +28,7 @@ const Input: React.FC<InputProps> = ({
 }) => {
   return (
     <div>
-      <label className="block text-sm font-medium">{label}</label>
+      <label className="block text-sm font-medium">{label} {required && <RequiredTag/>}</label>
       <input
         type={type}
         className={`border p-2 w-full rounded-lg ${className}`}

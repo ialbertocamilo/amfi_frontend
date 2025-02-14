@@ -13,6 +13,7 @@ export interface CasaProductora {
   selected: boolean;
   details: boolean;
   directors: Director[];
+  isInvited?:boolean
 }
 
 export const casasProductorasState = atom<CasaProductora[]>({
@@ -27,7 +28,6 @@ export const selectedCasasProductorasState = selector({
     return casasProductoras.filter(casa => casa.selected && casa.directors.some(director => director.selected));
   },
 });
-
 export const casasProductorasSelected= atom<string[]>({
   key: "casasProductorasSelected",
   default: [],

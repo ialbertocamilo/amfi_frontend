@@ -51,6 +51,21 @@ export const useFormValidation = () => {
     return isValid;
   };
 
+const validateArrayRules = (formData: any, validationRulesArray: ValidationRules[]): boolean => {
+  let isValid = true;
+
+  // Validate each rule set in the array
+  for (const rules of validationRulesArray) {
+    const currentValid = validate(formData, rules);
+    if (!currentValid) {
+      isValid = false;
+      break; // Stop on first validation failure
+    }
+  }
+
+  return isValid;
+};
+
   const getFieldError = (field: string): string | undefined => {
     return errors[field];
   };
@@ -63,6 +78,7 @@ export const useFormValidation = () => {
     errors,
     validate,
     getFieldError,
-    clearErrors
+    clearErrors,
+    validateArrayRules
   };
 };

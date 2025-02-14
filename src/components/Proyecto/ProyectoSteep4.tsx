@@ -8,6 +8,7 @@ import { useProjectContext } from '@/providers/project.context';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Input from '../inputs/Input';
+import RequiredTag from './RequiredTag';
 
 interface registroEntity {
   formData: any;
@@ -18,7 +19,6 @@ interface registroEntity {
 }
 
 export const validationRules = {
-  talento: { required: true, message: 'El talento es requerido', label: 'Talento' },
   talentoExclusividad: { required: true, message: 'La exclusividad es requerida', label: 'Exclusividad' },
   talentoTipoCasting: { required: true, message: 'El tipo de casting es requerido', label: 'Tipo de Casting' },
   talentoACargoDe: { required: true, message: 'El responsable del talento es requerido', label: 'A Cargo De' },
@@ -37,9 +37,6 @@ export const validationRules = {
   aCargoDe: { required: true, message: 'El responsable es requerido', label: 'A Cargo De' },
   postproduccion: { required: true, message: 'La postproducción es requerida', label: 'Postproducción' },
   animacion: { required: true, message: 'La animación es requerida', label: 'Animación' },
-  vfx: { required: true, message: 'Los VFX son requeridos', label: 'VFX' },
-  comentarioEntregables: { required: true, message: 'Los comentarios de entregables son requeridos', label: 'Comentarios Entregables' },
-  comentarios: { required: true, message: 'Los comentarios son requeridos', label: 'Comentarios' },
   titularResponsable: { required: true, message: 'El titular responsable es requerido', label: 'Titular Responsable' }
 };
 
@@ -50,7 +47,6 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
   const { id } = router.query;
 
   const validationRules = {
-    talento: { required: true, message: 'La descripción de talento es requerido', label: 'Talento', step: '4' },
     talentoExclusividad: { required: true, message: 'La exclusividad es requerida', label: 'Exclusividad', step: '4' },
     talentoTipoCasting: { required: true, message: 'El tipo de casting es requerido', label: 'Tipo de Casting', step: '4' },
     talentoACargoDe: { required: true, message: 'El responsable del talento es requerido', label: 'A Cargo De', step: '4' },
@@ -69,9 +65,6 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
     aCargoDe: { required: true, message: 'El responsable es requerido', label: 'A Cargo De', step: '4' },
     postproduccion: { required: true, message: 'La postproducción es requerida', label: 'Postproducción', step: '4' },
     animacion: { required: true, message: 'La animación es requerida', label: 'Animación', step: '4' },
-    vfx: { required: true, message: 'Los VFX son requeridos', label: 'VFX', step: '4' },
-    comentarioEntregables: { required: true, message: 'Los comentarios de entregables son requeridos', label: 'Comentarios Entregables', step: '4' },
-    comentarios: { required: true, message: 'Los comentarios son requeridos', label: 'Comentarios', step: '4' },
     titularResponsable: { required: true, message: 'El titular responsable es requerido', label: 'Titular Responsable', step: '4' }
   };
 
@@ -108,14 +101,14 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
      
           {/* Sección: Desglose Creativo */}
           <h2 className="text-xl font-bold mb-4">Notas</h2>
-          <h2 className="text-md font-medium mb-4">Talento</h2>
+          <h2 className="text-md font-medium mb-4">Talento </h2>
           <div className={'grid grid-cols-2 gap-8 mb-8'}>
             <div>
               <label
                 htmlFor="talentoExclusividad"
                 className="block text-sm font-medium text-gray-700"
               >
-                Exclusividad
+                Exclusividad <RequiredTag/>
               </label>
               <select
                 id="talentoExclusividad"
@@ -134,7 +127,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
                 htmlFor="talentoTipoCasting"
                 className="block text-sm font-medium text-gray-700"
               >
-                Tipo casting
+                Tipo casting <RequiredTag/>
               </label>
               <select
                 id="talentoTipoCasting"
@@ -154,7 +147,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
                 htmlFor="talentoACargoDe"
                 className="block text-sm font-medium text-gray-700"
               >
-                A cargo de:
+                A cargo de: <RequiredTag/>
               </label>
               <select
                 id="talentoACargoDe"
@@ -170,12 +163,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
               </select>
             </div>
             <div>
-              <label
-                htmlFor="talento"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Descripción
-              </label>
+              <label htmlFor="talento" className="block text-sm font-medium text-gray-700">Descripción </label>
               <input
                 type="text"
                 id="talento"
@@ -193,7 +181,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
                 htmlFor="competencia"
                 className="block text-sm font-medium text-gray-700"
               >
-                Competencia
+                Competencia <RequiredTag/>
               </label>
               <input
                 type="text"
@@ -206,12 +194,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
               />
             </div>
             <div>
-              <label
-                htmlFor="menoresDeEdad"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Menores de edad
-              </label>
+              <label htmlFor="talentoExclusividad" className="block text-sm font-medium text-gray-700">Exclusividad <RequiredTag/></label>
               <select
                 id="menoresDeEdad"
                 name="menoresDeEdad"
@@ -225,12 +208,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
               </select>
             </div>
             <div>
-              <label
-                htmlFor="animales"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Animales
-              </label>
+              <label htmlFor="animales" className="block text-sm font-medium text-gray-700">Animales <RequiredTag/></label>
               <select
                 id="animales"
                 name="animales"
@@ -244,12 +222,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
               </select>
             </div>
             <div>
-              <label
-                htmlFor="especieProtegida"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Especie protegida
-              </label>
+              <label htmlFor="especieProtegida" className="block text-sm font-medium text-gray-700">Especie protegida <RequiredTag/></label>
               <select
                 id="especieProtegida"
                 name="especieProtegida"
@@ -263,12 +236,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
               </select>
             </div>
             <div>
-              <label
-                htmlFor="locación"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Locación
-              </label>
+              <label htmlFor="locación" className="block text-sm font-medium text-gray-700">Locación <RequiredTag/></label>
               <select
                 id="locación"
                 name="locacion"
@@ -283,12 +251,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
               </select>
             </div>
             <div>
-              <label
-                htmlFor="vestuario"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Vestuario
-              </label>
+              <label htmlFor="vestuario" className="block text-sm font-medium text-gray-700">Vestuario <RequiredTag/></label>
               <input
                 type="text"
                 id="vestuario"
@@ -300,12 +263,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
               />
             </div>
             <div>
-              <label
-                htmlFor="efectos"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Efectos
-              </label>
+              <label htmlFor="efectos" className="block text-sm font-medium text-gray-700">Efectos <RequiredTag/></label>
               <input
                 type="text"
                 id="efectos"
@@ -317,12 +275,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
               />
             </div>
             <div>
-              <label
-                htmlFor="maquillaje y peinado"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Maquillaje y peinado
-              </label>
+              <label htmlFor="maquillaje y peinado" className="block text-sm font-medium text-gray-700">Maquillaje y peinado <RequiredTag/></label>
               <input
                 type="text"
                 id="maquillaje y peinado"
@@ -334,12 +287,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
               />
             </div>
             <div>
-              <label
-                htmlFor="arte/props"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Arte
-              </label>
+              <label htmlFor="arte/props" className="block text-sm font-medium text-gray-700">Arte <RequiredTag/></label>
               <input
                 type="text"
                 id="arte/props"
@@ -360,7 +308,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
                 htmlFor="locucionInstitucional"
                 className="block text-sm font-medium text-gray-700"
               >
-                Institucional
+                Institucional <RequiredTag/>
               </label>
               <select
                 id="locucionInstitucional"
@@ -379,7 +327,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
                 htmlFor="locucionAgencia"
                 className="block text-sm font-medium text-gray-700"
               >
-                Agencia
+                Agencia  <RequiredTag/>
               </label>
               <input
                 type="text"
@@ -401,7 +349,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
                 htmlFor="musica"
                 className="block text-sm font-medium text-gray-700"
               >
-                Música
+                Música  <RequiredTag/>
               </label>
               <select
                 id="musica"
@@ -422,7 +370,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
                 htmlFor="aCargoDe"
                 className="block text-sm font-medium text-gray-700"
               >
-                A cargo de
+                A cargo de  <RequiredTag/>
               </label>
               <select
                 id="aCargoDe"
@@ -443,12 +391,12 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
           <div className="grid grid-cols-2 gap-8">
             <div>
 
-              <Input label={'Animación'} name='animacion' value={formData.animacion} onChange={handleChange} />
+              <Input label={'Animación'} required name='animacion' value={formData.animacion} onChange={handleChange}  disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}/>
 
               <span className='text-sm font-medium'>Tipo de animación que se solicita: 2D, 3D, Motion graphics, stop motion y/o técnicas.</span>
             </div>
             <div>
-              <Input label={'Post producción'} name='postproduccion' disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
+              <Input label={'Post producción'} required name='postproduccion' disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
                 value={formData.postproduccion} onChange={handleChange} />
             </div>
             <div>
@@ -497,6 +445,7 @@ const ProyectoSteep4 = ({ formData, setEntregables, handleChange, handleSubmit }
                 name="comentarioEntregables"
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
                 value={formData?.comentarioEntregables}
+                placeholder='Escriba aquí la descripción de los entregables'
                 onChange={handleChange}
                 maxLength={300} disabled={checkProjectReadonly(projectContext?.project?.status as ProjectStatus)}
               />

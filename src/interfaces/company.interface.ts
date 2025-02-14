@@ -1,3 +1,5 @@
+import { IDirector } from "./director.interface";
+
 export interface ICompany {
     id: string;
     slug: string;
@@ -20,8 +22,15 @@ export interface ICompany {
 }
 
 
-export interface ICheckMaxUsersResponse{
+export interface ICheckMaxUsersResponse {
     totalUsers: number;
     maxUsers: number;
     canAddUser: boolean;
+}
+
+
+export interface ICompaniesInvited extends ICompany {
+
+    isInvited: boolean;
+    directors: IDirector[]
 }

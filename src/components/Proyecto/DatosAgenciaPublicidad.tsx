@@ -3,6 +3,7 @@ import { ICompany } from "@/interfaces/company.interface";
 import { useUserContext } from "@/providers/user.context";
 import { useEffect, useState } from "react";
 import AddAgencia from "./AddAgencia";
+import RequiredTag from "./RequiredTag";
 
 interface AgenciaPublicidadProps {
   formData: Record<string, any>;
@@ -55,7 +56,7 @@ export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({agency
             htmlFor="agencyEmail"
             className="block text-sm font-medium text-gray-700"
           >
-            Correo del responsable
+            Correo del responsable <RequiredTag/>
           </label>
           <input
             type="email"
@@ -72,7 +73,7 @@ export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({agency
             htmlFor="agencyCreativeDirector"
             className="block text-sm font-medium text-gray-700"
           >
-            Nombre del Director Creativo
+            Nombre del Director Creativo <RequiredTag/>
           </label>
           <input
             type="text"
@@ -89,7 +90,7 @@ export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({agency
             htmlFor="agencyAccountDirector"
             className="block text-sm font-medium text-gray-700"
           >
-            Nombre del Director de Cuentas
+            Nombre del Director de Cuentas <RequiredTag/>
           </label>
           <input
             type="text"
@@ -106,7 +107,7 @@ export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({agency
             htmlFor="agencyProductor"
             className="block text-sm font-medium text-gray-700"
           >
-            Productor de la agencia
+            Productor de la agencia <RequiredTag/>
           </label>
           <input
             type="text"
@@ -123,7 +124,7 @@ export const DatosAgenciaPublicidad: React.FC<AgenciaPublicidadProps> = ({agency
             htmlFor="odtNumber"
             className="block text-sm font-medium text-gray-700"
           >
-            Número ODT
+            Número ODT <RequiredTag/>
           </label>
           <input
             type="text"

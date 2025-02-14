@@ -36,7 +36,7 @@ const ListaCasasProductorasWrapper = ({ searchTerm }: { searchTerm: string }) =>
     }, [id])
 
     if (!checkProjectReadonly(projectContext?.project?.status as ProjectStatus)) {
-        return <ListaCasasProductoras buscar={searchTerm.toLowerCase()} />;
+        return <ListaCasasProductoras buscar={searchTerm.toLowerCase()} projectId={id as string} />;
     }
 
     return (
@@ -70,12 +70,7 @@ const ProyectoSteep5 = ({
 }: registroEntity) => {
     const [error, setError] = useState<string | null>(null);
 
-    // useEffect(() => {
-    //     if (!validateFormData(formData, ['porcentajeTasaTotal', 'porcentajeTasaFiniquito', 'porcentajeTasaAnticipo', 'procesoFacturacionAgencia', 'advertiserName', 'entregaBidLetter', 'moneda', 'cantidadAsistentes', 'puestoAsistentes', 'politicaPagoAgencia', 'momentoFacturacionAgencia'])) {
-    //         toast.error("Por favor, llena todos los campos para llegar a la siguiente etapa");
-    //         setactiveTab("1");
-    //     }
-    // }, []);
+
     const router = useRouter();
 
     const { id } = router.query;

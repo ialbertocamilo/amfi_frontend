@@ -36,7 +36,6 @@ const StepIndicator = ({ activeTab, setactiveTab, formData }: StepIndicatorProps
 
       case "6":
 
-      console.log('Proceso finalizado')
       break;
       default:
         isValid = true;
