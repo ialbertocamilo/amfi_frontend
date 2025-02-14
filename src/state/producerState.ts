@@ -13,6 +13,7 @@ export interface CasaProductora {
   selected: boolean;
   details: boolean;
   directors: Director[];
+  isInvited: boolean
 }
 
 export const casasProductorasState = atom<CasaProductora[]>({
