@@ -1,6 +1,6 @@
 import EntregableModal, { Field } from './AddEntregable';
 
-const AddEntregableModalLocutor = ({ isOpen, onClose, listaEntregables, setListaEntregables, entregable }) => {
+const AddEntregableModalLocutor = ({ isOpen, onClose, listaEntregables, setListaEntregables, entregable,noSave=false }) => {
   const campos: Field[] = [
     { etiqueta: 'Cantidad', nombre: 'cantidad', tipo: 'number' },
     { etiqueta: 'Tipo', nombre: 'tipo', tipo: 'select', opciones: [

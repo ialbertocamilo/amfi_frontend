@@ -166,7 +166,7 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
         listaEntregables={entregablesVideo}
         setListaEntregables={setEntregablesVideo}
         entregable={currentEntregable?.type === 'video' ? currentEntregable : null}
-        disabled={disabled}
+        noSave={disabled}
       />
       <AddEntregableModalFoto
         isOpen={isFotoModalOpen}
@@ -177,7 +177,7 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
         listaEntregables={entregablesFoto}
         setListaEntregables={setEntregablesFoto}
         entregable={currentEntregable?.type === 'foto' ? currentEntregable : null}
-        disabled={disabled}
+        noSave={disabled}
       />
       <AddEntregableModalLocutor
         isOpen={isLocutorModalOpen}
@@ -188,7 +188,7 @@ const EntregableList: React.FC<inputEntity> = ({ entregablesVideoIni, entregable
         listaEntregables={entregablesLocutor}
         setListaEntregables={setEntregablesLocutor}
         entregable={currentEntregable?.type === 'locutor' ? currentEntregable : null}
-        disabled={disabled}
+        noSave={disabled}
       />
     </div>
   );
