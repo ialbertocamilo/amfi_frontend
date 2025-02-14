@@ -199,7 +199,7 @@ export const assignProductionHouse = async (
         productionHouseId,
       },
     );
-    return response.data;
+    return response.data as {comparison:any[], project:IProject};
   } catch (error: any) {
     console.warn("Error assigning production house:", error);
     return null;

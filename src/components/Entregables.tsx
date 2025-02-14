@@ -44,40 +44,37 @@ const Entregables: React.FC<EntregablesProps> = ({
   const [formData, setFormData] = useState({ videos: 0, photos: 0, locutor: 0 });
   const [totalNumber, setTotalNumber] = useState(0);
 
-  // Initialize entregables from props
-  useEffect(() => {
-    if (initialEntregables?.length > 0) {
-      const categorizedEntregables = initialEntregables.reduce((acc, item) => ({
-        ...acc,
-        [item.type]: [...(acc[item.type] || []), item]
-      }), { video: [], foto: [], locutor: [] });
+    // Initialize entregables from props
+    useEffect(() => {
+        if (initialEntregables?.length > 0) {
+            const categorizedEntregables = initialEntregables.reduce((acc, item) => ({
+                ...acc,
+                [item.type]: [...(acc[item.type] || []), item]
+            }), { video: [], foto: [], locutor: [] });
 
       setEntregables(categorizedEntregables);
     }
   }, [initialEntregables]);
 
-  // Update form data and notify parent
-  useEffect(() => {
-    const newFormData = {
-      videos: entregables.video.length,
-      photos: entregables.foto.length,
-      locutor: entregables.locutor.length > 0 ? entregables.locutor[entregables.locutor.length - 1]?.cantidad || 0 : 0
-    };
+    // Update form data and notify parent
+    useEffect(() => {
+        const newFormData = {
+            videos: entregables.video.length,
+            photos: entregables.foto.length,
+            locutor: entregables.locutor.length > 0 ? entregables.locutor[entregables.locutor.length - 1]?.cantidad || 0 : 0
+        };
 
-    setFormData(newFormData);
-    setTotalNumber(newFormData.videos + newFormData.photos + newFormData.locutor);
-  }, [entregables]);
+        setFormData(newFormData);
+        setTotalNumber(newFormData.videos + newFormData.photos + newFormData.locutor);
 
-  // Separate useEffect for parent notification to prevent infinite loops
-  useEffect(() => {
-    if (onEntregablesChange) {
-      const allEntregables = Object.entries(entregables).flatMap(([type, items]) =>
-        items.map(item => ({ ...item, type }))
-      );
-      onEntregablesChange(allEntregables);
-    }
-  }, [entregables]);
+        if (onEntregablesChange) {
+            const allEntregables = Object.entries(entregables).flatMap(([type, items]) =>
+                items.map(item => ({ ...item, type }))
+            );
 
+            requestAnimationFrame(() => onEntregablesChange(allEntregables));
+        }
+    }, [entregables, onEntregablesChange]);
 
   const handleEntregableUpdate = (type: string, updatedEntregables: Entregable[]) => {
     setEntregables(prev => ({
@@ -99,24 +96,24 @@ const Entregables: React.FC<EntregablesProps> = ({
     />
   ), [entregables, disabled]);
 
-  const memoizedModals = useMemo(() => (
-    <React.Fragment>
-      {Object.entries({
-        video: AddEntregableModalVideo,
-        foto: AddEntregableModalFoto,
-        locutor: AddEntregableModalLocutor
-      }).map(([type, Modal]) => (
-        <Modal
-          key={type}
-          isOpen={modalState[type]}
-          onClose={() => setModalState(prev => ({ ...prev, [type]: false }))}
-          listaEntregables={entregables[type]}
-          setListaEntregables={(updated) => handleEntregableUpdate(type, updated)}
-          entregable={null}
-        />
-      ))}
-    </React.Fragment>
-  ), [modalState, entregables, disabled]);
+    const memoizedModals = useMemo(() => (
+        <React.Fragment>
+            {Object.entries({
+                video: AddEntregableModalVideo,
+                foto: AddEntregableModalFoto,
+                locutor: AddEntregableModalLocutor
+            }).map(([type, Modal]) => (
+                <Modal
+                    key={type}
+                    isOpen={modalState[type]}
+                    onClose={() => setModalState(prev => ({ ...prev, [type]: false }))}
+                    listaEntregables={entregables[type]}
+                    setListaEntregables={(updated) => handleEntregableUpdate(type, updated)}
+                    entregable={null}
+                />
+            ))}
+        </React.Fragment>
+    ), [modalState, entregables, disabled]);
 
   // Memoize the form inputs section
   const memoizedFormInputs = useMemo(() => (

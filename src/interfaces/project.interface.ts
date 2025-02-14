@@ -22,6 +22,7 @@ export interface IProject {
     createdAt: string;
     updatedAt?: Date;
     unlockedForAgency?:boolean;
+    assignedTo?: ICompany
     creator: {
       id: string;
       name: string;

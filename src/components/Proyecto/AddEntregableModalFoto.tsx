@@ -1,6 +1,6 @@
 import DeliverableModal, { Field } from './AddEntregable';
 
-const AddEntregableModalFoto = ({ isOpen, onClose, listaEntregables, setListaEntregables, entregable,disabled }) => {
+const AddEntregableModalFoto = ({ isOpen, onClose, listaEntregables, setListaEntregables, entregable,noSave=false }) => {
   const campos: Field[] = [
     { etiqueta: 'Versión', nombre: 'version', tipo: 'text' },
     { etiqueta: 'Fecha de entrega', nombre: 'fechaEntrega', tipo: 'date' },
@@ -50,7 +50,7 @@ const AddEntregableModalFoto = ({ isOpen, onClose, listaEntregables, setListaEnt
       setListaEntregables={setListaEntregables}
       entregable={entregable}
       campos={campos}
-      viewMode={disabled}
+      noSave={noSave}
     />
   );
 };

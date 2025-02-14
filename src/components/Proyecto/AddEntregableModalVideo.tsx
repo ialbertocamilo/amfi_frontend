@@ -1,8 +1,7 @@
 import React from 'react';
 import EntregableModal, { Field } from './AddEntregable';
 
-
-const AddEntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregables, entregable,disabled }) => {
+const AddEntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntregables, entregable, noSave = false }) => {
   const campos: Field[] = [
     { etiqueta: 'Versión', nombre: 'version', tipo: 'text' },
     { etiqueta: 'Fecha de entrega', nombre: 'fechaEntrega', tipo: 'date' },
@@ -32,18 +31,18 @@ const AddEntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntrega
       { value: '9:16', label: '9:16' },
     ]},
     { etiqueta: 'Formato/Medidas', nombre: 'formatoMedidas', tipo: 'text' },
-    {etiqueta: 'Full Media', nombre: 'fullMedia', tipo: 'switch' },
-  { etiqueta: 'Television', nombre: 'television', tipo: 'switch' },
-  { etiqueta: 'Cine', nombre: 'cine', tipo: 'switch' },
-  { etiqueta: 'Web', nombre: 'web', tipo: 'switch' },
-  { etiqueta: 'RRSS', nombre: 'rrss', tipo: 'switch' },
-  { etiqueta: 'Pantallas', nombre: 'pantallas', tipo: 'switch' },
-  { etiqueta: 'Facebook', nombre: 'facebook', tipo: 'switch' },
-  { etiqueta: 'Instagram', nombre: 'instagram', tipo: 'switch' },
-  { etiqueta: 'Linkedin', nombre: 'linkedin', tipo: 'switch' },
-  { etiqueta: 'TikTok', nombre: 'tiktok', tipo: 'switch' },
-  { etiqueta: 'Youtube', nombre: 'youtube', tipo: 'switch' },
-  { etiqueta: 'Otro', nombre: 'otro', tipo: 'switch' },
+    { etiqueta: 'Full Media', nombre: 'fullMedia', tipo: 'switch' },
+    { etiqueta: 'Television', nombre: 'television', tipo: 'switch' },
+    { etiqueta: 'Cine', nombre: 'cine', tipo: 'switch' },
+    { etiqueta: 'Web', nombre: 'web', tipo: 'switch' },
+    { etiqueta: 'RRSS', nombre: 'rrss', tipo: 'switch' },
+    { etiqueta: 'Pantallas', nombre: 'pantallas', tipo: 'switch' },
+    { etiqueta: 'Facebook', nombre: 'facebook', tipo: 'switch' },
+    { etiqueta: 'Instagram', nombre: 'instagram', tipo: 'switch' },
+    { etiqueta: 'Linkedin', nombre: 'linkedin', tipo: 'switch' },
+    { etiqueta: 'TikTok', nombre: 'tiktok', tipo: 'switch' },
+    { etiqueta: 'Youtube', nombre: 'youtube', tipo: 'switch' },
+    { etiqueta: 'Otro', nombre: 'otro', tipo: 'switch' },
     { etiqueta: 'Especificaciones', nombre: 'descripcionEntregable', tipo: 'textarea' },
     { etiqueta: 'Notas', nombre: 'notas', tipo: 'textarea' },
 
@@ -57,7 +56,7 @@ const AddEntregableModal = ({ isOpen, onClose, listaEntregables, setListaEntrega
       setListaEntregables={setListaEntregables}
       entregable={entregable}
       campos={campos}
-      viewMode={disabled}
+      noSave={noSave}
     />
   );
 };
