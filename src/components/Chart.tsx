@@ -1,27 +1,62 @@
 // components/Chart.tsx
-import React from 'react';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { getProjects } from '@/api/projectApi';
+import { ProjectStatus } from '@/mappers/project.mapper';
+import { BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js';
+import React, { useEffect, useState } from 'react';
+import { Bar } from 'react-chartjs-2';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Chart: React.FC = () => {
+  const [projectStats, setProjectStats] = useState({
+    [ProjectStatus.Draft]: 0,
+    [ProjectStatus.InProgress]: 0,
+    [ProjectStatus.Paused]: 0,
+    [ProjectStatus.Closed]: 0,
+    [ProjectStatus.Finished]: 0,
+  });
+
+  useEffect(() => {
+    const fetchProjectStats = async () => {
+      const projects = await getProjects();
+      if (projects) {
+        const stats = projects.reduce((acc: any, project: any) => {
+          acc[project.status] = (acc[project.status] || 0) + 1;
+          return acc;
+        }, {});
+        setProjectStats(stats);
+      }
+    };
+    fetchProjectStats();
+  }, []);
+
   const data = {
-    labels: ['10k', '15k', '20k', '25k', '30k', '35k', '40k', '45k', '50k', '55k', '60k'],
+    labels: ['En Progreso', 'Pausado', 'Cerrado', 'Terminado'],
     datasets: [
       {
-        label: 'Ventas',
-        data: [20, 30, 40, 50, 60, 50, 40, 30, 60, 50, 40],
-        fill: true,
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-      },
-      {
-        label: 'Ganancias',
-        data: [30, 40, 50, 60, 70, 60, 50, 40, 70, 60, 50],
-        fill: true,
-        backgroundColor: 'rgba(153, 102, 255, 0.2)',
-        borderColor: 'rgba(153, 102, 255, 1)',
+        label: 'Proyectos por Estado',
+        data: [
+          projectStats[ProjectStatus.Draft] || 0,
+          projectStats[ProjectStatus.InProgress] || 0,
+          projectStats[ProjectStatus.Paused] || 0,
+          projectStats[ProjectStatus.Closed] || 0,
+          projectStats[ProjectStatus.Finished] || 0,
+        ],
+        backgroundColor: [
+          'rgba(255, 206, 86, 0.5)',  // Yellow for Draft
+          'rgba(75, 192, 192, 0.5)',   // Green for InProgress
+          'rgba(255, 159, 64, 0.5)',   // Orange for Paused
+          'rgba(255, 99, 132, 0.5)',   // Red for Closed
+          'rgba(54, 162, 235, 0.5)',   // Blue for Finished
+        ],
+        borderColor: [
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+        ],
+        borderWidth: 1,
       },
     ],
   };
@@ -30,43 +65,31 @@ const Chart: React.FC = () => {
     plugins: {
       legend: {
         display: true,
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Distribución de Proyectos por Estado',
+        font: {
+          size: 16,
+        },
       },
     },
     scales: {
-      x: {
-        grid: {
-          display: false,
-        },
-      },
       y: {
-        grid: {
-          display: false,
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1,
         },
-      },
-    },
-    layout: {
-      padding: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
       },
     },
     maintainAspectRatio: false,
     responsive: true,
-    elements: {
-      line: {
-        tension: 0.4,
-      },
-    },
   };
 
   return (
-    <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', position: 'relative' }}>
-            <h1 style={{ position: 'absolute', top: '10px', left: '20px', margin: 0, fontWeight: 'bold', fontSize: '24px' }}>Resumen</h1>
-      <div style={{ paddingTop: '40px' }}>
-        <Line data={data} options={options} />
-      </div>
+    <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', height: '400px' }}>
+      <Bar data={data} options={options} />
     </div>
   );
 };

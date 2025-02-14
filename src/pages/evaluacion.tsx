@@ -10,12 +10,14 @@ const EvaluacionPage = () => {
 
   const router = useRouter();
   const projectInvitationId = router.query?.projectInvitationId as string;
+  const projectId = router.query?.projectId as string;
 
   return (
     <Layout>
       <Breadcrumb />
       <Evaluacion
         projectInvitationId={projectInvitationId}
+        projectId={projectId}
         creativeProposalPercentage={creativeProposalPercentage}
         setCreativeProposalPercentage={setCreativeProposalPercentage}
       ></Evaluacion>

@@ -30,32 +30,41 @@ const CustomModal: React.FC<CustomModalProps> = ({
       style={{
         overlay: {
           backgroundColor: 'rgba(0, 0, 0, 0.75)',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
         },
         content: {
-          top: '50%',
-          left: '50%',
+          position: 'relative',
+          top: 'auto',
+          left: 'auto',
           right: 'auto',
           bottom: 'auto',
-          marginRight: '-50%',
-          transform: 'translate(-50%, -50%)',
-          padding: '20px',
-          borderRadius: '8px',
+          width: '90%',
+          maxWidth: '500px',
+          maxHeight: '90vh',
+          overflow: 'auto',
+          padding: '1.25rem',
+          borderRadius: '0.5rem',
           border: 'none',
           background: '#fff',
+          margin: '0'
         },
       }}
     >
       <h2 style={{
-        margin: '0 0 15px 0',
-        fontSize: '1.5rem',
+        margin: '0 0 1rem 0',
+        fontSize: 'clamp(1.125rem, 4vw, 1.5rem)',
         fontWeight: 600,
-        color: '#333'
+        color: '#333',
+        wordBreak: 'break-word'
       }}>
         {title}
       </h2>
       <br />
       <p>{message}</p>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', marginTop: '1.25rem', flexWrap: 'wrap' }}>
         {cancelText && (<button
           onClick={onCancel}
           className="px-5 py-2.5 bg-white border border-[var(--color-primary)] text-[var(--color-primary)] rounded cursor-pointer"

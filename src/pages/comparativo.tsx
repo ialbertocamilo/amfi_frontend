@@ -4,13 +4,12 @@ import Comparacion, {
 } from "@/components/DetalleProyecto/Comparacion";
 import Layout from "@/components/Layout";
 import Loader from "@/components/Loader";
+import ProjectBreadcrumb from "@/components/Proyecto/ProjectBreadcrumb";
+import { ICompany } from "@/interfaces/company.interface";
 import { calculateBudgetScore, calculateEvaluationScore } from "@/lib/utils";
+import { useProjectContext } from "@/providers/project.context";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import ProjectBreadcrumb from "@/components/Proyecto/ProjectBreadcrumb";
-import { useProjectContext } from "@/providers/project.context";
-import { ProductionStudioCompany } from "@/components/interfaces/interfaces";
-import { ICompany } from "@/interfaces/company.interface";
 
 const ComparativoPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -18,15 +17,16 @@ const ComparativoPage: React.FC = () => {
     EvaluationScore[] | null
   >(null);
   const router = useRouter();
-  const { projectInvitationId } = router.query;
+  const { projectId } = router.query;
   const setProject = useProjectContext()?.setProject;
   const project = useProjectContext()?.project;
   const [selectedProductionHouse, setSelectedProductionHouse] = useState<ICompany>();
   useEffect(() => {
-    if (projectInvitationId) {
+    if (projectId) {
       setLoading(true);
-      getEvaluationComparison(projectInvitationId as string)
+      getEvaluationComparison(projectId as string)
         .then((data) => {
+          console.log(data)
           setSelectedProductionHouse(data.project.assignedTo as ICompany);
           const evaluationData = data.comparison!.map((item) => {
             let creativeProposal = 0;
@@ -84,13 +84,13 @@ const ComparativoPage: React.FC = () => {
           setLoading(false);
         });
     }
-  }, [projectInvitationId]);
+  }, [projectId]);
 
   return (
     <Layout>
       <Loader loading={loading}>
         <ProjectBreadcrumb />
-        {evaluationScore && project && selectedProductionHouse && <Comparacion data={evaluationScore} projectStatus={project.status} productionHouseWinner={selectedProductionHouse} />}
+        {evaluationScore && project && <Comparacion data={evaluationScore} projectStatus={project.status} productionHouseWinner={selectedProductionHouse} />}
       </Loader>
     </Layout>
   );

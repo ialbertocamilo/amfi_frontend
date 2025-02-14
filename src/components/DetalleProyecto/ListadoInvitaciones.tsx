@@ -1,14 +1,12 @@
-import React, { useState } from "react";
 import { InvitedDirectorsResponse } from "@/api/interface/api.interface";
-import { sendReminderToProductionHouses } from "@/api/productoraApi";
+import { ProposalUploaded } from "@/components/buttons/ProposalUploadedButton";
+import { IProjectInvitation } from "@/interfaces/project-director.interface";
+import { ProjectInvitationMapper } from "@/mappers/project-invitation.mapper";
 import { useRouter } from "next/router";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { Tooltip } from "react-tooltip";
-import DownloadIcon from "../icons/DownloadIcon";
 import NextIcon from "../icons/NextIcon";
-import { ProposalUploaded } from "@/components/buttons/ProposalUploadedButton";
-import { ProjectInvitationMapper } from "@/mappers/project-invitation.mapper";
-import { IProjectInvitation } from "@/interfaces/project-director.interface";
 
 interface ListadoInvitacionesProps {
   invitationData: InvitedDirectorsResponse;
@@ -17,6 +15,7 @@ interface ListadoInvitacionesProps {
   sendReminder: () => void;
   closeProject: () => void;
   disabled: boolean;
+  projectId: string;
 }
 
 const ListadoInvitaciones = ({
@@ -24,10 +23,11 @@ const ListadoInvitaciones = ({
   formData,
   sendReminder,
   closeProject,
-  disabled,
+  disabled, projectId
 }: ListadoInvitacionesProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
+
 
   const handleSendReminderClick = () => {
     if (!disabled) {
@@ -78,7 +78,7 @@ const ListadoInvitaciones = ({
     invitation: IProjectInvitation,
   ) => {
     if (!disabled && invitation.proposalUploaded) {
-      router.push(`/evaluacion?projectInvitationId=${invitation.id}`);
+      router.push(`/evaluacion?projectInvitationId=${invitation.id}&projectId=${projectId}`);
     } else {
       e.preventDefault();
       toast.error(
@@ -87,7 +87,7 @@ const ListadoInvitaciones = ({
     }
   };
   const goToComparative = ()=>{
-    router.push(`/comparativo?projectInvitationId=${formData.id}`);
+    router.push(`/comparativo?projectId=${projectId}`);
   }
 
   return (

@@ -146,7 +146,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
   }, [id]);
 
   const handleItemClick = () => {
-    router.push(`/evaluacion?projectInvitationId=${bidId}`);
+    router.push(`/evaluacion?projectInvitationId=${bidId}&projectId=${id}`);
   };
 
   const { loading, setLoading } = useLoader(false);
@@ -205,6 +205,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
           closeProject={closeProject}
           sendReminder={sendReminder}
           disabled={!unlocked}
+          projectId={id}
         ></ListadoInvitaciones>
       </div>
     </Loader>

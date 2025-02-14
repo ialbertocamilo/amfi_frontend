@@ -26,12 +26,13 @@ interface QuestionItem {
 
 interface EvaluacionProps {
   projectInvitationId: string;
+  projectId:string;
   creativeProposalPercentage: number;
   setCreativeProposalPercentage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const Evaluacion: React.FC<EvaluacionProps> = ({
-  projectInvitationId,
+  projectInvitationId,projectId,
   creativeProposalPercentage,
   setCreativeProposalPercentage,
 }) => {
@@ -363,7 +364,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
   const router = useRouter();
   const goToComparative = () => {
     synchronizeBidEvaluationData();
-    router.push(`/comparativo?projectInvitationId=${projectInvitationId}`);
+    router.push(`/comparativo?projectId=${projectId}`);
   };
 
   return (

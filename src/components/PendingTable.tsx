@@ -1,25 +1,29 @@
 // components/PendingTable.tsx
-import React, { useEffect, useState } from "react";
-import api from "@/lib/api";
-import PaginatedComponent from "@/components/PaginationComponent";
-
-import moment from "moment";
 import { getProjectBids } from "@/api/projectApi";
+import PaginatedComponent from "@/components/PaginationComponent";
+import ProjectStatusText from "@/components/inputs/ProjectStatusText";
+import { ProjectStatus } from "@/mappers/project.mapper";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+
 interface TableRow {
+  id: string;
   advertiser: string;
   projectName: string;
   bidDate: string;
-  biddingCompanies: number;
-  status: string;
+  biddingCompanies: number|string;
+  status: React.ReactNode;
 }
 
 const PendingTable: React.FC = () => {
+  const router = useRouter();
   const headers = [
     { key: "advertiser", label: "Anunciante" },
+    { key: "agency", label: "Agencia" },
     { key: "projectName", label: "Proyecto" },
     {
       key: "bidDate",
-      label: "Fecha de licitación",
+      label: "Entrega de propuesta",
     },
     { key: "biddingCompanies", label: "Empresas licitando" },
     {
@@ -28,76 +32,44 @@ const PendingTable: React.FC = () => {
     },
   ];
 
-  const [data, setData] = useState<any[] | undefined>([]);
+  const [data, setData] = useState<TableRow[]>([]);
+
   useEffect(() => {
     getProjectBids().then((response) => {
-      const formatted = response?.map((row: any) => ({
-        ...row,
+      const inProgressBids = response?.filter((row: any) =>
+        row.status.toLowerCase() === ProjectStatus.InProgress
+      );
+
+      const formatted = inProgressBids?.map((row: any) => ({
+        id: row.id || "-",
+        advertiser: row.advertiser || "-",
+        agency: row.agency || "-",
+        projectName: row.projectName || "-",
+        bidDate: row.bidDate || "-",
+        biddingCompanies: row.biddingCompanies || "-",
         status: getStatusClass(row.status),
       }));
-      setData(formatted);
+      setData(formatted || []);
     });
   }, []);
+
+  const handleView = (id: string) => {
+    router.push(`/detalle-proyecto?id=${id}`);
+  };
+
   return (
-    <div className="">
-      <PaginatedComponent items={data as any[]} itemsPerPage={5} headers={headers} />
+    <div className="bg-white shadow-md rounded-lg">
+      <PaginatedComponent
+        items={data}
+        itemsPerPage={5}
+        headers={headers}
+      />
     </div>
   );
 };
 
 const getStatusClass = (status: string) => {
-  switch (status.toLowerCase()) {
-    case "draft":
-      return (
-        <span
-          className={`py-1 px-3 rounded-md  font-bold flex items-center justify-center  bg-[#D3D3D3] text-[#FFFFFF]`}
-        >
-          En borrador
-        </span>
-      );
-    case "inprogress":
-      return (
-        <span
-          className={`py-1 px-3 rounded-md  font-bold flex items-center justify-center bg-[#CCCEFF] text-[#000AFF]`}
-        >
-          En proceso
-        </span>
-      );
-    case "revision":
-      return (
-        <span
-          className={`py-1 px-3 rounded-md  font-bold flex items-center justify-center bg-[#FFEDDD] text-[#FF9C41]`}
-        >
-          Pendiente de revisión
-        </span>
-      );
-    case "finished":
-      return (
-        <span
-          className={`py-1 px-3 rounded-md font-bold flex items-center justify-center bg-[#CCF0EB] text-[#00B69B]`}
-        >
-          Finalizado
-        </span>
-      );
-    case "closed":
-      return (
-        <span
-          className={`py-1 px-3 rounded-md font-bold flex items-center justify-center bg-[#FF0000] text-[#FFFFFF]`}
-        >
-          Cerrado
-        </span>
-      );
-    case "paused":
-      return (
-        <span
-          className={`py-1 px-3 rounded-md font-bold flex items-center justify-center bg-[#FFA500] text-[#FFFFFF]`}
-        >
-      Pausado
-    </span>
-      );
-    default:
-      return "";
-  }
+  return <ProjectStatusText status={status as ProjectStatus} />;
 };
 
 export default PendingTable;

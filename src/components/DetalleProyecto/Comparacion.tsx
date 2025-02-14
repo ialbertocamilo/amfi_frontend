@@ -1,11 +1,12 @@
 import { assignProductionHouse } from "@/api/projectApi";
+import { ICompany } from "@/interfaces/company.interface";
+import { ProjectStatus } from "@/mappers/project.mapper";
 import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { Tooltip } from "react-tooltip";
 import DefaultButton from "../buttons/DefaultButton";
 import StackedBarChar from "./StackedBarChar";
-import { ProjectStatus } from "@/mappers/project.mapper";
-import { ICompany } from "@/interfaces/company.interface";
 
 export interface EvaluationScore {
   name: string;
@@ -21,8 +22,8 @@ export interface EvaluationScore {
 
 interface ComparisonProps {
   data: EvaluationScore[];
-  projectStatus: string; // Add projectStatus prop
-  productionHouseWinner:ICompany
+  projectStatus: string;
+  productionHouseWinner?: ICompany  
 }
 
 const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productionHouseWinner }) => {
@@ -32,8 +33,9 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productio
 
   useEffect(() => {
     if (projectStatus === ProjectStatus.Finished) {
-        setSelectedGroup(productionHouseWinner.id);
-        setProjectAssigned(true);
+      if (productionHouseWinner)
+        setSelectedGroup(productionHouseWinner?.id);
+      setProjectAssigned(true);
     }
   }, [projectStatus, data]);
 
@@ -56,8 +58,8 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productio
     "Estado",
   ];
 
-  const handleCheckboxChange = (id: string) => {
-    if (projectStatus !== ProjectStatus.Finished) {
+  const handleCheckboxChange = (id: string, status: string) => {
+    if (projectStatus !== ProjectStatus.Finished && status === "Completado") {
       setSelectedGroup(id);
     }
   };
@@ -115,11 +117,9 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productio
                 display: "grid",
                 gridTemplateColumns: `1fr repeat(${headers.length - 1}, minmax(0, 1.5fr)) 1fr`,
               }}
-              className={`h-20 border rounded-lg border-gray-300 mb-4 transition-transform duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer ${
-                selectedGroup === group.id && projectStatus === ProjectStatus.Finished ? "bg-green-100" : ""
-              }`}
+              className={`h-20 border rounded-lg border-gray-300 mb-4 transition-transform duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer ${selectedGroup === group.id && projectStatus === ProjectStatus.Finished ? "bg-green-100" : group.status !== "Completado" ? "bg-gray-100 cursor-not-allowed group-status-tooltip" : ""}`}
               key={`group-${index}`}
-              onClick={() => handleCheckboxChange(group.id)}
+              onClick={() => handleCheckboxChange(group.id, group.status)}
             >
               <span className="flex items-center justify-center">
                 {projectAssigned && selectedGroup === group.id ? (
@@ -130,7 +130,7 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productio
                   <input
                     type="checkbox"
                     checked={selectedGroup === group.id}
-                    onChange={() => handleCheckboxChange(group.id)}
+                    onChange={() => handleCheckboxChange(group.id, group.status)}
                     className="w-6 h-6 rounded-full border-2 border-blue-600 text-blue-600 focus:ring-blue-500 appearance-none checked:bg-blue-600 checked:border-transparent"
                     disabled={projectStatus === "finished"}
                   />
@@ -195,6 +195,9 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productio
             </>
           )}
         </div>
+        <Tooltip anchorSelect=".group-status-tooltip" place="top">
+          No se puede seleccionar debido a que no se subió la propuesta
+        </Tooltip>
       </div>
     </div>
   );

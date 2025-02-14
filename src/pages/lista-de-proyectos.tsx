@@ -1,6 +1,7 @@
 import { getProductionHouseProjects } from "@/api/projectApi";
-import DownloadIcon from "@/components/icons/DownloadIcon";
+import { ProposalUploaded } from "@/components/buttons/ProposalUploadedButton";
 import NextIcon from "@/components/icons/NextIcon";
+import ProjectStatusText from "@/components/inputs/ProjectStatusText";
 import Layout from "@/components/Layout";
 import Loader from "@/components/Loader";
 import { CompanyType } from "@/constants";
@@ -11,14 +12,13 @@ import {
   ProjectMapper,
   ProjectStatus,
 } from "@/mappers/project.mapper";
+import { RefreshCw } from "lucide-react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Tooltip } from "react-tooltip";
 import "./globals.css";
-import { ProposalUploaded } from "@/components/buttons/ProposalUploadedButton";
-import ProjectStatusText from "@/components/inputs/ProjectStatusText";
 
 const ProjectStatusComponent = ({ status }: { status: string }) => {
   if (!status) {
@@ -126,10 +126,10 @@ const ListaDeProyectos = () => {
 
   const filteredProjects =
     projects?.filter((project) =>
-      project.project.name.toLowerCase().includes(filterText.toLowerCase()),
+      project.project?.name?.toLowerCase().includes(filterText.toLowerCase()),
     ) || [];
 
-  async function listarProyecto() {
+  async function getAllProjects() {
     setLoading(true);
     try {
       const response = await getProductionHouseProjects();
@@ -146,14 +146,17 @@ const ListaDeProyectos = () => {
   }
 
   useEffect(() => {
-    listarProyecto();
+    getAllProjects();
   }, []);
 
   return (
     <Layout>
       <Loader loading={loading}>
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-semibold">Lista de Proyectos</h1>
+          <h1 className="text-2xl font-semibold">Lista de Proyectos
+
+          </h1>
+
         </div>
 
         <div className="flex flex-col md:flex-row mb-4 justify-between">
@@ -164,6 +167,12 @@ const ListaDeProyectos = () => {
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
           />
+          <button
+            onClick={() => getAllProjects()}
+            className="refresh-button p-2 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transform transition-all duration-200 hover:scale-110 active:scale-95"
+          >
+            <RefreshCw className="w-5 h-5" />
+          </button>
         </div>
 
         <div className="space-y-4">
@@ -207,6 +216,9 @@ const ListaDeProyectos = () => {
       </Tooltip>
       <Tooltip anchorSelect=".project-status" place={"bottom"}>
         Estado del proyecto.
+      </Tooltip>
+      <Tooltip anchorSelect=".refresh-button" place={"bottom"}>
+        Refrescar lista de proyectos
       </Tooltip>
     </Layout>
   );

@@ -1,4 +1,6 @@
+import { EvaluationScore } from "@/components/DetalleProyecto/Comparacion";
 import { IProjectInvitation } from "@/interfaces/project-director.interface";
+import { IProject } from "@/interfaces/project.interface";
 import ApiService from "@/lib/api";
 import moment from "moment";
 import { CreateProjectDto } from "../dto/create-project.dto";
@@ -8,8 +10,6 @@ import {
   Evaluation,
   InvitedDirectorsResponse,
 } from "./interface/api.interface";
-import { EvaluationScore } from "@/components/DetalleProyecto/Comparacion";
-import { IProject } from "@/interfaces/project.interface";
 
 export const getProjects = async () => {
   try {
@@ -64,7 +64,7 @@ export const getProjectBids = async () => {
     return response.data.map((row: any) => ({
       ...row,
       bidDate: row.bidDate
-        ? moment(row.bidDate).format("DD/MM/YYYY, HH:mm")
+        ? moment(row.bidDate).format("DD/MM/YYYY")
         : "N/A",
     })) as any[];
   } catch (err: any) {
@@ -178,10 +178,10 @@ export const getEvaluationScore = async (projectInvitationId: string) => {
   return response.data as EvaluationScore[];
 };
 
-export const getEvaluationComparison = async (projectInvitationId: string) => {
-  console.log("getEvaluationComparison", projectInvitationId);
+export const getEvaluationComparison = async (projectId: string) => {
+  console.log("getEvaluationComparison", projectId);
   const response = await ApiService.get(
-    `/project-director/get-comparison/${projectInvitationId}`,
+    `/project-director/get-comparison/${projectId}`,
   );
   return response.data.result as {
     comparison: IProjectInvitation[];

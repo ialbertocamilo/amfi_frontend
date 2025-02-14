@@ -1,19 +1,23 @@
 // pages/index.tsx
-import { useEffect, useState } from "react";
-import SummaryWidget from "../components/SummaryWidget";
-import Chart from "../components/Chart";
-import PendingTable from "../components/PendingTable";
-import "../app/globals.css";
 import Layout from "@/components/Layout";
 import api from "@/lib/api";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import "../app/globals.css";
+import Chart from "../components/Chart";
+import PendingTable from "../components/PendingTable";
+import SummaryWidget from "../components/SummaryWidget";
 
 export default function Home() {
   const [stats, setStats] = useState({
     totalProjects: 0,
     totalDirectors: 0,
     totalUsers: 0,
+    activeProjects: 0,
+    completedProjects: 0,
+    pendingInvitations: 0
   });
+
   useEffect(() => {
     api.get("/company/stats").then((data) => {
       setStats(data.data);
@@ -26,28 +30,29 @@ export default function Home() {
       }
     });
   }, []);
+
   return (
     <Layout>
       <main className="flex-1 p-6">
         <div className="container mx-auto p-4">
           <h1 className="text-4xl font-bold mb-4">Panel</h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
             <SummaryWidget
               title="Total Usuarios"
               count={stats.totalUsers}
-              link="#"
+              link="/usuarios"
               icon="Icon.png"
             />
             <SummaryWidget
-              title="Licitaciones"
+              title="Total Licitaciones"
               count={stats.totalProjects}
-              link="#"
+              link="/lista-de-proyectos"
               icon="Icon2.png"
             />
             <SummaryWidget
-              title="Total de directores"
+              title="Total Directores"
               count={stats.totalDirectors}
-              link="#"
+              link="/directores"
               icon="Icon3.png"
             />
           </div>
