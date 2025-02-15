@@ -48,8 +48,9 @@ const ListaCasasProductorasWrapper = ({ searchTerm }: { searchTerm: string }) =>
                 {invitedDirectors.map((director) => (
                     <div key={director.id} className="mb-2 border border-gray-200 rounded-md p-3">
                         <p className="flex items-center">
+                           
                             <span className="text-green-500 mr-2">✔</span>
-                            {director.productionHouse.name}
+                            {director.productionHouse.name} 
                         </p>
                         <p className="ml-6">
                             Director: {director.director?.name} {director.director?.lastname}
@@ -90,7 +91,6 @@ const ProyectoSteep5 = ({
             return false;
         }
         try {
-
             for (const casa of selectedCasas) {
                 const haveSelected = casa.directors.some((director) => director.selected == true)
                 if (!haveSelected) {
@@ -98,20 +98,17 @@ const ProyectoSteep5 = ({
                     return false
                 }
 
-                const selected = casa.directors.filter((director) => director.selected == true)
-                if (selected.length > 1) {
-                    toast.error("Debe seleccionar solo un director.");
-                    return false
+                const selectedDirectors = casa.directors.filter((director) => director.selected == true)
+                for (const selectedDirector of selectedDirectors) {
+                    if (selectedDirector?.id && id) {
+                        arrInvitedProductors.push({
+                            projectId: id as string,
+                            directorId: selectedDirector.id,
+                            productionHouseId: casa.id
+                        })
+                    }
                 }
-                const selectedDirector = casa.directors.find((director) => director.selected == true)
-                if (selectedDirector?.id && id) {
-                    arrInvitedProductors.push({
-                        projectId: id as string,
-                        directorId: selectedDirector.id,
-                        productionHouseId: casa.id
-                    })
-                }
-            }
+            } 
             const [error, response] = await addDirectorsToProject(arrInvitedProductors);
             if (error) {
                 toast.error(response)

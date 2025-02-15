@@ -46,11 +46,7 @@ const ListaCasasProductoras: React.FC<ListaCasasProductorasProps> = ({ buscar, p
             details: true, // Automatically show details when selected
           };
         }
-        // Deselect other casas
-        return {
-          ...casa,
-          selected: false,
-        };
+        return casa;
       });
       return newState;
     });

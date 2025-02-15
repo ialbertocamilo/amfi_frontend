@@ -189,12 +189,12 @@ export const getEvaluationComparison = async (projectId: string) => {
   };
 };
 export const assignProductionHouse = async (
-  projectInvitationId: string,
+  projectId: string,
   productionHouseId: string,
 ) => {
   try {
     const response = await ApiService.post(
-      `/project/${projectInvitationId}/assign-production-house`,
+      `/project/${projectId}/assign-production-house`,
       {
         productionHouseId,
       },

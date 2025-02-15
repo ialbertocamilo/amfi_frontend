@@ -1,12 +1,12 @@
 import { assignProductionHouse } from "@/api/projectApi";
-import { ICompany } from "@/interfaces/company.interface";
-import { ProjectStatus } from "@/mappers/project.mapper";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { Tooltip } from "react-tooltip";
 import DefaultButton from "../buttons/DefaultButton";
 import StackedBarChar from "./StackedBarChar";
+import { ProjectStatus } from "@/mappers/project.mapper";
+import { ICompany } from "@/interfaces/company.interface";
+import { CheckCircle } from "lucide-react"; // Import Lucide icon
 
 export interface EvaluationScore {
   name: string;
@@ -22,8 +22,8 @@ export interface EvaluationScore {
 
 interface ComparisonProps {
   data: EvaluationScore[];
-  projectStatus: string;
-  productionHouseWinner?: ICompany  
+  projectStatus: string; // Add projectStatus prop
+  productionHouseWinner?: ICompany;
 }
 
 const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productionHouseWinner }) => {
@@ -33,8 +33,7 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productio
 
   useEffect(() => {
     if (projectStatus === ProjectStatus.Finished) {
-      if (productionHouseWinner)
-        setSelectedGroup(productionHouseWinner?.id);
+      if (productionHouseWinner) setSelectedGroup(productionHouseWinner?.id);
       setProjectAssigned(true);
     }
   }, [projectStatus, data]);
@@ -48,18 +47,10 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productio
     },
   }));
 
-  const headers = [
-    "",
-    "Grupo",
-    "Propuesta creativa",
-    "Experiencia",
-    "Presupuesto",
-    "Puntaje final",
-    "Estado",
-  ];
+  const headers = ["", "Grupo", "Propuesta creativa", "Experiencia", "Presupuesto", "Puntaje final", "Estado"];
 
-  const handleCheckboxChange = (id: string, status: string) => {
-    if (projectStatus !== ProjectStatus.Finished && status === "Completado") {
+  const handleCheckboxChange = (id: string) => {
+    if (projectStatus !== ProjectStatus.Finished) {
       setSelectedGroup(id);
     }
   };
@@ -68,16 +59,16 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productio
     router.back();
   };
 
-  const { projectInvitationId } = router.query;
+  const { projectId } = router.query;
   const assignProject = () => {
     const e = window.event;
     e?.preventDefault();
     if (selectedGroup) {
-      assignProductionHouse(projectInvitationId as string, selectedGroup)
+      assignProductionHouse(projectId as string, selectedGroup)
         .then((response) => {
           console.log("Project assigned successfully:", response);
           toast.success(
-            "Se ha enviado un correo a la Casa productora informándole que ha sido asignada al proyecto. Además avisaremos a los demás postulantes que no fueron elegidos.",
+            "Se ha enviado un correo a la Casa productora informándole que ha sido asignada al proyecto. Además avisaremos a los demás postulantes que no fueron elegidos."
           );
           setProjectAssigned(true);
           // router.push("/lista-de-proyectos-admin");
@@ -85,6 +76,7 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productio
         .catch((error) => {
           console.error("Error assigning project:", error);
         });
+      router.reload();
     } else {
       console.warn("No group selected");
     }
@@ -103,10 +95,7 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productio
             className="text-sm font-semibold text-gray-700"
           >
             {headers.map((header, index) => (
-              <span
-                className="h-20 flex items-center justify-center"
-                key={index}
-              >
+              <span className="h-20 flex items-center justify-center" key={index}>
                 {header}
               </span>
             ))}
@@ -116,10 +105,15 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productio
               style={{
                 display: "grid",
                 gridTemplateColumns: `1fr repeat(${headers.length - 1}, minmax(0, 1.5fr)) 1fr`,
+                backgroundColor: projectAssigned && selectedGroup !== group.id ? "#f0f0f0" : selectedGroup === group.id ? "#e6ffe6" : "white",
+                cursor: projectAssigned ? "not-allowed" : "pointer",
               }}
-              className={`h-20 border rounded-lg border-gray-300 mb-4 transition-transform duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer ${selectedGroup === group.id && projectStatus === ProjectStatus.Finished ? "bg-green-100" : group.status !== "Completado" ? "bg-gray-100 cursor-not-allowed group-status-tooltip" : ""}`}
+              className={`h-20 border rounded-lg border-gray-300 mb-4 transition-transform duration-300 ease-in-out transform ${
+                selectedGroup === group.id && projectStatus === ProjectStatus.Finished ? "bg-green-100" : ""
+              }`}
               key={`group-${index}`}
-              onClick={() => handleCheckboxChange(group.id, group.status)}
+              onClick={() => handleCheckboxChange(group.id)}
+              title={projectAssigned ? "No se puede marcar porque ya se seleccionó un ganador" : ""}
             >
               <span className="flex items-center justify-center">
                 {projectAssigned && selectedGroup === group.id ? (
@@ -130,9 +124,10 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productio
                   <input
                     type="checkbox"
                     checked={selectedGroup === group.id}
-                    onChange={() => handleCheckboxChange(group.id, group.status)}
+                    onChange={() => handleCheckboxChange(group.id)}
                     className="w-6 h-6 rounded-full border-2 border-blue-600 text-blue-600 focus:ring-blue-500 appearance-none checked:bg-blue-600 checked:border-transparent"
-                    disabled={projectStatus === "finished"}
+                    disabled={projectAssigned || projectStatus === "finished"}
+                    title={projectAssigned ? "No se puede marcar porque ya se seleccionó un ganador" : ""}
                   />
                 )}
               </span>
@@ -149,9 +144,7 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productio
                 {group.evaluationScore.budget}
               </span>
               <span className="flex items-center justify-center font-bold text-green-500">
-                {group.evaluationScore.creativeProposal +
-                  group.evaluationScore.experience +
-                  group.evaluationScore.budget}
+                {group.evaluationScore.creativeProposal + group.evaluationScore.experience + group.evaluationScore.budget}
               </span>
               <div className="flex items-center justify-center">
                 <span
@@ -159,13 +152,18 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productio
                     group.status === "Completado"
                       ? "bg-green-100 text-green-500"
                       : group.status === "Rechazado"
-                        ? "bg-red-100 text-red-500"
-                        : "bg-blue-100 text-blue-500"
+                      ? "bg-red-100 text-red-500"
+                      : "bg-blue-100 text-blue-500"
                   }`}
                 >
                   {group.status}
                 </span>
               </div>
+                {projectAssigned && selectedGroup === group.id && (
+                  <span className="ml-2 text-green-500 mx-3 font-bold flex items-center">
+                    <CheckCircle className="w-4 h-4 mr-1" /> Ganador
+                  </span>
+                )}
             </div>
           ))}
         </div>
@@ -173,31 +171,20 @@ const Comparacion: React.FC<ComparisonProps> = ({ data, projectStatus, productio
           <p>
             {projectStatus === ProjectStatus.Finished
               ? "El proyecto ya ha sido asignado a una Casa productora."
-              : "Si has completado la evaluación de todos tus candidatos, puedes elegir la Casa productora a la que deseas asignar el proyecto."
-            }
+              : "Si has completado la evaluación de todos tus candidatos, puedes elegir la Casa productora a la que deseas asignar el proyecto."}
           </p>
         </div>
         <StackedBarChar data={StackedBarCharData}></StackedBarChar>
         <div className="flex justify-center space-x-4">
           {projectAssigned ? (
-            <DefaultButton
-              onClick={() => router.push("/lista-de-proyectos-admin")}
-              label={"Ir a proyectos"}
-            />
+            <DefaultButton onClick={() => router.push("/lista-de-proyectos-admin")} label={"Ir a proyectos"} />
           ) : (
             <>
               <DefaultButton onClick={backToList} outlined label={"Atras"} />
-              <DefaultButton
-                onClick={assignProject}
-                label={"Asignar proyecto"}
-                disabled={!selectedGroup || projectStatus === "finished"}
-              />
+              <DefaultButton onClick={assignProject} label={"Asignar proyecto"} disabled={!selectedGroup || projectStatus === "finished"} />
             </>
           )}
         </div>
-        <Tooltip anchorSelect=".group-status-tooltip" place="top">
-          No se puede seleccionar debido a que no se subió la propuesta
-        </Tooltip>
       </div>
     </div>
   );
