@@ -23,7 +23,7 @@ import "./globals.css";
 const ProjectStatusComponent = ({ status }: { status: string }) => {
   if (!status) {
     return (
-      <span className="project-status bg-red-100 text-red-500 text-sm px-4 py-2 rounded">
+      <span className="project-status bg-blue-100 text-blue-500 text-sm px-4 py-2 rounded">
         No disponible
       </span>
     );
@@ -99,7 +99,7 @@ const InvitationStatus = ({ status }: { status: boolean }) => {
 const NewBadge = ({ createdAt }: { createdAt: Date }) => {
   return (
     moment().isSame(createdAt, "day") && (
-      <span className="text-sm text-red-500 bg-red-100 px-2 py-1 rounded-full">
+      <span className="text-sm text-blue-500 bg-blue-100 px-2 py-1 rounded-full">
         Nuevo
       </span>
     )
@@ -169,7 +169,7 @@ const ListaDeProyectos = () => {
           />
           <button
             onClick={() => getAllProjects()}
-            className="refresh-button p-2 rounded-full bg-red-50 text-red-500 hover:bg-red-100 transform transition-all duration-200 hover:scale-110 active:scale-95"
+            className="refresh-button p-2 rounded-full bg-blue-50 text-blue-500 hover:bg-blue-100 transform transition-all duration-200 hover:scale-110 active:scale-95"
           >
             <RefreshCw className="w-5 h-5" />
           </button>

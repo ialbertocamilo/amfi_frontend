@@ -1,5 +1,8 @@
 import Layout from '@/components/Layout';
-import React, { useState } from 'react';
+import { IUser } from '@/interfaces/user.interface';
+import { storage } from '@/lib/storage';
+import { UserMapper } from '@/mappers/user.mapper';
+import React, { useEffect, useState } from 'react';
 
 interface FAQItem {
   question: string;
@@ -8,7 +11,15 @@ interface FAQItem {
 }
 
 const FAQPage: React.FC = () => {
+  const [user, setUser] = useState<IUser>();
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const userData = storage('user').get();
+    if (userData) {
+      setUser(userData);
+    }
+  }, []);
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   const faqs: FAQItem[] = [
@@ -42,6 +53,7 @@ const FAQPage: React.FC = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
+
         <h1 className="text-3xl font-bold mb-8">Preguntas Frecuentes</h1>
         
         <div className="mb-8">

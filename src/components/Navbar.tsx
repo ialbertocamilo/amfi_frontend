@@ -1,9 +1,9 @@
-import React, {Fragment, useEffect, useState} from 'react';
-import {Menu, Transition} from '@headlessui/react';
-import {storage} from "@/lib/storage";
-import {UserMapper} from "@/mappers/user.mapper";
+import { signOut } from "@/api/authenticationApi";
+import { storage } from "@/lib/storage";
+import { UserMapper } from "@/mappers/user.mapper";
+import { Menu, Transition } from '@headlessui/react';
+import React, { Fragment, useEffect, useState } from 'react';
 import toast from "react-hot-toast";
-import {signOut} from "@/api/authenticationApi";
 
 
 const Navbar: React.FC = () => {
@@ -27,17 +27,18 @@ const Navbar: React.FC = () => {
     }
 
     return (
-        <div className="flex items-center justify-between px-6 py-4  ">
+        <div className="flex items-center justify-between px-6 py-4">
             <Menu as="div" className="relative inline-block text-left z-50">
                 <div className="flex items-center space-x-2">
-                    <span className='h2'>
-                    🧑‍💻
-                    </span>
-                    <Menu.Button
-                        className="inline-flex justify-center rounded-md border border-gray-100 shadow-sm px-4 py-2 bg-g text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 whitespace-nowrap">
-                        {user?.name}  {user?.lastname}
-
-                    </Menu.Button>
+                    <span className="h2">🧑‍💻</span>
+                    <div className="flex flex-col">
+                        <Menu.Button className="inline-flex justify-center rounded-md border border-gray-100 shadow-sm px-4 py-2 bg-g text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 whitespace-nowrap">
+                            <div className="flex flex-col items-start">
+                                <span className="font-semibold">{user?.name} {user?.lastname}</span>
+                                <span className="text-xs text-gray-500">{company} {user?.company?.name} • {type}</span>
+                            </div>
+                        </Menu.Button>
+                    </div>
                 </div>
                 <Transition
                     as={Fragment}
@@ -51,26 +52,7 @@ const Navbar: React.FC = () => {
                     <Menu.Items
                         className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <div className="py-1 ">
-                            <Menu.Item>
-                            {({active}) => (
-                                <span
-                                    className={`${active ? 'bg-gray-100 text-gray-900 font-bold' : 'text-gray-700 font-bold'
-                                    } block px-4 py-2 text-sm`}
-                                >
-                                        {type}
-                                    </span>
-                            )}
-                        </Menu.Item>
-                            <Menu.Item>
-                            {({active}) => (
-                                <span
-                                    className={`${active ? 'bg-gray-100 text-gray-900 font-bold' : 'text-gray-700 font-bold'
-                                    } block px-4 py-2 text-sm`}
-                                >
-                                        {company} {user?.company?.name}
-                                    </span>
-                            )}
-                        </Menu.Item>
+                 
                             <Menu.Item>
                                 {({active}) => (
                                     <a

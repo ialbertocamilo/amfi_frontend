@@ -39,18 +39,19 @@ const [loading, setLoading] = useState<boolean>(false);
                 <div className="grid md:grid-cols-1 gap-3">
                         <h1 className="text-3xl font-semibold">Detalles de la Productora</h1>
                         <br/>
-                        <p className="text-gray-600"><strong>Nombre:</strong> {productora.name}</p>
-                        <p className="text-gray-600 "><strong>Nombre Legal:</strong> {productora.legalName}</p>
-                        <p className="text-gray-600 "><strong>RFC:</strong> {productora.nationalIdentifierOrRFC}
-                        </p>
-                        <p className="text-gray-600"><strong>Año de
-                            Fundación:</strong> {productora.foundingYear}</p>
-                        <p className="text-gray-600"><strong>Fecha de
-                            Creación:</strong> {moment(productora.createdAt).format("DD/MM/YYYY")}</p>
+                        {productora && (
+                            <>
+                                <p className="text-gray-600"><strong>Nombre:</strong> {productora.name}</p>
+                                <p className="text-gray-600"><strong>Nombre Legal:</strong> {productora.legalName}</p>
+                                <p className="text-gray-600"><strong>RFC:</strong> {productora.nationalIdentifierOrRFC}</p>
+                                <p className="text-gray-600"><strong>Año de Fundación:</strong> {productora.foundingYear}</p>
+                                <p className="text-gray-600"><strong>Fecha de Creación:</strong> {moment(productora.createdAt).format("DD/MM/YYYY")}</p>
+                            </>
+                        )}
                 </div>
             </div></Loader>
         </Layout>
-);
+    );
 };
 
 export default ProductoraDetails;

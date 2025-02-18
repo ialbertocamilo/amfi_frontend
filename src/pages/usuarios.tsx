@@ -1,15 +1,15 @@
 'use client';
-import React, {useEffect, useState} from "react";
-import "./globals.css";
-import {useRouter} from "next/router";
-import PaginatedComponent from "@/components/PaginationComponent";
-import Layout from "@/components/Layout";
-import {fetchUserInfo, User} from "@/api/userApi";
-import {checkMaxUsers, getInfoUsers} from "@/api/companyApi";
-import {ICheckMaxUsersResponse} from "@/interfaces/company.interface";
-import {storageConstants} from "@/constants";
-import {IUser} from "@/interfaces/user.interface";
+import { checkMaxUsers, getInfoUsers } from "@/api/companyApi";
+import { fetchUserInfo, User } from "@/api/userApi";
 import ActionUsers from "@/components/ActionUsers";
+import Layout from "@/components/Layout";
+import PaginatedComponent from "@/components/PaginationComponent";
+import { storageConstants } from "@/constants";
+import { ICheckMaxUsersResponse } from "@/interfaces/company.interface";
+import { IUser } from "@/interfaces/user.interface";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import "./globals.css";
 
 const Usuarios = () => {
 
@@ -105,7 +105,7 @@ const Usuarios = () => {
             </div>
             <div className="flex justify-end mt-4 mb-4">
                 <a href={`/planes?register=true&email=${user?.email}&transactionId=`}
-                   className="text-yellow-500 border border-yellow-500 hover:bg-yellow-500 hover:text-white py-1 px-3 rounded inline-flex items-center transition duration-200">
+                   className="text-blue-500 border border-blue-500 hover:bg-blue-500 hover:text-white py-1 px-3 rounded inline-flex items-center transition duration-200">
                     💰
                     Comprar plan
                 </a>
@@ -114,7 +114,7 @@ const Usuarios = () => {
                 <h1 className="text-2xl font-semibold">Usuarios</h1>
                 <button
                     type="button"
-                    className="bg-red-500 text-white py-2 px-4 rounded"
+                    className="bg-blue-500 text-white py-2 px-4 rounded"
                     onClick={crearUsuario}
                 >
                     + Nuevo usuario

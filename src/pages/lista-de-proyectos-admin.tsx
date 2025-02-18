@@ -141,7 +141,7 @@ const ListaProyectosAdmin = () => {
 
           </div>
           <button
-            className="bg-red-500 text-xs text-white px-4 rounded z-10 transform transition-transform duration-200 hover:scale-105"
+            className="bg-blue-500 text-xs text-white px-4 rounded z-10 transform transition-transform duration-200 hover:scale-105"
             onClick={crearProyecto}
           >
             Nuevo proyecto
@@ -153,7 +153,7 @@ const ListaProyectosAdmin = () => {
                   type="checkbox"
                   checked={dateFilterEnabled}
                   onChange={(e) => setDateFilterEnabled(e.target.checked)}
-                  className="form-checkbox h-4 w-4 text-red-500 rounded border-gray-300"
+                  className="form-checkbox h-4 w-4 text-blue-500 rounded border-gray-300"
                 />
                 Filtrar por fecha
               </label>
