@@ -1,11 +1,11 @@
 import { FormEvent, useState } from "react";
 import "./globals.css";
 
+import { storageConstants } from "@/constants";
+import ApiService from "@/lib/api";
 import { Link } from "@mui/material";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
-import ApiService from "@/lib/api";
-import { storageConstants } from "@/constants";
 
 interface FormData {
   email: string;
@@ -113,7 +113,7 @@ const Login = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-red-500 text-white py-2 rounded"
+              className="w-full bg-blue-500 text-white py-2 rounded"
             >
               Ingresar
             </button>
@@ -121,7 +121,7 @@ const Login = () => {
               <Link
                 href="/register"
                 variant="body2"
-                sx={{ color: "red", textDecoration: "none" }}
+                sx={{ color: "blue", textDecoration: "none" }}
               >
                 {"Regístrate"}
               </Link>

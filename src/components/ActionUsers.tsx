@@ -1,18 +1,17 @@
-import React, {memo, useCallback, useMemo} from "react";
+import { useRouter } from "next/router";
+import React, { memo, useCallback, useMemo } from "react";
 import ActionList from "./ActionList";
-import {useRouter} from "next/router";
-import {ActionRoleProps} from "./ActionRole";
+import { ActionRoleProps } from "./ActionRole";
 
 const enum Actions {
-    view = "Ver",
     delete = "Eliminar",
 }
 
 const roleActionsMap: Record<string, string[]> = {
-    "super-admin": [Actions.view, Actions.delete],
-    support: [Actions.view],
-    owner: [Actions.delete],
-    user: [],
+    "super-admin": [Actions.delete],
+    support: [Actions.delete],
+    owner: [],
+    user: [Actions.delete],
 };
 
 const allActions = [
@@ -33,14 +32,13 @@ const ActionUsers: React.FC<ActionRoleProps> = ({id, userRole}) => {
 
     const availableActions = useMemo(() => {
 return allActions
-    .filter(action => roleActionsMap[userRole]?.includes(action.name))
     .map(action => ({
         ...action,
         onClick: () => action.onClick(id, action.name === Actions.delete ? handleDelete : (id: string) => router.push(`/usuario?id=${id}`))
     }));
     }, [id, userRole, handleDelete, router]);
 
-    return( <div><ActionList actions={availableActions} resourceId={id}/></div>)
+    return availableActions.length > 0 ? <div><ActionList actions={availableActions} resourceId={id}/></div> : null;
 };
 
 export default memo(ActionUsers);

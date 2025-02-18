@@ -1,9 +1,9 @@
-import {FormEvent, useState} from 'react';
+import { useRouter } from 'next/router';
+import { FormEvent, useState } from 'react';
 import "./globals.css";
-import {useRouter} from 'next/router';
 
-import {Link} from '@mui/material';
 import api from "@/lib/api";
+import { Link } from '@mui/material';
 import toast from "react-hot-toast";
 
 interface FormData {
@@ -54,7 +54,7 @@ const Login = () => {
             </div>
             <div className="flex-1 flex flex-col items-center justify-center p-8">
                 <div className="absolute top-0 right-0 m-4">
-                    <Link href="/login" variant="body2" sx={{color: 'red', textDecoration: 'none'}}>
+                    <Link href="/login" variant="body2" sx={{color: 'blue', textDecoration: 'none'}}>
                         {'Iniciar sesión'}
                     </Link>
                 </div>
@@ -74,7 +74,7 @@ const Login = () => {
                         </div>
 
 
-                        <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Enviar</button>
+                        <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">Enviar</button>
 
                     </form>
 

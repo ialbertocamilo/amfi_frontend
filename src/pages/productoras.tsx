@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./globals.css";
 import toast from "react-hot-toast";
 import PaginatedComponent from "@/components/PaginationComponent";
 import { getProductoras } from "@/api/productoraApi";
@@ -13,7 +12,7 @@ const Productoras = () => {
     const [productoras, setProductoras] = useState<any[]>([]);
 
     const headers = [
-        { label: "Correlativo", key: "correlativo" },
+        { label: "Nro.", key: "correlativo" },
         { label: "Nombre", key: "name" },
         { label: "Nombre Legal", key: "legalName" },
         { label: "RFC", key: "nationalIdentifierOrRFC" },

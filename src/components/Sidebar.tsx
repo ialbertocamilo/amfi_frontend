@@ -70,11 +70,11 @@ const Sidebar: React.FC = () => {
         </div>
         <div className="px-4 pb-8 space-y-6">
           <div>
-            <a href="#" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+            <a href="/preguntas-frecuentes" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
               <img src="miniaturas/preguntas_frecuentes.png" alt="Description" className="w-6 h-6 mr-3" />
               <span>Preguntas frecuentes</span>
             </a>
-            <a href="#" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+            <a href="/soporte" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
               <img src="miniaturas/soporte.png" alt="Description" className="w-6 h-6 mr-3" />
               <span>Soporte</span>
             </a>

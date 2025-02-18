@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import { Menu } from '@headlessui/react';
+import React from 'react';
 
 interface Action {
   id: string;

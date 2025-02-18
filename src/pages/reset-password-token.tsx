@@ -1,9 +1,9 @@
-import {ChangeEvent, FormEvent, useEffect, useState} from 'react';
-import "./globals.css";
-import {Link} from '@mui/material';
-import {useRouter} from "next/router";
 import api from "@/lib/api";
+import { Link } from '@mui/material';
+import { useRouter } from "next/router";
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import toast from "react-hot-toast";
+import "./globals.css";
 
 interface FormData {
     email: string;
@@ -73,7 +73,7 @@ const Login = () => {
             </div>
             <div id="contenido-derecho" className="flex-1 flex flex-col items-center justify-center p-8">
                 <div className="absolute top-0 right-0 m-4">
-                    <Link href="/login" variant="body2" sx={{color: 'red', textDecoration: 'none'}}>
+                    <Link href="/login" variant="body2" sx={{color: 'blue', textDecoration: 'none'}}>
                         {'Iniciar sesión'}
                     </Link>
                 </div>
@@ -104,7 +104,7 @@ const Login = () => {
                                 <input className="w-full px-3 py-2 border rounded" type="password" id="password2"
                                        name="password2" value={formData.password2} onChange={handleChange}/>
                             </div>
-                            <button type="submit" className="w-full bg-red-500 text-white py-2 rounded">Cambiar
+                            <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">Cambiar
                                 contraseña
                             </button>
                         </form>
