@@ -21,7 +21,6 @@ const Login = () => {
         password: ''
 
     });
-    const router = useRouter();
 
     const handleChange = (e: any) => {
         const {name, value, type, checked} = e.target;

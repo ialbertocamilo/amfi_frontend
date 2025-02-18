@@ -14,7 +14,7 @@ export const UserContext = createContext<UserContextProps | undefined>(undefined
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     const { fetchUser, user, loading, error } = useUser()
-    const excludedPaths = ['/login', '/register', '/planes', '/confirmacion'];
+    const excludedPaths = ['/login', '/register', '/planes', '/confirmacion','/reset-password'];
 
     useEffect(() => {
         if (!excludedPaths.includes(window.location.pathname)) {
