@@ -90,7 +90,7 @@ const ComparativoPage: React.FC = () => {
     <Layout>
       <Loader loading={loading}>
         <ProjectBreadcrumb />
-        {evaluationScore && project && <Comparacion data={evaluationScore} projectStatus={project.status} productionHouseWinner={selectedProductionHouse} />}
+        {evaluationScore && project  && <Comparacion data={evaluationScore} projectStatus={project.status} productionHouseWinner={selectedProductionHouse} />}
       </Loader>
     </Layout>
   );

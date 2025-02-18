@@ -67,7 +67,7 @@ const FullScreenSearch: React.FC<FullScreenSearchProps & ReturnType<typeof useSe
       <input
         id="searchInput"
         type="text"
-        placeholder="Click to search..."
+        placeholder="Presiona aquí para buscar..."
         onClick={openModal}
         className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
         value={selected?.name || value}
