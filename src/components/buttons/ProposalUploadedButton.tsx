@@ -12,7 +12,6 @@ export const ProposalUploaded = ({
   className?: string;
   invitation: IProjectInvitation;
 }) => {
-  const router = useRouter();
   if (isUploaded)
     return (
       <>
@@ -20,8 +19,9 @@ export const ProposalUploaded = ({
           className={`proposal-uploaded text-sm text-red-500 text-bold flex items-center cursor-pointer ${className}`}
           onClick={(e) => {
             e.stopPropagation();
-            router.push(
+            window.open(
               `/propuesta?postulationId=${invitation?.postulation?.id}`,
+              '_blank'
             );
           }}
         >

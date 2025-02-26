@@ -71,7 +71,6 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
     const invitationData = await getInvitationsByProjectId(id);
 
     if (projectData) {
-      console.log(projectData);
       setFormData({
         anunciante: projectData?.advertiser?.name || "",
         marca: projectData?.brand || "",

@@ -1,7 +1,9 @@
 import { InvitedDirectorsResponse } from "@/api/interface/api.interface";
 import { ProposalUploaded } from "@/components/buttons/ProposalUploadedButton";
+import { CompanyType } from "@/constants";
 import { IProjectInvitation } from "@/interfaces/project-director.interface";
 import { ProjectInvitationMapper } from "@/mappers/project-invitation.mapper";
+import { useUserContext } from "@/providers/user.context";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
@@ -73,11 +75,12 @@ const ListadoInvitaciones = ({
     );
   };
 
+  const user = useUserContext();
   const doClick = (
     e: React.MouseEvent<HTMLDivElement>,
     invitation: IProjectInvitation,
   ) => {
-    if (!disabled && invitation.proposalUploaded) {
+    if ((user?.user?.company?.type === CompanyType.Advertiser) || !disabled && invitation.proposalUploaded) {
       router.push(`/evaluacion?projectInvitationId=${invitation.id}&projectId=${projectId}`);
     } else {
       e.preventDefault();
@@ -86,9 +89,15 @@ const ListadoInvitaciones = ({
       );
     }
   };
-  const goToComparative = ()=>{
-    router.push(`/comparativo?projectId=${projectId}`);
-  }
+  const allProposalsUploaded = invitation.result?.every(inv => inv.proposalUploaded) ?? false;
+
+  const goToComparative = () => {
+    if (allProposalsUploaded) {
+      router.push(`/comparativo?projectId=${projectId}`);
+    }
+  };
+
+  const [isAdvertiser,] = useState(user?.user?.company?.type === CompanyType.Advertiser)
 
   return (
     <>
@@ -102,7 +111,7 @@ const ListadoInvitaciones = ({
               <div
                 key={index}
                 className={`flex justify-between items-center p-4 bg-white shadow-md rounded-lg space-y-4 hover:bg-gray-100 transition-transform duration-300 ease-in-out transform hover:-translate-y-1
-                    ${!disabled && invitation.proposalUploaded ? "cursor-pointer" : "cursor-not-allowed"}`}
+                    ${isAdvertiser || !disabled && invitation.proposalUploaded ? "cursor-pointer" : "cursor-not-allowed"}`}
                 onClick={(e) => doClick(e, invitation)}
               >
                 <span className="text-gray-800 font-medium">
@@ -178,14 +187,21 @@ const ListadoInvitaciones = ({
             Cerrar Convocatoria
           </button>
         )}
-        
+
         <button
-            type="submit"
-            className="w-1/4 bg-blue-500 mx-2 text-white py-2 rounded-lg"
-            onClick={goToComparative}
-          >
-            Comparativo
-          </button>
+          type="submit"
+          className={`w-1/4 mx-2 py-2 rounded-lg ${allProposalsUploaded ? 'bg-blue-500 text-white cursor-pointer' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+          onClick={goToComparative}
+          disabled={!allProposalsUploaded}
+          data-tooltip-id="comparative-button"
+        >
+          Comparativo
+        </button>
+        <Tooltip id="comparative-button" place="top">
+          {allProposalsUploaded
+            ? "Ver comparativo de propuestas"
+            : "Todas las propuestas deben estar subidas para acceder al comparativo"}
+        </Tooltip>
       </div>
     </>
   );
