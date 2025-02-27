@@ -153,10 +153,14 @@ export const calculateBudgetScore = (
   };
 };
 
-export const manageLogicError = (err: any) => {
+export const manageLogicError = (err: any, redirectUrl?: string) => {
   if (err?.status === 400)
     err?.response?.data?.message?.forEach((value: any) => toast.error(value));
-  if (err?.status === 409) toast.error(err?.response?.data?.clientMessage);
+  if (err?.status === 409)
+    toast.error(err?.response?.data?.clientMessage);
+  if (redirectUrl) {
+    window.location.href = redirectUrl;
+  }
 };
 
 export const formatUtcToLocalDate = (isoDate: string): string => {

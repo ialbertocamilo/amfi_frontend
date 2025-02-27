@@ -1,6 +1,7 @@
 import { Budget, Evaluation } from "@/api/interface/api.interface";
 import { getBidEvaluation, updateBidEvaluation } from "@/api/projectApi";
 import { calculateBudgetScore, calculateEvaluationScore } from "@/lib/utils";
+import { useProjectContext } from "@/providers/project.context";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
@@ -10,7 +11,6 @@ import PercentageSelector from "../Commons/PercentageSelector/PercentageSelector
 import ScoreModal from "../Commons/ScoreModal/ScoreModal";
 import StarRating from "../Commons/StarRating/StarRating";
 import BudgetBarChart from "./BudgetBarChart";
-import { useProjectContext } from "@/providers/project.context";
 
 interface ProposalItem {
   key: string;
@@ -191,7 +191,13 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
 
   const setProject = useProjectContext()?.setProject;
   const onInit = async () => {
-    const result = (await getBidEvaluation(projectInvitationId))?.result;
+    const data=await getBidEvaluation(projectInvitationId)
+    if (!data) {
+      router.back();
+      return;
+    }
+    const result = data?.result;
+    console.log("data", data)
     if (setProject && result?.project) {
       setProject(result?.project);
     }

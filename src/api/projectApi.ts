@@ -3,6 +3,7 @@ import { IProjectInvitation } from "@/interfaces/project-director.interface";
 import { IProject } from "@/interfaces/project.interface";
 import ApiService from "@/lib/api";
 import moment from "moment";
+import toast from "react-hot-toast";
 import { CreateProjectDto } from "../dto/create-project.dto";
 import { UpdateProjectDto } from "../dto/update-project.dto";
 import {
@@ -139,8 +140,14 @@ export const getBidEvaluation = async (
     const response = await ApiService.get(
       `/project-director/get-evaluation/${projectInvitationId}`,
     );
+    console.log('response.data', response.data)
     return response.data;
   } catch (error: any) {
+    if (error?.response?.status === 409) {
+      toast.error(error.response?.data?.clientMessage || 'Error conflicto encontrado');
+    } else {
+      toast.error('No puedes acceder a la evaluación');
+    }
     console.warn("Error obtaining project status:", error);
     return null;
   }
@@ -199,7 +206,7 @@ export const assignProductionHouse = async (
         productionHouseId,
       },
     );
-    return response.data as {comparison:any[], project:IProject};
+    return response.data as { comparison: any[], project: IProject };
   } catch (error: any) {
     console.warn("Error assigning production house:", error);
     return null;
