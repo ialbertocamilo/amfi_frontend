@@ -43,12 +43,24 @@ const Input: React.FC<InputProps> = ({
         />
       ) : (
         <input
-          type={type}
+          type={type === 'percentage' ? 'number' : type}
           className={`border p-2 w-full rounded-lg ${className}`}
           name={name}
           value={value}
           placeholder={placeholder || "Ingrese " + label}
-          onChange={onChange}
+          onChange={(e) => {
+            if (type === 'number' && Number(e.target.value) < 0) {
+              e.target.value = '0';
+            }
+            if (type === 'percentage') {
+              const val = Number(e.target.value);
+              if (val < 0) e.target.value = '0';
+              if (val > 100) e.target.value = '100';
+            }
+            onChange?.(e);
+          }}
+          min={type === 'number' || type === 'percentage' ? "0" : undefined}
+          max={type === 'percentage' ? "100" : undefined}
           disabled={disabled}
         />
       )}

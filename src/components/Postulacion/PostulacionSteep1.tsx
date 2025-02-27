@@ -4,6 +4,7 @@ import { FaCheck } from "react-icons/fa";
 import RequiredTag from "../Proyecto/RequiredTag";
 import { toast } from "react-hot-toast";
 import { createSectionValidator, createFormValidator } from "@/utils/validationUtils";
+import { useEffect } from "react";
 
 interface registroEntity {
   formData: any;
@@ -78,6 +79,48 @@ const PostulacionSteep1 = ({
     router.push("/lista-de-proyectos");
   };
 
+  const calculateTotal = () => {
+    const {
+      personal = 0,
+      preYPro = 0,
+      talento = 0,
+      equipo = 0,
+      setLocacion = 0,
+      viajes = 0,
+      digital = 0,
+      fotoFija = 0,
+      postProduccion = 0,
+      markUp = 0
+    } = formData.presupuesto;
+
+    const subtotal = Number(personal) + Number(preYPro) + Number(talento) + 
+                    Number(equipo) + Number(setLocacion) + Number(viajes) + 
+                    Number(digital) + Number(fotoFija) + Number(postProduccion);
+    
+    const markupAmount = subtotal * (Number(markUp) / 100);
+    return subtotal + markupAmount;
+  };
+
+  useEffect(() => {
+    handleChange({
+      target: {
+        name: 'presupuesto.total',
+        value: calculateTotal()
+      }
+    });
+  }, [
+    formData.presupuesto.personal,
+    formData.presupuesto.preYPro,
+    formData.presupuesto.talento,
+    formData.presupuesto.equipo,
+    formData.presupuesto.setLocacion,
+    formData.presupuesto.viajes,
+    formData.presupuesto.digital,
+    formData.presupuesto.fotoFija,
+    formData.presupuesto.postProduccion,
+    formData.presupuesto.markUp
+  ]);
+
   return (
     <div className="space-y-2">
       <div className="mb-8 bg-white shadow-md rounded  p-6">
@@ -120,6 +163,7 @@ const PostulacionSteep1 = ({
             value={formData.presupuesto.total}
             onChange={handleChange}
             required
+            disabled
           />
           <br />
           <div>
@@ -201,7 +245,7 @@ const PostulacionSteep1 = ({
               />
               <Input
                 label={"Mark up %"}
-                type={"number"}
+                type={"percentage"}
                 name={"presupuesto.markUp"}
                 value={formData.presupuesto.markUp}
                 onChange={handleChange}

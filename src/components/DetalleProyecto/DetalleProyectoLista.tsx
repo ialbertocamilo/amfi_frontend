@@ -11,7 +11,7 @@ import useLoader from "@/hooks/loader.hook";
 import { formatUtcToLocalDate } from "@/lib/utils";
 import { ProjectMapper, ProjectStatus } from "@/mappers/project.mapper";
 import { useUserContext } from "@/providers/user.context";
-import { RefreshCw } from "lucide-react";
+import { Divide, RefreshCw } from "lucide-react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -21,6 +21,7 @@ import ProjectStatusText from "../inputs/ProjectStatusText";
 import UnlockAgencyToggle from "../UnlockAgencyToggle";
 import { EvaluationScore } from "./Comparacion";
 import ListadoInvitaciones from "./ListadoInvitaciones";
+import Divider from "../Divider";
 
 interface ProjectDetailsProps {
   id: string;
@@ -193,16 +194,6 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
                 Anunciante: {formData?.anunciante}
               </p>
 
-        {isAdvertiser && (
-          <UnlockAgencyToggle
-            projectId={id}
-            unlockedForAgency={formData.unlockedForAgency}
-            onUnlockChange={(newValue) => {
-              setUnlocked(newValue);
-              setFormData(prev => ({ ...prev, unlockedForAgency: newValue }));
-            }}
-          />
-        )}
             </div>
             <div>
               <p className=" text-sm font-medium text-gray-600 pb-2">
@@ -217,6 +208,17 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
             </div>
           </div>
         </div>
+        {isAdvertiser && (
+          <UnlockAgencyToggle
+            projectId={id}
+            unlockedForAgency={formData.unlockedForAgency}
+            onUnlockChange={(newValue) => {
+              setUnlocked(newValue);
+              setFormData(prev => ({ ...prev, unlockedForAgency: newValue }));
+            }}
+          />
+        )}
+<hr />
         <Tooltip anchorSelect=".invitation-bid-deadline" place={"bottom"}>
           Restan {remainingDays} días para finalizar con la entrega.
         </Tooltip>
