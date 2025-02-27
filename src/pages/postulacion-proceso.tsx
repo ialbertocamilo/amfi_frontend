@@ -19,9 +19,11 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import "./globals.css";
+import { useFormValidation } from '@/hooks/useFormValidation';
 
 //?projectInvitationId=
 const PostulacionProceso: React.FC = () => {
+  const { validate } = useFormValidation();
 
   const [formData, setFormData] = useState({
     talento: {
@@ -146,31 +148,8 @@ const PostulacionProceso: React.FC = () => {
     }
   }, [project, router]);
 
-  const validateFormData = (formData: FormData): boolean => {
-    const validateFields = (data: any, parentKey: string = ""): boolean => {
-      for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-          const value = data[key];
-          const fieldKey = parentKey ? `${parentKey}.${key}` : key;
-
-          if (typeof value === "object" && value !== null) {
-            if (!validateFields(value, fieldKey)) {
-              return false;
-            }
-          } else if (!value) {
-            toast.error(`El campo ${fieldKey} es obligatorio`);
-            return false;
-          }
-        }
-      }
-      return true;
-    };
-
-    return validateFields(formData);
-  };
 
   const processCheckInvitation = async () => {
-    // Si la propuesta ha sido subida redirigir al ultimo step
     setLoading(true);
     const data = await getInvitationById(projectInvitationId as string);
     if (data?.result?.proposalUploaded) setActiveTab("5");
@@ -218,10 +197,14 @@ const PostulacionProceso: React.FC = () => {
     }));
   };
   const handleSubmit = async (page: string) => {
-    if (page == "5") {
-      if (!validateFormData(formData)) return;
-      setLoading(true);
+    const currentStep = activeTab;
+    // if (validationRulesByStep[currentStep]) {
+    //   const isValid = validate(formData, validationRulesByStep[currentStep]);
+    //   if (!isValid) return;
+    // }
 
+    if (page === "5") {
+      setLoading(true);
       try {
         await updateProjectInvitation(projectInvitationId as string, {
           budget: {
@@ -240,8 +223,10 @@ const PostulacionProceso: React.FC = () => {
           },
         }).then(async (response) => {
           if (response) {
-            toast.success("El presupuesto ha sido actualizado correctamente");
-
+            if (!files || files.length === 0) {
+              toast.error("Debe subir al menos un archivo adjunto");
+            }
+        
             const result = await submitPostulation({
               projectId: project?.id as string,
               metadata: formData,
@@ -263,7 +248,6 @@ const PostulacionProceso: React.FC = () => {
     } else {
       setActiveTab(page);
     }
-    setActiveTab(page);
   };
 
   const onLoadFiles = (files: File[]) => {

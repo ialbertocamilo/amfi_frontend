@@ -1,4 +1,8 @@
 import { FaCheck } from "react-icons/fa";
+import { useState } from "react";
+import Input from "../inputs/Input";
+import { toast } from "react-hot-toast";
+import RequiredTag from "../Proyecto/RequiredTag";
 
 interface registroEntity {
     formData: any,
@@ -10,6 +14,55 @@ interface registroEntity {
 }
 
 const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, setactiveTab }: registroEntity) => {
+    const [fieldErrors, setFieldErrors] = useState<{ [key: string]: boolean }>({});
+
+    const validateFields = () => {
+        const errors: string[] = [];
+        const newFieldErrors: { [key: string]: boolean } = {};
+
+        const talentoFields = [
+            { field: 'principalNumero', label: ' Principal' },
+            { field: 'secundarioNumero', label: ' Secundario' },
+            { field: 'adicionalNumero', label: ' Adicional' },
+            { field: 'extrasNumero', label: ' Extras' },
+            { field: 'totalNumero', label: ' Total' },
+        ];
+
+        talentoFields.forEach(({ field, label }) => {
+            if (!formData.talento[field]) {
+                errors.push(`${label} es requerido`);
+                newFieldErrors[`talento.${field}`] = true;
+            }
+        });
+
+        if (!formData.vestuario.descripcion) {
+            errors.push('La descripción de vestuario es requerida');
+            newFieldErrors['vestuario.descripcion'] = true;
+        }
+
+        if (!formData.arte.sets) {
+            errors.push('Sets es requerido');
+            newFieldErrors['arte.sets'] = true;
+        }
+        if (!formData.arte.props) {
+            errors.push('Props es requerido');
+            newFieldErrors['arte.props'] = true;
+        }
+        
+        setFieldErrors(newFieldErrors);
+
+        if (errors.length > 0) {
+            errors.forEach(error => toast.error(error));
+            return false;
+        }
+        return true;
+    };
+
+    const handleNext = () => {
+        if (validateFields()) {
+            handleSubmit('3');
+        }
+    };
 
     const getLabelText = (type: string) => {
         switch (type) {
@@ -29,9 +82,8 @@ const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, se
     };
 
     return (
-
         <div className="space-y-2">
-        <div className="mb-8 bg-white shadow-md rounded ">
+            <div className="mb-8 bg-white shadow-md rounded">
                 <div className="tabs flex justify-center space-x-10">
                     <button
                         onClick={() => setactiveTab('1')}
@@ -65,130 +117,150 @@ const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, se
                         <h2 className="text-xl font-bold mb-4">Talento</h2>
                         <div className="grid grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label htmlFor="talento.principalNumero" className="block text-sm font-medium text-gray-700">{getLabelText('principal')}</label>
-                                <input
+                                <Input
+                                    label={`${getLabelText('principal')}`}
                                     type="number"
                                     id="talento.principalNumero"
                                     name="talento.principalNumero"
                                     placeholder="Número"
-                                    className="border p-2 w-full"
                                     value={formData.talento.principalNumero}
                                     onChange={handleChange}
+                                    error={fieldErrors['talento.principalNumero']}
+                                    required
                                 />
                             </div>
                             <div>
+                                <label htmlFor="talento.principalTexto" className="block text-sm font-medium text-gray-700">
+                                    Descripción</label>
                                 <textarea
-                                    placeholder="Texto"
+                                    placeholder="Descripción"
                                     id="talento.principalTexto"
                                     name="talento.principalTexto"
                                     className="border p-2 w-full"
                                     maxLength={300}
                                     value={formData.talento.principalTexto}
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label htmlFor="talento.secundarioNumero" className="block text-sm font-medium text-gray-700">{getLabelText('secundario')}</label>
-                                <input
+                                <Input
+                                    label={`${getLabelText('secundario')}`}
                                     type="number"
                                     id="talento.secundarioNumero"
                                     name="talento.secundarioNumero"
                                     placeholder="Número"
-                                    className="border p-2 w-full"
                                     value={formData.talento.secundarioNumero}
                                     onChange={handleChange}
+                                    error={fieldErrors['talento.secundarioNumero']}
+                                    required
                                 />
                             </div>
                             <div>
+                                <label htmlFor="talento.secundarioTexto" className="block text-sm font-medium text-gray-700">
+                                    Descripción</label>
                                 <textarea
-                                    placeholder="Texto"
+                                    placeholder="Descripción"
                                     id="talento.secundarioTexto"
                                     name="talento.secundarioTexto"
                                     className="border p-2 w-full"
                                     maxLength={300}
                                     value={formData.talento.secundarioTexto}
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label htmlFor="talento.adicionalNumero" className="block text-sm font-medium text-gray-700">{getLabelText('adicional')}</label>
-                                <input
+                                <Input
+                                    label={`${getLabelText('adicional')}`}
                                     type="number"
                                     id="talento.adicionalNumero"
                                     name="talento.adicionalNumero"
                                     placeholder="Número"
-                                    className="border p-2 w-full"
                                     value={formData.talento.adicionalNumero}
                                     onChange={handleChange}
+                                    error={fieldErrors['talento.adicionalNumero']}
+                                    required
                                 />
                             </div>
                             <div>
+                                <label htmlFor="talento.adicionalTexto" className="block text-sm font-medium text-gray-700">
+                                    Descripción</label>
                                 <textarea
-                                    placeholder="Texto"
+                                    placeholder="Descripción"
                                     id="talento.adicionalTexto"
                                     name="talento.adicionalTexto"
                                     className="border p-2 w-full"
                                     maxLength={300}
                                     value={formData.talento.adicionalTexto}
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label htmlFor="talento.extrasNumero" className="block text-sm font-medium text-gray-700">{getLabelText('extras')}</label>
-                                <input
+                                <Input
+                                    label={`${getLabelText('extras')}`}
                                     type="number"
                                     id="talento.extrasNumero"
                                     name="talento.extrasNumero"
                                     placeholder="Número"
-                                    className="border p-2 w-full"
                                     value={formData.talento.extrasNumero}
                                     onChange={handleChange}
+                                    error={fieldErrors['talento.extrasNumero']}
+                                    required
                                 />
                             </div>
                             <div>
+                                <label htmlFor="talento.extrasTexto" className="block text-sm font-medium text-gray-700">
+                                    Descripción</label>
                                 <textarea
-                                    placeholder="Texto"
+                                    placeholder="Descripción"
                                     id="talento.extrasTexto"
                                     name="talento.extrasTexto"
                                     className="border p-2 w-full"
                                     maxLength={300}
                                     value={formData.talento.extrasTexto}
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label htmlFor="talento.totalNumero" className="block text-sm font-medium text-gray-700">{getLabelText('total')}</label>
-                                <input
+                                <Input
+                                    label={`${getLabelText('total')}`}
                                     type="number"
                                     id="talento.totalNumero"
                                     name="talento.totalNumero"
                                     placeholder="Número"
-                                    className="border p-2 w-full"
                                     value={formData.talento.totalNumero}
                                     onChange={handleChange}
+                                    error={fieldErrors['talento.totalNumero']}
+                                    required
                                 />
                             </div>
                             <div>
+                                <label htmlFor="talento.totalTexto" className="block text-sm font-medium text-gray-700">
+                                    Descripción</label>
                                 <textarea
-                                    placeholder="Texto"
+                                    placeholder="Descripción"
                                     id="talento.totalTexto"
                                     name="talento.totalTexto"
                                     className="border p-2 w-full"
                                     maxLength={300}
                                     value={formData.talento.totalTexto}
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                         </div>
@@ -196,7 +268,7 @@ const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, se
 
                     {/* Vestuario Section */}
                     <div>
-                        <h2 className="text-xl font-bold mb-4">Vestuario</h2>
+                        <h2 className="text-xl font-bold mb-4">Vestuario <RequiredTag/></h2>
                         <textarea
                             placeholder="Descripción"
                             id="formData.vestuario.descripcion"
@@ -205,6 +277,7 @@ const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, se
                             maxLength={300}
                             value={formData.vestuario.descripcion}
                             onChange={handleChange}
+                            required
                         />
                     </div>
 
@@ -213,31 +286,35 @@ const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, se
                         <h2 className="text-xl font-bold mb-4">Arte</h2>
                         <div className="grid grid-cols-2 gap-4 mb-4">
                             <div>
-                                <label htmlFor="formData.arte.sets" className="block text-sm font-medium text-gray-700">Sets</label>
-                                <input
+                                <Input
+                                    label="Sets "
                                     type="text"
                                     id="formData.arte.sets"
                                     name="arte.sets"
                                     placeholder="Sets"
-                                    className="border p-2 w-full"
                                     value={formData.arte.sets}
                                     onChange={handleChange}
+                                    error={fieldErrors['arte.sets']}
+                                    required
                                 />
                             </div>
                             <div>
-                                <label htmlFor="formData.arte.props" className="block text-sm font-medium text-gray-700">Props</label>
-                                <input
+                                <Input
+                                    label="Props"
                                     type="text"
                                     id="formData.arte.props"
                                     name="arte.props"
                                     placeholder="Props"
-                                    className="border p-2 w-full"
                                     value={formData.arte.props}
                                     onChange={handleChange}
+                                    error={fieldErrors['arte.props']}
+                                    required
                                 />
                             </div>
                         </div>
-                        <label htmlFor="formData.arte.descripcion" className="block text-sm font-medium text-gray-700">Descripción</label>
+                        <label htmlFor="formData.arte.descripcion" className="block text-sm font-medium text-gray-700">
+                            Descripción 
+                        </label>
                         <textarea
                             placeholder="Descripción"
                             id="formData.arte.descripcion"
@@ -246,6 +323,7 @@ const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, se
                             maxLength={300}
                             value={formData.arte.descripcion}
                             onChange={handleChange}
+                            required
                         />
                     </div>
                 </div>
@@ -253,10 +331,16 @@ const PostulacionSteep2 = ({ formData, handleChange, handleSubmit, activeTab, se
                 {/* Botones */}
                 <div className="flex justify-center mt-8">
                     <div className="flex space-x-4">
-                        <button className="border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-50 transition" onClick={() => setactiveTab('1')}>
+                        <button 
+                            className="border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-50 transition" 
+                            onClick={() => setactiveTab('1')}
+                        >
                             Atrás
                         </button>
-                        <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition" onClick={() => handleSubmit('3')}>
+                        <button 
+                            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition" 
+                            onClick={handleNext}
+                        >
                             Siguiente
                         </button>
                     </div>

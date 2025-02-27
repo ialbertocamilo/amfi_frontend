@@ -1,6 +1,8 @@
 import { FaCheck } from "react-icons/fa";
 import Input from "../inputs/Input";
-
+import { useState } from "react";
+import { toast } from "react-hot-toast";
+import RequiredTag from "../Proyecto/RequiredTag";
 
 interface registroEntity {
   formData: any,
@@ -12,6 +14,73 @@ interface registroEntity {
 }
 
 const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, setactiveTab }: registroEntity) => {
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: boolean }>({});
+
+  const validateFields = () => {
+    const errors: string[] = [];
+    const newFieldErrors: { [key: string]: boolean } = {};
+
+    // Validar locaciones
+    const locacionesFields = [
+      { field: 'interior', label: 'Interior' },
+      { field: 'exterior', label: 'Exterior' },
+      { field: 'cantidad', label: 'Cantidad' },
+      { field: 'descripcion', label: 'Descripción' }
+    ];
+
+    locacionesFields.forEach(({ field, label }) => {
+      if (!formData.locaciones[field]) {
+        errors.push(`${label} de locaciones es requerido`);
+        newFieldErrors[`locaciones.${field}`] = true;
+      }
+    });
+
+    const transporteFields = [
+      { field: 'cliente', label: 'Cliente' },
+      { field: 'produccion', label: 'Producción' },
+      { field: 'vuelos', label: 'Vuelos' },
+      { field: 'foraneo', label: 'Foráneo' },
+      { field: 'descripcion', label: 'Descripción' }
+    ];
+
+    transporteFields.forEach(({ field, label }) => {
+      if (!formData.transporte[field]) {
+        errors.push(`${label} de transporte es requerido`);
+        newFieldErrors[`transporte.${field}`] = true;
+      }
+    });
+
+    // Validar postproducción
+    const postproduccionFields = [
+      { field: 'edicion', label: 'Edición' },
+      { field: 'audio', label: 'Audio' },
+      { field: 'online', label: 'Online' },
+      { field: 'masterizacion', label: 'Masterización' },
+      { field: 'cc', label: 'CC' },
+      { field: 'descripcion', label: 'Descripción' }
+    ];
+
+    postproduccionFields.forEach(({ field, label }) => {
+      if (!formData.postproduccion[field]) {
+        errors.push(`${label} de postproducción es requerido`);
+        newFieldErrors[`postproduccion.${field}`] = true;
+      }
+    });
+
+    setFieldErrors(newFieldErrors);
+
+    if (errors.length > 0) {
+      errors.forEach(error => toast.error(error));
+      return false;
+    }
+    return true;
+  };
+
+  const handleNext = () => {
+    if (validateFields()) {
+      handleSubmit('4');
+    }
+  };
 
   return (
     <div className="space-y-2">
@@ -54,6 +123,8 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name={"locaciones.interior"}
                 value={formData.locaciones.interior}
                 onChange={handleChange}
+                error={fieldErrors['locaciones.interior']}
+                required
               />
               <Input
                 label={"Exterior"}
@@ -61,6 +132,8 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name={"locaciones.exterior"}
                 value={formData.locaciones.exterior}
                 onChange={handleChange}
+                error={fieldErrors['locaciones.exterior']}
+                required
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -70,6 +143,8 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name={"locaciones.cantidad"}
                 value={formData.locaciones.cantidad}
                 onChange={handleChange}
+                error={fieldErrors['locaciones.cantidad']}
+                required
               />
               <Input
                 label={"Descripción adicional"}
@@ -77,6 +152,8 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name={"locaciones.descripcion"}
                 value={formData.locaciones?.descripcion || ''}
                 onChange={handleChange}
+                error={fieldErrors['locaciones.descripcion']}
+                required
               />
             </div>
           </div>
@@ -91,6 +168,8 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name={"transporte.cliente"}
                 value={formData.transporte.cliente}
                 onChange={handleChange}
+                error={fieldErrors['transporte.cliente']}
+                required
               />
               <Input
                 label={"Producción"}
@@ -98,6 +177,8 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name={"transporte.produccion"}
                 value={formData.transporte.produccion}
                 onChange={handleChange}
+                error={fieldErrors['transporte.produccion']}
+                required
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -107,6 +188,8 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name={"transporte.vuelos"}
                 value={formData.transporte.vuelos}
                 onChange={handleChange}
+                error={fieldErrors['transporte.vuelos']}
+                required
               />
               <Input
                 label={"Foráneo"}
@@ -114,6 +197,8 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name={"transporte.foraneo"}
                 value={formData.transporte.foraneo}
                 onChange={handleChange}
+                error={fieldErrors['transporte.foraneo']}
+                required
               />
             </div>
             <label htmlFor="transporte.descripcion">Descripción</label>
@@ -136,6 +221,8 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="postproduccion.edicion"
                 value={formData.postproduccion.edicion}
                 onChange={handleChange}
+                error={fieldErrors['postproduccion.edicion']}
+                required
               />
               <Input
                 label="Audio"
@@ -143,6 +230,8 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="postproduccion.audio"
                 value={formData.postproduccion.audio}
                 onChange={handleChange}
+                error={fieldErrors['postproduccion.audio']}
+                required
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -152,6 +241,8 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="postproduccion.online"
                 value={formData.postproduccion.online}
                 onChange={handleChange}
+                error={fieldErrors['postproduccion.online']}
+                required
               />
               <Input
                 label="Masterización"
@@ -159,6 +250,8 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="postproduccion.masterizacion"
                 value={formData.postproduccion.masterizacion}
                 onChange={handleChange}
+                error={fieldErrors['postproduccion.masterizacion']}
+                required
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -168,22 +261,37 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="postproduccion.cc"
                 value={formData.postproduccion.cc}
                 onChange={handleChange}
+                error={fieldErrors['postproduccion.cc']}
+                required
               />
             </div>
 
-            <Input label={"Descripción adicional"} onChange={handleChange} name="postproduccion.descripcion" value={formData.postproduccion?.descripcion} />
+            <Input 
+              label={"Descripción adicional"} 
+              onChange={handleChange} 
+              name="postproduccion.descripcion" 
+              value={formData.postproduccion?.descripcion} 
+              error={fieldErrors['postproduccion.descripcion']}
+              required
+            />
           </div>
-        </div>
-
-        {/* Botones */}
-        <div className="flex justify-center mt-8">
-          <div className="flex space-x-4">
-            <button className="border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-50 transition" onClick={() => setactiveTab('2')}>
-              Atrás
-            </button>
-            <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition" onClick={() => handleSubmit('4')}>
-              Siguiente
-            </button>
+        
+          {/* Botones */}
+          <div className="flex justify-center mt-8">
+            <div className="flex space-x-4">
+              <button 
+                className="border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-50 transition" 
+                onClick={() => setactiveTab('2')}
+              >
+                Atrás
+              </button>
+              <button 
+                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition" 
+                onClick={handleNext}
+              >
+                Siguiente
+              </button>
+            </div>
           </div>
         </div>
       </div>

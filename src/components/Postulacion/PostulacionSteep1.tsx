@@ -1,6 +1,10 @@
 import Input from "@/components/inputs/Input";
 import { useRouter } from "next/router";
 import { FaCheck } from "react-icons/fa";
+import RequiredTag from "../Proyecto/RequiredTag";
+import { toast } from "react-hot-toast";
+import { createSectionValidator, createFormValidator } from "@/utils/validationUtils";
+
 interface registroEntity {
   formData: any;
   handleChange: any;
@@ -18,10 +22,61 @@ const PostulacionSteep1 = ({
   setactiveTab,
 }: registroEntity) => {
   const router = useRouter();
+
+  const validatePresupuesto = createSectionValidator(formData, 'presupuesto', {
+    total: "Total del presupuesto",
+    personal: "Personal",
+    preYPro: "Pre y pro",
+    talento: "Talento",
+    equipo: "Equipo",
+    setLocacion: "Set-locación",
+    viajes: "Viajes",
+    digital: "Digital",
+    fotoFija: "Foto fija",
+    postProduccion: "Post producción",
+    markUp: "Mark up %"
+  });
+
+  const validateBidLetter = createSectionValidator(formData, 'bidLetter', {
+    produccionDias: "Días de producción",
+    produccionCiudad: "Ciudad de producción",
+    produccionVersiones: "Versiones de producción",
+    locacionDias: "Días de locación",
+    locacionVersiones: "Versiones de locación",
+    foroDias: "Días de foro",
+    foraneoDias: "Días foráneos"
+  });
+
+  const validateCrew = createSectionValidator(formData, 'crew', {
+    direccion: "Dirección",
+    direccionFotografia: "Dirección de fotografía",
+    produccionEjecutiva: "Producción ejecutiva",
+    cantidadTotal: "Cantidad total"
+  });
+
+  const validateEquipo = createSectionValidator(formData, 'equipo', {
+    camara: "Cámara",
+    optica: "Óptica",
+    general: "General",
+    especializado: "Especializado"
+  });
+
+  const validateFields = createFormValidator([
+    validatePresupuesto,
+    validateBidLetter,
+    validateCrew,
+    validateEquipo
+  ]);
+
+  const handleNext = (nextTab: string) => {
+    if (validateFields()) {
+      handleSubmit(nextTab);
+    }
+  };
+
   const redirect = () => {
     router.push("/lista-de-proyectos");
   };
-
 
   return (
     <div className="space-y-2">
@@ -64,6 +119,7 @@ const PostulacionSteep1 = ({
             name={"presupuesto.total"}
             value={formData.presupuesto.total}
             onChange={handleChange}
+            required
           />
           <br />
           <div>
@@ -76,6 +132,7 @@ const PostulacionSteep1 = ({
                 name={"presupuesto.personal"}
                 value={formData.presupuesto.personal}
                 onChange={handleChange}
+                required
               />
 
               <Input
@@ -84,6 +141,7 @@ const PostulacionSteep1 = ({
                 name={"presupuesto.preYPro"}
                 value={formData.presupuesto.preYPro}
                 onChange={handleChange}
+                required
               />
               <Input
                 label={"Talento"}
@@ -91,6 +149,7 @@ const PostulacionSteep1 = ({
                 name={"presupuesto.talento"}
                 value={formData.presupuesto.talento}
                 onChange={handleChange}
+                required
               />
               <Input
                 label={"Equipo"}
@@ -98,6 +157,7 @@ const PostulacionSteep1 = ({
                 name={"presupuesto.equipo"}
                 value={formData.presupuesto.equipo}
                 onChange={handleChange}
+                required
               />
               <Input
                 label={"Set-locación"}
@@ -105,6 +165,7 @@ const PostulacionSteep1 = ({
                 name={"presupuesto.setLocacion"}
                 value={formData.presupuesto.setLocacion}
                 onChange={handleChange}
+                required
               />
               <Input
                 label={"Viajes"}
@@ -112,6 +173,7 @@ const PostulacionSteep1 = ({
                 name={"presupuesto.viajes"}
                 value={formData.presupuesto.viajes}
                 onChange={handleChange}
+                required
               />
               <Input
                 label={"Digital"}
@@ -119,6 +181,7 @@ const PostulacionSteep1 = ({
                 name={"presupuesto.digital"}
                 value={formData.presupuesto.digital}
                 onChange={handleChange}
+                required
               />
               <Input
                 label={"Foto fija"}
@@ -126,6 +189,7 @@ const PostulacionSteep1 = ({
                 name={"presupuesto.fotoFija"}
                 value={formData.presupuesto.fotoFija}
                 onChange={handleChange}
+                required
               />
               <Input
                 label={"Post producción"}
@@ -133,6 +197,7 @@ const PostulacionSteep1 = ({
                 name={"presupuesto.postProduccion"}
                 value={formData.presupuesto.postProduccion}
                 onChange={handleChange}
+                required
               />
               <Input
                 label={"Mark up %"}
@@ -140,6 +205,7 @@ const PostulacionSteep1 = ({
                 name={"presupuesto.markUp"}
                 value={formData.presupuesto.markUp}
                 onChange={handleChange}
+                required
               />
             </div>
 
@@ -158,6 +224,7 @@ const PostulacionSteep1 = ({
               name={"bidLetter.produccionDias"}
               value={formData.bidLetter.produccionDias}
               onChange={handleChange}
+              required
             />
             <Input
               label={"Ciudad"}
@@ -165,6 +232,7 @@ const PostulacionSteep1 = ({
               name={"bidLetter.produccionCiudad"}
               value={formData.bidLetter.produccionCiudad}
               onChange={handleChange}
+              required
             />
             <Input
               label={"Versiones"}
@@ -172,6 +240,7 @@ const PostulacionSteep1 = ({
               name={"bidLetter.produccionVersiones"}
               value={formData.bidLetter.produccionVersiones}
               onChange={handleChange}
+              required
             />
           </div>
           <br />
@@ -184,6 +253,7 @@ const PostulacionSteep1 = ({
               name={"bidLetter.locacionDias"}
               value={formData.bidLetter.locacionDias}
               onChange={handleChange}
+              required
             />
             <Input
               label={"Versiones"}
@@ -191,6 +261,7 @@ const PostulacionSteep1 = ({
               name={"bidLetter.locacionVersiones"}
               value={formData.bidLetter.locacionVersiones}
               onChange={handleChange}
+              required
             />
           </div>
           <br />
@@ -203,6 +274,7 @@ const PostulacionSteep1 = ({
               name={"bidLetter.foroDias"}
               value={formData.bidLetter.foroDias}
               onChange={handleChange}
+              required
             />
           </div>
           
@@ -216,6 +288,7 @@ const PostulacionSteep1 = ({
               name={"bidLetter.foraneoDias"}
               value={formData.bidLetter.foraneoDias}
               onChange={handleChange}
+              required
             />
           </div>
         </div>
@@ -226,7 +299,7 @@ const PostulacionSteep1 = ({
           <h2 className="text-2xl font-semibold mb-4">Crew</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label>Dirección</label>
+              <label>Dirección <RequiredTag /></label>
               <input
                 type="text"
                 className="border p-2 w-full rounded-lg"
@@ -236,7 +309,7 @@ const PostulacionSteep1 = ({
               />
             </div>
             <div>
-              <label>Dirección de fotografía</label>
+              <label>Dirección de fotografía <RequiredTag /></label>
               <input
                 type="text"
                 className="border p-2 w-full rounded-lg"
@@ -246,7 +319,7 @@ const PostulacionSteep1 = ({
               />
             </div>
             <div>
-              <label>Producción ejecutiva</label>
+              <label>Producción ejecutiva <RequiredTag /></label>
               <input
                 type="text"
                 className="border p-2 w-full rounded-lg"
@@ -256,7 +329,7 @@ const PostulacionSteep1 = ({
               />
             </div>
             <div>
-              <label>Descripción adicional</label>
+              <label>Descripción adicional </label>
               <input
                 type="text"
                 className="border p-2 w-full rounded-lg"
@@ -266,7 +339,7 @@ const PostulacionSteep1 = ({
               />
             </div>
             <div>
-              <label>Cantidad total</label>
+              <label>Cantidad total <RequiredTag /></label>
               <input
                 type="number"
                 className="border p-2 w-full rounded-lg"
@@ -284,7 +357,7 @@ const PostulacionSteep1 = ({
           <h2 className="text-2xl font-semibold mb-4">Equipo</h2>
           <div className="grid grid-cols-4 gap-4">
             <div>
-              <label>Cámara</label>
+              <label>Cámara <RequiredTag /></label>
               <input
                 type="text"
                 className="border p-2 w-full rounded-lg"
@@ -294,7 +367,7 @@ const PostulacionSteep1 = ({
               />
             </div>
             <div>
-              <label>Óptica</label>
+              <label>Óptica <RequiredTag /></label>
               <input
                 type="text"
                 className="border p-2 w-full rounded-lg"
@@ -304,7 +377,7 @@ const PostulacionSteep1 = ({
               />
             </div>
             <div>
-              <label>General</label>
+              <label>General <RequiredTag /></label>
               <input
                 type="text"
                 className="border p-2 w-full rounded-lg"
@@ -314,7 +387,7 @@ const PostulacionSteep1 = ({
               />
             </div>
             <div>
-              <label>Especializado</label>
+              <label>Especializado <RequiredTag /></label>
               <input
                 type="text"
                 className="border p-2 w-full rounded-lg"
@@ -324,7 +397,7 @@ const PostulacionSteep1 = ({
               />
             </div>
             <div className="col-span-4">
-              <label>Descripción adicional</label>
+              <label>Descripción adicional </label>
               <input
                 type="text"
                 className="border p-2 w-full rounded-lg"
@@ -347,7 +420,7 @@ const PostulacionSteep1 = ({
             </button>
             <button
               className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-              onClick={() => handleSubmit("2")}
+              onClick={() => handleNext("2")}
             >
               Siguiente
             </button>

@@ -183,30 +183,31 @@ const ListaDeProyectos = () => {
           )}
 
           {filteredProjects.map((projectInvitation, index) => (
-            <div
-              key={index}
-              className="flex flex-col md:flex-row justify-between items-center p-4 bg-white shadow-md rounded-lg space-y-4 md:space-y-0 hover:bg-gray-100 transition-transform duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer"
+            <div className="flex flex-row items-center gap-4 h-24" key={index}>
+              <div
+              className="flex-1 flex flex-col md:flex-row justify-between items-center p-4 bg-white shadow-md rounded-lg space-y-4 md:space-y-0 hover:bg-gray-100 transition-transform duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer"
               onClick={() => handleRedirect(projectInvitation)}
-            >
+              >
               <div className="flex items-center space-x-4">
                 <span className="text-lg font-medium">
-                  {projectInvitation.project.name}
+                {projectInvitation.project.name}
                 </span>
                 <NewBadge createdAt={projectInvitation.createdAt} />
               </div>
               <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 space-x-0 md:space-x-3">
-                <ProposalUploaded
-                  className={"proposal-uploaded"}
-                  isUploaded={projectInvitation.proposalUploaded}
-                  invitation={projectInvitation}
-                  disabled={false}
-                />
                 <InvitationStatus status={projectInvitation.accepted} />
                 <ProjectStatusComponent
-                  status={projectInvitation.project.status}
+                status={projectInvitation.project.status}
                 />
                 <NextIcon />
+              </div>             
               </div>
+              <ProposalUploaded
+              className={"proposal-uploaded"}
+              isUploaded={projectInvitation.proposalUploaded}
+              invitation={projectInvitation}
+              disabled={false}
+              />
             </div>
           ))}
         </div>

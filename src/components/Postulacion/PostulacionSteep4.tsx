@@ -2,7 +2,9 @@ import { FaCheck } from "react-icons/fa";
 import EntregablePostulacion from "../EntregablePostulacion";
 import ProposalUploaderComponent from "../ProposalUploaderComponent";
 import Input from "../inputs/Input";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import RequiredTag from "../Proyecto/RequiredTag";
+import { toast } from "react-hot-toast";
 
 interface registroEntity {
   formData: any,
@@ -15,6 +17,74 @@ interface registroEntity {
 }
 
 const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, setactiveTab, files }: registroEntity) => {
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: boolean }>({});
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+
+  const validateForm = () => {
+    const errors: string[] = [];
+    const newFieldErrors: { [key: string]: boolean } = {};
+
+    // Validate Animacion
+    if (!formData.animacion.twoD) {
+      console.log('GAA')
+      errors.push("2D es requerido");
+    }
+    if (!formData.animacion.threeD) {
+      errors.push("3D es requerido");
+    }
+    if (!formData.animacion.vfx) {
+      errors.push("VFX es requerido");
+    }
+
+    // Validate Musica
+    if (!formData.musica.original) {
+      errors.push("Música original es requerida");
+    }
+    if (!formData.musica.soundALike) {
+      errors.push("Sound-alike es requerido");
+    }
+    if (!formData.musica.stock) {
+      errors.push("Stock es requerido");
+    }
+    if (!formData.musica.licencia) {
+      errors.push("Licencia es requerida");
+    }
+    if (!formData.musica.otro) {
+      errors.push("Otro es requerido");
+    }
+
+    // Validate Locutor
+    if (!formData.locutor.institucional) {
+      errors.push("Locutor institucional es requerido");
+    }
+    if (!formData.locutor.principal) {
+      errors.push("Locutor principal es requerido");
+    }
+    if (!formData.locutor.secundario) {
+      errors.push("Locutor secundario es requerido");
+    }
+    if (!formData.locutor.voces) {
+      errors.push("Voces es requerido");
+    }
+
+    if (!formData.notas?.text) {
+      errors.push("Las notas son requeridas");
+    }
+
+    setFieldErrors(newFieldErrors);
+
+    if (errors.length > 0) {
+      errors.forEach(error => toast.error(error));
+      return false;
+    }
+    return true;
+  };
+
+  const handleNext = () => {
+    if (validateForm()) {
+      handleSubmit('5');
+    }
+  };
 
 
   return (
@@ -58,6 +128,8 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="animacion.twoD"
                 value={formData.animacion.twoD}
                 onChange={handleChange}
+                error={fieldErrors['animacion.twoD']}
+                required
               />
               <Input
                 label="3D"
@@ -65,6 +137,8 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="animacion.threeD"
                 value={formData.animacion.threeD}
                 onChange={handleChange}
+                error={fieldErrors['animacion.threeD']}
+                required
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -74,6 +148,8 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="animacion.vfx"
                 value={formData.animacion.vfx}
                 onChange={handleChange}
+                error={fieldErrors['animacion.vfx']}
+                required
               />
               <Input
                 label="Descripción adicional"
@@ -95,6 +171,8 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="musica.original"
                 value={formData.musica.original}
                 onChange={handleChange}
+                error={fieldErrors['musica.original']}
+                required
               />
               <Input
                 label="Sound-alike"
@@ -102,6 +180,8 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="musica.soundALike"
                 value={formData.musica.soundALike}
                 onChange={handleChange}
+                error={fieldErrors['musica.soundALike']}
+                required
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -111,6 +191,8 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="musica.stock"
                 value={formData.musica.stock}
                 onChange={handleChange}
+                error={fieldErrors['musica.stock']}
+                required
               />
               <Input
                 label="Licencia"
@@ -118,6 +200,8 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="musica.licencia"
                 value={formData.musica.licencia}
                 onChange={handleChange}
+                error={fieldErrors['musica.licencia']}
+                required
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -127,6 +211,8 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="musica.otro"
                 value={formData.musica.otro}
                 onChange={handleChange}
+                error={fieldErrors['musica.otro']}
+                required
               />
               <Input
                 label="Descripción adicional"
@@ -148,6 +234,8 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="locutor.institucional"
                 value={formData.locutor.institucional}
                 onChange={handleChange}
+                error={fieldErrors['locutor.institucional']}
+                required
               />
               <Input
                 label="Principal"
@@ -155,6 +243,8 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="locutor.principal"
                 value={formData.locutor.principal}
                 onChange={handleChange}
+                error={fieldErrors['locutor.principal']}
+                required
               />
             </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -164,6 +254,8 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="locutor.secundario"
                 value={formData.locutor.secundario}
                 onChange={handleChange}
+                error={fieldErrors['locutor.secundario']}
+                required
               />
               <Input
                 label="Voces"
@@ -171,6 +263,8 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
                 name="locutor.voces"
                 value={formData.locutor.voces}
                 onChange={handleChange}
+                error={fieldErrors['locutor.voces']}
+                required
               />
             </div>
             <label htmlFor="locutor.descripcion">Descripción adicional</label>
@@ -197,20 +291,21 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
             />
           </div>
           <div>
-            <h2 className="text-xl font-bold mb-4">Notas</h2>
-            <textarea
-              placeholder="Escriba sus notas aquí"
-              className="border p-2 w-full"
+          <h2 className="text-xl font-bold mb-4">Notas <RequiredTag/></h2>
+            <Input
+              type="textarea" 
               name="notas.text"
               value={formData.notas?.text}
               onChange={handleChange}
+              error={fieldErrors['notas.text']}
+              placeholder="Escriba sus notas aquí"
+              required
             />
           </div>
           {/* Proposal uploader Section */}
           <div>
-            <h2 className="text-xl font-bold mb-4">Subir archivos adjuntos</h2>
+            <h2 className="text-xl font-bold mb-4">Subir archivos adjuntos <RequiredTag/></h2>
             <ProposalUploaderComponent identifier={"1"} onFilesChange={files} />
-
           </div>
         </div>
         {/* Botones */}
@@ -220,12 +315,12 @@ const PostulacionSteep4 = ({ formData, handleChange, handleSubmit, activeTab, se
             <button className="border border-red-500 text-red-500 px-4 py-2 rounded-lg hover:bg-red-50 transition" onClick={() => handleSubmit('3')}>
               Atras
             </button>
-            <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition" onClick={() => handleSubmit('5')}>
+            <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition" onClick={handleNext}>
               Enviar propuesta
             </button>
           </div>
         </div>
-
+<br />
 
       </div>
     </div>
