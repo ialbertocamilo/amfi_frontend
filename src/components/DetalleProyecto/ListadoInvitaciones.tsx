@@ -98,6 +98,7 @@ const ListadoInvitaciones = ({
   };
 
   const [isAdvertiser,] = useState(user?.user?.company?.type === CompanyType.Advertiser)
+  const canAccessComparative = allProposalsUploaded && (isAdvertiser || formData.unlockedForAgency);
 
   return (
     <>
@@ -108,25 +109,32 @@ const ListadoInvitaciones = ({
         <ul>
           <div className="space-y-4">
             {invitation.result?.map((invitation, index) => (
-              <div
-                key={index}
-                className={`flex justify-between items-center p-4 bg-white shadow-md rounded-lg space-y-4 hover:bg-gray-100 transition-transform duration-300 ease-in-out transform hover:-translate-y-1
-                    ${isAdvertiser || !disabled && invitation.proposalUploaded ? "cursor-pointer" : "cursor-not-allowed"}`}
-                onClick={(e) => doClick(e, invitation)}
-              >
-                <span className="text-gray-800 font-medium">
-                  {invitation.productionHouse?.name}
-                </span>
-                <div className="flex items-center space-x-20">
+              <>
+                <div className="flex flex-row gap-4">
+                <div
+                    key={index}
+                    className={`flex-1 flex justify-between items-center p-4 shadow-md rounded-lg 
+                      ${!disabled ? 'hover:bg-gray-100 transition-transform duration-300 ease-in-out transform hover:-translate-y-1' : ''}
+                      ${isAdvertiser || !disabled && invitation.proposalUploaded ? "cursor-pointer bg-white " : "cursor-not-allowed bg-gray-100"}`}
+                    onClick={(e) => doClick(e, invitation)}
+                  >
+                    <span className="text-gray-800 font-medium">
+                      {invitation.productionHouse?.name}
+                    </span>
+                    <div className="flex items-center space-x-20">
+                      <InvitationStatus status={invitation?.accepted} />
+                      <NextIcon />
+                    </div>
+                  </div>
+
                   <ProposalUploaded
                     className="proposal-uploaded"
                     isUploaded={invitation.proposalUploaded}
                     invitation={invitation}
+                    disabled={!(isAdvertiser || !disabled && invitation.proposalUploaded)}
                   />
-                  <InvitationStatus status={invitation?.accepted} />
-                  <NextIcon />
                 </div>
-              </div>
+              </>
             ))}
           </div>
         </ul>
@@ -188,20 +196,22 @@ const ListadoInvitaciones = ({
           </button>
         )}
 
-        <button
-          type="submit"
-          className={`w-1/4 mx-2 py-2 rounded-lg ${allProposalsUploaded ? 'bg-blue-500 text-white cursor-pointer' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-          onClick={goToComparative}
-          disabled={!allProposalsUploaded}
-          data-tooltip-id="comparative-button"
-        >
-          Comparativo
-        </button>
-        <Tooltip id="comparative-button" place="top">
-          {allProposalsUploaded
-            ? "Ver comparativo de propuestas"
-            : "Todas las propuestas deben estar subidas para acceder al comparativo"}
-        </Tooltip>
+<button
+        type="submit"
+        className={`w-1/4 mx-2 py-2 rounded-lg ${canAccessComparative ? 'bg-blue-500 text-white cursor-pointer' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+        onClick={goToComparative}
+        disabled={!canAccessComparative}
+        data-tooltip-id="comparative-button"
+      >
+        Comparativo
+      </button>
+      <Tooltip id="comparative-button" place="top">
+        {!allProposalsUploaded 
+          ? "Todas las propuestas deben estar subidas para acceder al comparativo"
+          : !formData.unlockedForAgency && !isAdvertiser 
+          ? "El anunciante debe desbloquear el acceso al comparativo"
+          : "Ver comparativo de propuestas"}
+      </Tooltip>
       </div>
     </>
   );

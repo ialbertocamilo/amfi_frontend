@@ -199,6 +199,7 @@ const ListaDeProyectos = () => {
                   className={"proposal-uploaded"}
                   isUploaded={projectInvitation.proposalUploaded}
                   invitation={projectInvitation}
+                  disabled={false}
                 />
                 <InvitationStatus status={projectInvitation.accepted} />
                 <ProjectStatusComponent

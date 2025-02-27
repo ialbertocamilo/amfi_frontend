@@ -1,7 +1,7 @@
+import { checkPermission } from "@/api/authorization";
 import { updateProjectById, updateProjectStatus } from "@/api/projectApi";
 import { formatToLocalTime } from "@/lib/utils";
 import { ProjectStatus } from "@/mappers/project.mapper";
-import { Role } from "@/mappers/user.mapper";
 import { useProjectContext } from "@/providers/project.context";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -9,7 +9,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import PlaybackControl from "../buttons/PlaybackButton";
 import ProjectStatusText from "../inputs/ProjectStatusText";
-import { checkPermission } from "@/api/authorization";
+import UnlockAgencyToggle from "../UnlockAgencyToggle";
 
 export const ProjectControl: React.FC = () => {
   const context = useProjectContext();
@@ -57,13 +57,7 @@ export const ProjectControl: React.FC = () => {
     [memoizedProject?.id, updateProjectStatus],
   );
 
-  const unlockForAgency = (e) => {
-    setUnlockedAgency(e.target.checked);
-    updateProjectById(project?.id as string, {
-      unlockedForAgency: e.target.checked,
-    });
-    context?.fetchProject(project?.id as string);
-  };
+
   const [displayStatus, setDisplayStatus] = useState(project?.status);
 
   useEffect(() => {
@@ -136,30 +130,14 @@ export const ProjectControl: React.FC = () => {
                       </div>
 
                       {enabledUnlockForAgency && (
-                        <div className="space-y-2 text-xs text-gray-500 font-mono">
-                          <div className="flex justify-between">
-                            <span className={"uppercase"}>
-                              Desbloquear agencia para manejo de proyecto
-                            </span>
-                            <label className="relative inline-flex items-center cursor-pointer">
-                              <input
-                                type="checkbox"
-                                className="sr-only peer"
-                                checked={unlockedAgency}
-                                onChange={unlockForAgency}
-                              />
-                              <div
-                                className="w-11 h-6 bg-gray-200 rounded-full peer 
-                                                    peer-focus:ring-4 peer-focus:ring-blue-300 
-                                                    peer-checked:after:translate-x-full peer-checked:after:border-white 
-                                                    after:content-[''] after:absolute after:top-0.5 after:left-[2px] 
-                                                    after:bg-white after:border-gray-300 after:border after:rounded-full 
-                                                    after:h-5 after:w-5 after:transition-all
-                                                    peer-checked:bg-blue-600"
-                              ></div>
-                            </label>
-                          </div>
-                        </div>
+                        <UnlockAgencyToggle
+                          projectId={project?.id as string}
+                          unlockedForAgency={project?.unlockedForAgency || false}
+                          onUnlockChange={(newValue) => {
+                            setUnlockedAgency(newValue);
+                            context?.fetchProject(project?.id as string);
+                          }}
+                        />
                       )}
                     </div>
                   </div>

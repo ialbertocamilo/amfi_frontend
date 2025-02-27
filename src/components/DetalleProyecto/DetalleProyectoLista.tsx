@@ -6,19 +6,21 @@ import {
   updateProjectStatus,
 } from "@/api/projectApi";
 import Loader from "@/components/Loader";
+import { CompanyType } from "@/constants";
 import useLoader from "@/hooks/loader.hook";
 import { formatUtcToLocalDate } from "@/lib/utils";
 import { ProjectMapper, ProjectStatus } from "@/mappers/project.mapper";
+import { useUserContext } from "@/providers/user.context";
+import { RefreshCw } from "lucide-react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Tooltip } from "react-tooltip";
 import ProjectStatusText from "../inputs/ProjectStatusText";
+import UnlockAgencyToggle from "../UnlockAgencyToggle";
 import { EvaluationScore } from "./Comparacion";
 import ListadoInvitaciones from "./ListadoInvitaciones";
-import { useUserContext } from "@/providers/user.context";
-import { CompanyType } from "@/constants";
 
 interface ProjectDetailsProps {
   id: string;
@@ -29,6 +31,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
 
   const userContext = useUserContext();
   const user = userContext?.user;
+  const isAdvertiser = user?.company?.type === CompanyType.Advertiser;
   const [invitationData, setInvitationData] =
     useState<InvitedDirectorsResponse>({
       result: [],
@@ -160,9 +163,18 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
         )}
         <div className="flex flex-col border-b">
           <div className="flex justify-between items-center pb-4">
-            <h1 className="text-xl font-semibold">
-              {formData?.nombreProyecto}
-            </h1>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl font-semibold">
+                {formData?.nombreProyecto}
+              </h1>
+              <button
+                onClick={() => onInit()}
+                className="p-2 rounded-full bg-blue-50 text-blue-500 hover:bg-blue-100 transform transition-all duration-200 hover:scale-110 active:scale-95"
+                title="Recargar datos del proyecto"
+              >
+                <RefreshCw className="w-5 h-5" />
+              </button>
+            </div>
             <div className={"flex flex-col"}>
               <ProjectStatusText status={formData?.status as ProjectStatus} />
             </div>
@@ -180,6 +192,17 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
               <p className="text-sm font-medium text-gray-600 pb-2">
                 Anunciante: {formData?.anunciante}
               </p>
+
+        {isAdvertiser && (
+          <UnlockAgencyToggle
+            projectId={id}
+            unlockedForAgency={formData.unlockedForAgency}
+            onUnlockChange={(newValue) => {
+              setUnlocked(newValue);
+              setFormData(prev => ({ ...prev, unlockedForAgency: newValue }));
+            }}
+          />
+        )}
             </div>
             <div>
               <p className=" text-sm font-medium text-gray-600 pb-2">

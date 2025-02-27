@@ -221,37 +221,47 @@ const PostulacionProceso: React.FC = () => {
     if (page == "5") {
       if (!validateFormData(formData)) return;
       setLoading(true);
-      updateProjectInvitation(projectInvitationId as string, {
-        budget: {
-          preAndPro: formData.presupuesto.preYPro ? parseFloat(formData.presupuesto.preYPro) : 0,
-          talent: formData.presupuesto.talento ? parseFloat(formData.presupuesto.talento) : 0,
-          equipment: formData.presupuesto.equipo ? parseFloat(formData.presupuesto.equipo) : 0,
-          location: formData.presupuesto.setLocacion ? parseFloat(formData.presupuesto.setLocacion) : 0,
-          travel: formData.presupuesto.viajes ? parseFloat(formData.presupuesto.viajes) : 0,
-          postProduction: formData.presupuesto.postProduccion ? parseFloat(formData.presupuesto.postProduccion) : 0,
-          financing: formData.presupuesto.total ? parseFloat(formData.presupuesto.total) : 0,
-          insurance: formData.presupuesto.personal ? parseFloat(formData.presupuesto.personal) : 0,
-          crew: formData.crew.cantidadTotal ? parseFloat(formData.crew.cantidadTotal) : 0,
-          stillPhotography: formData.presupuesto.fotoFija ? parseFloat(formData.presupuesto.fotoFija) : 0,
-          overhead: formData.presupuesto.digital ? parseFloat(formData.presupuesto.digital) : 0,
-          markUp: formData.presupuesto.markUp ? parseFloat(formData.presupuesto.markUp) : 0,
-        },
-      })
 
-      submitPostulation({
-        projectId: project?.id as string,
-        metadata: formData,
-      }, files)
-        .then(() => {
-          toast.success("La postulación ha sido enviada correctamente");
-        })
-        .catch((error) => {
-          console.warn(error);
-          toast.error("Ocurrió un error al enviar la postulación");
-        })
-        .finally(() => {
-          setLoading(false);
+      try {
+        await updateProjectInvitation(projectInvitationId as string, {
+          budget: {
+            preAndPro: formData.presupuesto.preYPro ? parseFloat(formData.presupuesto.preYPro) : 0,
+            talent: formData.presupuesto.talento ? parseFloat(formData.presupuesto.talento) : 0,
+            equipment: formData.presupuesto.equipo ? parseFloat(formData.presupuesto.equipo) : 0,
+            location: formData.presupuesto.setLocacion ? parseFloat(formData.presupuesto.setLocacion) : 0,
+            travel: formData.presupuesto.viajes ? parseFloat(formData.presupuesto.viajes) : 0,
+            postProduction: formData.presupuesto.postProduccion ? parseFloat(formData.presupuesto.postProduccion) : 0,
+            financing: formData.presupuesto.total ? parseFloat(formData.presupuesto.total) : 0,
+            insurance: formData.presupuesto.personal ? parseFloat(formData.presupuesto.personal) : 0,
+            crew: formData.crew.cantidadTotal ? parseFloat(formData.crew.cantidadTotal) : 0,
+            stillPhotography: formData.presupuesto.fotoFija ? parseFloat(formData.presupuesto.fotoFija) : 0,
+            overhead: formData.presupuesto.digital ? parseFloat(formData.presupuesto.digital) : 0,
+            markUp: formData.presupuesto.markUp ? parseFloat(formData.presupuesto.markUp) : 0,
+          },
+        }).then(async (response) => {
+          if (response) {
+            toast.success("El presupuesto ha sido actualizado correctamente");
+
+            const result = await submitPostulation({
+              projectId: project?.id as string,
+              metadata: formData,
+            }, files);
+            if (result) {
+              toast.success("La postulación ha sido enviada correctamente");
+            }
+          }
         });
+
+        setActiveTab(page);
+      } catch (error) {
+        console.warn(error);
+        toast.error("Ocurrió un error al enviar la postulación");
+        setActiveTab("4");
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setActiveTab(page);
     }
     setActiveTab(page);
   };
