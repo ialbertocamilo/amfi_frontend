@@ -68,7 +68,41 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
     return end.diff(now, "days");
   };
 
+  const isBidDeadlinePassed = (deadline: string) => {
+    return moment().isAfter(moment(deadline));
+  };
+
   const [remainingDays, setRemainingDays] = useState(0);
+  const [countdown, setCountdown] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  });
+
+  const updateCountdown = (deadline: string) => {
+    const now = moment();
+    const end = moment(deadline);
+    const duration = moment.duration(end.diff(now));
+
+    setCountdown({
+      days: Math.floor(duration.asDays()),
+      hours: duration.hours(),
+      minutes: duration.minutes(),
+      seconds: duration.seconds()
+    });
+  };
+
+  useEffect(() => {
+    if (formData.entregaBidLetter) {
+      const timer = setInterval(() => {
+        updateCountdown(formData.entregaBidLetter);
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [formData.entregaBidLetter]);
+
   const onInit = async () => {
     setLoading(true);
     const projectData = await getProjectById(id);
@@ -102,12 +136,14 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
           "",
       });
     }
-    console.log(!!projectData?.unlockedForAgency ||
-      (CompanyType.Agency === user?.company?.type && !!projectData?.unlockedForAgency));
+    
+    const deadlinePassed = isBidDeadlinePassed(projectData?.bidDeadline as string);
     setUnlocked(
-      !!projectData?.unlockedForAgency ||
+      (isAdvertiser && deadlinePassed) ||
+      (!isAdvertiser && !!projectData?.unlockedForAgency) ||
       (CompanyType.Agency === user?.company?.type && !!projectData?.unlockedForAgency)
     );
+
     setRemainingDays(
       calculateRemainingDays(projectData?.bidDeadline as string),
     );
@@ -197,11 +233,12 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
             </div>
             <div>
               <p className=" text-sm font-medium text-gray-600 pb-2">
-                Fecha limite de entrega de ofertas: {formData?.entregaBidLetter}
+                Fecha limite de entrega de propuestas: {formData?.entregaBidLetter}
                 <span className="invitation-bid-deadline text-sm font-medium text-red-600 pb-2 cursor-pointer">
                   ℹ️
                 </span>
               </p>
+ 
               <p className="text-sm font-medium text-gray-600 pb-2">
                 Creado: {formData?.creado}
               </p>

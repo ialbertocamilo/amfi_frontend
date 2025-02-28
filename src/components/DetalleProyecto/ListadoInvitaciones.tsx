@@ -30,6 +30,11 @@ const ListadoInvitaciones = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
+  const isDeadlinePassed = () => {
+    const deliveryDeadline = new Date(formData.fechaLimiteEntrega);
+    const now = new Date();
+    return now >= deliveryDeadline;
+  };
 
   const handleSendReminderClick = () => {
     if (!disabled) {
@@ -80,7 +85,14 @@ const ListadoInvitaciones = ({
     e: React.MouseEvent<HTMLDivElement>,
     invitation: IProjectInvitation,
   ) => {
-    if ((user?.user?.company?.type === CompanyType.Advertiser) || !disabled && invitation.proposalUploaded) {
+    if (user?.user?.company?.type === CompanyType.Advertiser) {
+      if (!isDeadlinePassed()) {
+        e.preventDefault();
+        toast.error("No se puede acceder a la propuesta hasta la fecha límite de entrega");
+        return;
+      }
+    }
+    if (!disabled && invitation.proposalUploaded) {
       router.push(`/evaluacion?projectInvitationId=${invitation.id}&projectId=${projectId}`);
     } else {
       e.preventDefault();
@@ -115,7 +127,7 @@ const ListadoInvitaciones = ({
                     key={index}
                     className={`flex-1 flex justify-between items-center p-4 shadow-md rounded-lg 
                       ${!disabled ? 'hover:bg-gray-100 transition-transform duration-300 ease-in-out transform hover:-translate-y-1' : ''}
-                      ${isAdvertiser || !disabled && invitation.proposalUploaded ? "cursor-pointer bg-white " : "cursor-not-allowed bg-gray-100"}`}
+                      ${(isAdvertiser && isDeadlinePassed()) || (!isAdvertiser && !disabled && invitation.proposalUploaded) ? "cursor-pointer bg-white" : "cursor-not-allowed bg-gray-100"}`}
                     onClick={(e) => doClick(e, invitation)}
                   >
                     <span className="text-gray-800 font-medium">
@@ -131,7 +143,7 @@ const ListadoInvitaciones = ({
                     className="proposal-uploaded"
                     isUploaded={invitation.proposalUploaded}
                     invitation={invitation}
-                    disabled={!(isAdvertiser || !disabled && invitation.proposalUploaded)}
+                    disabled={!((!isAdvertiser && !disabled && invitation.proposalUploaded) || (isAdvertiser && isDeadlinePassed()))}
                   />
                 </div>
               </>

@@ -171,7 +171,7 @@ export const formatUtcToLocalDate = (isoDate: string): string => {
     return "-";
   }
 
-  return moment.utc(isoDate).local().format("DD/MM/YYYY");
+  return moment.utc(isoDate).local().format("DD/MM/YYYY HH:mm");
 };
 
 export const formatToUtcBackend = (isoDate: string): Date => {
