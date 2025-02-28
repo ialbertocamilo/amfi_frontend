@@ -5,6 +5,8 @@ import RequiredTag from "../Proyecto/RequiredTag";
 import { toast } from "react-hot-toast";
 import { createSectionValidator, createFormValidator } from "@/utils/validationUtils";
 import { useEffect } from "react";
+import { IDirector } from "@/interfaces/director.interface";
+import { getAllDirectorByProductionHouse } from "@/api/directorApi";
 
 interface registroEntity {
   formData: any;
@@ -13,6 +15,8 @@ interface registroEntity {
   activeTab: string;
   setactiveTab: any;
   isEditing?: boolean;
+  director?: IDirector
+  directors?: IDirector[]
 }
 
 const PostulacionSteep1 = ({
@@ -20,9 +24,11 @@ const PostulacionSteep1 = ({
   handleChange,
   handleSubmit,
   activeTab,
-  setactiveTab,
+  setactiveTab,directors,
+  director
 }: registroEntity) => {
   const router = useRouter();
+
 
   const validatePresupuesto = createSectionValidator(formData, 'presupuesto', {
     total: "Total del presupuesto",
@@ -344,13 +350,37 @@ const PostulacionSteep1 = ({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label>Dirección <RequiredTag /></label>
-              <input
-                type="text"
+              <select
                 className="border p-2 w-full rounded-lg"
                 name="crew.direccion"
-                value={formData.crew.direccion}
-                onChange={handleChange}
-              />
+                value={formData.crew.direccion?.id || ""}
+                onChange={(e) => {
+                  const selectedDirector = directors?.find(dir => dir.id === e.target.value);
+                  handleChange({
+                    target: {
+                      name: "crew.direccion",
+                      value: selectedDirector || ""
+                    }
+                  });
+                }}
+              >
+                <option value="">Seleccione un director</option>
+                {directors?.map((dir: IDirector) => (
+                  <option key={dir.id} value={dir.id}>
+                    {dir.name} {dir.lastname}
+                  </option>
+                ))}
+              </select>
+                <span className={`block text-sm ${
+                formData.crew.direccion?.id === director?.id
+                  ? 'text-green-500 font-medium flex items-center gap-1' 
+                  : 'text-gray-500'
+                }`}>
+                Director sugerido: {director?.name} {director?.lastname}
+                {formData.crew.direccion?.id === director?.id && 
+                  <FaCheck className="inline-block" size={12} />
+                }
+                </span>
             </div>
             <div>
               <label>Dirección de fotografía <RequiredTag /></label>

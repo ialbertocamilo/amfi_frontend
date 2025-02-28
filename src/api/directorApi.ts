@@ -1,4 +1,5 @@
 import {CreateDirectorDto} from "@/dto/create-director.dto";
+import { IDirector } from "@/interfaces/director.interface";
 import { IProjectInvitation } from "@/interfaces/project-director.interface";
 import api from "@/lib/api";
 
@@ -47,6 +48,21 @@ export const getInvitedDirectors = async (projectId: string) => {
         return response.data?.result as IProjectInvitation[];
     } catch (error: any) {
         console.warn(error?.response?.data?.message || 'Error fetching invited directors');
+        return [];
+    }
+};
+
+
+export const getAllDirectorByProductionHouse = async (productionHouseId: string) : Promise<IDirector[]>=> {
+    try {
+        const response = await api.get(`/director/getAll/${productionHouseId}`);
+        const directors= response.data?.companyDirectors 
+
+        return directors.map((director) => {
+            return director?.director
+        })
+    } catch (error: any) {
+        console.warn(error?.response?.data?.message || 'Error fetching directors by production house');
         return [];
     }
 };

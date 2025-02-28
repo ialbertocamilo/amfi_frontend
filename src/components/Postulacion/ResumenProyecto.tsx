@@ -38,7 +38,6 @@ const ResumenProyecto: React.FC<ResumenProyectoProps> = ({ data }) => {
           <p>Política de pago: {data?.politicaPago}</p>
           <p>Proceso de facturación: {data?.procesoFacturacion}</p>
           <p>Contrato de proyecto: {data?.contratoProyecto}</p>
-          <p>Anticipo: {data?.porcentajeTasaAnticipo}%</p>
           <p>Ronda de cotización:{data?.rondaCotizacion}</p>
           <p>Política de alta al proveedor: {data?.politicaAltaProveedor}</p>
         </div>

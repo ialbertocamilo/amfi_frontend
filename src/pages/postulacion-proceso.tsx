@@ -20,6 +20,11 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import "./globals.css";
 import { useFormValidation } from '@/hooks/useFormValidation';
+import { IDirector } from "@/interfaces/director.interface";
+import { getAllDirectorByProductionHouse } from "@/api/directorApi";
+import { FileText } from "lucide-react";
+import ProposalUploaderComponent from "@/components/ProposalUploaderComponent";
+import { ProposalUploaded } from "@/components/buttons/ProposalUploadedButton";
 
 //?projectInvitationId=
 const PostulacionProceso: React.FC = () => {
@@ -149,35 +154,49 @@ const PostulacionProceso: React.FC = () => {
   }, [project, router]);
 
 
+  const [director, setDirector] = useState<IDirector>();
+  const [directors, setDirectors] = useState<IDirector[]>();
+  const [error, setError] = useState<string | null>(null);
+
   const processCheckInvitation = async () => {
-    setLoading(true);
-    const data = await getInvitationById(projectInvitationId as string);
-    if (data?.result?.proposalUploaded) setActiveTab("5");
-    const projectId = data?.result?.project?.id as string;
-    setProject(data?.result?.project);
-    if (projectId)
-      checkInvitationStatus(projectId)
-        .then((response) => {
-          if (response) {
-            setProjectName(response?.result?.project?.name);
-            setBidDeadline(response?.result?.project?.bidDeadline);
-          }
-        })
-        .catch((error) => {
-          // Si la invitacion no fue aceptada
-          if (error?.response?.data?.serverCodeError === 20) {
-            router.push(
-              "/postulacion-directa?projectInvitationId=" + data?.result?.id,
-            );
-          }
-          manageLogicError(error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    else
-      router.back();
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await getInvitationById(projectInvitationId as string);
+      if (!data?.result) {
+        throw new Error('No se pudo obtener la información de la invitación');
+      }
+      
+      if (data?.result?.proposalUploaded) setActiveTab("5");
+      setDirector(data?.result?.director)
+      
+      const directors = await getAllDirectorByProductionHouse(data?.result?.productionHouse?.id as string)
+      setDirectors(directors);
+  
+      const projectId = data?.result?.project?.id;
+      if (!projectId) {
+        throw new Error('ID del proyecto no encontrado');
+      }
+      
+      setProject(data?.result?.project);
+      const response = await checkInvitationStatus(projectId);
+      
+      if (response?.result?.project) {
+        setProjectName(response.result.project.name || '');
+        setBidDeadline(response.result.project.bidDeadline || '');
+      }
+    } catch (error: any) {
+      if (error?.response?.data?.serverCodeError === 20) {
+        router.push("/postulacion-directa?projectInvitationId=" + projectInvitationId);
+        return;
+      }
+      setError(error.message || 'Ocurrió un error al procesar la invitación');
+      manageLogicError(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   useEffect(() => {
     if (projectInvitationId) processCheckInvitation();
   }, [projectInvitationId]);
@@ -226,7 +245,7 @@ const PostulacionProceso: React.FC = () => {
             if (!files || files.length === 0) {
               toast.error("Debe subir al menos un archivo adjunto");
             }
-        
+
             const result = await submitPostulation({
               projectId: project?.id as string,
               metadata: formData,
@@ -295,66 +314,82 @@ const PostulacionProceso: React.FC = () => {
   return (
     <Layout>
       <Loader loading={loading}>
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">Proyecto</h1>
-          {bidDeadline && (
-            <div className={`px-4 py-2 rounded-lg ${isDeadlinePassed ? 'bg-red-100 text-red-600' : isLessThanOneHour ? 'bg-red-100 text-red-600' : moment().add(2, 'days').isAfter(bidDeadline) ? 'bg-yellow-100 text-yellow-600' : 'bg-green-100 text-green-600'}`}>
-              <span>{countdown}</span>
+        {error ? (
+          <div className="p-4 text-red-600 bg-red-100 rounded-md">
+            {error}
+          </div>
+        ) : (
+          <>
+            <div className="flex items-center justify-between mb-6">
+              <h1 className="text-2xl font-bold">Proyecto</h1>
+              {bidDeadline && (
+                <div className={`px-4 py-2 rounded-lg ${isDeadlinePassed ? 'bg-red-100 text-red-600' : isLessThanOneHour ? 'bg-red-100 text-red-600' : moment().add(2, 'days').isAfter(bidDeadline) ? 'bg-yellow-100 text-yellow-600' : 'bg-green-100 text-green-600'}`}>
+                  <span>{countdown}</span>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <div className="flex justify-end mb-4">
-          <button className="bg-green-500 hover:bg-green-600 border text-white font-bold py-2 px-4 rounded" onClick={() => router.push(`/consulta-brief?projectInvitationId=${projectInvitationId}`)}>
-            Consultar Brief
-          </button>
-        </div>
-        <div className="text-sm text-gray-500 ">
-          <span>Lista de Proyectos</span> {">"} <span>{projectName}</span> {">"}{" "}
-          <span>Postular</span>
-        </div>
-
-        <div className="tabs flex justify-center">
-          <StepIndicatorForPostulation activeTab={activeTab} setactiveTab={setActiveTab} />
-        </div>
-        {activeTab === "1" && (
-          <PostulacionSteep1
-            formData={formData}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            activeTab={activeTab}
-            setactiveTab={setActiveTab}
-          />
+            <div className="flex justify-end mb-4">
+                <button
+                className={`proposal-uploaded flex justify-between items-center p-4 shadow-md rounded-lg w-48 h-14 hover:bg-green-600 text-white transition-transform duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer bg-green-500 font-medium`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.open(`/consulta-brief?projectInvitationId=${projectInvitationId}`, '_blank');
+                }}>
+                <FileText className="w-5 h-5 text-white" />
+                <span>Consultar Brief</span>
+                </button>
+            </div>
+            <div className="text-sm text-gray-500 ">
+              <span>Lista de Proyectos</span> {">"} <span>{projectName}</span> {">"}{" "}
+              <span>Postular</span>
+            </div>
+    
+            <div className="tabs flex justify-center">
+              <StepIndicatorForPostulation activeTab={activeTab} setactiveTab={setActiveTab} />
+            </div>
+            {activeTab === "1" && (
+              <PostulacionSteep1
+                formData={formData}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                activeTab={activeTab}
+                setactiveTab={setActiveTab}
+                director={director}
+                directors={directors}
+              />
+            )}
+            {activeTab === "2" && (
+              <PostulacionSteep2
+                formData={formData}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                activeTab={activeTab}
+                setactiveTab={setActiveTab}
+              />
+            )}
+            {activeTab === "3" && (
+              <PostulacionSteep3
+                formData={formData}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                activeTab={activeTab}
+                setactiveTab={setActiveTab}
+              />
+            )}
+            {activeTab === "4" && (
+              <PostulacionSteep4
+                formData={formData}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                activeTab={activeTab}
+                setactiveTab={setActiveTab}
+                files={onLoadFiles}
+              />
+            )}
+    
+            {activeTab === "5" && <PostulacionConfirmacionFinal />}
+          </>
         )}
-        {activeTab === "2" && (
-          <PostulacionSteep2
-            formData={formData}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            activeTab={activeTab}
-            setactiveTab={setActiveTab}
-          />
-        )}
-        {activeTab === "3" && (
-          <PostulacionSteep3
-            formData={formData}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            activeTab={activeTab}
-            setactiveTab={setActiveTab}
-          />
-        )}
-        {activeTab === "4" && (
-          <PostulacionSteep4
-            formData={formData}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            activeTab={activeTab}
-            setactiveTab={setActiveTab}
-            files={onLoadFiles}
-          />
-        )}
-
-        {activeTab === "5" && <PostulacionConfirmacionFinal />}
       </Loader>
     </Layout>
   );

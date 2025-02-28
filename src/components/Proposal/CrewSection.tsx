@@ -5,7 +5,7 @@ export function CrewSection({ data }: { data: any }) {
         <div className="grid grid-cols-2 gap-6">
           <div>
             <h3 className="text-sm font-medium text-gray-500 mb-2">Dirección</h3>
-            <p className="text-gray-800">{data?.crew?.direccion}</p>
+            <p className="text-gray-800">{data?.crew?.direccion?.name} {data?.crew?.direccion?.lastname}</p>
           </div>
           <div>
             <h3 className="text-sm font-medium text-gray-500 mb-2">Dirección de Fotografía</h3>

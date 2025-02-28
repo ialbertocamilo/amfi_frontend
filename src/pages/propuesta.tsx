@@ -35,7 +35,6 @@ const Propuesta = () => {
           setProductionHouse(data?.postulation?.projectInvitation?.productionHouse);
           setPostulation(data.postulation.metadata);
           setFiles(data.files);
-          console.log(data)
         })
         .catch((error) => {
           manageLogicError(error);
@@ -61,7 +60,7 @@ const Propuesta = () => {
           </button>
         </div>
         <div ref={targetRef}>
-          <ProposalPDF data={postulation} productionHouse={productionHouse} />
+          <ProposalPDF data={postulation} productionHouse={productionHouse} files={files}/>
         </div>
       </Loader>
     </Layout>

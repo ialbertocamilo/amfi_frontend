@@ -25,7 +25,6 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
       { field: 'interior', label: 'Interior' },
       { field: 'exterior', label: 'Exterior' },
       { field: 'cantidad', label: 'Cantidad' },
-      { field: 'descripcion', label: 'Descripción' }
     ];
 
     locacionesFields.forEach(({ field, label }) => {
@@ -40,7 +39,6 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
       { field: 'produccion', label: 'Producción' },
       { field: 'vuelos', label: 'Vuelos' },
       { field: 'foraneo', label: 'Foráneo' },
-      { field: 'descripcion', label: 'Descripción' }
     ];
 
     transporteFields.forEach(({ field, label }) => {
@@ -57,7 +55,6 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
       { field: 'online', label: 'Online' },
       { field: 'masterizacion', label: 'Masterización' },
       { field: 'cc', label: 'CC' },
-      { field: 'descripcion', label: 'Descripción' }
     ];
 
     postproduccionFields.forEach(({ field, label }) => {
@@ -153,7 +150,6 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
                 value={formData.locaciones?.descripcion || ''}
                 onChange={handleChange}
                 error={fieldErrors['locaciones.descripcion']}
-                required
               />
             </div>
           </div>
@@ -272,7 +268,6 @@ const PostulacionSteep3 = ({ formData, handleChange, handleSubmit, activeTab, se
               name="postproduccion.descripcion" 
               value={formData.postproduccion?.descripcion} 
               error={fieldErrors['postproduccion.descripcion']}
-              required
             />
           </div>
         
