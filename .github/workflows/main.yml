@@ -16,8 +16,8 @@ env:
   REGISTRY: ghcr.io
   REGISTRY_USERNAME: ${{ github.actor }}
   REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-  SERVICE_NAME: bytestone_licitaciones_api
-  REPOSITORY_NAME: backend
+  SERVICE_NAME: bytestone_licitaciones_web
+  REPOSITORY_NAME: amfi_frontend
 
 jobs:
   build:
