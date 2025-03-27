@@ -11,7 +11,7 @@ import useLoader from "@/hooks/loader.hook";
 import { formatUtcToLocalDate } from "@/lib/utils";
 import { ProjectMapper, ProjectStatus } from "@/mappers/project.mapper";
 import { useUserContext } from "@/providers/user.context";
-import { Divide, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -21,7 +21,7 @@ import ProjectStatusText from "../inputs/ProjectStatusText";
 import UnlockAgencyToggle from "../UnlockAgencyToggle";
 import { EvaluationScore } from "./Comparacion";
 import ListadoInvitaciones from "./ListadoInvitaciones";
-import Divider from "../Divider";
+import CustomModal from "../CustomModal";
 
 interface ProjectDetailsProps {
   id: string;
@@ -136,7 +136,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
           "",
       });
     }
-    
+
     const deadlinePassed = isBidDeadlinePassed(projectData?.bidDeadline as string);
     setUnlocked(
       (isAdvertiser && deadlinePassed) ||
@@ -172,10 +172,19 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
 
   const router = useRouter();
   const closeProject = () => {
+    setIsCloseModalOpen(true);
+  };
+
+  const handleCloseConfirm = () => {
     updateProjectStatus(id as string, ProjectStatus.Closed).then(() => {
       toast.success("Convocatoria cerrada");
       router.push("/lista-de-proyectos-admin");
     });
+    setIsCloseModalOpen(false);
+  };
+
+  const handleCloseCancel = () => {
+    setIsCloseModalOpen(false);
   };
 
   useEffect(() => {
@@ -189,6 +198,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
   };
 
   const { loading, setLoading } = useLoader(false);
+  const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
 
   return (
     <Loader loading={loading}>
@@ -238,7 +248,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
                   ℹ️
                 </span>
               </p>
- 
+
               <p className="text-sm font-medium text-gray-600 pb-2">
                 Creado: {formData?.creado}
               </p>
@@ -255,7 +265,7 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
             }}
           />
         )}
-<hr />
+        <hr />
         <Tooltip anchorSelect=".invitation-bid-deadline" place={"bottom"}>
           Restan {remainingDays} días para finalizar con la entrega.
         </Tooltip>
@@ -269,8 +279,18 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ id }) => {
           projectId={id}
         ></ListadoInvitaciones>
       </div>
+      <CustomModal
+        title="Cerrar proyecto"
+        message="¿Estás seguro que deseas cerrar este proyecto?"
+        confirmText="Sí, cerrar"
+        cancelText="No, cancelar"
+        onConfirm={handleCloseConfirm}
+        onCancel={handleCloseCancel}
+        isOpen={isCloseModalOpen}
+        isDanger
+      />
     </Loader>
   );
-};
 
+};
 export default ProjectDetails;

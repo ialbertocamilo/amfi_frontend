@@ -131,11 +131,12 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
       label: "¿La empresa está afiliada a alguna asociación?",
       value: null,
     },
-    {
-      key: "companyYearsInMarket",
-      label: "¿Cuántos años en el mercado tiene la empresa?",
-      value: null,
-    },
+    // TODO : completa companyYearsInMarket debe traerse de la company 
+    // {
+    //   key: "companyYearsInMarket",
+    //   label: "¿Cuántos años en el mercado tiene la empresa?",
+    //   value: null,
+    // },
     {
       key: "negativeReportsExist",
       label: "¿Se tienen algún reporte negativo de la empresa?",
@@ -177,6 +178,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
   });
 
   const [hideSection, setHideSection] = useState(true);
+const [allBudgetsSubmitted, setAllBudgetsSubmitted] = useState(false);
 
   const updateEvaluation = (
     proposal: ProposalItem[] | QuestionItem[],
@@ -235,11 +237,14 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
     }
 
     if (budget) {
+      console.log("budget", budget);  
       setBudget(budget);
       const totalBudget = Object.values(budget).reduce(
         (acc, value) => acc + value,
         0,
       );
+      // Check if all production houses have submitted budgets
+      setAllBudgetsSubmitted(true); // TODO: Replace with actual API check
 
       calculatedEvaluationScore.budget = calculateBudgetScore(
         totalBudget,
@@ -499,7 +504,7 @@ const Evaluacion: React.FC<EvaluacionProps> = ({
               <InfoLink label="Ver puntaje de sección"></InfoLink>
             </ScoreModal>
           </div>
-          {hideSection ? (
+          {!allBudgetsSubmitted || hideSection ? (
             <div className="mt-4">
               <div className="flex justify-center">
                 <img

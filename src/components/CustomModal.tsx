@@ -10,6 +10,7 @@ interface CustomModalProps {
   cancelText?: string;
   onConfirm: () => void;
   onCancel?: () => void;
+  isDanger?: boolean;
 }
 
 const CustomModal: React.FC<CustomModalProps> = ({
@@ -20,6 +21,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
   cancelText,
   onConfirm,
   onCancel,
+  isDanger
 }) => {
   return ( // @ts-ignore
     <Modal
@@ -74,7 +76,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
 
         <button
           onClick={onConfirm}
-          className="px-5 py-2.5  text-white border-none rounded cursor-pointer bg-[var(--color-primary)] "
+          className={`px-5 py-2.5 text-white border-none rounded cursor-pointer ${isDanger ? 'bg-red-500 hover:bg-red-600' : 'bg-[var(--color-primary)]'}`}
         >
           {confirmText}
         </button>

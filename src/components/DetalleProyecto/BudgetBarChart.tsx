@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Bar } from "react-chartjs-2";
+import { Budget } from "@/api/interface/api.interface";
+import { formatToMxn } from "@/lib/utils";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
-import { Budget } from "@/api/interface/api.interface";
-import { formatToCurrency, formatToMxn } from "@/lib/utils";
+import React from "react";
+import { Bar } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
@@ -83,7 +83,8 @@ const BudgetBarChart: React.FC<BudgetBarChartProps> = ({ budget }) => {
   ];
 
   const budgetData = keys.map((key) => budget[key]);
-  const totalBudget = budgetData.reduce((acc, curr) => acc + curr, 0);
+  console.log("budgetData",budget?.financing);
+  const totalBudget = budget?.financing;
 
   const chartData = {
     labels: addEmptyData(labels, FILL_NUMBER) as string[],
