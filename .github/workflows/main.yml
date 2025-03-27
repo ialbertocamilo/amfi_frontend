@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 env:
-  IMAGE_NAME: licitaciones_backend
+  IMAGE_NAME: licitaciones_web
   IMAGE_TAG: prod
   REGISTRY: ghcr.io
   REGISTRY_USERNAME: ${{ github.actor }}
