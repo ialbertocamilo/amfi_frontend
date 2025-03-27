@@ -2,7 +2,7 @@ FROM node:20-alpine AS build
 
 
 WORKDIR /web
-ENV NEXT_PUBLIC_SOCKET_URL="https://licitaciones-api.svgdev.tech/api"
+ENV NEXT_PUBLIC_SOCKET_URL="https://licitaciones-api.svgdev.tech"
 ENV NEXT_PUBLIC_PAYPAL_CLIENT="Aeb-2z3_4M276SYVYSo_nYlraIWuZkDkuc64U9ZEZJsOodEVFDuv72K2DCYUv0meHgVX2__8JlzzcwDc"
 COPY package*.json ./
 RUN yarn
