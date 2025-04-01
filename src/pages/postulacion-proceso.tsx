@@ -1,3 +1,4 @@
+import { getAllDirectorByProductionHouse } from "@/api/directorApi";
 import {
   checkInvitationStatus,
   getInvitationById,
@@ -12,23 +13,23 @@ import PostulacionSteep2 from "@/components/Postulacion/PostulacionSteep2";
 import PostulacionSteep3 from "@/components/Postulacion/PostulacionSteep3";
 import PostulacionSteep4 from "@/components/Postulacion/PostulacionSteep4";
 import StepIndicatorForPostulation from "@/components/Proyecto/StepIndicator/StepIndicatorForPostulation";
+import { useFormValidation } from '@/hooks/useFormValidation';
+import { IDirector } from "@/interfaces/director.interface";
 import { IProject } from "@/interfaces/project.interface";
 import { manageLogicError } from "@/lib/utils";
+import { ProjectStatus } from "@/mappers/project.mapper";
+import { FileText } from "lucide-react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import Confetti from 'react-confetti';
 import toast from "react-hot-toast";
 import "./globals.css";
-import { useFormValidation } from '@/hooks/useFormValidation';
-import { IDirector } from "@/interfaces/director.interface";
-import { getAllDirectorByProductionHouse } from "@/api/directorApi";
-import { FileText } from "lucide-react";
-import ProposalUploaderComponent from "@/components/ProposalUploaderComponent";
-import { ProposalUploaded } from "@/components/buttons/ProposalUploadedButton";
 
 //?projectInvitationId=
 const PostulacionProceso: React.FC = () => {
   const { validate } = useFormValidation();
+  const [isWinner, setIsWinner] = useState(false);
 
   const [formData, setFormData] = useState({
     talento: {
@@ -166,21 +167,28 @@ const PostulacionProceso: React.FC = () => {
       if (!data?.result) {
         throw new Error('No se pudo obtener la información de la invitación');
       }
-      
+
+      if (data?.result?.status === ProjectStatus.Finished) {
+        toast.error("Este proyecto ha finalizado");
+        if (data?.result?.isWinner) {
+          setIsWinner(true);
+        }
+        return;
+      }
       if (data?.result?.proposalUploaded) setActiveTab("5");
       setDirector(data?.result?.director)
-      
+
       const directors = await getAllDirectorByProductionHouse(data?.result?.productionHouse?.id as string)
       setDirectors(directors);
-  
+
       const projectId = data?.result?.project?.id;
       if (!projectId) {
         throw new Error('ID del proyecto no encontrado');
       }
-      
+
       setProject(data?.result?.project);
       const response = await checkInvitationStatus(projectId);
-      
+
       if (response?.result?.project) {
         setProjectName(response.result.project.name || '');
         setBidDeadline(response.result.project.bidDeadline || '');
@@ -313,6 +321,14 @@ const PostulacionProceso: React.FC = () => {
 
   return (
     <Layout>
+      {isWinner && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={500}
+        />
+      )}
       <Loader loading={loading}>
         {error ? (
           <div className="p-4 text-red-600 bg-red-100 rounded-md">
@@ -329,7 +345,7 @@ const PostulacionProceso: React.FC = () => {
               )}
             </div>
             <div className="flex justify-end mb-4">
-                <button
+              <button
                 className={`proposal-uploaded flex justify-between items-center p-4 shadow-md rounded-lg w-48 h-14 hover:bg-green-600 text-white transition-transform duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer bg-green-500 font-medium`}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -337,13 +353,13 @@ const PostulacionProceso: React.FC = () => {
                 }}>
                 <FileText className="w-5 h-5 text-white" />
                 <span>Consultar Brief</span>
-                </button>
+              </button>
             </div>
             <div className="text-sm text-gray-500 ">
               <span>Lista de Proyectos</span> {">"} <span>{projectName}</span> {">"}{" "}
               <span>Postular</span>
             </div>
-    
+
             <div className="tabs flex justify-center">
               <StepIndicatorForPostulation activeTab={activeTab} setactiveTab={setActiveTab} />
             </div>
@@ -386,7 +402,7 @@ const PostulacionProceso: React.FC = () => {
                 files={onLoadFiles}
               />
             )}
-    
+
             {activeTab === "5" && <PostulacionConfirmacionFinal />}
           </>
         )}
