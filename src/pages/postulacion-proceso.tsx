@@ -7,6 +7,7 @@ import {
 } from "@/api/postulationApi";
 import Layout from "@/components/Layout";
 import Loader from "@/components/Loader";
+import GanadorDetalles from "@/components/Postulacion/GanadorDetalles";
 import PostulacionConfirmacionFinal from "@/components/Postulacion/PostulacionConfirmacionFinal";
 import PostulacionSteep1 from "@/components/Postulacion/PostulacionSteep1";
 import PostulacionSteep2 from "@/components/Postulacion/PostulacionSteep2";
@@ -15,6 +16,7 @@ import PostulacionSteep4 from "@/components/Postulacion/PostulacionSteep4";
 import StepIndicatorForPostulation from "@/components/Proyecto/StepIndicator/StepIndicatorForPostulation";
 import { useFormValidation } from '@/hooks/useFormValidation';
 import { IDirector } from "@/interfaces/director.interface";
+import { CheckProjectInvitationStatusResponse } from "@/interfaces/project-director.interface";
 import { IProject } from "@/interfaces/project.interface";
 import { manageLogicError } from "@/lib/utils";
 import { ProjectStatus } from "@/mappers/project.mapper";
@@ -159,6 +161,7 @@ const PostulacionProceso: React.FC = () => {
   const [directors, setDirectors] = useState<IDirector[]>();
   const [error, setError] = useState<string | null>(null);
 
+  const [invitation, setInvitation] = useState<CheckProjectInvitationStatusResponse>();
   const processCheckInvitation = async () => {
     try {
       setLoading(true);
@@ -167,13 +170,25 @@ const PostulacionProceso: React.FC = () => {
       if (!data?.result) {
         throw new Error('No se pudo obtener la información de la invitación');
       }
+      setInvitation(data)
 
-      if (data?.result?.status === ProjectStatus.Finished) {
-        toast.error("Este proyecto ha finalizado");
-        if (data?.result?.isWinner) {
-          setIsWinner(true);
-        }
-        return;
+      console.log('Data', data)
+
+      switch (data?.result?.status) {
+        case ProjectStatus.Finished:
+          if (data?.result?.isWinner) {
+            setIsWinner(true);
+          }
+          break;
+        case ProjectStatus.Closed:
+          toast.error('Este proyecto está cerrado');
+          router.push('/lista-de-proyectos');
+          return;
+        case ProjectStatus.InProgress:
+          if (data?.result?.message) {
+            throw new Error(data?.result?.message || 'Este proyecto está cerrado');
+          }
+          break;
       }
       if (data?.result?.proposalUploaded) setActiveTab("5");
       setDirector(data?.result?.director)
@@ -194,6 +209,7 @@ const PostulacionProceso: React.FC = () => {
         setBidDeadline(response.result.project.bidDeadline || '');
       }
     } catch (error: any) {
+      console.log('Gaaa')
       if (error?.response?.data?.serverCodeError === 20) {
         router.push("/postulacion-directa?projectInvitationId=" + projectInvitationId);
         return;
@@ -322,12 +338,15 @@ const PostulacionProceso: React.FC = () => {
   return (
     <Layout>
       {isWinner && (
-        <Confetti
-          width={window.innerWidth}
-          height={window.innerHeight}
-          recycle={false}
-          numberOfPieces={500}
-        />
+        <>
+          <Confetti
+            width={window.innerWidth}
+            height={window.innerHeight}
+            recycle={false}
+            numberOfPieces={500}
+          />
+          <GanadorDetalles invitation={invitation?.result} />
+        </>
       )}
       <Loader loading={loading}>
         {error ? (
@@ -335,77 +354,78 @@ const PostulacionProceso: React.FC = () => {
             {error}
           </div>
         ) : (
-          <>
-            <div className="flex items-center justify-between mb-6">
-              <h1 className="text-2xl font-bold">Proyecto</h1>
-              {bidDeadline && (
-                <div className={`px-4 py-2 rounded-lg ${isDeadlinePassed ? 'bg-red-100 text-red-600' : isLessThanOneHour ? 'bg-red-100 text-red-600' : moment().add(2, 'days').isAfter(bidDeadline) ? 'bg-yellow-100 text-yellow-600' : 'bg-green-100 text-green-600'}`}>
-                  <span>{countdown}</span>
-                </div>
+          !isWinner && (
+            <>
+              <div className="flex items-center justify-between mb-6">
+                <h1 className="text-2xl font-bold">Proyecto</h1>
+                {bidDeadline && (
+                  <div className={`px-4 py-2 rounded-lg ${isDeadlinePassed ? 'bg-red-100 text-red-600' : isLessThanOneHour ? 'bg-red-100 text-red-600' : moment().add(2, 'days').isAfter(bidDeadline) ? 'bg-yellow-100 text-yellow-600' : 'bg-green-100 text-green-600'}`}>
+                    <span>{countdown}</span>
+                  </div>
+                )}
+              </div>
+              <div className="flex justify-end mb-4">
+                <button
+                  className={`proposal-uploaded flex justify-between items-center p-4 shadow-md rounded-lg w-48 h-14 hover:bg-green-600 text-white transition-transform duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer bg-green-500 font-medium`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(`/consulta-brief?projectInvitationId=${projectInvitationId}`, '_blank');
+                  }}>
+                  <FileText className="w-5 h-5 text-white" />
+                  <span>Consultar Brief</span>
+                </button>
+              </div>
+              <div className="text-sm text-gray-500 ">
+                <span>Lista de Proyectos</span> {">"} <span>{projectName}</span> {">"}{" "}
+                <span>Postular</span>
+              </div>
+
+              <div className="tabs flex justify-center">
+                <StepIndicatorForPostulation activeTab={activeTab} setactiveTab={setActiveTab} />
+              </div>
+              {activeTab === "1" && (
+                <PostulacionSteep1
+                  formData={formData}
+                  handleChange={handleChange}
+                  handleSubmit={handleSubmit}
+                  activeTab={activeTab}
+                  setactiveTab={setActiveTab}
+                  director={director}
+                  directors={directors}
+                />
               )}
-            </div>
-            <div className="flex justify-end mb-4">
-              <button
-                className={`proposal-uploaded flex justify-between items-center p-4 shadow-md rounded-lg w-48 h-14 hover:bg-green-600 text-white transition-transform duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer bg-green-500 font-medium`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  window.open(`/consulta-brief?projectInvitationId=${projectInvitationId}`, '_blank');
-                }}>
-                <FileText className="w-5 h-5 text-white" />
-                <span>Consultar Brief</span>
-              </button>
-            </div>
-            <div className="text-sm text-gray-500 ">
-              <span>Lista de Proyectos</span> {">"} <span>{projectName}</span> {">"}{" "}
-              <span>Postular</span>
-            </div>
+              {activeTab === "2" && (
+                <PostulacionSteep2
+                  formData={formData}
+                  handleChange={handleChange}
+                  handleSubmit={handleSubmit}
+                  activeTab={activeTab}
+                  setactiveTab={setActiveTab}
+                />
+              )}
+              {activeTab === "3" && (
+                <PostulacionSteep3
+                  formData={formData}
+                  handleChange={handleChange}
+                  handleSubmit={handleSubmit}
+                  activeTab={activeTab}
+                  setactiveTab={setActiveTab}
+                />
+              )}
+              {activeTab === "4" && (
+                <PostulacionSteep4
+                  formData={formData}
+                  handleChange={handleChange}
+                  handleSubmit={handleSubmit}
+                  activeTab={activeTab}
+                  setactiveTab={setActiveTab}
+                  files={onLoadFiles}
+                />
+              )}
 
-            <div className="tabs flex justify-center">
-              <StepIndicatorForPostulation activeTab={activeTab} setactiveTab={setActiveTab} />
-            </div>
-            {activeTab === "1" && (
-              <PostulacionSteep1
-                formData={formData}
-                handleChange={handleChange}
-                handleSubmit={handleSubmit}
-                activeTab={activeTab}
-                setactiveTab={setActiveTab}
-                director={director}
-                directors={directors}
-              />
-            )}
-            {activeTab === "2" && (
-              <PostulacionSteep2
-                formData={formData}
-                handleChange={handleChange}
-                handleSubmit={handleSubmit}
-                activeTab={activeTab}
-                setactiveTab={setActiveTab}
-              />
-            )}
-            {activeTab === "3" && (
-              <PostulacionSteep3
-                formData={formData}
-                handleChange={handleChange}
-                handleSubmit={handleSubmit}
-                activeTab={activeTab}
-                setactiveTab={setActiveTab}
-              />
-            )}
-            {activeTab === "4" && (
-              <PostulacionSteep4
-                formData={formData}
-                handleChange={handleChange}
-                handleSubmit={handleSubmit}
-                activeTab={activeTab}
-                setactiveTab={setActiveTab}
-                files={onLoadFiles}
-              />
-            )}
-
-            {activeTab === "5" && <PostulacionConfirmacionFinal />}
-          </>
-        )}
+              {activeTab === "5" && <PostulacionConfirmacionFinal />}
+            </>
+          ))}
       </Loader>
     </Layout>
   );

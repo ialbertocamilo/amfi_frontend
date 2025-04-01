@@ -28,7 +28,6 @@ const ConsultaBrief: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (!projectInvitationId) return;
-
             try {
                 const invitationData = await getInvitationById(projectInvitationId as string);
                 setData(invitationData?.result || null);
@@ -53,7 +52,7 @@ const ConsultaBrief: React.FC = () => {
         <Layout>
             <Loader loading={loading} >
                 <div className="container mx-auto p-6 bg-white shadow-lg rounded-md">
-                    {data && projectJson && project && <Brief
+                    {data && <Brief
                         projectJson={projectJson}
                         project={project}
                         data={data}
@@ -62,7 +61,7 @@ const ConsultaBrief: React.FC = () => {
                     {data && projectJson && project && <ResumenProyecto data={projectJson} />}
                     <div className="mt-4 flex justify-end">
                         <button
-                            onClick={() => router.back()}
+                            onClick={() => router.push('lista-de-proyectos')}
                             className="bg-red-500 text-white py-2 px-4 rounded"
                         >
                             Volver
