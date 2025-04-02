@@ -16,10 +16,11 @@ const ConsultaBrief: React.FC = () => {
 
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState<IProjectInvitation | null>(null);
-    const [projectJson, setJsonProject] = useState<any>(null);
+    const [jsonProject, setJsonProject] = useState<any>(null);
     const [project, setProject] = useState<IProject>();
     useEffect(() => {
-        if (data?.project?.extra) {
+        if (data) {
+            console.log('data json', data)
             setJsonProject(data.project.extra);
             setProject(data.project);
         }
@@ -30,6 +31,7 @@ const ConsultaBrief: React.FC = () => {
             if (!projectInvitationId) return;
             try {
                 const invitationData = await getInvitationById(projectInvitationId as string);
+                console.log(invitationData?.result)
                 setData(invitationData?.result || null);
                 if (invitationData?.result?.project?.id) {
                     getInvitedDirectors(invitationData.result.project.id).then((res) => {
@@ -53,12 +55,12 @@ const ConsultaBrief: React.FC = () => {
             <Loader loading={loading} >
                 <div className="container mx-auto p-6 bg-white shadow-lg rounded-md">
                     {data && <Brief
-                        projectJson={projectJson}
+                        projectJson={jsonProject}
                         project={project}
                         data={data}
                         invitedDirectors={invitedDirectors}
                     />}
-                    {data && projectJson && project && <ResumenProyecto data={projectJson} />}
+                    {data && <ResumenProyecto data={jsonProject} />}
                     <div className="mt-4 flex justify-end">
                         <button
                             onClick={() => router.push('lista-de-proyectos')}
